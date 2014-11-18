@@ -21,7 +21,7 @@ public class Objosome extends ArrayList<Objene> {
     public final GeneContext parentContext;
     
     /** generated context, constructed lazily */
-    public DefaultContext context = null;
+    private DefaultContext context = null;
 
     public Objosome(GeneContext context, List<Objene> parameters) throws InvalidRepresentationException {
         super(parameters);        
