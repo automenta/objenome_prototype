@@ -12,7 +12,7 @@ import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
 
 /**
- * The implementation of the IoC container.
+ * The deterministic implementation of the IoC container.
  *
  * @author sergio.oliveira.jr@gmail.com
  */

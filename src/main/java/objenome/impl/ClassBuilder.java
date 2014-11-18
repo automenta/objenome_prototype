@@ -580,4 +580,11 @@ public class ClassBuilder implements ConfigurableBuilder {
     public Class<?> type() {
         return klass;
     }
+
+    @Override
+    public String toString() {
+        return "ClassBuilder[" + type() + ']';
+    }
+    
+    
 }

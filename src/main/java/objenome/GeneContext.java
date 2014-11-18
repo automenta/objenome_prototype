@@ -32,8 +32,61 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
     }
 
     
+
+    protected List<Objene> getGenes(ClassBuilder cb, List<Object> path, List<Objene> genes) {
+        cb.updateConstructorDependencies(false);
+
+        if (cb.getInitValues() == null) {
+            /*System.out.println(cb.getInitTypes());
+            System.out.println(cb.getInitValues());*/
+            throw new RuntimeException(this + " unknown how to Build component: " + path);
+        }
+
+        for (Object v : cb.getInitValues()) {
+            //System.out.println("  Class Builder Init Value: "+ cb + " " + v);
+
+            if (v instanceof DependencyKey)
+                v = ((DependencyKey)v).key;
+
+            Builder bv = getBuilder(v);
+            if (bv instanceof Parameterized) {
+                genes.addAll( ((Parameterized)bv).getGenes(path) );
+
+            }
+            if (bv instanceof MultiClassBuilder) {
+                //recurse for each choice
+                getGenes(((MultiClassBuilder)bv).implementors, path, genes);
+            }
+            else {
+                //System.out.println("  Class Builder Init Value Builder: "+ cb + " " + bv);
+                getGenes(bv, path, genes);
+                //getGenes()
+            }
+        }
+        for (Parameter p : cb.getInitPrimitives()) {
+            if (p.getType() == int.class) {
+                genes.add( new IntegerSelect(p, path, 
+                        getIntMinDefault(), getIntMaxDefault()) );
+            }
+            else if (p.getType() == double.class) {
+                genes.add( new DoubleSelect(p, path, 
+                        getDoubleMinDefault(), getDoubleMaxDefault()) );
+            }
+            else if (p.getType() == boolean.class) {
+                genes.add( new BooleanSelect(p, path) );    
+            }
+            else {
+                throw new RuntimeException("primitive Parameter " + path + " " + p + " not yet supported");
+            }
+        }
+
+        //TODO handle setters, etc
+        //System.out.println("Class Builder: "+ path + " " + cb);
+
+        return genes;
+    }
     
-    protected List<Objene> getParameters(Iterable keys, List<Object> parentPath, List<Objene> genes) {
+    protected List<Objene> getGenes(Iterable keys, List<Object> parentPath, List<Objene> genes) {
         if (genes == null) genes = new ArrayList();
         
         
@@ -46,58 +99,28 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
             
             path.add(k);
                     
-            Builder b = getBuilder(k);
+            Builder b = (k instanceof Builder) ? (Builder)k : getBuilder(k);
             if (b == null) {
                 //throw new RuntimeException(this + " does not have Builder for key: " + k);
                 
                 ClassBuilder cb = getClassBuilder(k.getClass().equals(Class.class) ? (Class)k : k.getClass());
-                cb.updateConstructorDependencies(false);
-                
-                if (cb.getInitValues() == null) {
-                    /*System.out.println(cb.getInitTypes());
-                    System.out.println(cb.getInitValues());*/
-                    throw new RuntimeException(this + " unknown how to Build component: " + k + " (path=" + path + ")");
-                }
-                
-                for (Object v : cb.getInitValues()) {
-                    if (v instanceof DependencyKey)
-                        v = ((DependencyKey)v).key;
-                    
-                    Builder bv = getBuilder(v);
-                    if (bv instanceof Parameterized) {
-                        genes.addAll( ((Parameterized)bv).getGenes(path) );
-                        
-                        if (bv instanceof MultiClassBuilder) {
-                            //recurse for each choice
-                            getParameters(((MultiClassBuilder)bv).implementors, path, genes);
-                        }
-                    }
-                }
-                for (Parameter p : cb.getInitPrimitives()) {
-                    if (p.getType() == int.class) {
-                        genes.add( new IntegerSelect(p, path, 
-                                getIntMinDefault(), getIntMaxDefault()) );
-                    }
-                    else if (p.getType() == double.class) {
-                        genes.add( new DoubleSelect(p, path, 
-                                getDoubleMinDefault(), getDoubleMaxDefault()) );
-                    }
-                    else if (p.getType() == boolean.class) {
-                        genes.add( new BooleanSelect(p, path) );    
-                    }
-                    else {
-                        throw new RuntimeException("primitive Parameter " + path + " " + p + " not yet supported");
-                    }
-                }
-                
-                //TODO handle setters, etc
-                
+                getGenes(cb, path, genes);
             }
-            else if (b instanceof Parameterized) {
-                genes.addAll( ((Parameterized)b).getGenes(path) );
+            else if (b instanceof ClassBuilder) {
+                getGenes( b.type(), path, genes);
+            }
+            else {
+                throw new RuntimeException("decide what this means: Builder=" + b);                
+                /*if (b instanceof Parameterized) {
+                    genes.addAll( ((Parameterized)b).getGenes(path) );
+                } */               
             }
         }
         return genes;
+    }
+    
+    public List<Objene> getGenes(Object key, List<Object> path, List<Objene> genes) {
+        return getGenes(Lists.newArrayList( key ), path, genes);
     }
     
     /** creates a new random objosome,
@@ -105,7 +128,7 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
      *  keys for which to evolve a set of Objosomes can be evolved to generate
      */
     public Objosome get(Object... keys) {
-        return new Objosome(getParameters(Lists.newArrayList(keys), null, null));
+        return new Objosome(getGenes(Lists.newArrayList(keys), null, null));
     }
     
    

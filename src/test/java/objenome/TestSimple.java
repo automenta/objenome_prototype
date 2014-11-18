@@ -16,13 +16,13 @@ import org.junit.Test;
  */
 public class TestSimple {
 
-    public interface Part { public int function();    }
-    public interface SubComponent { public int function();    }
+    public static interface Part { public int function();    }
+    public static interface SubComponent { public int function();    }
 
-    public static class Subcomponent0 implements SubComponent {
+    public static class SubComponent0 implements SubComponent {
         @Override public int function() { return 0; }
     }
-    public static class Subcomponent1 implements SubComponent {
+    public static class SubComponent1 implements SubComponent {
         @Override public int function() {  return 1;}         
     }
     
@@ -97,12 +97,13 @@ public class TestSimple {
         assertEquals("[class objenome.TestSimple$Machine]", o.get(0).path.toString());
     }
     
-    /** one gene to select between two interfaces with non-parametric constructors */
+    /** one gene to select between two interfaces with parametric constructor in one of the dependencies */
     @Test public void testSimpleObjeneGeneration2() {
+        
         GeneContext c = new GeneContext();
-        c.usable(Part.class, Part0.class, Part1.class, PartN.class);
-                        
+        c.usable(Part.class, Part0.class, Part1.class, PartN.class);                        
         Objosome o = c.get(Machine.class);
+        
         assertEquals("objosome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());
         assertEquals("[class objenome.TestSimple$Machine]", o.get(0).path.toString());
@@ -111,6 +112,17 @@ public class TestSimple {
         assertEquals("[class objenome.TestSimple$Machine, class objenome.TestSimple$PartN]", o.get(1).path.toString());
     }
     
+    @Test public void testRecurse2LevelsGeneration() {
+        
+        GeneContext c = new GeneContext();
+        c.usable(Part.class, PartWithSubComponent.class);
+        c.usable(SubComponent.class, SubComponent0.class, SubComponent1.class);
+        Objosome o = c.get(Machine.class);
+               
+        assertEquals("objosome contains 1 gene: to select between subcomponents of the part component", 1, o.getLength());
+        assertEquals(ClassSelect.class, o.get(0).getClass());
+        assertEquals("3rd level deep", 3, o.get(0).path.size());
+    }
     
 
     @Test public void testAmbiguityDenial() {
