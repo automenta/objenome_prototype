@@ -17,6 +17,7 @@ public class Objosome extends AbstractListChromosome<Objene> {
     private Scoring scoring;
 
 
+
     public interface Scoring extends Function<Objosome,Double> {
         
     }
@@ -47,6 +48,9 @@ public class Objosome extends AbstractListChromosome<Objene> {
         return 0;
     }
 
+    public Objene get(final int i) {
+        return getRepresentation().get(i);
+    }
     
     
 }

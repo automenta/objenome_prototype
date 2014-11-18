@@ -2,6 +2,7 @@ package objenome.impl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ public class ClassBuilder implements ConfigurableBuilder {
     private boolean useZeroArgumentsConstructor = false;
 
     public final Set<ConstructorDependency> constructorDependencies;
+    private LinkedList<Parameter> initPrimitives;
 
     public ClassBuilder(ProtoContext container, Class<?> klass) {
 
@@ -78,6 +80,10 @@ public class ClassBuilder implements ConfigurableBuilder {
 
     public List<Object> getInitValues() {
         return initValues;
+    }
+
+    public List<Parameter> getInitPrimitives() {
+        return initPrimitives;
     }
     
 
@@ -434,6 +440,10 @@ public class ClassBuilder implements ConfigurableBuilder {
     }
 
     public void updateConstructorDependencies() {
+        updateConstructorDependencies(true);
+    }
+    
+    public void updateConstructorDependencies(boolean requirePrimitives) {
 
         Constructor<?>[] constructors = klass.getConstructors();
 
@@ -463,24 +473,33 @@ public class ClassBuilder implements ConfigurableBuilder {
 
             LinkedList<Class<?>> newInitTypes = new LinkedList<Class<?>>();
             LinkedList<Object> newInitValues = new LinkedList<Object>();
+            LinkedList<Parameter> newInitPrimitives = new LinkedList<>();
 
             Set<ConstructorDependency> constructorDependencies = this.constructorDependencies != null ? this.constructorDependencies : container.getConstructorDependencies();
 
             Set<ConstructorDependency> dependencies = new HashSet<ConstructorDependency>(constructorDependencies);
 
-            Class<?>[] constructorParams = c.getParameterTypes();
+                        
+            Parameter[] constructorParams = c.getParameters();
 
             if (constructorParams == null || constructorParams.length == 0) {
-                continue; // skip default constructor for now...
+                //Default constructor
+                this.initTypes = newInitTypes; //use empty lists to indicate this
+                this.initValues = newInitValues;
+                this.initPrimitives = newInitPrimitives;
+                continue; 
             }
-            for (Class<?> constructorParam : constructorParams) {
+            for (final Parameter p : constructorParams) {
+                Class<?> pc = p.getType();
 
                 // first see if it was provided...
                 Class<?> provided = providedInitTypes.isEmpty() ? null : providedInitTypes.get(0);
 
-                if (provided != null && constructorParam.isAssignableFrom(provided)) {
+                if (provided != null && pc.isAssignableFrom(provided)) {
 
-                    newInitTypes.add(providedInitTypes.removeFirst()); // we matched this one, so remove...
+                    // matched this one, so remove...
+                    
+                    newInitTypes.add(providedInitTypes.removeFirst()); 
 
                     newInitValues.add(providedInitValues.removeFirst());
 
@@ -497,7 +516,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                         ConstructorDependency d = iter.next();
 
-                        if (betterIsAssignableFrom(constructorParam, d.getSourceType())) {
+                        if (betterIsAssignableFrom(pc, d.getSourceType())) {
 
                             iter.remove();
 
@@ -515,19 +534,33 @@ public class ClassBuilder implements ConfigurableBuilder {
                         continue; // next constructor param...
                     }
 
+                    
+                }
+                
+                //record primitives in constructor
+                if (pc.equals(double.class) || (pc.equals(int.class))) {
+                    newInitPrimitives.add(p);
+                }
+                else {
+                    //System.out.println("Missing: " + p + " " + pc.getName());
                 }
 
                 break; // no param... next constructor...
             }
 
             // done, contains if found...
-            if (constructorParams.length == newInitTypes.size() && providedInitTypes.isEmpty()) {
+            int capableSize = requirePrimitives ? 
+                newInitTypes.size() : (newInitPrimitives.size() + newInitTypes.size());
+                    
+            if (constructorParams.length == capableSize && providedInitTypes.isEmpty()) {
 
                 this.initTypes = newInitTypes;
-
+                this.initPrimitives = newInitPrimitives;
                 this.initValues = newInitValues;
             }
         }
+        
+        //return missing;
     }
 
     public static class DependencyKey {

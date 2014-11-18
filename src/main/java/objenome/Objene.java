@@ -6,14 +6,22 @@
 package objenome;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import java.util.List;
 
 /**
  * Gene of an Objosome
  */
 abstract public class Objene extends AtomicDouble {
+   
+    /**
+     * the DI target instance key that this affects
+     */
+    public final List<Object> path;
 
-    public Objene(double initialValue) {
+   
+    public Objene(List<Object> path, double initialValue) {
         super(initialValue);
+        this.path = path;
     }
     
     

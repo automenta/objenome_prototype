@@ -5,6 +5,7 @@
  */
 package objenome.impl;
 
+import objenome.gene.ClassSelect;
 import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
@@ -48,35 +49,10 @@ public class MultiClassBuilder implements Builder, Parameterized {
         return abstractClass;
     }
 
-    /** stores a double value between 0...1.0 which is used to select equally
-     *  from the list of classes in its creator Multiclass
-     */
-    public static class SelectClass extends Objene {
-        
-        public final MultiClassBuilder multiclass;
-
-        public SelectClass(MultiClassBuilder multiclass) {
-            super(Math.random());
-            this.multiclass = multiclass;            
-        }
-        
-        public Class getValue() {
-            int num = multiclass.size();
-            int which = (int)(doubleValue() * num);
-            if (which == num) which = num-1;
-            return multiclass.implementors.get(which);
-        }
-
-        @Override
-        public String toString() {
-            return "Class=" + getValue().toString();
-        }
-        
-    }
     
     @Override
-    public Collection<? extends Objene> getGenes() {
-        return Lists.newArrayList(new SelectClass(this));
+    public Collection<? extends Objene> getGenes(List<Object> path) {
+        return Lists.newArrayList(new ClassSelect(path, this));
     }
     
 }

@@ -6,6 +6,7 @@
 package objenome;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 
@@ -13,6 +14,6 @@ import java.util.Collection;
 public interface Parameterized {
 
     /** the genes necessary to specify an instance of this component */
-    public Collection<? extends Objene> getGenes();
+    public Collection<? extends Objene> getGenes(List<Object> path);
     
 }
