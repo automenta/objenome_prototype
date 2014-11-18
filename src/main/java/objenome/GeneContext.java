@@ -43,40 +43,47 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
         }
 
         for (Object v : cb.getInitValues()) {
-            //System.out.println("  Class Builder Init Value: "+ cb + " " + v);
-
-            if (v instanceof DependencyKey)
-                v = ((DependencyKey)v).key;
-
-            Builder bv = getBuilder(v);
+            //System.out.println("  Class Builder Init Value: "+ cb + " " + v);           
+            
+            
+            if (!(v instanceof DependencyKey)) {
+                throw new RuntimeException("Unknown init value type: " + v);
+            }
+            
+            List nextPath = new ArrayList(path);
+            nextPath.add(v);
+            
+            Builder bv = getBuilder(((DependencyKey)v).key);
             if (bv instanceof Parameterized) {
-                genes.addAll( ((Parameterized)bv).getGenes(path) );
+                genes.addAll( ((Parameterized)bv).getGenes(nextPath) );
 
             }
             if (bv instanceof MultiClassBuilder) {
                 //recurse for each choice
-                getGenes(((MultiClassBuilder)bv).implementors, path, genes);
+                getGenes(((MultiClassBuilder)bv).implementors, nextPath, genes);
             }
             else {
                 //System.out.println("  Class Builder Init Value Builder: "+ cb + " " + bv);
-                getGenes(bv, path, genes);
-                //getGenes()
+                getGenes(bv, nextPath, genes);
             }
         }
         for (Parameter p : cb.getInitPrimitives()) {
+            List nextPath = new ArrayList(path);
+            nextPath.add(p);
+            
             if (p.getType() == int.class) {
-                genes.add( new IntegerSelect(p, path, 
+                genes.add( new IntegerSelect(p, nextPath, 
                         getIntMinDefault(), getIntMaxDefault()) );
             }
             else if (p.getType() == double.class) {
-                genes.add( new DoubleSelect(p, path, 
+                genes.add( new DoubleSelect(p, nextPath, 
                         getDoubleMinDefault(), getDoubleMaxDefault()) );
             }
             else if (p.getType() == boolean.class) {
-                genes.add( new BooleanSelect(p, path) );    
+                genes.add( new BooleanSelect(p, nextPath) );    
             }
             else {
-                throw new RuntimeException("primitive Parameter " + path + " " + p + " not yet supported");
+                throw new RuntimeException("primitive Parameter " + nextPath + " " + p + " not yet supported");
             }
         }
 

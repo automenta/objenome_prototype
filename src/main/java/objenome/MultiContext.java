@@ -16,10 +16,10 @@ public interface MultiContext extends ProtoContext {
     
     public MultiClassBuilder usable(Class abstractClass, Scope scope, Class<?>... klasses);
     
-    //TODO: deduce common parent class from supplied classes:
+    //TODO: deduce common parent classes from a supplied list of classes:
     //default public MultiClassBuilder usable(Class<?>... klasses) { ...
     
-    default public MultiClassBuilder usable(Class abstractClass, Class<?>... klasses) {
+    default public MultiClassBuilder usable(Class<?> abstractClass, Class<?>... klasses) {
         if (klasses.length == 0)
             usable(abstractClass, abstractClass);
             

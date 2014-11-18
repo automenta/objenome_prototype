@@ -35,8 +35,8 @@ public class TestSimple {
     public static class PartN implements Part {
         private final int value;
 
-        public PartN(int value) {
-            this.value = value;
+        public PartN(int arg0) {
+            this.value = arg0;
         }
         
         @Override public int function() { return value; }
@@ -94,7 +94,8 @@ public class TestSimple {
         assertEquals("objosome contains one gene to select betwen the implementations of interface Part", 1, o.getLength());
         
         assertEquals(ClassSelect.class, o.get(0).getClass());
-        assertEquals("[class objenome.TestSimple$Machine]", o.get(0).path.toString());
+        
+        assertEquals("[class objenome.TestSimple$Machine, objenome.TestSimple$Part arg0 (part)]", o.get(0).path.toString());
     }
     
     /** one gene to select between two interfaces with parametric constructor in one of the dependencies */
@@ -106,10 +107,14 @@ public class TestSimple {
         
         assertEquals("objosome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());
-        assertEquals("[class objenome.TestSimple$Machine]", o.get(0).path.toString());
+        
+         System.out.println(o.get(0).path);
+         System.out.println(o.get(1).path);
+        assertEquals("[class objenome.TestSimple$Machine, objenome.TestSimple$Part arg0 (part)]", o.get(0).path.toString());
         
         assertEquals(IntegerSelect.class, o.get(1).getClass());        
-        assertEquals("[class objenome.TestSimple$Machine, class objenome.TestSimple$PartN]", o.get(1).path.toString());
+                        
+        assertEquals("[class objenome.TestSimple$Machine, objenome.TestSimple$Part arg0 (part), class objenome.TestSimple$PartN, int arg0]", o.get(1).path.toString());
     }
     
     @Test public void testRecurse2LevelsGeneration() {
@@ -118,10 +123,26 @@ public class TestSimple {
         c.usable(Part.class, PartWithSubComponent.class);
         c.usable(SubComponent.class, SubComponent0.class, SubComponent1.class);
         Objosome o = c.get(Machine.class);
-               
+
+        
         assertEquals("objosome contains 1 gene: to select between subcomponents of the part component", 1, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());
-        assertEquals("3rd level deep", 3, o.get(0).path.size());
+        assertEquals("3rd level deep", 5, o.get(0).path.size());
+    }
+    
+    @Test public void testMultitypeRecurse() {
+        
+        GeneContext c = new GeneContext();
+        c.usable(Part.class, 
+                    Part0.class, Part1.class, PartN.class, PartWithSubComponent.class);
+        c.usable(SubComponent.class, 
+                    SubComponent0.class, SubComponent1.class);
+        Objosome o = c.get(Machine.class);
+                       
+        assertEquals(3, o.getLength());
+        assertEquals(ClassSelect.class, o.get(0).getClass());
+        assertEquals(IntegerSelect.class, o.get(1).getClass());
+        assertEquals(ClassSelect.class, o.get(2).getClass());
     }
     
 

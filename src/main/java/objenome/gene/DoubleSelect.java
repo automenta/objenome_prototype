@@ -5,10 +5,6 @@
  */
 package objenome.gene;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import objenome.Objene;
@@ -17,7 +13,7 @@ import objenome.Objene;
  *
  * @author me
  */
-public class DoubleSelect extends Objene {
+public class DoubleSelect extends Objene<Double> {
     private double max;
     private double min;
 
@@ -39,7 +35,7 @@ public class DoubleSelect extends Objene {
         this.max = max;
     }
     
-    public double getValue() {
+    public Double getValue() {
         return ((doubleValue() * (max-min)) + min);
     }
 

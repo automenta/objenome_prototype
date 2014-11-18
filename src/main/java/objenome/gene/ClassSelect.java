@@ -12,7 +12,7 @@ import objenome.impl.MultiClassBuilder;
 /** stores a double value between 0...1.0 which is used to select equally
  *  from the list of classes in its creator Multiclass
  */
-public class ClassSelect extends Objene {
+public class ClassSelect extends Objene<Class> {
     public final MultiClassBuilder multiclass;
 
     public ClassSelect(List<Object> path, MultiClassBuilder multiclass) {
@@ -20,6 +20,7 @@ public class ClassSelect extends Objene {
         this.multiclass = multiclass;
     }
 
+    @Override
     public Class getValue() {
         int num = multiclass.size();
         int which = (int) (doubleValue() * num);

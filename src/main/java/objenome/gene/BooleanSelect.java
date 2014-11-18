@@ -13,7 +13,7 @@ import objenome.Objene;
  *
  * @author me
  */
-public class BooleanSelect extends Objene {
+public class BooleanSelect extends Objene<Boolean> {
     
     public BooleanSelect(Parameter p, List<Object> path) {
         this(path);        
@@ -24,7 +24,8 @@ public class BooleanSelect extends Objene {
         super(path, Math.random());
     }
     
-    public boolean getValue() {
+    @Override
+    public Boolean getValue() {
         return doubleValue() > 0.5 ? true : false;
     }
 

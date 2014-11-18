@@ -522,7 +522,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                             newInitTypes.add(d.getSourceType());
 
-                            newInitValues.add(new DependencyKey(d.getSource()));
+                            newInitValues.add(new DependencyKey(p, d.getSource()));
 
                             foundMatch = true;
 
@@ -563,17 +563,33 @@ public class ClassBuilder implements ConfigurableBuilder {
         //return missing;
     }
 
-    public static class DependencyKey {
+    public final static class DependencyKey {
 
         public final String key;
+        public final Parameter param;
 
         public DependencyKey(String key) {
+            this(null, key);            
+        }
+        
+        public DependencyKey(Parameter param, String key) {
+            this.param = param;
             this.key = key;
         }
 
         private String getKey() {
             return key;
         }
+
+        @Override
+        public String toString() {
+            if (param!=null)
+                return param + " (" + key + ")";
+            else
+                return key;
+        }
+        
+        
     }
 
     @Override
