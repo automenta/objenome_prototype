@@ -42,7 +42,7 @@ public interface Context extends ProtoContext {
      * @param klass The class that should be instantiated.
      * @return An instantiated bean.
      */
-    <T> T get(Class<?> klass);
+    <T> T get(Class<? extends T> klass);
     
     /**
      * Clear all cached instances for that scope. If you have a thread-pool for

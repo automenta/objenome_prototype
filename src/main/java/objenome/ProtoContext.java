@@ -31,12 +31,12 @@ public interface ProtoContext  {
 
 
     /**
-     * Get the types of the instances returned by the associated factory.
+     * Get the type of the instances returned by the associated factory.
      *
      * @param key The factory
-     * @return The types returned by this factory
+     * @return The type returned by this factory
      */
-    public Set<Class<?>> types(Object key);
+    public Class<?> type(Object key);
 
     /**
      * Configure a bean to be returned with the given implementation when
@@ -50,7 +50,7 @@ public interface ProtoContext  {
      * @return The factory created as a ConfigurableBuilder. (Fluent API)
      * @see Scope
      */
-    public ConfigurableBuilder usable(Object key, Class<?> klass, Scope scope);
+    public ConfigurableBuilder usable(Object key, Scope scope, Class<?> klass);
 
     /**
      * Same as {@link #ioc(String, Class, Scope)} except that it assumes there
@@ -85,18 +85,22 @@ public interface ProtoContext  {
      * @see Builder
      * @see Scope
      */
-    public Builder usable(Object key, Builder factory, Scope scope);
+    public Builder usable(Object key, Scope scope, Builder factory);
 
+    public default Builder usable(Class c) {
+        return usable(c, c);
+    }
+    
     /**
      * Configure a bean dependency to be auto-wired by the container. It wires
- by constructor and by setter. By constructor is uses the types of
+ by constructor and by setter. By constructor is uses the type of
  sourceFromContainer. By setter it assumes the property is also named
  sourceFromContainer.
      *
      * @param sourceFromContainer The bean inside the container that will be
      * wired automatically inside any other bean the depends on it.
      */
-    public void use(Object sourceFromContainer);
+    void use(Object sourceFromContainer);
     
     default public ConfigurableBuilder use(Object key, Class<? extends Object> klass) {
         ConfigurableBuilder c = usable(key, klass);
@@ -108,12 +112,17 @@ public interface ProtoContext  {
         use(key);
         return c;
     }
+    default public Builder use(Class klass) {
+        Builder c = usable(klass, klass);
+        use(klass);
+        return c;
+    }
     
     //TODO make 'use' versions of all 'usable' methods
     
     /**
      * Configure a bean dependency to be auto-wired by the container. It wires
- by constructor and by setter. By constructor is uses the types of
+ by constructor and by setter. By constructor is uses the type of
  sourceFromContainer. By setter it looks for a property with the given
  name and try to apply.
      *
@@ -122,7 +131,7 @@ public interface ProtoContext  {
      * @param property The name of the property to apply, whey trying
  auto-wiring by setter.
      */
-    public void use(Object sourceFromContainer, String property);
+    void use(Object sourceFromContainer, String property);
 
 
     

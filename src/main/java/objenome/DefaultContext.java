@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import objenome.impl.ClassFactory;
+import objenome.impl.ClassBuilder;
 import objenome.impl.SetterDependency;
 import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
@@ -34,7 +33,7 @@ public class DefaultContext extends AbstractProtoContext implements Context {
             return null;
         }
 
-        Builder c = getTheBuilder(name);
+        Builder c = builders.get(name);
 
         Scope scope = scopes.get(name);
 
@@ -197,10 +196,8 @@ public class DefaultContext extends AbstractProtoContext implements Context {
 
 
     @Override
-    public <T> T get(final Class<?> klass) {
-
-        ClassFactory f = new ClassFactory(this, klass, forConstructMethod);
-
+    public <T> T get(final Class<? extends T> c) {
+        ClassBuilder f = getClassBuilder(c);
         return (T) f.instance(this);
     }
 
@@ -236,8 +233,8 @@ public class DefaultContext extends AbstractProtoContext implements Context {
     }
 
     @Override
-    public Builder usable(Object key, Builder factory, Scope scope) {
-        Builder b = super.usable(key, factory, scope);
+    public Builder usable(Object key, Scope scope, Builder factory) {
+        Builder b = super.usable(key, scope, factory);
 
         String keyString = InjectionUtils.getKeyName(key);
         singletonsCache.remove(keyString); // just in case we are overriding a previous singleton bean...
@@ -255,14 +252,12 @@ public class DefaultContext extends AbstractProtoContext implements Context {
             List<ClearableHolder> listToClear = new LinkedList<ClearableHolder>();
             synchronized (this) {
                 for (String key : singletonsCache.keySet()) {
-                    Set<Builder> factories = builders.get(key);
-                    for (Builder factory : factories) {
-                        if (factory instanceof Interceptor) {
-                            Interceptor c = (Interceptor) factory;
-                            Object value = singletonsCache.get(key);
-                            listToClear.add(new ClearableHolder(c, value));
-                        }
-                    }
+                    Builder factory = builders.get(key);                    
+                    if (factory instanceof Interceptor) {
+                        Interceptor c = (Interceptor) factory;
+                        Object value = singletonsCache.get(key);
+                        listToClear.add(new ClearableHolder(c, value));
+                    }                    
                 }
                 singletonsCache.clear();
             }
@@ -274,17 +269,15 @@ public class DefaultContext extends AbstractProtoContext implements Context {
             List<ClearableHolder> listToClear = new LinkedList<ClearableHolder>();
             synchronized (this) {
                 for (String key : threadLocalsCache.keySet()) {
-                    Set<Builder> factories = builders.get(key);
-                    for (Builder factory : factories) {
-                        if (factory instanceof Interceptor) {
-                            Interceptor c = (Interceptor) factory;
-                            ThreadLocal<Object> t = threadLocalsCache.get(key);
-                            Object value = t.get();
-                            // we are ONLY clearing if this thread has something in the threadlocal, in other words,
-                            // if the thread has previously requested this key...
-                            if (value != null) {
-                                listToClear.add(new ClearableHolder(c, value));
-                            }
+                    Builder factory = builders.get(key);                    
+                    if (factory instanceof Interceptor) {
+                        Interceptor c = (Interceptor) factory;
+                        ThreadLocal<Object> t = threadLocalsCache.get(key);
+                        Object value = t.get();
+                        // we are ONLY clearing if this thread has something in the threadlocal, in other words,
+                        // if the thread has previously requested this key...
+                        if (value != null) {
+                            listToClear.add(new ClearableHolder(c, value));
                         }
                     }
                 }
@@ -314,12 +307,10 @@ public class DefaultContext extends AbstractProtoContext implements Context {
             synchronized (this) {
                 value = singletonsCache.remove(key);
                 if (value != null) {
-                    Set<Builder> factories = builders.get(key);
-                    for (Builder factory : factories) {
-                        if (factory instanceof Interceptor) {
-                            Interceptor c = (Interceptor) factory;
-                            cp = new ClearableHolder(c, value);
-                        }
+                    Builder factory = builders.get(key);                    
+                    if (factory instanceof Interceptor) {
+                        Interceptor c = (Interceptor) factory;
+                        cp = new ClearableHolder(c, value);
                     }
                 }
             }
@@ -335,12 +326,10 @@ public class DefaultContext extends AbstractProtoContext implements Context {
                 if (t != null) {
                     Object o = t.get();
                     if (o != null) {
-                        Set<Builder> factories = builders.get(key);
-                        for (Builder factory : factories) {
-                            if (factory instanceof Interceptor) {
-                                Interceptor c = (Interceptor) factory;
-                                cp = new ClearableHolder(c, o);
-                            }
+                        Builder factory = builders.get(key);                    
+                        if (factory instanceof Interceptor) {
+                            Interceptor c = (Interceptor) factory;
+                            cp = new ClearableHolder(c, o);
                         }
                         t.remove();
                         retVal = o;

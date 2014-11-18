@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -17,13 +18,15 @@ public class TestSimple {
         public int function();        
     }
     
-    public class Part0 implements Part {
+    public static class Part0 implements Part {
+        public Part0() {         }        
         @Override public int function() { return 0;  }
     }
-    public class Part1 implements Part {
+    public static class Part1 implements Part {
+        public Part1() {         }
         @Override public int function() { return 1; }
     }
-    public class PartN implements Part {
+    public static class PartN implements Part {
         private final int value;
 
         public PartN(int value) {
@@ -47,11 +50,20 @@ public class TestSimple {
     
     @Test public void testIt() {
         GeneContext c = new GeneContext();
-        c.usable(Part.class, Part0.class);
-        c.usable(Part.class, Part1.class);
-        c.usable(Part.class, PartN.class);
+        c.usable(Part.class, Part0.class, Part1.class, PartN.class);
+                        
+        Objosome o = c.newObjosome(Machine.class);
+        assertEquals("objosome contains one gene to select betwen the implementations of interface Part", 1, o.getLength());
+    }
+
+    @Test public void testAmbiguityDenial() {
         
-        Objosome o = c.newObjosome();
+        DefaultContext c = new DefaultContext();
+        c.usable(Part.class, Part0.class);
+        assertEquals(0, c.get(Machine.class).function());
+        c.usable(Part.class, Part1.class);
+        assertEquals("overrides the first builder", 1, c.get(Machine.class).function());
         
     }
+
 }

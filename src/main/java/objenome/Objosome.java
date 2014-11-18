@@ -8,34 +8,24 @@ package objenome;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.math3.genetics.AbstractListChromosome;
-import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 /**
- *
- * @author me
+ * Object chromosome
  */
 public class Objosome extends AbstractListChromosome<Objene> {
     private Scoring scoring;
+
 
     public interface Scoring extends Function<Objosome,Double> {
         
     }
     
-    
-    /** realize the phenotype of a chromosome as a mapping of the specified object keys to instances */
-    public ProtoContext build(Chromosome c) {
-        //populate new DefaultContext
-        return null;
-    }
-    
-    public Objosome(List<Objene> representation) throws InvalidRepresentationException {
-        super(representation);
-    }
 
-    public Objosome(Scoring scoring) throws InvalidRepresentationException {
-        this((List)null);
-        this.scoring = scoring;
+    public Objosome(List<Objene> parameters) throws InvalidRepresentationException {
+        super(parameters);        
+        
+        //this.scoring = scoring;
     }
     
     
@@ -53,7 +43,10 @@ public class Objosome extends AbstractListChromosome<Objene> {
 
     @Override
     public double fitness() {
-        return scoring.apply(this);
+        //return scoring.apply(this);
+        return 0;
     }
+
+    
     
 }

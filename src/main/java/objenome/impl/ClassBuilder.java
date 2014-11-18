@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import static java.util.stream.Collectors.toSet;
 
 import objenome.ConfigurableBuilder;
 import objenome.Context;
@@ -23,7 +22,7 @@ import objenome.util.InjectionUtils;
  *
  * @author sergio.oliveira.jr@gmail.com
  */
-public class ClassFactory implements ConfigurableBuilder {
+public class ClassBuilder implements ConfigurableBuilder {
 
     private final ProtoContext container;
 
@@ -43,12 +42,12 @@ public class ClassFactory implements ConfigurableBuilder {
 
     public final Set<ConstructorDependency> constructorDependencies;
 
-    public ClassFactory(ProtoContext container, Class<?> klass) {
+    public ClassBuilder(ProtoContext container, Class<?> klass) {
 
         this(container, klass, null);
     }
 
-    public ClassFactory(ProtoContext container, Class<?> klass, Set<ConstructorDependency> constructorDependencies) {
+    public ClassBuilder(ProtoContext container, Class<?> klass, Set<ConstructorDependency> constructorDependencies) {
 
         this.container = container;
 
@@ -73,6 +72,15 @@ public class ClassFactory implements ConfigurableBuilder {
         return this;
     }
 
+    public List<Class<?>> getInitTypes() {
+        return initTypes;
+    }
+
+    public List<Object> getInitValues() {
+        return initValues;
+    }
+    
+
     @Override
     public ConfigurableBuilder useZeroArgumentConstructor() {
 
@@ -96,14 +104,13 @@ public class ClassFactory implements ConfigurableBuilder {
     }
 
     @Override
-    public Set<ConfigurableBuilder> constructorUse(Object key) {
+    public ConfigurableBuilder constructorUse(Object key) {
 
         String k = InjectionUtils.getKeyName(key);
 
-        Set<Class<?>> types = container.types(k);
-        return types.stream().map( t -> 
-            addInitValue(new DependencyKey(k), t)
-        ).collect(toSet());
+        Class<?> t = container.type(k);
+        
+        return addInitValue(new DependencyKey(k), t);
     }
 
     private ConfigurableBuilder addInitValue(Object value, Class<?> type) {
@@ -169,7 +176,7 @@ public class ClassFactory implements ConfigurableBuilder {
         return results;
     }
 
-    private Class<?>[] getClasses(List<Class<?>> values) {
+    private static Class<?>[] getClasses(List<Class<?>> values) {
 
         if (values == null) {
             return new Class[0];
@@ -180,7 +187,7 @@ public class ClassFactory implements ConfigurableBuilder {
         return values.toArray(types);
     }
 
-    private Object[] getValues(Context context, List<Object> values) throws InstantiationException {
+    private static Object[] getValues(Context context, List<Object> values) throws InstantiationException {
 
         if (values == null) {
             return null;
@@ -334,7 +341,7 @@ public class ClassFactory implements ConfigurableBuilder {
 
                 if (!useZeroArgumentsConstructor) {
 
-                    checkConstructorDependencies();
+                    updateConstructorDependencies();
 
                 } else {
 
@@ -372,7 +379,7 @@ public class ClassFactory implements ConfigurableBuilder {
 
             } catch (Exception e) {
 
-                new RuntimeException("Cannot instantiate values for constructor!", e);
+                new RuntimeException("Cannot instantiate values for constructor: " + e.toString(), e);
             }
         }
 
@@ -382,7 +389,7 @@ public class ClassFactory implements ConfigurableBuilder {
 
         } catch (Exception e) {
 
-            throw new RuntimeException("Cannot create instance from constructor: " + constructor, e);
+            throw new RuntimeException("Cannot create instance from constructor: " + constructor + ": " + e.toString() + " with values=" + values, e);
         }
 
         if (props != null && props.size() > 0) {
@@ -426,7 +433,7 @@ public class ClassFactory implements ConfigurableBuilder {
         return k1.isAssignableFrom(k2);
     }
 
-    private void checkConstructorDependencies() {
+    public void updateConstructorDependencies() {
 
         Constructor<?>[] constructors = klass.getConstructors();
 
@@ -523,9 +530,9 @@ public class ClassFactory implements ConfigurableBuilder {
         }
     }
 
-    private static class DependencyKey {
+    public static class DependencyKey {
 
-        private String key;
+        public final String key;
 
         public DependencyKey(String key) {
             this.key = key;

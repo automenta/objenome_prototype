@@ -1,7 +1,5 @@
 package objenome;
 
-import java.util.Set;
-
 /**
  * An IoC factory that knows how to create instances and can be configured by
  * accepting values for its constructor and properties (setters). It can also be
@@ -52,8 +50,8 @@ public interface ConfigurableBuilder extends Builder {
      * @param key The key used to get an instance from the container
      * @return The set of possible builders itself. (Fluent API)
      */    
-    public Set<ConfigurableBuilder> constructorUse(Object key);
-
+    public ConfigurableBuilder constructorUse(Object key);
+    
     /**
      * In case you want to force the use of a zero argument constructor and
      * avoid any ambiguity when choosing the constructor to use.

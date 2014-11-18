@@ -5,15 +5,12 @@
  */
 package objenome;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.SetMultimap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import static java.util.stream.Collectors.toSet;
-import objenome.impl.ClassFactory;
+import objenome.impl.ClassBuilder;
 import objenome.impl.ConstructorDependency;
 import objenome.impl.SetterDependency;
 import objenome.util.InjectionUtils;
@@ -24,7 +21,7 @@ import objenome.util.InjectionUtils;
  */
 public class AbstractProtoContext implements ProtoContext  {
     
-    protected SetMultimap<String,Builder> builders = LinkedHashMultimap.create();
+    protected Map<String,Builder> builders = new HashMap();
 
     protected Map<String, Scope> scopes = new HashMap<String, Scope>();
     
@@ -33,57 +30,43 @@ public class AbstractProtoContext implements ProtoContext  {
     protected Set<ConstructorDependency> forConstructMethod = Collections.synchronizedSet(new HashSet<ConstructorDependency>());
 
     @Override
-    public Set<Class<?>> types(Object key) {
-        String k = InjectionUtils.getKeyName(key);
-        Set<Builder> f = getBuilders(k);
+    public Class<?> type(Object key) {        
+        Builder f = getBuilder(key);
         if (f == null) {
             return null;
         }
-        return f.stream().map(b -> b.type()).collect(toSet());
+        return f.type();
     }
 
-    protected Set<Builder> getBuilders(String name) {
-        return builders.get(name);
+ 
+    public Builder getBuilder(Object key) {
+        String k = InjectionUtils.getKeyName(key);
+        return builders.get(k);        
     }
-    
-    protected Builder getTheBuilder(String name) {
-        Set<Builder> f = getBuilders(name);
-        if (f == null)
-            return null;
-        if (f.size() > 1) {
-            throw new RuntimeException("Ambiguousity: " + name + " has builders: " + f);
-        }
-        return f.iterator().next();
-    }
-            
 
     
     @Override
-    public Builder usable(Object key, Builder factory, Scope scope) {
+    public Builder usable(Object key, Scope scope, Builder b) {
         String keyString = InjectionUtils.getKeyName(key);
-        builders.put(keyString, factory);
+        builders.put(keyString, b);
         scopes.put(keyString, scope);
-        forConstructMethod.add(new ConstructorDependency(keyString, factory.type()));
-        return factory;
+        forConstructMethod.add(new ConstructorDependency(keyString, b.type()));
+        return b;
     }
 
     @Override
     public Builder usable(Object key, Builder factory) {
-        return usable(key, factory, Scope.NONE);
+        return usable(key, Scope.NONE, factory);
     }
 
     @Override
     public ConfigurableBuilder usable(Object key, Class<?> klass) {
-        ConfigurableBuilder cc = new ClassFactory(this, klass);
-        usable(key, cc);
-        return cc;
+        return usable(key, Scope.NONE, klass);
     }
 
     @Override
-    public ConfigurableBuilder usable(Object key, Class<?> klass, Scope scope) {
-        ConfigurableBuilder cc = new ClassFactory(this, klass);
-        usable(key, cc, scope);
-        return cc;
+    public ConfigurableBuilder usable(Object key, Scope scope, Class<?> klass) {
+        return (ConfigurableBuilder) usable(key, scope, new ClassBuilder(this, klass));
     }
 
     @Override
@@ -106,16 +89,21 @@ public class AbstractProtoContext implements ProtoContext  {
     public Set<ConstructorDependency> getConstructorDependencies() {
         return constructorDependencies;
     }
+    
+    public ClassBuilder getClassBuilder(Class c) {
+        return new ClassBuilder(this, c, forConstructMethod);
+    }
+            
 
     
     private void autowireBySetter(String targetProperty, String sourceFromContainer) {
 
-        Set<Class<?>> sourceTypes = types(sourceFromContainer);        
-        for (Class t : sourceTypes) {            
-            setterDependencies.add(
-                    new SetterDependency(targetProperty, sourceFromContainer, t)
-            );
-        }
+        Class<?> sourceType = type(sourceFromContainer);        
+        
+        setterDependencies.add(
+                new SetterDependency(targetProperty, sourceFromContainer, sourceType)
+        );
+        
     }
 
     private void autowireBySetter(String targetProperty) {
@@ -125,12 +113,12 @@ public class AbstractProtoContext implements ProtoContext  {
 
     private void autowireByConstructor(String sourceFromContainer) {
 
-        Set<Class<?>> sourceTypes = types(sourceFromContainer);        
-        for (Class t : sourceTypes) {     
-            constructorDependencies.add(
-                    new ConstructorDependency(sourceFromContainer, t)
-            );
-        }
+        Class<?> sourceType = type(sourceFromContainer);        
+        
+        constructorDependencies.add(
+                new ConstructorDependency(sourceFromContainer, sourceType)
+        );
+        
     }
 
     protected static class ClearableHolder {

@@ -2,9 +2,6 @@ package objenome;
 
 import java.util.Date;
 
-import objenome.Context;
-import objenome.Scope;
-import objenome.DefaultContext;
 
 public class BasicOperations {
 
@@ -20,6 +17,7 @@ public class BasicOperations {
         case8();
         case9();
         case10();
+        case11();
     }
 
     public static class Connection {
@@ -177,7 +175,7 @@ public class BasicOperations {
 
         Context c = new DefaultContext();
 
-        c.usable("myString", String.class, Scope.SINGLETON).addInitValue("saoj");
+        c.usable("myString", Scope.SINGLETON, String.class).addInitValue("saoj");
 
         String s1 = c.get("myString");
 
@@ -198,13 +196,13 @@ public class BasicOperations {
         // or the hibernate SessionFactory
 
         // "conn" = the name of the property
-        // Connection.class = the types of the property
+        // Connection.class = the type of the property
         // "connection" = the source from where the dependency will come from
         
 
         UserDAO userDAO = c.get("userDAO");
 
-        // the container detects that userDAO has a dependency: name = "conn" and types = "Connection.class"
+        // the container detects that userDAO has a dependency: name = "conn" and type = "Connection.class"
         // where does it go to get the dependency to insert?
         // In itself: it does a Context.get("connection") => "connection" => the source
         System.out.println(userDAO.getUsername(11)); // ==> "saoj" ==> connection is not null as expected...
@@ -238,11 +236,11 @@ public class BasicOperations {
         c.apply(service).doSomething(); 
     }
 
-    public static class SomeService2 {
+    public static class ExampleService {
 
         private final UserDAO userDAO;
 
-        public SomeService2(UserDAO userDAO) {
+        public ExampleService(UserDAO userDAO) {
             this.userDAO = userDAO;
         }
 
@@ -250,6 +248,25 @@ public class BasicOperations {
             System.out.println(userDAO.getUsername(11));
         }
     }
+    
+    public static class ParameterX {
+        public ParameterX() { }        
+    }
+    
+    public static class ExampleService2 {
+
+        private final UserDAO userDAO;
+        private final ParameterX x;
+
+        public ExampleService2(UserDAO userDAO, ParameterX x) {
+            this.userDAO = userDAO;
+            this.x = x;
+        }
+
+        public void function() {
+            System.out.println(userDAO.getUsername(11) + " " + x);
+        }
+    }    
 
     private static void case10() {
 
@@ -259,9 +276,23 @@ public class BasicOperations {
 
         c.use("connection", Connection.class);
 
-        SomeService2 service = c.get(SomeService2.class);
+        ExampleService service = c.get(ExampleService.class);
 
         service.doSomething(); // ==> "saoj"
     }
 
+    private static void case11() {
+
+        Context c = new DefaultContext();
+
+        c.usable(JdbcUserDAO.class);        
+        c.usable(ParameterX.class);
+        
+        c.use("connection", Connection.class); //wires to setter
+
+        ExampleService2 service = c.get(ExampleService2.class);
+
+        service.function(); // ==> "saoj"
+    }
+    
 }

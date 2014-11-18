@@ -5,16 +5,14 @@
  */
 package objenome;
 
-import com.google.common.util.concurrent.AtomicDouble;
+import java.util.Collection;
 
 /**
- * Gene of an Objosome
+ * 
  */
-abstract public class Objene extends AtomicDouble {
+public interface Parameterized {
 
-    public Objene(double initialValue) {
-        super(initialValue);
-    }
-    
+    /** the genes necessary to specify an instance of this component */
+    public Collection<? extends Objene> getGenes();
     
 }
