@@ -5,7 +5,6 @@
  */
 package objenome.impl;
 
-import objenome.gene.ClassSelect;
 import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +12,7 @@ import objenome.Builder;
 import objenome.Context;
 import objenome.Objene;
 import objenome.Parameterized;
+import objenome.gene.ClassSelect;
 
 /**
  *

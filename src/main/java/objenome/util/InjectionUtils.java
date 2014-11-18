@@ -19,7 +19,8 @@ public class InjectionUtils {
      * Ex: getObject(User.class, "user") will get all values that begin with
      * "user.".
      */
-    public static char PREFIX_SEPARATOR = '.';
+
+    public static final char PREFIX_SEPARATOR = '.';
 
     private static Map<Class<?>, Map<String, Object>> settersMaps = new HashMap<Class<?>, Map<String, Object>>();
 
@@ -27,7 +28,7 @@ public class InjectionUtils {
 
     public static void prepareForInjection(Class<?> klass, Map<String, Object> setters, Map<String, Object> fields) {
 
-        StringBuffer sb = new StringBuffer(32);
+        StringBuilder sb = new StringBuilder(32);
 
         Method[] methods = klass.getMethods();
 
@@ -226,7 +227,7 @@ public class InjectionUtils {
             } catch (Exception e) {
                 return null;
             }
-            newValue = new Integer(x);
+            newValue = x;
         } else if (className.equals("short") || className.equals("java.lang.Short")) {
             short x = -1;
             try {
@@ -234,7 +235,7 @@ public class InjectionUtils {
             } catch (Exception e) {
                 return null;
             }
-            newValue = new Short(x);
+            newValue = x;
 
         } else if (className.equals("char") || className.equals("java.lang.Character")) {
 
@@ -242,7 +243,7 @@ public class InjectionUtils {
                 return null;
             }
 
-            newValue = new Character(value.charAt(0));
+            newValue = value.charAt(0);
 
         } else if (className.equals("long") || className.equals("java.lang.Long")) {
             long x = -1;
@@ -251,7 +252,7 @@ public class InjectionUtils {
             } catch (Exception e) {
                 return null;
             }
-            newValue = new Long(x);
+            newValue = x;
         } else if (className.equals("float") || className.equals("java.lang.Float")) {
             float x = -1;
             try {
@@ -259,7 +260,7 @@ public class InjectionUtils {
             } catch (Exception e) {
                 return null;
             }
-            newValue = new Float(x);
+            newValue = x;
         } else if (className.equals("double") || className.equals("java.lang.Double")) {
             double x = -1;
             try {
@@ -267,7 +268,7 @@ public class InjectionUtils {
             } catch (Exception e) {
                 return null;
             }
-            newValue = new Double(x);
+            newValue = x;
         } else if (className.equals("boolean") || className.equals("java.lang.Boolean")) {
             try {
                 int x = Integer.parseInt(value);
@@ -345,22 +346,23 @@ public class InjectionUtils {
 
         String s = klass.getName();
 
-        if (s.equals("java.lang.Boolean")) {
-            return Boolean.TYPE;
-        } else if (s.equals("java.lang.Byte")) {
-            return Byte.TYPE;
-        } else if (s.equals("java.lang.Short")) {
-            return Short.TYPE;
-        } else if (s.equals("java.lang.Character")) {
-            return Character.TYPE;
-        } else if (s.equals("java.lang.Integer")) {
-            return Integer.TYPE;
-        } else if (s.equals("java.lang.Long")) {
-            return Long.TYPE;
-        } else if (s.equals("java.lang.Float")) {
-            return Float.TYPE;
-        } else if (s.equals("java.lang.Double")) {
-            return Double.TYPE;
+        switch (s) {
+            case "java.lang.Boolean":
+                return Boolean.TYPE;
+            case "java.lang.Byte":
+                return Byte.TYPE;
+            case "java.lang.Short":
+                return Short.TYPE;
+            case "java.lang.Character":
+                return Character.TYPE;
+            case "java.lang.Integer":
+                return Integer.TYPE;
+            case "java.lang.Long":
+                return Long.TYPE;
+            case "java.lang.Float":
+                return Float.TYPE;
+            case "java.lang.Double":
+                return Double.TYPE;
         }
         return null;
     }
@@ -395,7 +397,7 @@ public class InjectionUtils {
 
     public static Method findMethodToGet(Class<?> target, String name) {
 
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         sb.append("get").append(name.substring(0, 1).toUpperCase());
 
@@ -433,7 +435,7 @@ public class InjectionUtils {
 
     public static Method findMethodToInject(Class<?> target, String name, Class<?> source) {
 
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         sb.append("set").append(name.substring(0, 1).toUpperCase());
 
@@ -576,7 +578,7 @@ public class InjectionUtils {
      */
     public static String getProperty(Object bean, String nameProperty) throws Exception {
 
-        if (nameProperty == null || nameProperty.equals("")) {
+        if (nameProperty == null || nameProperty.isEmpty()) {
             return null;
         }
 
@@ -683,11 +685,12 @@ public class InjectionUtils {
             }
         }
 
-        Iterator<String> iter = setters.keySet().iterator();
+        Iterator<Map.Entry<String, Object>> iter = setters.entrySet().iterator();
 
         while (iter.hasNext()) {
 
-            String var = iter.next();
+            Map.Entry<String, Object> evar = iter.next();
+            String var = evar.getKey();
 
             boolean hasValue = provider.hasValue(var);
 
@@ -709,7 +712,7 @@ public class InjectionUtils {
             }
 
             // if (value == null) continue;
-            Object obj = setters.get(var);
+            Object obj = evar.getValue();
 
             // we may have a list of overloaded methods...
             List<Method> list = null;
@@ -794,17 +797,18 @@ public class InjectionUtils {
 
         if (fields != null) {
 
-            iter = fields.keySet().iterator();
+            iter = fields.entrySet().iterator();
 
             while (iter.hasNext()) {
 
-                String var = iter.next();
+                Map.Entry<String, Object> evar = iter.next();
+                String var = evar.getKey();
 
                 boolean hasValue = provider.hasValue(var);
 
                 Object value = provider.get(var);
 
-                Field f = (Field) fields.get(var);
+                Field f = (Field) evar.getValue();
 
                 Class<?> type = f.getType();
 

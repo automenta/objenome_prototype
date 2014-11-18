@@ -86,6 +86,7 @@ public class AbstractProtoContext implements ProtoContext  {
     }
  
 
+    @Override
     public Set<ConstructorDependency> getConstructorDependencies() {
         return constructorDependencies;
     }

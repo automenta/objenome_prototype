@@ -35,6 +35,7 @@ public class DoubleSelect extends Objene<Double> {
         this.max = max;
     }
     
+    @Override
     public Double getValue() {
         return ((doubleValue() * (max-min)) + min);
     }

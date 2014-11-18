@@ -3,6 +3,7 @@ package objenome.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,13 +11,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import objenome.ConfigurableBuilder;
 import objenome.Context;
 import objenome.ProtoContext;
 import objenome.util.FindConstructor;
 import objenome.util.FindMethod;
 import objenome.util.InjectionUtils;
+
 
 /**
  * The implementation of the Configurable Factory.
@@ -188,7 +189,7 @@ public class ClassBuilder implements ConfigurableBuilder {
             return new Class[0];
         }
 
-        Class<?>[] types = (Class<?>[]) new Class[values.size()];
+        Class<?>[] types = new Class[values.size()];
 
         return values.toArray(types);
     }
@@ -231,7 +232,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         try {
 
-            StringBuffer sb = new StringBuffer(30);
+            StringBuilder sb = new StringBuilder(30);
             sb.append("set");
             sb.append(name.substring(0, 1).toUpperCase());
 
@@ -395,7 +396,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         } catch (Exception e) {
 
-            throw new RuntimeException("Cannot create instance from constructor: " + constructor + ": " + e.toString() + " with values=" + values, e);
+            throw new RuntimeException("Cannot create instance from constructor: " + constructor + ": " + e.toString() + " with values=" + Arrays.toString(values), e);
         }
 
         if (props != null && props.size() > 0) {

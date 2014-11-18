@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import objenome.impl.ClassBuilder;
 import objenome.impl.SetterDependency;
 import objenome.util.InjectionUtils;
@@ -19,9 +18,9 @@ import objenome.util.InjectionUtils.Provider;
 public class DefaultContext extends AbstractProtoContext implements Context {
 
 
-    private Map<String, Object> singletonsCache = new HashMap<String, Object>();
+    private final Map<String, Object> singletonsCache = new HashMap<String, Object>();
 
-    private Map<String, ThreadLocal<Object>> threadLocalsCache = new HashMap<String, ThreadLocal<Object>>();
+    private final Map<String, ThreadLocal<Object>> threadLocalsCache = new HashMap<String, ThreadLocal<Object>>();
 
 
     @Override

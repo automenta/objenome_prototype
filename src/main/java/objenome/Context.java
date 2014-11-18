@@ -5,9 +5,6 @@
  */
 package objenome;
 
-import java.util.Set;
-import objenome.impl.ConstructorDependency;
-
 /**
  * Context which can completely operate to produce or modify objects
  */

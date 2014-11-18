@@ -124,6 +124,7 @@ public class TestSimple {
         c.usable(SubComponent.class, SubComponent0.class, SubComponent1.class);
         Objosome o = c.get(Machine.class);
 
+        System.out.println(o.get(0).path);
         
         assertEquals("objosome contains 1 gene: to select between subcomponents of the part component", 1, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());

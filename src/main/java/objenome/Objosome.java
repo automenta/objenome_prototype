@@ -34,7 +34,6 @@ public class Objosome extends AbstractListChromosome<Objene> {
     
     @Override
     protected void checkValidity(List<Objene> list) throws InvalidRepresentationException {
-        return;
     }
 
     @Override

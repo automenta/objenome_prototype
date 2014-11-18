@@ -3,7 +3,6 @@ package objenome.impl;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
 import objenome.util.InjectionUtils;
 
 /**
@@ -19,7 +18,7 @@ public class SetterDependency {
 
     private final Class<?> sourceType;
 
-    private Map<String, Method> cache = new HashMap<String, Method>();
+    private final Map<String, Method> cache = new HashMap<String, Method>();
 
     public SetterDependency(String targetProperty, String sourceFromContainer, Class<?> sourceType) {
 
@@ -59,11 +58,7 @@ public class SetterDependency {
             return false;
         }
 
-        if (!d.sourceFromContainer.equals(this.sourceFromContainer)) {
-            return false;
-        }
-
-        return true;
+        return d.sourceFromContainer.equals(this.sourceFromContainer);
     }
 
     public Method check(Class<?> targetClass) {

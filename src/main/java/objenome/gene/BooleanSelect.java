@@ -26,7 +26,7 @@ public class BooleanSelect extends Objene<Boolean> {
     
     @Override
     public Boolean getValue() {
-        return doubleValue() > 0.5 ? true : false;
+        return doubleValue() > 0.5;
     }
 
 }

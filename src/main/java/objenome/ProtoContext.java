@@ -114,7 +114,7 @@ public interface ProtoContext  {
     }
     default public Builder use(Class klass) {
         Builder c = usable(klass, klass);
-        use(klass);
+        use(klass, klass);
         return c;
     }
     

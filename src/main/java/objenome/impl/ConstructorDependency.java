@@ -43,11 +43,7 @@ public class ConstructorDependency {
 
         ConstructorDependency d = (ConstructorDependency) obj;
 
-        if (!d.sourceFromContainer.equals(this.sourceFromContainer)) {
-            return false;
-        }
-
-        return true;
+        return d.sourceFromContainer.equals(this.sourceFromContainer);
     }
 
     @Override

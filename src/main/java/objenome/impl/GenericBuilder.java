@@ -1,7 +1,6 @@
 package objenome.impl;
 
 import java.lang.reflect.Method;
-
 import objenome.Builder;
 import objenome.Context;
 import objenome.Interceptor;

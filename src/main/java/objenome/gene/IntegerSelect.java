@@ -35,6 +35,7 @@ public class IntegerSelect extends Objene<Integer> {
         this.max = max;
     }
     
+    @Override
     public Integer getValue() {
         return (int)((doubleValue() * (max-min)) + min);
     }
