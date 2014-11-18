@@ -5,7 +5,6 @@
  */
 package objenome;
 
-import objenome.gene.Between;
 import objenome.gene.ClassSelect;
 import objenome.gene.IntegerSelect;
 import static org.junit.Assert.assertEquals;

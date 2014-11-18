@@ -5,6 +5,7 @@
  */
 package objenome.gene;
 
+import objenome.Between;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import objenome.Objene;
