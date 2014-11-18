@@ -8,6 +8,7 @@ package objenome.gene;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import objenome.Objene;
+import objenome.ObjosomeContext;
 
 /**
  *
@@ -29,4 +30,9 @@ public class BooleanSelect extends Objene<Boolean> {
         return doubleValue() > 0.5;
     }
 
+    @Override public void apply(ObjosomeContext c) { 
+        
+    }
+
+    
 }

@@ -25,13 +25,19 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
     private int doubleMinDefault = 0;
     private int doubleMaxDefault = 1;
     
+    public GeneContext() {
+        this(false);        
+    }
+    
+    public GeneContext(boolean concurrent) {
+        super(concurrent);
+    }
+    
     @Override
     public MultiClassBuilder usable(Class abstractClass, Scope scope, Class<?>... klasses) {
         return (MultiClassBuilder)usable(abstractClass, scope, 
                 new MultiClassBuilder(abstractClass, Lists.newArrayList( klasses ) ));
     }
-
-    
 
     protected List<Objene> getGenes(ClassBuilder cb, List<Object> path, List<Objene> genes) {
         cb.updateConstructorDependencies(false);
@@ -135,7 +141,7 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
      *  keys for which to evolve a set of Objosomes can be evolved to generate
      */
     public Objosome get(Object... keys) {
-        return new Objosome(getGenes(Lists.newArrayList(keys), null, null));
+        return new Objosome(this, getGenes(Lists.newArrayList(keys), null, null));
     }
     
    
@@ -169,6 +175,12 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
 
     public void setDoubleMinDefault(int doubleMinDefault) {
         this.doubleMinDefault = doubleMinDefault;
+    }
+
+    /** returns an error string summarizing why a list of genes would be invalid
+     * with respect to this context; or null if there is no error     */
+    public String getChromosomeError(List<Objene> genes) {
+        return null;
     }
 
 }

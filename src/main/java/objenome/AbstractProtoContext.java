@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import objenome.impl.ClassBuilder;
 import objenome.impl.ConstructorDependency;
 import objenome.impl.SetterDependency;
@@ -21,14 +22,43 @@ import objenome.util.InjectionUtils;
  */
 public class AbstractProtoContext implements ProtoContext  {
     
-    protected Map<String,Builder> builders = new HashMap();
+    protected final Map<String,Builder> builders;
 
-    protected Map<String, Scope> scopes = new HashMap<String, Scope>();
+    protected final Map<String, Scope> scopes;
     
-    protected Set<SetterDependency> setterDependencies = Collections.synchronizedSet(new HashSet<SetterDependency>());
-    protected Set<ConstructorDependency> constructorDependencies = Collections.synchronizedSet(new HashSet<ConstructorDependency>());
-    protected Set<ConstructorDependency> forConstructMethod = Collections.synchronizedSet(new HashSet<ConstructorDependency>());
+    protected final Set<SetterDependency> setterDependencies;
+    protected final Set<ConstructorDependency> constructorDependencies;
+    protected final Set<ConstructorDependency> forConstructMethod;
+    public final boolean concurrent;
 
+    
+    public AbstractProtoContext(final boolean concurrent) {
+        this(
+            concurrent ? new ConcurrentHashMap() : new HashMap(),
+            concurrent ? new ConcurrentHashMap() : new HashMap(),
+            concurrent ? Collections.synchronizedSet(new HashSet()) : new HashSet(),
+            concurrent ? Collections.synchronizedSet(new HashSet()) : new HashSet(),
+            concurrent ? Collections.synchronizedSet(new HashSet()) : new HashSet()
+        );
+    }
+
+            
+    public AbstractProtoContext(
+            Map<String,Builder> builders, 
+            Map<String, Scope> scopes,
+            Set<SetterDependency> setterDependencies, 
+            Set<ConstructorDependency> constructorDependencies,
+            Set<ConstructorDependency> forConstructMethod
+            ) {
+        this.builders = builders;
+        this.scopes = scopes;
+        this.setterDependencies = setterDependencies;
+        this.constructorDependencies = constructorDependencies;
+        this.forConstructMethod = forConstructMethod;
+        this.concurrent = builders instanceof ConcurrentHashMap;
+    }
+
+    
     @Override
     public Class<?> type(Object key) {        
         Builder f = getBuilder(key);

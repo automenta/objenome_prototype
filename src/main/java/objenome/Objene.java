@@ -29,7 +29,10 @@ abstract public class Objene<V> extends AtomicDouble {
         this.path = path;
     }
 
+    /** apply the consequences of this gene to an ObjosomeContext */
+    abstract public void apply(ObjosomeContext c);
 
+    /** gets the data value */
     abstract public V getValue();
     
     @Override
@@ -37,5 +40,6 @@ abstract public class Objene<V> extends AtomicDouble {
         Object lastPathElement = path.get(path.size()-1);        
         return lastPathElement + "=" + getValue();
     }    
+
     
 }

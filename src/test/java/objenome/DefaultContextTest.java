@@ -298,5 +298,16 @@ public class DefaultContextTest {
 
         Assert.assertNotNull(service.function());
     }
+
+    /** tests what happens when a key is replaced */
+    @Test public void testAmbiguity() {
+        
+        DefaultContext c = new DefaultContext();
+        c.usable(ExampleService2.class, GeneContextTest.Part0.class);
+        assertEquals(0, c.get(GeneContextTest.Machine.class).function());
+        c.usable(ExampleService2.class, GeneContextTest.Part1.class);
+        assertEquals("overrides the first builder", 1, c.get(GeneContextTest.Machine.class).function());
+        
+    }
     
 }

@@ -91,7 +91,7 @@ public class GeneContextTest {
         c.usable(Part.class, Part0.class, Part1.class);
                         
         Objosome o = c.get(Machine.class);
-        assertEquals("objosome contains one gene to select betwen the implementations of interface Part", 1, o.getLength());
+        assertEquals("objosome contains one gene to select betwen the implementations of interface Part", 1, o.size());
         
         assertEquals(ClassSelect.class, o.get(0).getClass());
         
@@ -105,7 +105,7 @@ public class GeneContextTest {
         c.usable(Part.class, Part0.class, Part1.class, PartN.class);                        
         Objosome o = c.get(Machine.class);
         
-        assertEquals("objosome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.getLength());
+        assertEquals("objosome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.size());
         assertEquals(ClassSelect.class, o.get(0).getClass());
                  
         assertEquals("[class objenome.GeneContextTest$Machine, objenome.GeneContextTest$Part arg0 (part)]", o.get(0).path.toString());
@@ -122,7 +122,7 @@ public class GeneContextTest {
         c.usable(SubComponent.class, SubComponent0.class, SubComponent1.class);
         Objosome o = c.get(Machine.class);
         
-        assertEquals("objosome contains 1 gene: to select between subcomponents of the part component", 1, o.getLength());
+        assertEquals("objosome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
         assertEquals(ClassSelect.class, o.get(0).getClass());
         assertEquals("3rd level deep", 5, o.get(0).path.size());
     }
@@ -136,7 +136,7 @@ public class GeneContextTest {
                     SubComponent0.class, SubComponent1.class);
         Objosome o = c.get(Machine.class);
                        
-        assertEquals(3, o.getLength());
+        assertEquals(3, o.size());
         assertEquals(ClassSelect.class, o.get(0).getClass());
         assertEquals(IntegerSelect.class, o.get(1).getClass());
         assertEquals(1, ((IntegerSelect)o.get(1)).getMin());
@@ -145,14 +145,5 @@ public class GeneContextTest {
     }
     
 
-    @Test public void testAmbiguityDenial() {
-        
-        DefaultContext c = new DefaultContext();
-        c.usable(Part.class, Part0.class);
-        assertEquals(0, c.get(Machine.class).function());
-        c.usable(Part.class, Part1.class);
-        assertEquals("overrides the first builder", 1, c.get(Machine.class).function());
-        
-    }
 
 }

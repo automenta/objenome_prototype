@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import objenome.impl.ClassBuilder;
 import objenome.impl.SetterDependency;
 import objenome.util.InjectionUtils;
@@ -18,10 +19,33 @@ import objenome.util.InjectionUtils.Provider;
 public class DefaultContext extends AbstractProtoContext implements Context {
 
 
-    private final Map<String, Object> singletonsCache = new HashMap<String, Object>();
+    private final Map<String, Object> singletonsCache;
 
-    private final Map<String, ThreadLocal<Object>> threadLocalsCache = new HashMap<String, ThreadLocal<Object>>();
+    private final Map<String, ThreadLocal<Object>> threadLocalsCache;
 
+    
+    
+    public DefaultContext() {
+        this(false);        
+    }
+    
+    public DefaultContext(boolean concurrent) {
+        super(concurrent);
+        singletonsCache = concurrent ? new ConcurrentHashMap() : new HashMap();
+        threadLocalsCache = concurrent ? new ConcurrentHashMap() : new HashMap();        
+    }
+
+    public DefaultContext(final AbstractProtoContext parent) {
+        super(parent.builders, parent.scopes, parent.setterDependencies, parent.constructorDependencies, parent.forConstructMethod);
+        
+        singletonsCache = parent.concurrent ? new ConcurrentHashMap() : new HashMap();
+        threadLocalsCache = parent.concurrent ? new ConcurrentHashMap() : new HashMap();
+    }
+    
+    
+    
+
+    
 
     @Override
     public <T> T get(Object key) {

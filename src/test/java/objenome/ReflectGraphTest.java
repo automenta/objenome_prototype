@@ -26,7 +26,7 @@ public class ReflectGraphTest {
                 GeneContext.class, DefaultContext.class, Builder.class)                
                 .getAncestorImplementations();
 
-        assertEquals(5, anc.keySet().size());
+        assertEquals(6, anc.keySet().size());
         assertTrue(anc.size() > anc.keySet().size());
         
 //        for (Class c : anc.keySet()) {

@@ -9,6 +9,7 @@ import objenome.Between;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import objenome.Objene;
+import objenome.ObjosomeContext;
 
 /**
  *
@@ -35,6 +36,11 @@ public class IntegerSelect extends Objene<Integer> {
         this.min = min;
         this.max = max;
     }
+    
+    @Override public void apply(ObjosomeContext c) { 
+        
+    }
+
     
     @Override
     public Integer getValue() {

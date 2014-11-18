@@ -7,6 +7,7 @@ package objenome.gene;
 
 import java.util.List;
 import objenome.Objene;
+import objenome.ObjosomeContext;
 import objenome.impl.MultiClassBuilder;
 
 /** stores a double value between 0...1.0 which is used to select equally
@@ -28,6 +29,10 @@ public class ClassSelect extends Objene<Class> {
             which = num - 1;
         }
         return multiclass.implementors.get(which);
+    }
+
+    @Override public void apply(ObjosomeContext c) { 
+        c.use(getValue());
     }
 
     @Override
