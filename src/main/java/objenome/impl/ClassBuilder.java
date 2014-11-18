@@ -44,6 +44,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
     public final Set<ConstructorDependency> constructorDependencies;
     private LinkedList<Parameter> initPrimitives;
+    private boolean specificInitValue;
 
     public ClassBuilder(ProtoContext container, Class<?> klass) {
 
@@ -138,7 +139,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
     @Override
     public ConfigurableBuilder addInitValue(Object value) {
-
+        specificInitValue = true;
         return addInitValue(value, value.getClass());
     }
 
@@ -485,9 +486,11 @@ public class ClassBuilder implements ConfigurableBuilder {
 
             if (constructorParams == null || constructorParams.length == 0) {
                 //Default constructor
-                this.initTypes = newInitTypes; //use empty lists to indicate this
-                this.initValues = newInitValues;
-                this.initPrimitives = newInitPrimitives;
+                if (!specificInitValue) {
+                    this.initTypes = newInitTypes; //use empty lists to indicate this
+                    this.initValues = newInitValues;
+                    this.initPrimitives = newInitPrimitives;
+                }
                 continue; 
             }
             for (final Parameter p : constructorParams) {

@@ -1,24 +1,28 @@
 package objenome;
 
 import java.util.Date;
+import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /** TODO convert this into unit tests */
-public class BasicOperations {
+public class DefaultContextTest {
 
-    public static void main(String[] args) {
-
-        case1();
-        case2();
-        case3();
-        case4();
-        case5();
-        case6();
-        case7();
-        case8();
-        case9();
-        case10();
-        case11();
-    }
+//    public static void main(String[] args) {
+//
+//        case1();
+//        case2();
+//        case3();
+//        case4();
+//        case5();
+//        case6();
+//        case7();
+//        case8();
+//        case9();
+//        case10();
+//        case11();
+//    }
 
     public static class Connection {
 
@@ -73,7 +77,7 @@ public class BasicOperations {
         }
     }
 
-    private static void case9() {
+    @Test public void case9() {
 
         Context c = new DefaultContext();
 
@@ -86,25 +90,23 @@ public class BasicOperations {
         AccountDAO accountDAO = c.get("accountDAO");
         UserDAO userDAO = c.get("userDAO");
 
-        System.out.println(accountDAO.getBalance(25)); // => 1000000
-        System.out.println(userDAO.getUsername(45)); // => "saoj"
+        assertEquals(1000000D, accountDAO.getBalance(25), 0.01);
+        assertEquals("saoj", userDAO.getUsername(45));
     }
 
-    private static void case1() {
+    @Test public void case1() {
 
         Context c = new DefaultContext();
 
         c.usable("myString1", String.class);
 
-        String myString1 = c.get("myString1");
-
-        System.out.println(myString1); // ==> "" ==> default constructor new String() was used
+        assertEquals("default constructor new String() was used", "", c.get("myString1"));
 
         c.usable("myString2", String.class).addInitValue("saoj");
 
-        String myString2 = c.get("myString2");
-
-        System.out.println(myString2); // ==> "saoj" ==> constructor new String("saoj") was used
+        String s2 = c.get("myString2");
+        assertEquals("==> constructor new String(\"saoj\") initialized via addInitValue", "saoj", s2);
+        
 
         c.usable("myDate1", Date.class).addPropertyValue("hours", 15) // setHours(15)
                 .addPropertyValue("minutes", 10) // setMinutes(10)
@@ -112,10 +114,10 @@ public class BasicOperations {
 
         Date myDate1 = c.get("myDate1");
 
-        System.out.println(myDate1); // ==> a date with time 15:10:45
+        assertTrue(myDate1.toString().contains("15:10:45"));
     }
 
-    private static void case5() {
+    @Test public void case5() {
 
         Context c = new DefaultContext();
 
@@ -125,10 +127,10 @@ public class BasicOperations {
 
         AccountDAO accountDAO = c.get("accountDAO");
 
-        System.out.println(accountDAO.getBalance(25)); // => 1000000
+        assertEquals(1000000, accountDAO.getBalance(25), 0.01);
     }
 
-    private static void case7() {
+    @Test public void case7() {
 
         Context c = new DefaultContext();
 
@@ -139,11 +141,11 @@ public class BasicOperations {
 
         AccountDAO accountDAO = c.get("accountDAO");
 
-        System.out.println(accountDAO.getBalance(25)); // => 1000000
+        assertEquals(1000000, accountDAO.getBalance(25), 0.01);
 
     }
 
-    private static void case6() {
+    @Test public void case6() {
 
         Context c = new DefaultContext();
 
@@ -153,10 +155,10 @@ public class BasicOperations {
 
         UserDAO userDAO = c.get("userDAO");
 
-        System.out.println(userDAO.getUsername(54)); // => "saoj"
+        assertEquals("saoj", userDAO.getUsername(54));
     }
 
-    private static void case8() {
+    @Test public void case8() {
 
         Context c = new DefaultContext();
 
@@ -167,11 +169,11 @@ public class BasicOperations {
 
         UserDAO userDAO = c.get("userDAO");
 
-        System.out.println(userDAO.getUsername(54)); // => "saoj"
+        assertEquals("saoj", userDAO.getUsername(54));
 
     }
 
-    private static void case2() {
+    @Test public void case2() {
 
         Context c = new DefaultContext();
 
@@ -181,12 +183,12 @@ public class BasicOperations {
 
         String s2 = c.get("myString");
 
-        System.out.println(s1 == s2); // ==> true ==> same instance
+        assertTrue(s1 == s2); // ==> true ==> same instance
 
-        System.out.println(s1.equals(s2)); // ==> true => of course
+        assertEquals(s1, s2); // ==> true => of course
     }
 
-    private static void case3() {
+    @Test public void case3() {
 
         Context c = new DefaultContext();
 
@@ -205,7 +207,7 @@ public class BasicOperations {
         // the container detects that userDAO has a dependency: name = "conn" and type = "Connection.class"
         // where does it go to get the dependency to insert?
         // In itself: it does a Context.get("connection") => "connection" => the source
-        System.out.println(userDAO.getUsername(11)); // ==> "saoj" ==> connection is not null as expected...
+        assertEquals("connection is not null as expected...", "saoj", userDAO.getUsername(11));
     }
 
     public static class SomeService {
@@ -216,12 +218,13 @@ public class BasicOperations {
             this.userDAO = userDAO;
         }
 
-        public void doSomething() {
-            System.out.println(userDAO.getUsername(11));
+        public boolean doSomething() {
+            //System.out.println(userDAO.getUsername(11));
+            return true;
         }
     }
 
-    private static void case4() {
+    @Test public void case4() {
 
         Context c = new DefaultContext();
 
@@ -233,7 +236,7 @@ public class BasicOperations {
 
         // populate (apply) all properties of SomeService with
         // beans from the container
-        c.apply(service).doSomething(); 
+        assertTrue(c.apply(service).doSomething()); 
     }
 
     public static class ExampleService {
@@ -244,8 +247,8 @@ public class BasicOperations {
             this.userDAO = userDAO;
         }
 
-        public void doSomething() {
-            System.out.println(userDAO.getUsername(11));
+        public String doSomething() {            
+            return userDAO.getUsername(11);
         }
     }
     
@@ -263,12 +266,13 @@ public class BasicOperations {
             this.x = x;
         }
 
-        public void function() {
-            System.out.println(userDAO.getUsername(11) + " " + x);
+        public ParameterX function() {
+            //System.out.println(userDAO.getUsername(11) + " " + x);
+            return x;
         }
     }    
 
-    private static void case10() {
+    @Test public void case10() {
 
         Context c = new DefaultContext();
 
@@ -278,10 +282,10 @@ public class BasicOperations {
 
         ExampleService service = c.get(ExampleService.class);
 
-        service.doSomething(); // ==> "saoj"
+        assertEquals("saoj", service.doSomething()); // ==> "saoj"
     }
 
-    private static void case11() {
+    @Test public void case11() {
 
         Context c = new DefaultContext();
 
@@ -292,7 +296,7 @@ public class BasicOperations {
 
         ExampleService2 service = c.get(ExampleService2.class);
 
-        service.function(); // ==> "saoj"
+        Assert.assertNotNull(service.function());
     }
     
 }

@@ -14,7 +14,7 @@ import org.junit.Test;
  *
  * @author me
  */
-public class TestSimple {
+public class GeneContextTest {
 
     public static interface Part { public int function();    }
     public static interface SubComponent { public int function();    }
@@ -95,7 +95,7 @@ public class TestSimple {
         
         assertEquals(ClassSelect.class, o.get(0).getClass());
         
-        assertEquals("[class objenome.TestSimple$Machine, objenome.TestSimple$Part arg0 (part)]", o.get(0).path.toString());
+        assertEquals("[class objenome.GeneContextTest$Machine, objenome.GeneContextTest$Part arg0 (part)]", o.get(0).path.toString());
     }
     
     /** one gene to select between two interfaces with parametric constructor in one of the dependencies */
@@ -107,14 +107,12 @@ public class TestSimple {
         
         assertEquals("objosome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());
-        
-         System.out.println(o.get(0).path);
-         System.out.println(o.get(1).path);
-        assertEquals("[class objenome.TestSimple$Machine, objenome.TestSimple$Part arg0 (part)]", o.get(0).path.toString());
+                 
+        assertEquals("[class objenome.GeneContextTest$Machine, objenome.GeneContextTest$Part arg0 (part)]", o.get(0).path.toString());
         
         assertEquals(IntegerSelect.class, o.get(1).getClass());        
                         
-        assertEquals("[class objenome.TestSimple$Machine, objenome.TestSimple$Part arg0 (part), class objenome.TestSimple$PartN, int arg0]", o.get(1).path.toString());
+        assertEquals("[class objenome.GeneContextTest$Machine, objenome.GeneContextTest$Part arg0 (part), class objenome.GeneContextTest$PartN, int arg0]", o.get(1).path.toString());
     }
     
     @Test public void testRecurse2LevelsGeneration() {
@@ -123,8 +121,6 @@ public class TestSimple {
         c.usable(Part.class, PartWithSubComponent.class);
         c.usable(SubComponent.class, SubComponent0.class, SubComponent1.class);
         Objosome o = c.get(Machine.class);
-
-        System.out.println(o.get(0).path);
         
         assertEquals("objosome contains 1 gene: to select between subcomponents of the part component", 1, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());
