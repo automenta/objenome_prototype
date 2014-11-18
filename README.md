@@ -1,10 +1,10 @@
-![base](https://raw.githubusercontent.com/automenta/objenome/master/objenome.jpg)
-
 Evolutionary Dependency Injection
 ------------------------------
 
 A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container that automatically assembles software from combinations of components.  Ambiguities in the choice of particular dependencies form a set of combinatorial parameters that can be optimized to maximize a goal function.  In other words, the container can potentially grow itself.  It can also be used in a deterministic mode as a minimal dependency injection framework.
 
+
+![base](https://raw.githubusercontent.com/automenta/objenome/master/objenome.jpg)
 
 Hyperparameter Optimization
 ---------------------------

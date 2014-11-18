@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import objenome.gene.Between;
 import objenome.gene.ClassSelect;
 import objenome.gene.IntegerSelect;
 import static org.junit.Assert.assertEquals;
@@ -35,7 +36,7 @@ public class GeneContextTest {
     public static class PartN implements Part {
         private final int value;
 
-        public PartN(int arg0) {
+        public PartN( @Between(min=1, max=3) int arg0) {
             this.value = arg0;
         }
         
@@ -139,6 +140,8 @@ public class GeneContextTest {
         assertEquals(3, o.getLength());
         assertEquals(ClassSelect.class, o.get(0).getClass());
         assertEquals(IntegerSelect.class, o.get(1).getClass());
+        assertEquals(1, ((IntegerSelect)o.get(1)).getMin());
+        assertEquals(3, ((IntegerSelect)o.get(1)).getMax());
         assertEquals(ClassSelect.class, o.get(2).getClass());
     }
     

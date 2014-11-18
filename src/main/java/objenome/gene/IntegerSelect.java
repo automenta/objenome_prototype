@@ -40,6 +40,23 @@ public class IntegerSelect extends Objene<Integer> {
         return (int)((doubleValue() * (max-min)) + min);
     }
 
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+
     
     
 }
