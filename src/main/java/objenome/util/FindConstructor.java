@@ -1,8 +1,11 @@
 package objenome.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Find constructor with polymorphism! Class.getConstructor only finds an exact
@@ -20,10 +23,11 @@ public class FindConstructor {
      * @param parameterTypes Parameter types to search for
      */
     public static Constructor<?> getConstructor(Class<?> source,
-            Class<?>[] parameterTypes)
+            Class<?>[] parameterTypes, Map<Parameter,Object> specific)
             throws NoSuchMethodException {
         return internalFind(source.getConstructors(),
-                parameterTypes);
+                parameterTypes, 
+                specific);
     }
 
     /**
@@ -36,14 +40,15 @@ public class FindConstructor {
             Class<?>[] parameterTypes)
             throws NoSuchMethodException {
         return internalFind(source.getDeclaredConstructors(),
-                parameterTypes);
+                parameterTypes, 
+                Collections.EMPTY_MAP);
     }
 
     /**
      * Internal method to find the most specific applicable method
      */
     private static Constructor<?> internalFind(Constructor<?>[] toTest,
-            Class<?>[] parameterTypes)
+            Class<?>[] parameterTypes, Map<Parameter,Object> specific)
             throws NoSuchMethodException {
 
         int l = parameterTypes.length;
@@ -51,22 +56,31 @@ public class FindConstructor {
         // First find the applicable methods 
         List<Constructor<?>> applicableMethods = new LinkedList<Constructor<?>>();
 
+        int assigned = 0;
         for (int i = 0; i < toTest.length; i++) {
             // Check the parameters match 
-            Class<?>[] params = toTest[i].getParameterTypes();
+            Parameter[] params = toTest[i].getParameters();
+            //Class<?>[] params = toTest[i].getParameterTypes();
 
             if (params.length != l) {
                 continue;
             }
             int j;
 
-            for (j = 0; j < l; j++) {
-                if (!params[j].isAssignableFrom(parameterTypes[j])) {
-                    break;
+            for (j = 0; j < params.length; j++) {
+                Object specificValue = specific.get(params[j] );
+                if (specificValue!=null) {                    
+                    assigned++;
                 }
+                //TODO parameterTypes may be out of order or missing holes, so allow that
+                else if (params[j].getType().isAssignableFrom(parameterTypes[j])) {
+                    assigned++;
+                }
+                
             }
+            
             // If so, add it to the list 
-            if (j == l) {
+            if (assigned == params.length) {
                 applicableMethods.add(toTest[i]);
             }
         }
@@ -100,7 +114,7 @@ public class FindConstructor {
             int j;
             // In terms of the JLS, current is T 
             Constructor<?> current = applicableMethods.get(i);
-            Class<?>[] currentParams = current.getParameterTypes();
+            Parameter[] currentParams = current.getParameters();
             Class<?> currentDeclarer = current.getDeclaringClass();
 
             for (j = 0; j < size; j++) {
@@ -109,7 +123,7 @@ public class FindConstructor {
                 }
                 // In terms of the JLS, test is U 
                 Constructor<?> test = applicableMethods.get(j);
-                Class<?>[] testParams = test.getParameterTypes();
+                Parameter[] testParams = test.getParameters();
                 Class<?> testDeclarer = test.getDeclaringClass();
 
                 // Check if T is a subclass of U, breaking if not 
@@ -121,12 +135,14 @@ public class FindConstructor {
                 // equivalent parameter in U 
                 int k;
 
-                for (k = 0; k < l; k++) {
-                    if (!testParams[k].isAssignableFrom(currentParams[k])) {
+                for (k = 0; k < testParams.length; k++) {
+                    Object specificValue = specific.get(currentParams[k] );
+                    if ((specificValue==null) ||
+                       (!testParams[k].getType().isAssignableFrom(currentParams[k].getType()))) {
                         break;
                     }
                 }
-                if (k != l) {
+                if (k != testParams.length) {
                     break;
                 }
             }

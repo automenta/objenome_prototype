@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import objenome.ConfigurableBuilder;
 import objenome.AbstractContainer;
+import objenome.Phenotainer;
 import objenome.Prototainer;
 import objenome.util.FindConstructor;
 import objenome.util.FindMethod;
@@ -195,31 +197,42 @@ public class ClassBuilder implements ConfigurableBuilder {
         return values.toArray(types);
     }
 
-    private static Object[] getValues(AbstractContainer context, List<Object> values) throws InstantiationException {
+    private static Object[] getValues(AbstractContainer container, Constructor c, List<Object> values, Map<Parameter,Object> specific) throws InstantiationException {
 
         if (values == null) {
             return null;
         }
 
-        Object[] array = new Object[values.size()];
+        Parameter[] ps = c.getParameters();
+        int size = ps.length;
+        
+        Object[] array = new Object[size];
 
         int index = 0;
-        
-        for (Object obj : values) {
+        int v = 0;
+        for (Parameter p : ps) {
 
-            if (obj instanceof DependencyKey) {
+            Object specified = specific.get(p);
+            if (specified != null)
+                array[index] = specified;
+            else {
+                Object obj = values.get(v++);
+                if (obj instanceof DependencyKey) {
 
-                DependencyKey dk = (DependencyKey) obj;
-                Object dependency = context.get(dk.getKey());
-                if (dependency == null) {
-                    throw new RuntimeException("Unknown dependency:" + dk);
+                    DependencyKey dk = (DependencyKey) obj;
+                    Object dependency = container.get(dk.getKey());
+                    if (dependency == null) {
+                        throw new RuntimeException("Unknown dependency:" + dk);
+                    }
+                    array[index] = dependency;
+
+                } else {
+
+                    array[index] = obj;
                 }
-                array[index++] = dependency;
-
-            } else {
-
-                array[index++] = obj;
             }
+            
+            index++;
         }
 
         return array;
@@ -335,6 +348,13 @@ public class ClassBuilder implements ConfigurableBuilder {
         return null;
     }
 
+    public static Map<Parameter,Object> getParameters(AbstractContainer container) {
+        if (container instanceof Phenotainer) {
+            return ((Phenotainer)container).parameterValues;
+        }
+        return Collections.EMPTY_MAP;
+    }
+    
     @Override
     public <T> T instance(AbstractContainer context) {
 
@@ -343,6 +363,8 @@ public class ClassBuilder implements ConfigurableBuilder {
         Object[] values = null;
 
         synchronized (this) {
+            
+            Map<Parameter,Object> specificParameters = getParameters(context);
 
             if (constructor == null) {
 
@@ -360,29 +382,36 @@ public class ClassBuilder implements ConfigurableBuilder {
                     }
                 }
 
+                
+                
                 try {
-
-                    //constructor = klass.getConstructor(getClasses(initTypes));
-                    constructor = FindConstructor.getConstructor(klass, getClasses(initTypes));
-
+                    
+                    constructor = FindConstructor.getConstructor(klass, getClasses(initTypes), specificParameters);
+                    
                 } catch (Exception e) {
 
                     // try primitives...
                     try {
-
-                        //constructor = klass.getConstructor(getClasses(convertToPrimitives(initTypes)));
-                        constructor = FindConstructor.getConstructor(klass, getClasses(convertToPrimitives(initTypes)));
+                        
+                       constructor = FindConstructor.getConstructor(klass, getClasses(convertToPrimitives(initTypes)), specificParameters);
 
                     } catch (Exception ee) {
 
-                        throw new RuntimeException("Cannot find a constructor for class: " + klass);
+                        //throw new RuntimeException("Cannot find a constructor for class: " + klass + ": " + ee);
                     }
                 }
             }
 
             try {
 
-                values = getValues(context, initValues);
+                if (initValues == null)  {
+                    System.out.println(context);
+                    System.out.println(constructor);
+                    initValues = new LinkedList();
+                    
+                }
+                
+                values = getValues(context, constructor, initValues, specificParameters);
 
             } catch (Exception e) {
 
@@ -396,23 +425,18 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         } catch (Exception e) {
 
-            throw new RuntimeException("Cannot create instance from constructor: " + constructor + ": " + e.toString() + " with values=" + Arrays.toString(values), e);
+            throw new RuntimeException("Cannot create instance of " + this + " with constructor: " + constructor + ": " + e.toString() + " with values=" + Arrays.toString(values), e);
         }
 
+        //set Bean properties
         if (props != null && props.size() > 0) {
 
-            Iterator<String> iter = props.keySet().iterator();
-
-            while (iter.hasNext()) {
-
-                String name = iter.next();
-
+            //TODO use entrySet
+            for (String name : props.keySet()) {
                 Object value = props.get(name);
 
                 if (value instanceof DependencyKey) {
-
                     DependencyKey dk = (DependencyKey) value;
-
                     value = context.get(dk.getKey());
                 }
 
@@ -503,22 +527,40 @@ public class ClassBuilder implements ConfigurableBuilder {
                     // matched this one, so remove...
                     
                     newInitTypes.add(providedInitTypes.removeFirst()); 
-
                     newInitValues.add(providedInitValues.removeFirst());
 
                     continue;
 
-                } else {
+                } 
+                                
+                /*else*/ {
+                    
+                    //check for a Phenotainer-supplied get
+                    //TODO move this to a method in phenotainer
+                    if (container instanceof Phenotainer) {
+                        Phenotainer pheno = (Phenotainer)container;
+                        Object v = pheno.get(p);
+                        System.out.println(pheno.parameterValues);
+                        System.out.println("Got phenotainer: " + p + " = " + v);
+                        
+                        //TODO check for assignability?
+                        if (v!=null) {                            
+                            newInitTypes.add(p.getType());
+                            newInitValues.add(v);                            
+                            continue;
+                        }                    
+                        
+                    }
 
-                    // contains auto-wiring...
-                    Iterator<ConstructorDependency> iter = dependencies.iterator();
 
                     boolean foundMatch = false;
 
+                    // contains auto-wiring...
+                    Iterator<ConstructorDependency> iter = dependencies.iterator();
                     while (iter.hasNext()) {
-
+                        
                         ConstructorDependency d = iter.next();
-
+                        
                         if (betterIsAssignableFrom(pc, d.getSourceType())) {
 
                             iter.remove();
@@ -533,12 +575,12 @@ public class ClassBuilder implements ConfigurableBuilder {
                         }
                     }
 
-                    if (foundMatch) {
+                    if (foundMatch)
                         continue; // next constructor param...
-                    }
+                }
 
                     
-                }
+                
                 
                 //record primitives in constructor
                 if (pc.equals(double.class) || (pc.equals(int.class))) {

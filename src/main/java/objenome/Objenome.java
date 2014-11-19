@@ -14,25 +14,25 @@ import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 /**
- * Object chromosome
+ * Object Genome
  */
-public class Objosome extends ArrayList<Objene> {
+public class Objenome extends ArrayList<Objene> {
     
     public final Genetainer parentContext;
     
-    /** generated context, constructed lazily */
+    /** generated container, constructed lazily */
     private Container context = null;
 
-    public Objosome(Genetainer context, List<Objene> parameters) throws InvalidRepresentationException {
+    public Objenome(Genetainer context, List<Objene> parameters) throws InvalidRepresentationException {
         super(parameters);        
         
         this.parentContext = context;
     }
     
-    /** gets the generated context of this Objosome with respect to the parent context.
-        Parent is a Genetainer but the generated context is a Container
+    /** gets the generated container of this Objenome with respect to the parent container.
+        Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
-    public Container context() {
+    public Container container() {
         if (context!=null)
             return context;
         
@@ -53,14 +53,14 @@ public class Objosome extends ArrayList<Objene> {
 
             @Override
             protected void checkValidity(List<Objene> genes) throws InvalidRepresentationException {
-                String e = Objosome.this.parentContext.getChromosomeError(genes);
+                String e = Objenome.this.parentContext.getChromosomeError(genes);
                 if (e!=null)
                     throw new InvalidRepresentationException(new DummyLocalizable(e));
             }
 
             @Override
             public double fitness() {
-                return scoring.apply(Objosome.this);
+                return scoring.apply(Objenome.this);
             }
 
             @Override
@@ -71,7 +71,7 @@ public class Objosome extends ArrayList<Objene> {
         };
     }
 
-    public interface Scoring extends Function<Objosome,Double> {
+    public interface Scoring extends Function<Objenome,Double> {
         
     }
     

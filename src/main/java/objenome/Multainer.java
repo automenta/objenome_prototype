@@ -13,12 +13,14 @@ import objenome.impl.MultiClassBuilder;
  */
 public interface Multainer extends Prototainer {
     
-    public MultiClassBuilder usable(Class abstractClass, Scope scope, Class<?>... klasses);
+    public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses);
     
     //TODO: deduce common parent classes from a supplied list of classes:
-    //default public MultiClassBuilder usable(Class<?>... klasses) { ...
+    //default public MultiClassBuilder any(Class<?>... klasses) { ...
     
-    default public MultiClassBuilder usable(Class<?> abstractClass, Class<?>... klasses) {
+    
+    
+    default public MultiClassBuilder any(Class<?> abstractClass, Class<?>[] klasses) {
         if (klasses.length == 0)
             usable(abstractClass, abstractClass);
             
@@ -26,7 +28,7 @@ public interface Multainer extends Prototainer {
         if (uniques == 1)
             usable(abstractClass, klasses[0]);
                 
-        return usable(abstractClass, Scope.NONE, klasses);
+        return any(abstractClass, Scope.NONE, klasses);
     }
 
 }

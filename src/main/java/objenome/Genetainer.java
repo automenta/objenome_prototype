@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open of template in of editor.
  */
 package objenome;
 
@@ -10,6 +10,7 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import objenome.gene.BooleanSelect;
+import objenome.gene.ClassSelect;
 import objenome.gene.DoubleSelect;
 import objenome.gene.IntegerSelect;
 import objenome.impl.ClassBuilder;
@@ -18,9 +19,9 @@ import objenome.impl.MultiClassBuilder;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
- * generate Phenotainer containers
- * 
- * early 20th century: from German Gen, from Pangen, a supposed ultimate unit of heredity (from Greek pan * ‘all’ + genos ‘race, kind, offspring’) + from Latin tenere 'to hold.’"
+ generate Phenotainer containers
+ 
+ early 20th century: of German Gen, of Pangen, a supposed ultimate unit of heredity (of Greek pan * ‘all’ + genos ‘race, kind, offspring’) + of Latin tenere 'to hold.’"
  */
 public class Genetainer extends AbstractPrototainer implements Multainer {       
     private int intMinDefault = 0;
@@ -37,7 +38,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
     
     @Override
-    public MultiClassBuilder usable(Class abstractClass, Scope scope, Class<?>... klasses) {
+    public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses) {
         return (MultiClassBuilder)usable(abstractClass, scope, 
                 new MultiClassBuilder(abstractClass, Lists.newArrayList( klasses ) ));
     }
@@ -65,7 +66,6 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             Builder bv = getBuilder(((DependencyKey)v).key);
             if (bv instanceof Parameterized) {
                 genes.addAll( ((Parameterized)bv).getGenes(nextPath) );
-
             }
             if (bv instanceof MultiClassBuilder) {
                 //recurse for each choice
@@ -103,27 +103,55 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
     
     protected List<Objene> getGenes(Iterable keys, List<Object> parentPath, List<Objene> genes) {
-        if (genes == null) genes = new ArrayList();
-        
-        
         for (Object k : keys) {
+            genes = getGenes(k, parentPath, genes);
+        }
+        return genes;
+    }
+    
+    protected List<Objene> getGenes(Object k, List<Object> parentPath, List<Objene> genes) {
+        if (genes == null) genes = new ArrayList();
             
-            //TODO lazily calculate as needed, not immediately because it may not be used
-            List<Object> path;
-            if (parentPath == null) path = new ArrayList();
-            else path = new ArrayList(parentPath);
-            
-            path.add(k);
+        //TODO lazily calculate as needed, not immediately because it may not be used
+        List<Object> path;
+        if (parentPath == null) path = new ArrayList();
+        else path = new ArrayList(parentPath);
+
+        Object previousPathElement = path.size() > 0 ? path.get(path.size()-1) : null;
+
+        Builder b = (k instanceof Builder) ? (Builder)k : getBuilder(k);
+
+
+        
+
+        if (b == null) {
+            ClassBuilder cb = getClassBuilder(k.getClass() instanceof Class ? (Class)k : k.getClass());
+            if (cb.equals(previousPathElement))
+                throw new RuntimeException("Cyclic dependency: " + path + " -> " + cb);
+
+            //System.out.println(k + "=" + cb);
                     
-            Builder b = (k instanceof Builder) ? (Builder)k : getBuilder(k);
-            if (b == null) {
-                //throw new RuntimeException(this + " does not have Builder for key: " + k);
-                
-                ClassBuilder cb = getClassBuilder(k.getClass().equals(Class.class) ? (Class)k : k.getClass());
-                getGenes(cb, path, genes);
+            path.add(cb);                
+            getGenes(cb, path, genes);
+        }
+        else {
+            
+            if (b instanceof Parameterized) {
+                genes.addAll( ((Parameterized)b).getGenes(path) );
+            }            
+        
+            if (b instanceof MultiClassBuilder) {
+                MultiClassBuilder mcb = (MultiClassBuilder)b;
+                path.add(mcb);
+
+                return getGenes(mcb.implementors, path, genes);
             }
-            else if (b instanceof ClassBuilder) {
-                getGenes( b.type(), path, genes);
+            else if (b instanceof ClassBuilder) {                      
+                if (b.equals(previousPathElement))
+                    throw new RuntimeException("Cyclic dependency: " + path + " -> " + b);
+
+                path.add(b);
+                return getGenes( b.type(), path, genes);
             }
             else {
                 throw new RuntimeException("decide what this means: Builder=" + b);                
@@ -132,26 +160,25 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
                 } */               
             }
         }
+        
         return genes;
+        
     }
-    
-    public List<Objene> getGenes(Object key, List<Object> path, List<Objene> genes) {
-        return getGenes(Lists.newArrayList( key ), path, genes);
-    }
+
     
     /** creates a new random objosome,
-  analogous to AbstractContainer.get(Object key) except this represents the set of desired
+  analogous to AbstractContainer.genome(Object key) except this represents of set of desired
   keys for which to evolve a set of Objosomes can be evolved to generate
      */
-    public Objosome get(Object... keys) {
-        return new Objosome(this, getGenes(Lists.newArrayList(keys), null, null));
+    public Objenome genome(Object... keys) {
+        return new Objenome(this, getGenes(Lists.newArrayList(keys), null, null));
     }
     
    
-    /** realize the phenotype of a chromosome */
-    public AbstractContainer build(Objosome objsome, Object[] keys) {
+    /** realize of phenotype of a chromosome */
+    public AbstractContainer build(Objenome objsome, Object[] keys) {
 
-        //populate a new DefaultContext as configured by this Objosome and the static parameters provided in Genetainer parent context
+        //populate a new DefaultContext as configured by this Objenome and of static parameters provided in Genetainer parent container
         return null;
     }    
 
@@ -181,7 +208,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
 
     /** returns an error string summarizing why a list of genes would be invalid
-     * with respect to this context; or null if there is no error     */
+ with respect to this container; or null if there is no error     */
     public String getChromosomeError(List<Objene> genes) {
         return null;
     }

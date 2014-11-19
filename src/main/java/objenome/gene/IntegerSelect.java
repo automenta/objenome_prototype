@@ -18,12 +18,13 @@ import objenome.Phenotainer;
 public class IntegerSelect extends Objene<Integer> {
     private int max;
     private int min;
-
+    private Parameter parameter = null;
     
     public IntegerSelect(Parameter p, List<Object> path, int defaultMin, int defaultMax) {
         this(path, defaultMin, defaultMax);        
         assert(p.getType() == int.class);
-
+        this.parameter = p;
+        
         Between between = p.getDeclaredAnnotation(Between.class);
         if (between!=null) {
             min = (int)between.min();
@@ -38,7 +39,7 @@ public class IntegerSelect extends Objene<Integer> {
     }
     
     @Override public void apply(Phenotainer c) { 
-        
+        c.use(parameter, getValue());
     }
 
     

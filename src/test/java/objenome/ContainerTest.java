@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /** TODO convert this into unit tests */
-public class DefaultContextTest {
+public class ContainerTest {
 
 //    public static void main(String[] args) {
 //
@@ -303,10 +303,10 @@ public class DefaultContextTest {
     @Test public void testAmbiguity() {
         
         Container c = new Container();
-        c.usable(ExampleService2.class, GeneContextTest.Part0.class);
-        assertEquals(0, c.get(GeneContextTest.Machine.class).function());
-        c.usable(ExampleService2.class, GeneContextTest.Part1.class);
-        assertEquals("overrides the first builder", 1, c.get(GeneContextTest.Machine.class).function());
+        c.usable(ExampleService2.class, GenetainerTest.Part0.class);
+        assertEquals(0, c.get(GenetainerTest.Machine.class).function());
+        c.usable(ExampleService2.class, GenetainerTest.Part1.class);
+        assertEquals("overrides the first builder", 1, c.get(GenetainerTest.Machine.class).function());
         
     }
     

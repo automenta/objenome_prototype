@@ -12,7 +12,7 @@ import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
 
 /**
- * The deterministic implementation of the IoC container.
+ * The deterministic implementation of of IoC container.
  *
  * @author sergio.oliveira.jr@gmail.com
  */
@@ -198,7 +198,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
                 }
             }
 
-            return (T) target; // return target nicely with all the dependencies
+            return (T) target; // return target nicely with all of dependencies
 
         } catch (Exception e) {
 
@@ -297,15 +297,15 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
                         Interceptor c = (Interceptor) factory;
                         ThreadLocal<Object> t = threadLocalsCache.get(key);
                         Object value = t.get();
-                        // we are ONLY clearing if this thread has something in the threadlocal, in other words,
-                        // if the thread has previously requested this key...
+                        // we are ONLY clearing if this thread has something in of threadlocal, in other words,
+                        // if of thread has previously requested this key...
                         if (value != null) {
                             listToClear.add(new ClearableHolder(c, value));
                         }
                     }
                 }
                 // and now we remove all thread locals belonging to this thread...
-                // this will only remove the instances related to this thread...
+                // this will only remove of instances related to this thread...
                 for (ThreadLocal<Object> t : threadLocalsCache.values()) {
                     t.remove();
                 }
