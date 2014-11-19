@@ -45,7 +45,7 @@ public class ClassBuilder implements ConfigurableBuilder {
     private boolean useZeroArgumentsConstructor = false;
 
     public final Set<ConstructorDependency> constructorDependencies;
-    private LinkedList<Parameter> initPrimitives;
+    private List<Parameter> initPrimitives;
     private boolean specificInitValue;
 
     public ClassBuilder(Prototainer container, Class<?> klass) {
@@ -397,7 +397,6 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                     } catch (Exception ee) {
 
-                        ee.printStackTrace();;
                         throw new RuntimeException("Cannot find a constructor for class: " + klass + ": " + ee);
                     }
                 }
@@ -494,9 +493,9 @@ public class ClassBuilder implements ConfigurableBuilder {
                 providedInitValues = new LinkedList<Object>();
             }
 
-            LinkedList<Class<?>> newInitTypes = new LinkedList<Class<?>>();
-            LinkedList<Object> newInitValues = new LinkedList<Object>();
-            LinkedList<Parameter> newInitPrimitives = new LinkedList<>();
+            List<Class<?>> newInitTypes = new LinkedList();
+            List<Object> newInitValues = new LinkedList();
+            List<Parameter> newInitPrimitives = new LinkedList();
 
             Set<ConstructorDependency> constructorDependencies = this.constructorDependencies != null ? this.constructorDependencies : container.getConstructorDependencies();
 

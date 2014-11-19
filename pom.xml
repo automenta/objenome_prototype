@@ -23,7 +23,7 @@
         <truth.version>0.13</truth.version>
         <compile-testing.version>0.4</compile-testing.version>
     </properties>    
-    
+      
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -44,20 +44,21 @@
             <version>18.0</version>
         </dependency>
 
-<!--
-<dependency>
-	<groupId>net.bytebuddy</groupId>
-	<artifactId>byte-buddy-agent</artifactId>
-	<version>0.3.1</version>
-</dependency>
--->
+        <!--
+        <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>0.3.1</version>
+        </dependency>
+        -->
 
-<dependency>
-	<groupId>org.reflections</groupId>
-	<artifactId>reflections</artifactId>
-	<version>0.9.9</version>
-</dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.9</version>
+        </dependency>
 
 
     </dependencies>
+  
 </project>

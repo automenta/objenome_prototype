@@ -219,6 +219,8 @@ public class InjectionUtils {
         Object newValue = null;
 
         String className = targetType.getName();
+        
+        //TODO use switch statement
 
         if (className.equals("int") || className.equals("java.lang.Integer")) {
             int x = -1;
@@ -321,7 +323,7 @@ public class InjectionUtils {
         return null;
     }
 
-    public static Class<?> getPrimitiveFrom(Object w) {
+    public static Class getPrimitiveFrom(Object w) {
         if (w instanceof Boolean) {
             return Boolean.TYPE;
         } else if (w instanceof Byte) {
@@ -542,9 +544,10 @@ public class InjectionUtils {
 
             } catch (Exception e) {
 
-                System.err.println("Error injecting by method: " + value + " in " + target + " thru " + m);
+                //System.err.println("Error injecting by method: " + value + " in " + target + " thru " + m);
 
-                e.printStackTrace();
+                //e.printStackTrace();
+                
 
                 throw e;
 
@@ -840,9 +843,9 @@ public class InjectionUtils {
 
                     } catch (Exception e) {
 
-                        System.err.println("Error injecting by field: " + value + " in " + target);
+                        //System.err.println("Error injecting by field: " + value + " in " + target);
 
-                        e.printStackTrace();
+                        //e.printStackTrace();
 
                         throw e;
 

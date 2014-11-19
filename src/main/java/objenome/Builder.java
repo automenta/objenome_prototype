@@ -7,11 +7,11 @@ package objenome;
  */
 public interface Builder {
 
-    public static Class<?>[] the(final Class<?> c) {
+    public static Class[] the(final Class<?> c) {
         return new Class[] { c };
     }
     
-    public static Class<?>[] of(final Class<?>... c) {
+    public static Class[] of(final Class<?>... c) {
         return c;
     }
     
@@ -27,5 +27,5 @@ public interface Builder {
      *
      * @return of type of objects returned by this factory.
      */
-    public Class<?> type();
+    public Class type();
 }

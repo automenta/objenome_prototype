@@ -65,7 +65,7 @@ public class AbstractPrototainer implements Prototainer  {
 
         
     @Override
-    public Class<?> type(Object key) {        
+    public Class type(Object key) {        
         Builder f = getBuilder(key);
         if (f == null) {
             return null;
