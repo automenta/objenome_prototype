@@ -9,7 +9,7 @@ import objenome.Between;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import objenome.Objene;
-import objenome.ObjosomeContext;
+import objenome.Phenotainer;
 
 /**
  *
@@ -37,7 +37,7 @@ public class DoubleSelect extends Objene<Double> {
         this.max = max;
     }
     
-    @Override public void apply(ObjosomeContext c) { 
+    @Override public void apply(Phenotainer c) { 
         
     }
     

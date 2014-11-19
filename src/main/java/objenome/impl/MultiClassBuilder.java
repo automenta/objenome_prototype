@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import objenome.Builder;
-import objenome.Context;
+import objenome.AbstractContainer;
 import objenome.Objene;
 import objenome.Parameterized;
 import objenome.gene.ClassSelect;
@@ -37,7 +37,7 @@ public class MultiClassBuilder implements Builder, Parameterized {
     
     
     @Override
-    public <T> T instance(Context context) {
+    public <T> T instance(AbstractContainer context) {
         if (implementors.size() == 1) {
             return (T) context.get(implementors.get(0) );
         }

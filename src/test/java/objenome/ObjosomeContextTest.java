@@ -8,6 +8,7 @@ package objenome;
 import objenome.GeneContextTest.Machine;
 import objenome.GeneContextTest.Part0;
 import objenome.gene.ClassSelect;
+import objenome.gene.IntegerSelect;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -16,10 +17,30 @@ import org.junit.Test;
  * @author me
  */
 public class ObjosomeContextTest {
- 
+
     
-    @Test public void testSimpleObjeneGeneration() {
-        GeneContext g = new GeneContext();
+    @Test public void testIntegerParameterObjosomeContext() {
+        Genetainer g = new Genetainer();
+
+        g.use(GeneContextTest.Part.class, GeneContextTest.PartN.class);
+                        
+        Objosome o = g.get(GeneContextTest.Machine.class);
+
+        IntegerSelect partSelect = (IntegerSelect)o.get(0);
+        
+        Container c = o.context();
+        
+        Machine m = c.get(Machine.class);
+        
+        int expectedResult = partSelect.getValue();
+        
+        assertEquals(expectedResult, m.function());        
+        
+    }
+    
+    
+    @Test public void testSimpleObjosomeContext() {
+        Genetainer g = new Genetainer();
 
         g.usable(GeneContextTest.Part.class, GeneContextTest.Part0.class, GeneContextTest.Part1.class);
                         
@@ -27,7 +48,7 @@ public class ObjosomeContextTest {
 
         ClassSelect partSelect = (ClassSelect)o.get(0);
         
-        DefaultContext c = o.context();
+        Container c = o.context();
         
         Machine m = c.get(Machine.class);
         
@@ -36,5 +57,6 @@ public class ObjosomeContextTest {
         assertEquals(expectedResult, m.function());        
         
     }
+
     
 }

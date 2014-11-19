@@ -4,31 +4,34 @@ import java.util.Set;
 import objenome.impl.ConstructorDependency;
 
 /**
- * A IoC container that provides:
- * <ul>
- * <li>Programmatic Configuration</li>
- * <li>Bean Instantiation through constructors</li>
- * <li>Bean Initialization through setters</li>
- * <li>Dependency Injection through constructors</li>
- * <li>Dependency Injection through setters</li>
- * <li>Auto-wiring through constructors and setters (very simple!)</li>
- * <li>Injection through setters so you can populate any external object with
- * objects from the container</li>
- * <li>Instantiation through constructors so you can instantiate any external
- * class with objects from the container</li>
- * <li>Support for SINGLETON and THREAD scopes, plus you can easily get REQUEST
- * and SESSION scopes for web projects</li>
- * <li>Generic Factories so you can easily turn anything into a object
- * factory</li>
- * <li>Interceptors for factories: onCreated, onCleared, useful for object
- * pooling</li>
- * </ul>
- *
- * @author sergio.oliveira.jr@gmail.com
- *
+ * first; anterior; relating to a precursor + from Latin tenere 'to hold.’"
  */
-public interface ProtoContext  {
+public interface Prototainer  {
 
+
+    /**
+     * A IoC container that provides:
+     * <ul>
+     * <li>Programmatic Configuration</li>
+     * <li>Bean Instantiation through constructors</li>
+     * <li>Bean Initialization through setters</li>
+     * <li>Dependency Injection through constructors</li>
+     * <li>Dependency Injection through setters</li>
+     * <li>Auto-wiring through constructors and setters (very simple!)</li>
+     * <li>Injection through setters so you can populate any external object with
+     * objects from the container</li>
+     * <li>Instantiation through constructors so you can instantiate any external
+     * class with objects from the container</li>
+     * <li>Support for SINGLETON and THREAD scopes, plus you can easily get REQUEST
+     * and SESSION scopes for web projects</li>
+     * <li>Generic Factories so you can easily turn anything into a object
+     * factory</li>
+     * <li>Interceptors for factories: onCreated, onCleared, useful for object
+     * pooling</li>
+     * </ul>
+     *
+     * 
+     * @author sergio.oliveira.jr@gmail.com
 
     /**
      * Get the type of the instances returned by the associated factory.

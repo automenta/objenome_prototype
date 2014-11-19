@@ -16,7 +16,7 @@ import objenome.util.InjectionUtils.Provider;
  *
  * @author sergio.oliveira.jr@gmail.com
  */
-public class DefaultContext extends AbstractProtoContext implements Context {
+public class Container extends AbstractPrototainer implements AbstractContainer {
 
 
     private final Map<String, Object> singletonsCache;
@@ -25,17 +25,17 @@ public class DefaultContext extends AbstractProtoContext implements Context {
 
     
     
-    public DefaultContext() {
+    public Container() {
         this(false);        
     }
     
-    public DefaultContext(boolean concurrent) {
+    public Container(boolean concurrent) {
         super(concurrent);
         singletonsCache = concurrent ? new ConcurrentHashMap() : new HashMap();
         threadLocalsCache = concurrent ? new ConcurrentHashMap() : new HashMap();        
     }
 
-    public DefaultContext(final AbstractProtoContext parent) {
+    public Container(final AbstractPrototainer parent) {
         super(parent.builders, parent.scopes, parent.setterDependencies, parent.constructorDependencies, parent.forConstructMethod);
         
         singletonsCache = parent.concurrent ? new ConcurrentHashMap() : new HashMap();
@@ -232,13 +232,13 @@ public class DefaultContext extends AbstractProtoContext implements Context {
             @Override
             public Object get(String key) {
 
-                return DefaultContext.this.get(key);
+                return Container.this.get(key);
             }
 
             @Override
             public boolean hasValue(String key) {
 
-                return DefaultContext.this.contains(key);
+                return Container.this.contains(key);
             }
 
         };

@@ -1,7 +1,7 @@
 package objenome.impl;
 
 import objenome.Builder;
-import objenome.Context;
+import objenome.AbstractContainer;
 
 public class SingletonFactory implements Builder {
 
@@ -17,7 +17,7 @@ public class SingletonFactory implements Builder {
     }
 
     @Override
-    public <T> T instance(Context context) {
+    public <T> T instance(AbstractContainer context) {
 
         return (T) instance;
     }

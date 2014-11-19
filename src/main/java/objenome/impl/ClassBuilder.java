@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import objenome.ConfigurableBuilder;
-import objenome.Context;
-import objenome.ProtoContext;
+import objenome.AbstractContainer;
+import objenome.Prototainer;
 import objenome.util.FindConstructor;
 import objenome.util.FindMethod;
 import objenome.util.InjectionUtils;
@@ -26,7 +26,7 @@ import objenome.util.InjectionUtils;
  */
 public class ClassBuilder implements ConfigurableBuilder {
 
-    private final ProtoContext container;
+    private final Prototainer container;
 
     private final Class<?> klass;
 
@@ -46,12 +46,12 @@ public class ClassBuilder implements ConfigurableBuilder {
     private LinkedList<Parameter> initPrimitives;
     private boolean specificInitValue;
 
-    public ClassBuilder(ProtoContext container, Class<?> klass) {
+    public ClassBuilder(Prototainer container, Class<?> klass) {
 
         this(container, klass, null);
     }
 
-    public ClassBuilder(ProtoContext container, Class<?> klass, Set<ConstructorDependency> constructorDependencies) {
+    public ClassBuilder(Prototainer container, Class<?> klass, Set<ConstructorDependency> constructorDependencies) {
 
         this.container = container;
 
@@ -195,7 +195,7 @@ public class ClassBuilder implements ConfigurableBuilder {
         return values.toArray(types);
     }
 
-    private static Object[] getValues(Context context, List<Object> values) throws InstantiationException {
+    private static Object[] getValues(AbstractContainer context, List<Object> values) throws InstantiationException {
 
         if (values == null) {
             return null;
@@ -204,18 +204,17 @@ public class ClassBuilder implements ConfigurableBuilder {
         Object[] array = new Object[values.size()];
 
         int index = 0;
-
-        Iterator<Object> iter = values.iterator();
-
-        while (iter.hasNext()) {
-
-            Object obj = iter.next();
+        
+        for (Object obj : values) {
 
             if (obj instanceof DependencyKey) {
 
                 DependencyKey dk = (DependencyKey) obj;
-
-                array[index++] = context.get(dk.getKey());
+                Object dependency = context.get(dk.getKey());
+                if (dependency == null) {
+                    throw new RuntimeException("Unknown dependency:" + dk);
+                }
+                array[index++] = dependency;
 
             } else {
 
@@ -316,28 +315,28 @@ public class ClassBuilder implements ConfigurableBuilder {
     }
 
     private static Class<?> getPrimitiveFrom(Class<?> klass) {
-        if (klass.equals(Boolean.class)) {
+        if (klass==(Boolean.class)) {
             return Boolean.TYPE;
-        } else if (klass.equals(Byte.class)) {
+        } else if (klass==(Byte.class)) {
             return Byte.TYPE;
-        } else if (klass.equals(Short.class)) {
+        } else if (klass==(Short.class)) {
             return Short.TYPE;
-        } else if (klass.equals(Character.class)) {
+        } else if (klass==(Character.class)) {
             return Character.TYPE;
-        } else if (klass.equals(Integer.class)) {
+        } else if (klass==(Integer.class)) {
             return Integer.TYPE;
-        } else if (klass.equals(Long.class)) {
+        } else if (klass==(Long.class)) {
             return Long.TYPE;
-        } else if (klass.equals(Float.class)) {
+        } else if (klass==(Float.class)) {
             return Float.TYPE;
-        } else if (klass.equals(Double.class)) {
+        } else if (klass==(Double.class)) {
             return Double.TYPE;
         }
         return null;
     }
 
     @Override
-    public <T> T instance(Context context) {
+    public <T> T instance(AbstractContainer context) {
 
         Object obj = null;
 
@@ -497,7 +496,7 @@ public class ClassBuilder implements ConfigurableBuilder {
                 Class<?> pc = p.getType();
 
                 // first see if it was provided...
-                Class<?> provided = providedInitTypes.isEmpty() ? null : providedInitTypes.get(0);
+                Class<?> provided = providedInitTypes.isEmpty() ? null : providedInitTypes.getFirst();
 
                 if (provided != null && pc.isAssignableFrom(provided)) {
 

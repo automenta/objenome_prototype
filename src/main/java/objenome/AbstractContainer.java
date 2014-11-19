@@ -6,9 +6,11 @@
 package objenome;
 
 /**
- * Context which can completely operate to produce or modify objects
+ * AbstractContainer which can completely operate to produce or modify objects
+ * 
+ * "Middle English: from Old French contenir, from Latin continere, from con- ‘altogether’ + tenere ‘to hold.’"
  */
-public interface Context extends ProtoContext {
+public interface AbstractContainer extends Prototainer {
 
     /**
      * Take a given bean and populate its properties with other beans coming

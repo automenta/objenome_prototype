@@ -87,7 +87,7 @@ public class GeneContextTest {
     
     /** one gene to select between two interfaces with non-parametric constructors */
     @Test public void testSimpleObjeneGeneration() {
-        GeneContext c = new GeneContext();
+        Genetainer c = new Genetainer();
         c.usable(Part.class, Part0.class, Part1.class);
                         
         Objosome o = c.get(Machine.class);
@@ -101,7 +101,7 @@ public class GeneContextTest {
     /** one gene to select between two interfaces with parametric constructor in one of the dependencies */
     @Test public void testSimpleObjeneGeneration2() {
         
-        GeneContext c = new GeneContext();
+        Genetainer c = new Genetainer();
         c.usable(Part.class, Part0.class, Part1.class, PartN.class);                        
         Objosome o = c.get(Machine.class);
         
@@ -117,7 +117,7 @@ public class GeneContextTest {
     
     @Test public void testRecurse2LevelsGeneration() {
         
-        GeneContext c = new GeneContext();
+        Genetainer c = new Genetainer();
         c.usable(Part.class, PartWithSubComponent.class);
         c.usable(SubComponent.class, SubComponent0.class, SubComponent1.class);
         Objosome o = c.get(Machine.class);
@@ -129,7 +129,7 @@ public class GeneContextTest {
     
     @Test public void testMultitypeRecurse() {
         
-        GeneContext c = new GeneContext();
+        Genetainer c = new Genetainer();
         c.usable(Part.class, 
                     Part0.class, Part1.class, PartN.class, PartWithSubComponent.class);
         c.usable(SubComponent.class, 

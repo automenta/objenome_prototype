@@ -79,7 +79,7 @@ public class DefaultContextTest {
 
     @Test public void case9() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.use("connection", Connection.class); // in real life this will be a connection pool factory...
         // all beans that need a connection in the constructor or setter will receive one...
@@ -96,7 +96,7 @@ public class DefaultContextTest {
 
     @Test public void case1() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("myString1", String.class);
 
@@ -119,7 +119,7 @@ public class DefaultContextTest {
 
     @Test public void case5() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("connection", Connection.class); // in real life this will be a connection pool factory...
 
@@ -132,7 +132,7 @@ public class DefaultContextTest {
 
     @Test public void case7() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.use("connection", Connection.class); // in real life this will be a connection pool factory...
         // all beans that need a connection in the constructor will get one...
@@ -147,7 +147,7 @@ public class DefaultContextTest {
 
     @Test public void case6() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("connection", Connection.class); // in real life this will be a connection pool factory...
 
@@ -160,7 +160,7 @@ public class DefaultContextTest {
 
     @Test public void case8() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.use("connection", Connection.class); // in real life this will be a connection pool factory...
 
@@ -175,7 +175,7 @@ public class DefaultContextTest {
 
     @Test public void case2() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("myString", Scope.SINGLETON, String.class).addInitValue("saoj");
 
@@ -190,7 +190,7 @@ public class DefaultContextTest {
 
     @Test public void case3() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("userDAO", JdbcUserDAO.class);
 
@@ -206,7 +206,7 @@ public class DefaultContextTest {
 
         // the container detects that userDAO has a dependency: name = "conn" and type = "Connection.class"
         // where does it go to get the dependency to insert?
-        // In itself: it does a Context.get("connection") => "connection" => the source
+        // In itself: it does a AbstractContainer.get("connection") => "connection" => the source
         assertEquals("connection is not null as expected...", "saoj", userDAO.getUsername(11));
     }
 
@@ -226,7 +226,7 @@ public class DefaultContextTest {
 
     @Test public void case4() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("userDAO", JdbcUserDAO.class);
 
@@ -274,7 +274,7 @@ public class DefaultContextTest {
 
     @Test public void case10() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable("userDAO", JdbcUserDAO.class);        
 
@@ -287,7 +287,7 @@ public class DefaultContextTest {
 
     @Test public void case11() {
 
-        Context c = new DefaultContext();
+        AbstractContainer c = new Container();
 
         c.usable(JdbcUserDAO.class);        
         c.usable(ParameterX.class);
@@ -302,7 +302,7 @@ public class DefaultContextTest {
     /** tests what happens when a key is replaced */
     @Test public void testAmbiguity() {
         
-        DefaultContext c = new DefaultContext();
+        Container c = new Container();
         c.usable(ExampleService2.class, GeneContextTest.Part0.class);
         assertEquals(0, c.get(GeneContextTest.Machine.class).function());
         c.usable(ExampleService2.class, GeneContextTest.Part1.class);

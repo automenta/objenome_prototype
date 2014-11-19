@@ -7,7 +7,7 @@ package objenome.gene;
 
 import java.util.List;
 import objenome.Objene;
-import objenome.ObjosomeContext;
+import objenome.Phenotainer;
 import objenome.impl.MultiClassBuilder;
 
 /** stores a double value between 0...1.0 which is used to select equally
@@ -31,7 +31,7 @@ public class ClassSelect extends Objene<Class> {
         return multiclass.implementors.get(which);
     }
 
-    @Override public void apply(ObjosomeContext c) { 
+    @Override public void apply(Phenotainer c) { 
         c.use(getValue());
     }
 

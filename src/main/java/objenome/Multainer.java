@@ -9,10 +9,9 @@ import com.google.common.collect.Sets;
 import objenome.impl.MultiClassBuilder;
 
 /**
- *
- * @author me
+ * Non-determinate "Multi" Container
  */
-public interface MultiContext extends ProtoContext {
+public interface Multainer extends Prototainer {
     
     public MultiClassBuilder usable(Class abstractClass, Scope scope, Class<?>... klasses);
     

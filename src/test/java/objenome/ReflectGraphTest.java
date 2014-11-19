@@ -23,7 +23,7 @@ public class ReflectGraphTest {
         
     
         SetMultimap<Class, Class> anc = new ReflectGraph(/*new String[] { "objenome" },*/
-                GeneContext.class, DefaultContext.class, Builder.class)                
+                Genetainer.class, Container.class, Builder.class)                
                 .getAncestorImplementations();
 
         assertEquals(6, anc.keySet().size());

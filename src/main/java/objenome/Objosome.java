@@ -18,25 +18,25 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
  */
 public class Objosome extends ArrayList<Objene> {
     
-    public final GeneContext parentContext;
+    public final Genetainer parentContext;
     
     /** generated context, constructed lazily */
-    private DefaultContext context = null;
+    private Container context = null;
 
-    public Objosome(GeneContext context, List<Objene> parameters) throws InvalidRepresentationException {
+    public Objosome(Genetainer context, List<Objene> parameters) throws InvalidRepresentationException {
         super(parameters);        
         
         this.parentContext = context;
     }
     
     /** gets the generated context of this Objosome with respect to the parent context.
-        Parent is a GeneContext but the generated context is a DefaultContext
+        Parent is a Genetainer but the generated context is a Container
         which functions as an ordinary deterministic dependency injection container.     */
-    public DefaultContext context() {
+    public Container context() {
         if (context!=null)
             return context;
         
-        context = new ObjosomeContext(this);
+        context = new Phenotainer(this);
         
         
         return context;

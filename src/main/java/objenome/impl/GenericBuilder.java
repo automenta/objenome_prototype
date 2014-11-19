@@ -2,7 +2,7 @@ package objenome.impl;
 
 import java.lang.reflect.Method;
 import objenome.Builder;
-import objenome.Context;
+import objenome.AbstractContainer;
 import objenome.Interceptor;
 import objenome.util.FindMethod;
 
@@ -54,7 +54,7 @@ public class GenericBuilder<E> implements Builder, Interceptor<E> {
     }
 
     @Override
-    public <T> T instance(Context context) {
+    public <T> T instance(AbstractContainer context) {
 
         try {
 

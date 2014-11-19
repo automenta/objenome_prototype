@@ -20,7 +20,7 @@ import objenome.util.InjectionUtils;
  *
  * @author me
  */
-public class AbstractProtoContext implements ProtoContext  {
+public class AbstractPrototainer implements Prototainer  {
     
     protected final Map<String,Builder> builders;
 
@@ -32,7 +32,7 @@ public class AbstractProtoContext implements ProtoContext  {
     public final boolean concurrent;
 
     
-    public AbstractProtoContext(final boolean concurrent) {
+    public AbstractPrototainer(final boolean concurrent) {
         this(
             concurrent ? new ConcurrentHashMap() : new HashMap(),
             concurrent ? new ConcurrentHashMap() : new HashMap(),
@@ -43,7 +43,7 @@ public class AbstractProtoContext implements ProtoContext  {
     }
 
             
-    public AbstractProtoContext(
+    public AbstractPrototainer(
             Map<String,Builder> builders, 
             Map<String, Scope> scopes,
             Set<SetterDependency> setterDependencies, 

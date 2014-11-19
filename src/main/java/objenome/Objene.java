@@ -29,8 +29,8 @@ abstract public class Objene<V> extends AtomicDouble {
         this.path = path;
     }
 
-    /** apply the consequences of this gene to an ObjosomeContext */
-    abstract public void apply(ObjosomeContext c);
+    /** apply the consequences of this gene to an Phenotainer */
+    abstract public void apply(Phenotainer c);
 
     /** gets the data value */
     abstract public V getValue();

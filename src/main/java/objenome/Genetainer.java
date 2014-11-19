@@ -17,19 +17,22 @@ import objenome.impl.ClassBuilder.DependencyKey;
 import objenome.impl.MultiClassBuilder;
 
 /**
- * Dependency-injection Context which supports genetic search to evolve build patterns
+ * Dependency-injection Multainer which can be parametrically searched to 
+ * generate Phenotainer containers
+ * 
+ * early 20th century: from German Gen, from Pangen, a supposed ultimate unit of heredity (from Greek pan * ‘all’ + genos ‘race, kind, offspring’) + from Latin tenere 'to hold.’"
  */
-public class GeneContext extends AbstractProtoContext implements MultiContext {       
+public class Genetainer extends AbstractPrototainer implements Multainer {       
     private int intMinDefault = 0;
     private int intMaxDefault = 1;
     private int doubleMinDefault = 0;
     private int doubleMaxDefault = 1;
     
-    public GeneContext() {
+    public Genetainer() {
         this(false);        
     }
     
-    public GeneContext(boolean concurrent) {
+    public Genetainer(boolean concurrent) {
         super(concurrent);
     }
     
@@ -137,8 +140,8 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
     }
     
     /** creates a new random objosome,
-     *  analogous to Context.get(Object key) except this represents the set of desired
-     *  keys for which to evolve a set of Objosomes can be evolved to generate
+  analogous to AbstractContainer.get(Object key) except this represents the set of desired
+  keys for which to evolve a set of Objosomes can be evolved to generate
      */
     public Objosome get(Object... keys) {
         return new Objosome(this, getGenes(Lists.newArrayList(keys), null, null));
@@ -146,9 +149,9 @@ public class GeneContext extends AbstractProtoContext implements MultiContext {
     
    
     /** realize the phenotype of a chromosome */
-    public Context build(Objosome objsome, Object[] keys) {
+    public AbstractContainer build(Objosome objsome, Object[] keys) {
 
-        //populate a new DefaultContext as configured by this Objosome and the static parameters provided in GeneContext parent context
+        //populate a new DefaultContext as configured by this Objosome and the static parameters provided in Genetainer parent context
         return null;
     }    
 

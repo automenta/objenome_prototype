@@ -12,7 +12,7 @@ public interface Builder {
      *
      * @return an instance
      */
-    public <T> T instance(Context context);
+    public <T> T instance(AbstractContainer context);
 
     /**
      * Return the type of objects that this factory disposes.

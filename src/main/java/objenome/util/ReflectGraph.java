@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import objenome.Builder;
-import objenome.DefaultContext;
-import objenome.GeneContext;
+import objenome.Container;
+import objenome.Genetainer;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -90,7 +90,7 @@ public class ReflectGraph  {
     
 //    public static void main(String[] args) {
 //        SetMultimap<Class, Class> anc = new ReflectGraph(
-//                GeneContext.class, DefaultContext.class, Builder.class)                
+//                Genetainer.class, Container.class, Builder.class)                
 //                .getAncestorImplementations();
 //
 //        System.out.println(anc);
