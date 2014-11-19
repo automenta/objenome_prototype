@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import java.util.List;
 import static objenome.Builder.of;
 import static objenome.Builder.the;
 import objenome.gene.ClassSelect;
@@ -19,12 +20,12 @@ import org.junit.Test;
 public class GenetainerTest {
 
     public static interface Part { public int function();    }
-    public static interface SubComponent { public int function();    }
+    public static interface SubPart { public int function();    }
 
-    public static class SubComponent0 implements SubComponent {
+    public static class SubPart0 implements SubPart {
         @Override public int function() { return 0; }
     }
-    public static class SubComponent1 implements SubComponent {
+    public static class SubPart1 implements SubPart {
         @Override public int function() {  return 1;}         
     }
     
@@ -43,9 +44,9 @@ public class GenetainerTest {
         
         @Override public int function() { return value; }
     }
-    public static class PartWithSubComponent implements Part {
-        private final SubComponent subcomp;
-        public PartWithSubComponent(SubComponent subcomponent) {         
+    public static class PartWithSubPart implements Part {
+        private final SubPart subcomp;
+        public PartWithSubPart(SubPart subcomponent) {         
             this.subcomp = subcomponent;                    
         }        
         @Override public int function() { return subcomp.function();  }
@@ -76,9 +77,9 @@ public class GenetainerTest {
     
 
     public static class MachineWithParametricPart {
-        public final PartWithSubComponent part;
+        public final PartWithSubPart part;
         
-        public MachineWithParametricPart(PartWithSubComponent p) {
+        public MachineWithParametricPart(PartWithSubPart p) {
             this.part = p;
         }
         public int function() {
@@ -95,9 +96,11 @@ public class GenetainerTest {
         Objenome o = c.genome(Machine.class);
         assertEquals("obgenome contains one gene to select betwen the implementations of interface Part", 1, o.size());
         
-        assertEquals(ClassSelect.class, o.get(0).getClass());
+        List<Objene> genes = o.getGeneList();
         
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", o.get(0).path.toString());
+        assertEquals(ClassSelect.class, genes.get(0).getClass());
+        
+        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", genes.get(0).path.toString());
     }
     
     
@@ -108,21 +111,23 @@ public class GenetainerTest {
         Objenome o = c.genome(Part.class);
         
         assertEquals(1, o.size());        
-        assertEquals(ClassSelect.class, o.get(0).getClass());        
+        
+        List<Objene> genes = o.getGeneList();
+        
+        assertEquals(ClassSelect.class, genes.get(0).getClass());        
     }
     
     //18553247676
     @Test public void testSimpleObjeneGeneration11() {
-        System.out.println("-------------");
         Genetainer c = new Genetainer();
         c.any(Part.class, the(PartN.class));
                         
         Objenome o = c.genome(Part.class);
+        List<Objene> genes = o.getGeneList();
         
         assertEquals(1, o.size());        
-        assertEquals(IntegerSelect.class, o.get(0).getClass());
+        assertEquals(IntegerSelect.class, genes.get(0).getClass());
                 
-        System.out.println("-------------");
     }
     
     
@@ -134,42 +139,49 @@ public class GenetainerTest {
         Objenome o = c.genome(Machine.class);
         
         assertEquals("obgenome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.size());
-        assertEquals(ClassSelect.class, o.get(0).getClass());
-                 
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", o.get(0).path.toString());
         
-        assertEquals(IntegerSelect.class, o.get(1).getClass());        
+        List<Objene> genes = o.getGeneList();
+        
+        assertEquals(ClassSelect.class, genes.get(0).getClass());
+                 
+        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", genes.get(0).path.toString());
+        
+        assertEquals(IntegerSelect.class, genes.get(1).getClass());        
                         
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part), ClassBuilder[class objenome.GenetainerTest$PartN], int arg0]", o.get(1).path.toString());
+        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part), ClassBuilder[class objenome.GenetainerTest$PartN], int arg0]", genes.get(1).path.toString());
     }
     
     @Test public void testRecurse2LevelsGeneration() {
         
         Genetainer c = new Genetainer();
-        c.usable(Part.class, PartWithSubComponent.class);
-        c.any(SubComponent.class, of(SubComponent0.class, SubComponent1.class));
+        c.usable(Part.class, PartWithSubPart.class);
+        c.any(SubPart.class, of(SubPart0.class, SubPart1.class));
         Objenome o = c.genome(Machine.class);
         
+        List<Objene> genes = o.getGeneList();
+        
         assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
-        assertEquals(ClassSelect.class, o.get(0).getClass());
-        assertEquals("3rd level deep", 5, o.get(0).path.size());
+        assertEquals(ClassSelect.class, genes.get(0).getClass());
+        assertEquals("3rd level deep", 5, genes.get(0).path.size());
     }
     
     @Test public void testMultitypeRecurse() {
         
         Genetainer c = new Genetainer();
         c.any(Part.class, 
-                    of(Part0.class, Part1.class, PartN.class, PartWithSubComponent.class));
-        c.any(SubComponent.class, 
-                    of(SubComponent0.class, SubComponent1.class));
+                    of(Part0.class, Part1.class, PartN.class, PartWithSubPart.class));
+        c.any(SubPart.class, 
+                    of(SubPart0.class, SubPart1.class));
         Objenome o = c.genome(Machine.class);
                        
+        List<Objene> genes = o.getGeneList();
+        
         assertEquals(3, o.size());
-        assertEquals(ClassSelect.class, o.get(0).getClass());
-        assertEquals(IntegerSelect.class, o.get(1).getClass());
-        assertEquals(1, ((IntegerSelect)o.get(1)).getMin());
-        assertEquals(3, ((IntegerSelect)o.get(1)).getMax());
-        assertEquals(ClassSelect.class, o.get(2).getClass());
+        assertEquals(ClassSelect.class, genes.get(0).getClass());
+        assertEquals(ClassSelect.class, genes.get(1).getClass());
+        assertEquals(IntegerSelect.class, genes.get(2).getClass());
+        assertEquals(1, ((IntegerSelect)genes.get(2)).getMin());
+        assertEquals(3, ((IntegerSelect)genes.get(2)).getMax());
     }
     
 

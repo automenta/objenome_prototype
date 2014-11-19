@@ -14,15 +14,11 @@ import objenome.Phenotainer;
  *
  * @author me
  */
-public class BooleanSelect extends Objene<Boolean> {
+public class BooleanSelect extends SetValue<Boolean> {
     
     public BooleanSelect(Parameter p, List<Object> path) {
-        this(path);        
+        super(p, path, Math.random());        
         assert(p.getType() == boolean.class);
-    }
-    
-    public BooleanSelect(List<Object> path) {
-        super(path, Math.random());
     }
     
     @Override
@@ -30,9 +26,6 @@ public class BooleanSelect extends Objene<Boolean> {
         return doubleValue() > 0.5;
     }
 
-    @Override public void apply(Phenotainer c) { 
-        
-    }
 
     
 }

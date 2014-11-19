@@ -2,6 +2,7 @@ package objenome;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,13 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     }
 
     public Container(final AbstractPrototainer parent) {
-        super(parent.builders, parent.scopes, parent.setterDependencies, parent.constructorDependencies, parent.forConstructMethod);
+        super(
+                //TODO clone according to concurrent implementation:                
+                new HashMap(parent.builders), 
+                new HashMap(parent.scopes), 
+                new HashSet(parent.setterDependencies), 
+                new HashSet(parent.constructorDependencies), 
+                new HashSet(parent.forConstructMethod));
         
         singletonsCache = parent.concurrent ? new ConcurrentHashMap() : new HashMap();
         threadLocalsCache = parent.concurrent ? new ConcurrentHashMap() : new HashMap();
@@ -53,6 +60,8 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         String name = InjectionUtils.getKeyName(key);
 
         if (!builders.containsKey(name)) {
+            if (key instanceof Class)
+                return (T) get((Class)key);
             return null;
         }
 

@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import objenome.gene.BooleanSelect;
-import objenome.gene.ClassSelect;
 import objenome.gene.DoubleSelect;
 import objenome.gene.IntegerSelect;
 import objenome.impl.ClassBuilder;
@@ -121,9 +121,9 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
 
         Builder b = (k instanceof Builder) ? (Builder)k : getBuilder(k);
 
-
+        //System.out.println(k + " --> " + b);
+        System.out.println(parentPath);
         
-
         if (b == null) {
             ClassBuilder cb = getClassBuilder(k.getClass() instanceof Class ? (Class)k : k.getClass());
             if (cb.equals(previousPathElement))
@@ -212,5 +212,6 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     public String getChromosomeError(List<Objene> genes) {
         return null;
     }
+
 
 }

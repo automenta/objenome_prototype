@@ -1,7 +1,9 @@
 package objenome;
 
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,11 +15,23 @@ public class Phenotainer extends Container {
     public final Genetainer parent;
 
     public Phenotainer(Objenome o) {
-        super(o.parentContext);
+        super(o.parentContext);        
         this.objosome = o;
         this.parent = o.parentContext;
         
-        for (Objene g : o) {
+        
+        
+        //remove all builders with ambiguosity
+        List<String> toRemove = new ArrayList();
+        for (Map.Entry<String, Builder> e : this.builders.entrySet()) {
+            if (e.getValue() instanceof Parameterized)
+                toRemove.add(e.getKey());
+        }
+        for (String s : toRemove) this.builders.remove(s);
+        
+        
+        
+        for (Objene g : o.getGenes()) {
             g.apply(this);
         }
     }

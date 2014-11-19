@@ -37,7 +37,13 @@ public class ClassSelect extends Objene<Class> {
 
     @Override
     public String toString() {
-        return "Class=" + getValue().toString();
+        return path + " => Class(" + getValue().getSimpleName() +")";
     }
+
+    @Override
+    public String key() {
+        return "ClassSelect("+multiclass.abstractClass+')';
+    }
+
     
 }

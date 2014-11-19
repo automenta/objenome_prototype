@@ -7,7 +7,6 @@ package objenome.impl;
 
 import com.google.common.collect.Lists;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import objenome.Builder;
 import objenome.AbstractContainer;
@@ -58,5 +57,12 @@ public class MultiClassBuilder implements Builder, Parameterized {
         
         return Lists.newArrayList(new ClassSelect(path, this));
     }
+
+    @Override
+    public String toString() {
+        return "MultiClassBuilder(" + implementors.toString() + ")";
+    }
+    
+    
     
 }

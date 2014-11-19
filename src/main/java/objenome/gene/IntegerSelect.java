@@ -8,22 +8,21 @@ package objenome.gene;
 import objenome.Between;
 import java.lang.reflect.Parameter;
 import java.util.List;
-import objenome.Objene;
 import objenome.Phenotainer;
 
 /**
  *
  * @author me
  */
-public class IntegerSelect extends Objene<Integer> {
+public class IntegerSelect extends SetValue<Integer> {
     private int max;
     private int min;
-    private Parameter parameter = null;
     
     public IntegerSelect(Parameter p, List<Object> path, int defaultMin, int defaultMax) {
-        this(path, defaultMin, defaultMax);        
+        super(p, path, Math.random());
         assert(p.getType() == int.class);
-        this.parameter = p;
+        this.min = defaultMin;
+        this.max = defaultMax;
         
         Between between = p.getDeclaredAnnotation(Between.class);
         if (between!=null) {
@@ -31,18 +30,7 @@ public class IntegerSelect extends Objene<Integer> {
             max = (int)between.max();
         }
     }
-    
-    public IntegerSelect(List<Object> path, int min, int max) {
-        super(path, Math.random());
-        this.min = min;
-        this.max = max;
-    }
-    
-    @Override public void apply(Phenotainer c) { 
-        c.use(parameter, getValue());
-    }
-
-    
+        
     @Override
     public Integer getValue() {
         return (int)((doubleValue() * (max-min)) + min);

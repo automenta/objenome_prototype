@@ -59,6 +59,11 @@ public class AbstractPrototainer implements Prototainer  {
     }
 
     
+    public Map<String, Builder> getBuilders() {
+        return this.builders;
+    }
+
+        
     @Override
     public Class<?> type(Object key) {        
         Builder f = getBuilder(key);

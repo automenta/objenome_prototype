@@ -38,8 +38,9 @@ abstract public class Objene<V> extends AtomicDouble {
     @Override
     public String toString() {
         Object lastPathElement = path.get(path.size()-1);        
-        return lastPathElement + "=" + getValue();
+        return lastPathElement + " => " + getValue();
     }    
 
+    abstract public String key();
     
 }

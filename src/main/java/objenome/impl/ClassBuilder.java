@@ -406,10 +406,7 @@ public class ClassBuilder implements ConfigurableBuilder {
             try {
 
                 if (initValues == null)  {
-                    System.out.println(context);
-                    System.out.println(constructor);
-                    initValues = new LinkedList();
-                    
+                    initValues = new LinkedList();                    
                 }
                 
                 values = getValues(context, constructor, initValues, specificParameters);
@@ -541,8 +538,6 @@ public class ClassBuilder implements ConfigurableBuilder {
                     if (container instanceof Phenotainer) {
                         Phenotainer pheno = (Phenotainer)container;
                         Object v = pheno.get(p);
-                        System.out.println(pheno.parameterValues);
-                        System.out.println("Got phenotainer: " + p + " = " + v);
                         
                         //TODO check for assignability?
                         if (v!=null) {                            
@@ -564,6 +559,27 @@ public class ClassBuilder implements ConfigurableBuilder {
                         
                         if (betterIsAssignableFrom(pc, d.getSourceType())) {
 
+                            
+                            //if phenotyping, first check that it can be instantiated by attempting it. if it works, save it into the context for the parameter
+                            if (container instanceof Phenotainer) {
+                                Phenotainer pheno = (Phenotainer)container;
+                                try {
+                                    Object subinstance = pheno.get(d.getSourceType());
+                                    if (subinstance == null)
+                                        continue;
+                                    
+                                    //use this subinstance
+                                    pheno.use(p, subinstance);           
+                                    newInitValues.add(subinstance);
+                                }
+                                catch (Exception e) {
+                                    //not instantiable, try next dependency
+                                    continue;
+                                
+                                }
+                            }
+                            
+                            
                             iter.remove();
 
                             newInitTypes.add(d.getSourceType());
@@ -573,6 +589,7 @@ public class ClassBuilder implements ConfigurableBuilder {
                             foundMatch = true;
 
                             break;
+                            
                         }
                     }
 

@@ -8,38 +8,30 @@ package objenome.gene;
 import objenome.Between;
 import java.lang.reflect.Parameter;
 import java.util.List;
-import objenome.Objene;
-import objenome.Phenotainer;
 
 /**
  *
  * @author me
  */
-public class DoubleSelect extends Objene<Double> {
+public class DoubleSelect extends SetValue<Double> {
     private double max;
     private double min;
 
     
     public DoubleSelect(Parameter p, List<Object> path, double defaultMin, double defaultMax) {
-        this(path, defaultMin, defaultMax);        
+        super(p, path, Math.random());        
         assert(p.getType() == double.class);
 
+        this.min = defaultMin;
+        this.max = defaultMax;
+        
         Between between = p.getDeclaredAnnotation(Between.class);
         if (between!=null) {
-            min = between.min();
-            max = between.max();
+            this.min = between.min();
+            this.max = between.max();
         }
     }
-    
-    public DoubleSelect(List<Object> path, double min, double max) {
-        super(path, Math.random());
-        this.min = min;
-        this.max = max;
-    }
-    
-    @Override public void apply(Phenotainer c) { 
-        
-    }
+
     
     @Override
     public Double getValue() {

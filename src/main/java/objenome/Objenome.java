@@ -6,7 +6,10 @@
 package objenome;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import org.apache.commons.math3.exception.util.DummyLocalizable;
 import org.apache.commons.math3.genetics.AbstractListChromosome;
@@ -16,19 +19,25 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 /**
  * Object Genome
  */
-public class Objenome extends ArrayList<Objene> {
+public class Objenome {
+    
+    Map<String, Objene> genes = new TreeMap();
     
     public final Genetainer parentContext;
     
     /** generated container, constructed lazily */
     private Container context = null;
 
-    public Objenome(Genetainer context, List<Objene> parameters) throws InvalidRepresentationException {
-        super(parameters);        
+    public Objenome(Genetainer context, Collection<Objene> parameters) throws InvalidRepresentationException {
+        super();
+                
+        for (Objene o : parameters)
+            genes.put(o.key(), o);
         
         this.parentContext = context;
     }
     
+    public int size() { return genes.size(); }
     /** gets the generated container of this Objenome with respect to the parent container.
         Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
@@ -42,9 +51,21 @@ public class Objenome extends ArrayList<Objene> {
         return context;
     }
 
+    public <T> T get(Object key) {        
+        return container().get(key);
+    }
+    
+    /** list of genes, sorted by key */
+    public List<Objene> getGeneList() {
+        List<Objene> l = new ArrayList(genes.size());
+        for (String s : genes.keySet()) {
+            l.add(genes.get(s));
+        }
+        return l;
+    }
     
     public Chromosome newChromosome(final Scoring scoring) {
-        return newChromosome(scoring, this);        
+        return newChromosome(scoring, getGeneList());        
     }
     
     
@@ -69,6 +90,10 @@ public class Objenome extends ArrayList<Objene> {
             }
             
         };
+    }
+
+    Iterable<Objene> getGenes() {
+        return genes.values();
     }
 
     public interface Scoring extends Function<Objenome,Double> {
