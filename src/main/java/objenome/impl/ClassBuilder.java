@@ -397,7 +397,8 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                     } catch (Exception ee) {
 
-                        //throw new RuntimeException("Cannot find a constructor for class: " + klass + ": " + ee);
+                        ee.printStackTrace();;
+                        throw new RuntimeException("Cannot find a constructor for class: " + klass + ": " + ee);
                     }
                 }
             }
@@ -424,7 +425,7 @@ public class ClassBuilder implements ConfigurableBuilder {
             obj = constructor.newInstance(values);
 
         } catch (Exception e) {
-
+            
             throw new RuntimeException("Cannot create instance of " + this + " with constructor: " + constructor + ": " + e.toString() + " with values=" + Arrays.toString(values), e);
         }
 

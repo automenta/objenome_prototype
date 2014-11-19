@@ -2,6 +2,7 @@ package objenome.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,8 +52,7 @@ public class FindConstructor {
             Class<?>[] parameterTypes, Map<Parameter,Object> specific)
             throws NoSuchMethodException {
 
-        int l = parameterTypes.length;
-
+        
         // First find the applicable methods 
         List<Constructor<?>> applicableMethods = new LinkedList<Constructor<?>>();
 
@@ -62,20 +62,19 @@ public class FindConstructor {
             Parameter[] params = toTest[i].getParameters();
             //Class<?>[] params = toTest[i].getParameterTypes();
 
-            if (params.length != l) {
-                continue;
-            }
             int j;
 
+            int k = 0;
             for (j = 0; j < params.length; j++) {
                 Object specificValue = specific.get(params[j] );
                 if (specificValue!=null) {                    
                     assigned++;
                 }
                 //TODO parameterTypes may be out of order or missing holes, so allow that
-                else if (params[j].getType().isAssignableFrom(parameterTypes[j])) {
+                else if ((k < parameterTypes.length) && (params[k].getType().isAssignableFrom(parameterTypes[k++]))) {
                     assigned++;
                 }
+                
                 
             }
             
@@ -92,7 +91,8 @@ public class FindConstructor {
         int size = applicableMethods.size();
 
         if (size == 0) {
-            throw new NoSuchMethodException("No such constructor!");
+            throw new NoSuchMethodException("No valid constructor exists for " + Arrays.toString(parameterTypes) + ", " + specific);
+            
         }
         if (size == 1) {
             return applicableMethods.get(0);
@@ -135,10 +135,13 @@ public class FindConstructor {
                 // equivalent parameter in U 
                 int k;
 
-                for (k = 0; k < testParams.length; k++) {
-                    Object specificValue = specific.get(currentParams[k] );
-                    if ((specificValue==null) ||
-                       (!testParams[k].getType().isAssignableFrom(currentParams[k].getType()))) {
+                int l = 0;
+                for (k = 0; k < testParams.length; k++) {                    
+                    if (
+                        ((l++) >= currentParams.length) || 
+                        (specific.get(currentParams[l] )==null) ||
+                        (!testParams[k].getType().isAssignableFrom(currentParams[l].getType()))
+                        ) {
                         break;
                     }
                 }

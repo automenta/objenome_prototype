@@ -20,13 +20,14 @@ public interface Multainer extends Prototainer {
     
     
     
-    default public MultiClassBuilder any(Class<?> abstractClass, Class<?>[] klasses) {
+    default public Builder any(Class<?> abstractClass, Class<?>[] klasses) {
         if (klasses.length == 0)
             usable(abstractClass, abstractClass);
             
         int uniques = Sets.newHashSet(klasses).size();
-        if (uniques == 1)
-            usable(abstractClass, klasses[0]);
+        if (uniques == 1) {
+            return use(abstractClass, klasses[0]);
+        }
                 
         return any(abstractClass, Scope.NONE, klasses);
     }

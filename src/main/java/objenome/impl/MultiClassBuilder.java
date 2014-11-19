@@ -53,8 +53,8 @@ public class MultiClassBuilder implements Builder, Parameterized {
     
     @Override
     public Collection<? extends Objene> getGenes(List<Object> path) {
-        if (implementors.size() == 1)
-            return Collections.EMPTY_LIST;
+        /*if (implementors.size() == 1)
+            return Collections.EMPTY_LIST;*/
         
         return Lists.newArrayList(new ClassSelect(path, this));
     }

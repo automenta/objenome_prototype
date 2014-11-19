@@ -6,14 +6,16 @@
 package objenome;
 
 import static objenome.Builder.of;
-import static objenome.Builder.of;
 import objenome.GenetainerTest.Machine;
 import objenome.GenetainerTest.Part;
 import objenome.GenetainerTest.Part0;
 import objenome.GenetainerTest.PartN;
 import objenome.gene.ClassSelect;
 import objenome.gene.IntegerSelect;
+import objenome.impl.ClassBuilder;
+import objenome.impl.MultiClassBuilder;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -26,7 +28,8 @@ public class PhenotainerTest {
     @Test public void testIntegerParameterObjosomeContext() {
         Genetainer g = new Genetainer();
 
-        g.any(Part.class, of(PartN.class));
+        Builder builder = g.any(Part.class, of(PartN.class));
+        assertTrue( (builder instanceof ClassBuilder) && (!(builder instanceof MultiClassBuilder)));
                         
         Objenome o = g.genome(Part.class);
 
@@ -43,7 +46,7 @@ public class PhenotainerTest {
     }
     
     
-    /*@Test*/ public void testSimpleObjosomeContext() {
+    @Test public void testSimpleObjosomeContext() {
         Genetainer g = new Genetainer();
 
         g.any(GenetainerTest.Part.class, of(GenetainerTest.Part0.class, GenetainerTest.Part1.class));

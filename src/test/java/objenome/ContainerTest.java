@@ -1,6 +1,8 @@
 package objenome;
 
 import java.util.Date;
+import objenome.GenetainerTest.Part;
+import objenome.GenetainerTest.Part0;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -310,4 +312,11 @@ public class ContainerTest {
         
     }
     
+    /** tests what happens when a key is replaced */
+    @Test public void testInstantiateKey() {
+        Container c = new Container();
+        c.use(Part.class, Part0.class);
+        Part p = c.get(Part.class);
+        assertEquals(0, p.function());
+    }    
 }

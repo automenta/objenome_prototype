@@ -220,6 +220,12 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
     @Override
     public <T> T get(final Class<? extends T> c) {
+        //if c is actually a key and not an arbitrary class this container has never been told about:
+        String name = InjectionUtils.getKeyName(c);
+        if (builders.containsKey(name)) {
+            return get(name);
+        }
+        
         ClassBuilder f = getClassBuilder(c);
         return (T) f.instance(this);
     }
