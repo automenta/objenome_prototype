@@ -10,6 +10,7 @@ public class ConstructorDependency {
     private final String sourceFromContainer;
 
     private final Class<?> sourceType;
+    private Object containerKey;
 
     public ConstructorDependency(String sourceFromContainer, Class<?> sourceType) {
 
@@ -18,6 +19,8 @@ public class ConstructorDependency {
         this.sourceType = sourceType;
     }
 
+    
+            
     public String getSource() {
 
         return sourceFromContainer;
@@ -48,6 +51,15 @@ public class ConstructorDependency {
 
     @Override
     public String toString() {
-        return "[ConstructorDependency: sourceFromContainer=" + sourceFromContainer + "]";
+        return "[ConstructorDependency: sourceFromContainer=" + sourceType + ";" + sourceFromContainer +  ";" + containerKey + "]";
     }
+
+    public void setContainerKey(Object sourceFromContainer) {
+        this.containerKey = sourceFromContainer;
+    }
+
+    public Object getContainerKey() {
+        return containerKey;
+    }
+    
 }

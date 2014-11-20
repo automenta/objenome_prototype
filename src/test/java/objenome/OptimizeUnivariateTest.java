@@ -62,11 +62,7 @@ public class OptimizeUnivariateTest {
     }    
     
     @Test public void testFindZeros() {
-        Genetainer g = new Genetainer(ExampleScalarFunction.class);
-                
-        Objenome o = g.genome(ExampleScalarFunction.class);
-        
-        new FindZeros(o, ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
+        Objenome o = new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
             public Double apply(ExampleScalarFunction s) {                
                 return s.output(0.0) + s.output(0.5) + s.output(1.0);
             }
@@ -77,11 +73,8 @@ public class OptimizeUnivariateTest {
     }
     
     @Test public void testMultivariate() {
-        Genetainer g = new Genetainer(ExampleMultivariateFunction.class);
-                
-        Objenome o = g.genome(ExampleMultivariateFunction.class);
         
-        new OptimizeMultivariate(o, ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
+        Objenome o = new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
             public Double apply(ExampleMultivariateFunction s) {      
                 double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
                 return v;

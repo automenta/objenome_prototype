@@ -6,6 +6,7 @@
 package objenome.optimize;
 
 import java.util.function.Function;
+import objenome.Genetainer;
 import objenome.Objene;
 import objenome.Objenome;
 import objenome.gene.Numeric;
@@ -18,12 +19,16 @@ import org.apache.commons.math3.analysis.solvers.BisectionSolver;
  */
 public class FindZeros<C> extends NumericSolver<C> {
 
+
+    public FindZeros(Class<? extends C> model, Function<C, Double> function) {
+        this(new Genetainer().genome(model), model, function);
+    }
+    
     public FindZeros(Objenome o, Class<? extends C> model, Function<C, Double> function) {
         super(o, model, function);
     }
-
-    @Override
-    public void run() {
+    
+    public Objenome run() {
         if (variables.size() == 1) {
             BisectionSolver solver = new BisectionSolver();
             //bind variables values to objenome
@@ -39,10 +44,11 @@ public class FindZeros<C> extends NumericSolver<C> {
                 }
             }, getMin(var, gene), getMax(var, gene)); //var.getMin().doubleValue(), var.getMax().doubleValue());
             var.setValue(best);
-            return;
+            return objenome;
         } else {
             throw new RuntimeException("Unknown how to solve objenome " + objenome);
         }
+        
     }
 
 }

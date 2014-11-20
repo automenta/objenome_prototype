@@ -5,8 +5,8 @@
  */
 package objenome.optimize;
 
-import java.util.Arrays;
 import java.util.function.Function;
+import objenome.Genetainer;
 import objenome.Objenome;
 import objenome.gene.Numeric;
 import org.apache.commons.math3.analysis.MultivariateFunction;
@@ -34,12 +34,16 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
     int evaluations = 200;
     GoalType goal = MAXIMIZE;
     
+    public OptimizeMultivariate(Class<? extends C> model, Function<C, Double> function) {
+        this(new Genetainer().genome(model), model, function);
+    }
+    
     public OptimizeMultivariate(Objenome o, Class<? extends C> model, Function<C, Double> function) {
         super(o, model, function);
     }
 
-    @Override
-    public void run() {
+    
+    public Objenome run() {
         if (numStarts==-1)
             numStarts = variables.size() * 2;
         
@@ -71,6 +75,7 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
         apply(result.getPointRef());
                 
         this.bestValue = result.getValue();
+        return objenome;
     }
 
     /** the resulting scalar evaluation of the sought maxima/minima */

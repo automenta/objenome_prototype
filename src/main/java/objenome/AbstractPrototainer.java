@@ -108,8 +108,12 @@ public class AbstractPrototainer implements Prototainer  {
     public void use(Object sourceFromContainer) {
         // use by constructor and setter...
         String s = InjectionUtils.getKeyName(sourceFromContainer);
-        autowireBySetter(s);
-        autowireByConstructor(s);
+        
+        SetterDependency sd = autowireBySetter(s);        
+        ConstructorDependency cd = autowireByConstructor(s);
+        
+        cd.setContainerKey(sourceFromContainer);
+        //sd.setContainerKey(sourceFromContainer);
     }
 
     @Override
@@ -132,29 +136,30 @@ public class AbstractPrototainer implements Prototainer  {
             
 
     
-    private void autowireBySetter(String targetProperty, String sourceFromContainer) {
+    private SetterDependency autowireBySetter(String targetProperty, String sourceFromContainer) {
 
         Class<?> sourceType = type(sourceFromContainer);        
         
+        SetterDependency sd;
         setterDependencies.add(
-                new SetterDependency(targetProperty, sourceFromContainer, sourceType)
+                sd = new SetterDependency(targetProperty, sourceFromContainer, sourceType)
         );
-        
+        return sd;        
     }
 
-    private void autowireBySetter(String targetProperty) {
-
-        autowireBySetter(targetProperty, targetProperty);
+    private SetterDependency autowireBySetter(String targetProperty) {
+        return autowireBySetter(targetProperty, targetProperty);
     }
 
-    private void autowireByConstructor(String sourceFromContainer) {
+    private ConstructorDependency autowireByConstructor(String sourceFromContainer) {
 
         Class<?> sourceType = type(sourceFromContainer);        
         
+        ConstructorDependency c;
         constructorDependencies.add(
-                new ConstructorDependency(sourceFromContainer, sourceType)
+                c = new ConstructorDependency(sourceFromContainer, sourceType)
         );
-        
+        return c;        
     }
 
     protected static class ClearableHolder {

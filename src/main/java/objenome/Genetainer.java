@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.stream.Collectors.toList;
 import objenome.gene.BooleanSelect;
 import objenome.gene.DoubleSelect;
 import objenome.gene.IntegerSelect;
@@ -30,7 +31,8 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     
     public Genetainer(Class... useClasses) {
         this();
-        use(useClasses);
+        for (Class c : useClasses)
+            use(c);
     }
     
     public Genetainer() {
@@ -151,8 +153,10 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
                 return getGenes(mcb.implementors, path, genes);
             }
             else if (b instanceof ClassBuilder) {                      
-                if (b.equals(previousPathElement))
-                    throw new RuntimeException("Cyclic dependency: " + path + " -> " + b);
+                if (b.equals(previousPathElement)) {
+                    return genes;
+                    //throw new RuntimeException("Cyclic dependency: " + path + " -> " + b);
+                }
 
                 path.add(b);
                 return getGenes( b.type(), path, genes);
@@ -170,12 +174,26 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
 
     
+    public List<Object> getKeyClasses() {
+        //TODO use setter dependencies also?
+        return getConstructorDependencies().stream().map(d -> d.getContainerKey()).filter(k -> k!=null).collect(toList());
+    }
+    
     /** creates a new random objosome,
   analogous to AbstractContainer.genome(Object key) except this represents of set of desired
   keys for which to evolve a set of Objosomes can be evolved to generate
      */
     public Objenome genome(Object... keys) {
-        return new Objenome(this, getGenes(Lists.newArrayList(keys), null, null));
+        List<? extends Object> k;
+        if (keys.length == 0) {
+            //default: use all autowired dependents
+            k = getKeyClasses();
+        }
+        else {
+            k = Lists.newArrayList(keys);
+        }
+        
+        return new Objenome(this, getGenes(k, null, null));
     }
     
    

@@ -16,7 +16,7 @@ import objenome.gene.Numeric;
  *
  * @author me
  */
-public abstract class NumericSolver<C> implements Runnable {
+public abstract class NumericSolver<C>  {
     public final Objenome objenome;
     public final List<Numeric> variables = new ArrayList();
     public final Function<C, Double> function;
