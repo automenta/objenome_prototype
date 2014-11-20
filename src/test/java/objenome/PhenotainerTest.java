@@ -95,7 +95,6 @@ public class PhenotainerTest {
     }
 
     @Test public void testMultiGene2() {
-        System.out.println("-----/");
         
         Genetainer g = new Genetainer();
 
@@ -103,30 +102,20 @@ public class PhenotainerTest {
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class)); //, PartWithSubPart.class));        
                         
         Objenome o = g.genome(Machine.class, Part.class/*, PartWithSubPart.class*/);        
-        System.out.println(" ==");
-        for (Objene x : o.getGeneList()) {            
-            System.out.println(x.key() + ":  "+ x);
-        }
-        
+
         
         assertTrue(o.size() > 1);
-        
-        System.out.println("parent builders:");
-        System.out.println(g.getBuilders());
-        
+
         Container c = o.container();
         
         for (Builder b : c.getBuilders().values()) {
             assertTrue(!(b instanceof MultiClassBuilder));                
         }
-        
-        System.out.println("child builders:");
-        System.out.println(c.getBuilders());
+
         
         Machine m = c.get(Machine.class);
                 
         assertTrue(m.function() > -1);
-        System.out.println("/-----");
     }
     
 }

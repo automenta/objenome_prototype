@@ -5,6 +5,7 @@
  */
 package objenome.optimize;
 
+import java.util.Arrays;
 import java.util.function.Function;
 import objenome.Objenome;
 import objenome.gene.Numeric;
@@ -53,8 +54,10 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
             j++;
         }
         
+        //TODO add MultiStart
+        
         MultivariateOptimizer optimize = 
-                new BOBYQAOptimizer(2);
+                new BOBYQAOptimizer(4);
                 //new PowellOptimizer(0.01, 0.05);
 
         PointValuePair result = optimize.optimize(
@@ -62,11 +65,11 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
                 new SimpleBounds(lower, upper),
                 GoalType.MAXIMIZE,
                 new InitialGuess(mid),
-
                 new ObjectiveFunction(this)
-                );
-
+                );        
+        
         apply(result.getPointRef());
+                
         this.bestValue = result.getValue();
     }
 

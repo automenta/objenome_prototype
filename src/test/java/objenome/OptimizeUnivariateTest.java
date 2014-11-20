@@ -52,6 +52,13 @@ public class OptimizeUnivariateTest {
                 return Math.tanh(a * x) * (x-a)*(x-a);
         }
 
+        @Override
+        public String toString() {
+            return a + "," + b;
+        }
+        
+        
+
     }    
     
     @Test public void testFindZeros() {
@@ -66,7 +73,7 @@ public class OptimizeUnivariateTest {
         }).run();
         
         double bestParam = o.getGeneList().get(0).doubleValue();
-        assertEquals(1.52592, bestParam, 0.001);
+        assertEquals(-3.97454, bestParam, 0.001);
     }
     
     @Test public void testMultivariate() {
@@ -75,14 +82,15 @@ public class OptimizeUnivariateTest {
         Objenome o = g.genome(ExampleMultivariateFunction.class);
         
         new OptimizeMultivariate(o, ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
-            public Double apply(ExampleMultivariateFunction s) {                                
-                return s.output(0.0) + s.output(0.5) + s.output(1.0);
+            public Double apply(ExampleMultivariateFunction s) {      
+                double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
+                return v;
             }
         }).run();
         
-        //double bestParam = o.getGeneList().get(0).doubleValue();
-        System.out.println(o.genes);
-        //assertEquals(1.52592, bestParam, 0.001);
+        
+        double bestParam = o.getGeneList().get(1).doubleValue();        
+        assertEquals(0.30626, bestParam, 0.001);
     }
     
 }

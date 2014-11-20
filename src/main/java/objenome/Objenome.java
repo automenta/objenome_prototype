@@ -100,6 +100,7 @@ public class Objenome {
         };
     }
 
+    //WARNING this may not be in order, will need to check if test if this provides ordered or not
     public Iterable<Objene> getGenes() {
         return genes.values();
     }

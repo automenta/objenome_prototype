@@ -27,7 +27,7 @@ public abstract class NumericSolver<C> implements Runnable {
         this.function = function;
         this.objenome = o;
         
-        for (Objene g : o.getGenes()) {
+        for (Objene g : o.getGeneList()) {
             if (!(g instanceof Numeric)) {
                 throw new RuntimeException(this + " only applicable if " + o + " has only Numeric genes; " + g + " is not Numeric");
             }

@@ -32,7 +32,8 @@ public class IntegerSelect extends SetValue<Integer> implements Numeric {
         
     @Override
     public Integer getValue() {
-        return (int)((doubleValue() * (max-min)) + min);
+        return intValue();
+            //((doubleValue() * (max-min)) + min);
     }
 
     @Override

@@ -51,7 +51,7 @@ public class DoubleSelect extends SetValue<Double> implements Numeric {
     
     @Override
     public Double getValue() {
-        return ((doubleValue() * (max-min)) + min);
+        return doubleValue(); //((doubleValue() * (max-min)) + min);
     }
 
     @Override
