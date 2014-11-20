@@ -28,13 +28,31 @@ public class OptimizeUnivariateTest {
         
         
         public double output(double x) {
-            //parabola with zero at (1,0)
             return Math.sin(constParameter * x) * (x-constParameter)*(x-constParameter);
         }
 
     }
     
-    
+    public static class ExampleMultivariateFunction  {
+        
+        private final double a;
+        private final boolean b;
+
+        public ExampleMultivariateFunction(@Between(min=-4.0, max=4.0) double a, boolean b) {
+            
+            this.a = a;
+            this.b = b;
+        }
+        
+        
+        public double output(double x) {
+            if (b)
+                return Math.sin(a * x) * (x-a)*(x-a);
+            else
+                return Math.tanh(a * x) * (x-a)*(x-a);
+        }
+
+    }    
     
     @Test public void testFindZeros() {
         Genetainer g = new Genetainer(ExampleScalarFunction.class);
@@ -52,13 +70,12 @@ public class OptimizeUnivariateTest {
     }
     
     @Test public void testMultivariate() {
-        Genetainer g = new Genetainer(ExampleScalarFunction.class);
+        Genetainer g = new Genetainer(ExampleMultivariateFunction.class);
                 
-        Objenome o = g.genome(ExampleScalarFunction.class);
+        Objenome o = g.genome(ExampleMultivariateFunction.class);
         
-        new OptimizeMultivariate(o, ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
-            public Double apply(ExampleScalarFunction s) {                
-                System.out.println(s.constParameter);
+        new OptimizeMultivariate(o, ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
+            public Double apply(ExampleMultivariateFunction s) {                                
                 return s.output(0.0) + s.output(0.5) + s.output(1.0);
             }
         }).run();

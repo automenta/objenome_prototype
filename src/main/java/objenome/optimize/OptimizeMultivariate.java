@@ -7,18 +7,17 @@ package objenome.optimize;
 
 import java.util.function.Function;
 import objenome.Objenome;
+import objenome.gene.Numeric;
 import org.apache.commons.math3.analysis.MultivariateFunction;
+import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;
 import org.apache.commons.math3.optim.PointValuePair;
+import org.apache.commons.math3.optim.SimpleBounds;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import static org.apache.commons.math3.optim.nonlinear.scalar.GoalType.MAXIMIZE;
-import org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.MultiDirectionalSimplex;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
-import org.apache.commons.math3.random.RandomVectorGenerator;
-import org.apache.commons.math3.random.UnitSphereRandomVectorGenerator;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 
 /**
  * Multivariate Optmization with Multistart which uses different starting points 
@@ -43,12 +42,30 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
         if (numStarts==-1)
             numStarts = variables.size() * 2;
         
-        MultiStartMultivariateOptimizer m = new MultiStartMultivariateOptimizer(getOptimizer(), numStarts, getRandomVectorizer());
-        PointValuePair result 
-            = m.optimize(new MaxEval(200), goal, new ObjectiveFunction(this),
-                    new MultiDirectionalSimplex(variables.size()));
-                    //new InitialGuess(new double[] { 0 } ));
+        double[] lower = new double[variables.size()];
+        double[] upper = new double[variables.size()];
+        double[] mid = new double[variables.size()];
+        int j = 0;
+        for (Numeric n : variables) {
+            lower[j] = n.getMin().doubleValue();
+            upper[j] = n.getMax().doubleValue();
+            mid[j] = (lower[j] + upper[j]) * 0.5f;
+            j++;
+        }
         
+        MultivariateOptimizer optimize = 
+                new BOBYQAOptimizer(2);
+                //new PowellOptimizer(0.01, 0.05);
+
+        PointValuePair result = optimize.optimize(
+                new MaxEval(200),
+                new SimpleBounds(lower, upper),
+                GoalType.MAXIMIZE,
+                new InitialGuess(mid),
+
+                new ObjectiveFunction(this)
+                );
+
         apply(result.getPointRef());
         this.bestValue = result.getValue();
     }
@@ -72,14 +89,14 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
     }
 
     
-    public MultivariateOptimizer getOptimizer() {
-        return new SimplexOptimizer(convergeRel, convergeAbs);
-    }
+//    public MultivariateOptimizer getOptimizer() {
+//        return new SimplexOptimizer(convergeRel, convergeAbs);
+//    }
     
 
-    private RandomVectorGenerator getRandomVectorizer() {
-        return new UnitSphereRandomVectorGenerator(variables.size());
-    }
+//    private RandomVectorGenerator getRandomVectorizer() {
+//        return new UnitSphereRandomVectorGenerator(variables.size());
+//    }
 
     
     

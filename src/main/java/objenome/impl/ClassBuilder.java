@@ -465,7 +465,7 @@ public class ClassBuilder implements ConfigurableBuilder {
         updateConstructorDependencies(true);
     }
     
-    public void updateConstructorDependencies(boolean requirePrimitives) {
+    public void updateConstructorDependencies(boolean ignorePrimitives) {
 
         Constructor<?>[] constructors = klass.getConstructors();
 
@@ -598,21 +598,25 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                     
                 
-                
-                //record primitives in constructor
-                if (pc.equals(double.class) || (pc.equals(int.class))) {
-                    newInitPrimitives.add(p);
+    
+                if (!ignorePrimitives) {
+                    //record primitives in constructor
+                    if (pc.equals(double.class) || pc.equals(int.class) || pc.equals(boolean.class) || pc.equals(long.class) || pc.equals(short.class) ) {
+                        newInitPrimitives.add(p);
+                        newInitTypes.add(pc);
+                    }
+                    else {
+                        //System.out.println("Missing: " + p + " " + pc.getName());
+                        break;
+                    }
                 }
-                else {
-                    //System.out.println("Missing: " + p + " " + pc.getName());
-                }
-
-                break; // no param... next constructor...
+                else
+                    break; // no param... next constructor...
             }
 
             // done, contains if found...
-            int capableSize = requirePrimitives ? 
-                newInitTypes.size() : (newInitPrimitives.size() + newInitTypes.size());
+            int capableSize = newInitTypes.size();
+                //requirePrimitives ?  newInitTypes.size() : (newInitPrimitives.size() + newInitTypes.size());
                     
             if (constructorParams.length == capableSize && providedInitTypes.isEmpty()) {
 
