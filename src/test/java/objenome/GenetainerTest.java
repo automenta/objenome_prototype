@@ -19,7 +19,9 @@ import org.junit.Test;
  */
 public class GenetainerTest {
 
-    public static interface Part { public int function();    }
+    public static interface Part { 
+        public int function();    
+    }
     public static interface SubPart { public int function();    }
 
     public static class SubPart0 implements SubPart {
@@ -31,9 +33,11 @@ public class GenetainerTest {
     
     public static class Part0 implements Part {
         @Override public int function() { return 0;  }
+        @Override public String toString() { return getClass().getSimpleName(); }
     }
     public static class Part1 implements Part {
         @Override public int function() { return 1; }
+        @Override public String toString() { return getClass().getSimpleName(); }
     }
     public static class PartN implements Part {
         private final int value;
@@ -43,6 +47,7 @@ public class GenetainerTest {
         }
         
         @Override public int function() { return value; }
+        @Override public String toString() { return getClass().getSimpleName(); }
     }
     public static class PartWithSubPart implements Part {
         private final SubPart subcomp;
@@ -61,6 +66,12 @@ public class GenetainerTest {
         public int function() {
             return part.function();
         }
+
+        @Override
+        public String toString() {
+            return part.toString();
+        }
+        
     }
     
 //    public static class ParametricMachine {

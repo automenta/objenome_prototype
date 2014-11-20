@@ -5,6 +5,8 @@
  */
 package objenome;
 
+import java.util.HashSet;
+import java.util.Set;
 import static objenome.Builder.of;
 import objenome.GenetainerTest.Machine;
 import objenome.GenetainerTest.Part;
@@ -118,4 +120,27 @@ public class PhenotainerTest {
         assertTrue(m.function() > -1);
     }
     
+    @Test public void testReuse() {
+        Genetainer g = new Genetainer();
+
+        g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
+                        
+        Objenome o = g.genome(Machine.class);
+
+        Set<Class> uniqueClasses = new HashSet();
+        for (int i = 0; i < 55; i++) {            
+            Container c = o.container();
+            Machine m = c.get(Machine.class);
+            
+            assertEquals("iteration " + i,  ((ClassSelect)o.getGeneList().get(0)).getValue(), m.part.getClass() );
+            uniqueClasses.add(m.part.getClass());
+            
+            o.mutate();            
+        }
+        
+        assertEquals(3, uniqueClasses.size());
+        
+        
+        
+    }    
 }

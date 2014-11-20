@@ -16,4 +16,5 @@ public interface Numeric {
     public Number getNumber();
 
     public void setValue(double d);
+    
 }

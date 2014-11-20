@@ -34,10 +34,12 @@ public class Phenotainer extends Container {
     
     /** applies (current values of) the genes to the container for use by the next 
      *  instanced objects */
-    public void commit() {
+    public Phenotainer commit() {
+        parameterValues.clear();
         for (Objene g : obgenome.getGenes()) {
             g.apply(this);
-        }        
+        }
+        return this;
     }
     
     public void use(Parameter p, Object value) {
@@ -47,5 +49,11 @@ public class Phenotainer extends Container {
     public <T> T get(Parameter p) {
         return (T) parameterValues.get(p);
     }
+
+    @Override
+    public String toString() {
+        return parameterValues + ",  " + constructorDependencies.toString() + ",  " + setterDependencies.toString() + ", ";
+    }
+    
     
 }

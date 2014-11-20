@@ -42,5 +42,7 @@ abstract public class Objene<V> extends AtomicDouble {
     }    
 
     abstract public String key();
+
+    abstract public void mutate();
     
 }

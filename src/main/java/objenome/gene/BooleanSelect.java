@@ -24,13 +24,13 @@ public class BooleanSelect extends SetValue<Boolean> implements Numeric {
     }
 
     @Override
-    public Number getMin() {
-        return 0;
+    public Double getMin() {
+        return 0d;
     }
 
     @Override
-    public Number getMax() {
-        return 1;
+    public Double getMax() {
+        return 1d;
     }
 
     @Override
@@ -41,6 +41,11 @@ public class BooleanSelect extends SetValue<Boolean> implements Numeric {
     @Override
     public void setValue(double d) {
         set(d);
+    }
+
+    @Override
+    public void mutate() {
+        setValue( Math.random() * (getMax() - getMin()) + getMin() );
     }
     
 }

@@ -110,14 +110,10 @@ public interface Prototainer  {
         use(key);
         return c;
     }
-    default public Builder use(Object key, Builder factory) {
-        Builder c = usable(key, factory);
-        use(key);
-        return c;
-    }
-    default public Builder use(Class klass) {
-        Builder c = usable(klass, klass);
-        use(klass, klass);
+    
+    default public Builder use(Class klass) {        
+        ConfigurableBuilder c = usable(klass, klass);
+        use((Object)klass);
         return c;
     }
     

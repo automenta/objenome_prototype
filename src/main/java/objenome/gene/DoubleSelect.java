@@ -59,5 +59,9 @@ public class DoubleSelect extends SetValue<Double> implements Numeric {
         return getValue();
     }
 
+    @Override
+    public void mutate() {
+        setValue( Math.random() * (getMax() - getMin()) + getMin() );
+    }
     
 }

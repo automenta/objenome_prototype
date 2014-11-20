@@ -85,6 +85,10 @@ public class AbstractPrototainer implements Prototainer  {
         String keyString = InjectionUtils.getKeyName(key);
         builders.put(keyString, b);
         scopes.put(keyString, scope);
+        
+        //remove existing forConstructMethod with this key
+        forConstructMethod.removeIf(c -> keyString.equals(c.getSource()));
+        
         forConstructMethod.add(new ConstructorDependency(keyString, b.type()));
         return b;
     }
@@ -140,6 +144,8 @@ public class AbstractPrototainer implements Prototainer  {
 
         Class<?> sourceType = type(sourceFromContainer);        
         
+        setterDependencies.removeIf(sd -> sd.getSource().equals(sourceFromContainer));
+        
         SetterDependency sd;
         setterDependencies.add(
                 sd = new SetterDependency(targetProperty, sourceFromContainer, sourceType)
@@ -155,6 +161,8 @@ public class AbstractPrototainer implements Prototainer  {
 
         Class<?> sourceType = type(sourceFromContainer);        
         
+        constructorDependencies.removeIf(cd -> cd.getSource().equals(sourceFromContainer));
+                
         ConstructorDependency c;
         constructorDependencies.add(
                 c = new ConstructorDependency(sourceFromContainer, sourceType)

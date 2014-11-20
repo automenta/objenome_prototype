@@ -19,7 +19,7 @@ public class IntegerSelect extends SetValue<Integer> implements Numeric {
     
     public IntegerSelect(Parameter p, List<Object> path, int defaultMin, int defaultMax) {
         super(p, path, Math.random());
-        assert(p.getType() == int.class);
+        //assert(p.getType() == int.class);
         this.min = defaultMin;
         this.max = defaultMax;
         
@@ -65,5 +65,9 @@ public class IntegerSelect extends SetValue<Integer> implements Numeric {
         return getValue();
     }
     
+    @Override
+    public void mutate() {
+        setValue( Math.random() * (getMax() - getMin()) + getMin() );
+    }
     
 }

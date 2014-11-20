@@ -8,6 +8,8 @@ package objenome;
 import objenome.optimize.FindZeros;
 import java.util.function.Function;
 import objenome.optimize.OptimizeMultivariate;
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -15,7 +17,7 @@ import org.junit.Test;
  *
  * @author me
  */
-public class OptimizeUnivariateTest {
+public class NumericAnalysisTest {
     
     public static class ExampleScalarFunction  {
         
@@ -49,7 +51,7 @@ public class OptimizeUnivariateTest {
             if (b)
                 return Math.sin(a * x) * (x-a)*(x-a);
             else
-                return Math.tanh(a * x) * (x-a)*(x-a);
+                return Math.tanh(a * -x) * (x-a)*(x-a);
         }
 
         @Override
@@ -75,15 +77,31 @@ public class OptimizeUnivariateTest {
     @Test public void testMultivariate() {
         
         Objenome o = new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
+            
+            
+                    
             public Double apply(ExampleMultivariateFunction s) {      
                 double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
                 return v;
             }
-        }).run();
+
+
+            
+        }) {
+
+            @Override
+            protected RandomGenerator getRandomGenerator() {
+                JDKRandomGenerator j = new JDKRandomGenerator();
+                j.setSeed(0);
+                return j;
+            }
+        
+        }.minimize().run();
+        
         
         
         double bestParam = o.getGeneList().get(1).doubleValue();        
-        assertEquals(0.30626, bestParam, 0.001);
+        assertEquals(-2.5919, bestParam, 0.001);
     }
     
 }

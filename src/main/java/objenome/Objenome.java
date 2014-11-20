@@ -29,7 +29,7 @@ public class Objenome {
         TODO different construction policies other than caching a single Phenotainer
         instance in this instance
         */
-    private Phenotainer context = null;
+    private Phenotainer pheno = null;
 
     public Objenome(Genetainer context, Collection<Objene> parameters) throws InvalidRepresentationException {
         super();
@@ -45,21 +45,18 @@ public class Objenome {
         Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
     public Phenotainer container() {
-        if (context!=null)
-            return context;
+        if (pheno!=null)
+            return pheno;
         
-        context = new Phenotainer(this);
-        
-        
-        return context;
+        return new Phenotainer(this);
     }
 
     /** call when if genes have changed */
-    public void commit() {
-        container().commit();
+    public Phenotainer commit() {
+        return container().commit();
     }
     
-    public <T> T get(Object key) {        
+    public <T> T get(Object key) {
         return container().get(key);
     }
     
@@ -67,7 +64,8 @@ public class Objenome {
     public List<Objene> getGeneList() {
         List<Objene> l = new ArrayList(genes.size());
         for (String s : genes.keySet()) {
-            l.add(genes.get(s));
+            Objene g = genes.get(s);
+            l.add(g);
         }
         return l;
     }
@@ -103,6 +101,13 @@ public class Objenome {
     //WARNING this may not be in order, will need to check if test if this provides ordered or not
     public Iterable<Objene> getGenes() {
         return genes.values();
+    }
+
+    void mutate() {
+        for ( Objene g : genes.values()) {
+            g.mutate();                
+        }
+        commit();
     }
 
     public interface Scoring extends Function<Objenome,Double> {

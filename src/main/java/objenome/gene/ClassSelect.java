@@ -13,7 +13,7 @@ import objenome.impl.MultiClassBuilder;
 /** stores a double value between 0...1.0 which is used to select equally
  *  from the list of classes in its creator Multiclass
  */
-public class ClassSelect extends Objene<Class> {
+public class ClassSelect extends Objene<Class> implements Numeric {
     public final MultiClassBuilder multiclass;
 
     public ClassSelect(List<Object> path, MultiClassBuilder multiclass) {
@@ -24,7 +24,7 @@ public class ClassSelect extends Objene<Class> {
     @Override
     public Class getValue() {
         int num = multiclass.size();
-        int which = (int) (doubleValue() * num);
+        int which = (int) (doubleValue()*multiclass.size());
         if (which == num) {
             which = num - 1;
         }
@@ -37,13 +37,37 @@ public class ClassSelect extends Objene<Class> {
 
     @Override
     public String toString() {
-        return path + " => Class(" + getValue().getSimpleName() +")";
+        return "ClassSelect(" + multiclass.toString() +") => " + getValue();
     }
 
     @Override
     public String key() {
+        //Path?
         return "ClassSelect("+multiclass.abstractClass+')';
     }
 
-    
+    @Override
+    public Double getMin() {
+        return 0.0d;
+    }
+
+    @Override
+    public Double getMax() {
+        return 1.0d;
+    }
+
+    @Override
+    public Number getNumber() {
+        return doubleValue();
+    }
+
+    @Override
+    public void setValue(double d) {
+        set(d);
+    }
+
+    @Override
+    public void mutate() {
+        setValue( Math.random() * (getMax() - getMin()) + getMin() );
+    }    
 }

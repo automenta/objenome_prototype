@@ -16,9 +16,14 @@ import org.apache.commons.math3.optim.PointValuePair;
 import org.apache.commons.math3.optim.SimpleBounds;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import static org.apache.commons.math3.optim.nonlinear.scalar.GoalType.MAXIMIZE;
+import org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.UncorrelatedRandomVectorGenerator;
+import org.apache.commons.math3.random.UniformRandomGenerator;
 
 /**
  * Multivariate Optmization with Multistart which uses different starting points 
@@ -27,12 +32,16 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
  */
 public class OptimizeMultivariate<C> extends NumericSolver<C> implements MultivariateFunction {
 
-    int numStarts = -1;
-    double convergeRel = 0.01;
-    double convergeAbs = 0.02;
+    int numStarts = 4;
+    //double convergeRel = 0.01;
+    //double convergeAbs = 0.02;
     private Double bestValue;
     int evaluations = 200;
     GoalType goal = MAXIMIZE;
+    
+    public OptimizeMultivariate(Genetainer g, Class<? extends C> model, Function<C, Double> function) {  
+        this(g.genome(model), model, function);        
+    }
     
     public OptimizeMultivariate(Class<? extends C> model, Function<C, Double> function) {
         this(new Genetainer().genome(model), model, function);
@@ -61,13 +70,17 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
         //TODO add MultiStart
         
         MultivariateOptimizer optimize = 
-                new BOBYQAOptimizer(4);
+                new BOBYQAOptimizer(variables.size()*2);
                 //new PowellOptimizer(0.01, 0.05);
-
-        PointValuePair result = optimize.optimize(
-                new MaxEval(200),
+        
+        RandomGenerator rng = getRandomGenerator();
+        
+        MultiStartMultivariateOptimizer multiOptimize = new MultiStartMultivariateOptimizer(optimize, numStarts, new UncorrelatedRandomVectorGenerator(variables.size(), new UniformRandomGenerator(rng)));
+        
+        PointValuePair result = multiOptimize.optimize(
+                new MaxEval(evaluations),
                 new SimpleBounds(lower, upper),
-                GoalType.MAXIMIZE,
+                goal,
                 new InitialGuess(mid),
                 new ObjectiveFunction(this)
                 );        
@@ -84,17 +97,22 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
     }
        
     
-    protected void apply(double[] values) {
+    protected void apply(double[] values) {              
         for (int i = 0; i < values.length; i++)
             variables.get(i).setValue(values[i]);
-        objenome.commit();
+        objenome.commit();        
     }
 
     @Override
     public double value(double[] v) {
         apply(v);
-        return function.apply( objenome.get(model) );
+        
+        C instance = objenome.get(model);
+
+        
+        return function.apply( instance );
     }
+        
 
     
 //    public MultivariateOptimizer getOptimizer() {
@@ -105,6 +123,15 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
 //    private RandomVectorGenerator getRandomVectorizer() {
 //        return new UnitSphereRandomVectorGenerator(variables.size());
 //    }
+
+    public OptimizeMultivariate minimize() {
+        this.goal = GoalType.MINIMIZE;
+        return this;
+    }
+
+    protected RandomGenerator getRandomGenerator() {
+        return new JDKRandomGenerator();
+    }
 
     
     
