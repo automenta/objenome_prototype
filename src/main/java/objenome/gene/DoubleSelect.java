@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author me
  */
-public class DoubleSelect extends SetValue<Double> {
+public class DoubleSelect extends SetValue<Double> implements Numeric {
     private double max;
     private double min;
 
@@ -32,10 +32,32 @@ public class DoubleSelect extends SetValue<Double> {
         }
     }
 
+    @Override
+    public Double getMin() {
+        return min;
+    }
+
+    @Override
+    public Double getMax() {
+        return max;
+    }
+
+    @Override
+    public void setValue(double d) {
+        this.set(d);
+    }
+
+    
     
     @Override
     public Double getValue() {
         return ((doubleValue() * (max-min)) + min);
     }
 
+    @Override
+    public Number getNumber() {
+        return getValue();
+    }
+
+    
 }

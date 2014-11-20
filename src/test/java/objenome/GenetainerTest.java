@@ -180,8 +180,8 @@ public class GenetainerTest {
         assertEquals(ClassSelect.class, genes.get(0).getClass());
         assertEquals(ClassSelect.class, genes.get(1).getClass());
         assertEquals(IntegerSelect.class, genes.get(2).getClass());
-        assertEquals(1, ((IntegerSelect)genes.get(2)).getMin());
-        assertEquals(3, ((IntegerSelect)genes.get(2)).getMax());
+        assertEquals(1, ((IntegerSelect)genes.get(2)).getMin().intValue());
+        assertEquals(3, ((IntegerSelect)genes.get(2)).getMax().intValue());
     }
     
 

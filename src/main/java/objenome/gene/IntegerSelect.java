@@ -8,13 +8,12 @@ package objenome.gene;
 import objenome.Between;
 import java.lang.reflect.Parameter;
 import java.util.List;
-import objenome.Phenotainer;
 
 /**
  *
  * @author me
  */
-public class IntegerSelect extends SetValue<Integer> {
+public class IntegerSelect extends SetValue<Integer> implements Numeric {
     private int max;
     private int min;
     
@@ -36,11 +35,13 @@ public class IntegerSelect extends SetValue<Integer> {
         return (int)((doubleValue() * (max-min)) + min);
     }
 
-    public int getMin() {
+    @Override
+    public Integer getMin() {
         return min;
     }
 
-    public int getMax() {
+    @Override
+    public Integer getMax() {
         return max;
     }
 
@@ -52,7 +53,16 @@ public class IntegerSelect extends SetValue<Integer> {
         this.min = min;
     }
 
+    @Override
+    public void setValue(double d) {
+        this.set(d);
+    }
 
+    
+    @Override
+    public Number getNumber() {
+        return getValue();
+    }
     
     
 }

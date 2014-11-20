@@ -25,8 +25,11 @@ public class Objenome {
     
     public final Genetainer parentContext;
     
-    /** generated container, constructed lazily */
-    private Container context = null;
+    /** generated container, constructed lazily
+        TODO different construction policies other than caching a single Phenotainer
+        instance in this instance
+        */
+    private Phenotainer context = null;
 
     public Objenome(Genetainer context, Collection<Objene> parameters) throws InvalidRepresentationException {
         super();
@@ -41,7 +44,7 @@ public class Objenome {
     /** gets the generated container of this Objenome with respect to the parent container.
         Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
-    public Container container() {
+    public Phenotainer container() {
         if (context!=null)
             return context;
         
@@ -51,6 +54,11 @@ public class Objenome {
         return context;
     }
 
+    /** call when if genes have changed */
+    public void commit() {
+        container().commit();
+    }
+    
     public <T> T get(Object key) {        
         return container().get(key);
     }
@@ -92,7 +100,7 @@ public class Objenome {
         };
     }
 
-    Iterable<Objene> getGenes() {
+    public Iterable<Objene> getGenes() {
         return genes.values();
     }
 

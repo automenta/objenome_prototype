@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import objenome.gene.BooleanSelect;
 import objenome.gene.DoubleSelect;
 import objenome.gene.IntegerSelect;
@@ -28,6 +27,11 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     private int intMaxDefault = 1;
     private int doubleMinDefault = 0;
     private int doubleMaxDefault = 1;
+    
+    public Genetainer(Class... useClasses) {
+        this();
+        use(useClasses);
+    }
     
     public Genetainer() {
         this(false);        
