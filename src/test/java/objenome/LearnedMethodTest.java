@@ -5,8 +5,9 @@
  */
 package objenome;
 
-import static objenome.LearnedMethod.Behavior.DO;
-import static objenome.LearnedMethod.Behavior.DONT;
+import objenome.learn.TrainedMethod;
+import static objenome.learn.TrainedMethod.Behavior.DO;
+import static objenome.learn.TrainedMethod.Behavior.DONT;
 import org.apache.commons.math3.genetics.GeneticAlgorithm;
 
 /**
@@ -20,7 +21,7 @@ public class LearnedMethodTest {
         
         public static int xor(int x, int y) {
             
-            throw new LearnedMethod() {
+            throw new TrainedMethod() {
 
                 @Override public Class[] training() {
                     return new Class[] { 
@@ -32,7 +33,7 @@ public class LearnedMethodTest {
                 }
 
                 @Override
-                public LearnedMethod.Behavior[] behavior() {
+                public TrainedMethod.Behavior[] behavior() {
                     return new Behavior[] {
                         new Behavior(new Object[] { 0, 0 }, 0, DO),
                         new Behavior(new Object[] { 0, 1 }, 1, DO),

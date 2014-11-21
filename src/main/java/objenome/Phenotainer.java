@@ -1,5 +1,7 @@
 package objenome;
 
+import objenome.dependency.Builder;
+import objenome.gene.Parameterized;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,12 +13,12 @@ import java.util.Map;
  */
 public class Phenotainer extends Container {
     public final Map<Parameter, Object> parameterValues = new HashMap();
-    public final Objenome obgenome;
+    public final Objenome objenome;
     public final Genetainer parent;
 
     public Phenotainer(Objenome o) {
         super(o.parentContext);        
-        this.obgenome = o;
+        this.objenome = o;
         this.parent = o.parentContext;
         
         
@@ -36,7 +38,7 @@ public class Phenotainer extends Container {
      *  instanced objects */
     public Phenotainer commit() {
         parameterValues.clear();
-        for (Objene g : obgenome.getGenes()) {
+        for (Objene g : objenome.genes.values()) {
             g.apply(this);
         }
         return this;

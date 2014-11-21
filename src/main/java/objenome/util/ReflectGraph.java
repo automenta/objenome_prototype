@@ -12,7 +12,7 @@ import com.google.common.reflect.ClassPath;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
-import objenome.Builder;
+import objenome.dependency.Builder;
 import objenome.Container;
 import objenome.Genetainer;
 import org.reflections.ReflectionUtils;

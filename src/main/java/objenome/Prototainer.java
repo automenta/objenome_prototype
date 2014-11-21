@@ -1,7 +1,10 @@
 package objenome;
 
+import objenome.dependency.Builder;
+import objenome.dependency.Scope;
+import objenome.dependency.ConfigurableBuilder;
 import java.util.Set;
-import objenome.impl.ConstructorDependency;
+import objenome.dependency.ConstructorDependency;
 
 /**
  * first; anterior; relating to a precursor + from Latin tenere 'to hold.’"
@@ -64,8 +67,10 @@ public interface Prototainer  {
      * @return The factory created as a ConfigurableBuilder. (Fluent API)
      * @see Scope
      */
-    public ConfigurableBuilder usable(Object key, Class<? extends Object> klass);
-
+    default public ConfigurableBuilder usable(Object key, Class<?> klass) {
+        return usable(key, Scope.NONE, klass);
+    }
+    
     /**
      * Set up a factory for the given key. The scope assumed is NONE.
      *
@@ -75,7 +80,9 @@ public interface Prototainer  {
      * @return The factory passed as a parameter. (Fluent API)
      * @see Builder
      */
-    public Builder usable(Object key, Builder factory);
+    default public Builder usable(Object key, Builder factory) {
+        return usable(key, Scope.NONE, factory);
+    }
 
     /**
      * Set up a factory for the given key in the given scope.

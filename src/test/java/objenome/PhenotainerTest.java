@@ -5,9 +5,10 @@
  */
 package objenome;
 
+import objenome.dependency.Builder;
 import java.util.HashSet;
 import java.util.Set;
-import static objenome.Builder.of;
+import static objenome.dependency.Builder.of;
 import objenome.GenetainerTest.Machine;
 import objenome.GenetainerTest.Part;
 import objenome.GenetainerTest.Part0;
@@ -16,10 +17,10 @@ import objenome.GenetainerTest.PartN;
 import objenome.GenetainerTest.PartWithSubPart;
 import objenome.GenetainerTest.SubPart0;
 import objenome.GenetainerTest.SubPart1;
-import objenome.gene.ClassSelect;
-import objenome.gene.IntegerSelect;
-import objenome.impl.ClassBuilder;
-import objenome.impl.MultiClassBuilder;
+import objenome.gene.SelectImplementation;
+import objenome.gene.SetIntegerValue;
+import objenome.dependency.ClassBuilder;
+import objenome.dependency.MultiClassBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -40,7 +41,7 @@ public class PhenotainerTest {
                         
         Objenome o = g.genome(Part.class);
 
-        IntegerSelect partSelect = (IntegerSelect)o.getGeneList().get(0);
+        SetIntegerValue partSelect = (SetIntegerValue)o.getGeneList().get(0);
         
         Container c = o.container();
         
@@ -61,7 +62,7 @@ public class PhenotainerTest {
                         
         Objenome o = g.genome(Machine.class);
 
-        ClassSelect partSelect = (ClassSelect)o.getGeneList().get(0);
+        SelectImplementation partSelect = (SelectImplementation)o.getGeneList().get(0);
         
         Container c = o.container();
         
@@ -132,7 +133,7 @@ public class PhenotainerTest {
             Container c = o.container();
             Machine m = c.get(Machine.class);
             
-            assertEquals("iteration " + i,  ((ClassSelect)o.getGeneList().get(0)).getValue(), m.part.getClass() );
+            assertEquals("iteration " + i,  ((SelectImplementation)o.getGeneList().get(0)).getValue(), m.part.getClass() );
             uniqueClasses.add(m.part.getClass());
             
             o.mutate();            

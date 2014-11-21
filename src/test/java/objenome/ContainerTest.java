@@ -1,5 +1,6 @@
 package objenome;
 
+import objenome.dependency.Scope;
 import java.util.Date;
 import objenome.GenetainerTest.Part;
 import objenome.GenetainerTest.Part0;

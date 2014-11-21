@@ -5,8 +5,12 @@
  */
 package objenome;
 
+import objenome.dependency.Builder;
+import objenome.dependency.Scope;
 import com.google.common.collect.Sets;
-import objenome.impl.MultiClassBuilder;
+import java.util.List;
+import java.util.Set;
+import objenome.dependency.MultiClassBuilder;
 
 /**
  * Non-determinate "Multi" Container
@@ -14,9 +18,6 @@ import objenome.impl.MultiClassBuilder;
 public interface Multainer extends Prototainer {
     
     public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses);
-    
-    //TODO: deduce common parent classes from a supplied list of classes:
-    //default public MultiClassBuilder any(Class<?>... klasses) { ...
     
     
     
@@ -32,4 +33,19 @@ public interface Multainer extends Prototainer {
         return any(abstractClass, Scope.NONE, klasses);
     }
 
+    /** create all possible builders that can be made involving a set of classes 
+     *  deduces common parent classes from a supplied list of classes
+     *  TODO
+     */
+    default public List<Builder> possible(Set<Class<?>> classes) {
+        return null;
+    }
+    
+    /** create all possible builders that can be made involving the classes in a set of packages
+     *  TODO
+     */
+    default public List<Builder> possible(String... packages) {
+        //calls ReflectGraph, then Multainer.possible(classes)
+        return null;
+    }
 }

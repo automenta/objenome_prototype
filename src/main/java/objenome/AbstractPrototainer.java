@@ -5,15 +5,19 @@
  */
 package objenome;
 
+import objenome.dependency.Builder;
+import objenome.dependency.Scope;
+import objenome.dependency.Interceptor;
+import objenome.dependency.ConfigurableBuilder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import objenome.impl.ClassBuilder;
-import objenome.impl.ConstructorDependency;
-import objenome.impl.SetterDependency;
+import objenome.dependency.ClassBuilder;
+import objenome.dependency.ConstructorDependency;
+import objenome.dependency.SetterDependency;
 import objenome.util.InjectionUtils;
 
 /**
@@ -93,15 +97,6 @@ public class AbstractPrototainer implements Prototainer  {
         return b;
     }
 
-    @Override
-    public Builder usable(Object key, Builder factory) {
-        return usable(key, Scope.NONE, factory);
-    }
-
-    @Override
-    public ConfigurableBuilder usable(Object key, Class<?> klass) {
-        return usable(key, Scope.NONE, klass);
-    }
 
     @Override
     public ConfigurableBuilder usable(Object key, Scope scope, Class<?> klass) {

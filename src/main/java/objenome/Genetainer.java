@@ -5,17 +5,20 @@
  */
 package objenome;
 
+import objenome.dependency.Builder;
+import objenome.gene.Parameterized;
+import objenome.dependency.Scope;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
-import objenome.gene.BooleanSelect;
-import objenome.gene.DoubleSelect;
-import objenome.gene.IntegerSelect;
-import objenome.impl.ClassBuilder;
-import objenome.impl.ClassBuilder.DependencyKey;
-import objenome.impl.MultiClassBuilder;
+import objenome.gene.SetBooleanValue;
+import objenome.gene.SetDoubleValue;
+import objenome.gene.SetIntegerValue;
+import objenome.dependency.ClassBuilder;
+import objenome.dependency.ClassBuilder.DependencyKey;
+import objenome.dependency.MultiClassBuilder;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
@@ -87,15 +90,15 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             nextPath.add(p);
             
             if (p.getType() == int.class) {
-                genes.add( new IntegerSelect(p, nextPath, 
+                genes.add(new SetIntegerValue(p, nextPath, 
                         getIntMinDefault(), getIntMaxDefault()) );
             }
             else if (p.getType() == double.class) {
-                genes.add( new DoubleSelect(p, nextPath, 
+                genes.add(new SetDoubleValue(p, nextPath, 
                         getDoubleMinDefault(), getDoubleMaxDefault()) );
             }
             else if (p.getType() == boolean.class) {
-                genes.add( new BooleanSelect(p, nextPath) );    
+                genes.add(new SetBooleanValue(p, nextPath) );    
             }
             else {
                 throw new RuntimeException("primitive Parameter " + nextPath + " " + p + " not yet supported");

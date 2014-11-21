@@ -5,11 +5,12 @@
  */
 package objenome;
 
+import objenome.gene.Between;
 import java.util.List;
-import static objenome.Builder.of;
-import static objenome.Builder.the;
-import objenome.gene.ClassSelect;
-import objenome.gene.IntegerSelect;
+import static objenome.dependency.Builder.of;
+import static objenome.dependency.Builder.the;
+import objenome.gene.SelectImplementation;
+import objenome.gene.SetIntegerValue;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -109,7 +110,7 @@ public class GenetainerTest {
         
         List<Objene> genes = o.getGeneList();
         
-        assertEquals(ClassSelect.class, genes.get(0).getClass());
+        assertEquals(SelectImplementation.class, genes.get(0).getClass());
         
         assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", genes.get(0).path.toString());
     }
@@ -125,7 +126,7 @@ public class GenetainerTest {
         
         List<Objene> genes = o.getGeneList();
         
-        assertEquals(ClassSelect.class, genes.get(0).getClass());        
+        assertEquals(SelectImplementation.class, genes.get(0).getClass());        
     }
     
     //18553247676
@@ -137,7 +138,7 @@ public class GenetainerTest {
         List<Objene> genes = o.getGeneList();
         
         assertEquals(1, o.size());        
-        assertEquals(IntegerSelect.class, genes.get(0).getClass());
+        assertEquals(SetIntegerValue.class, genes.get(0).getClass());
                 
     }
     
@@ -153,11 +154,11 @@ public class GenetainerTest {
         
         List<Objene> genes = o.getGeneList();
         
-        assertEquals(ClassSelect.class, genes.get(0).getClass());
+        assertEquals(SelectImplementation.class, genes.get(0).getClass());
                  
         assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", genes.get(0).path.toString());
         
-        assertEquals(IntegerSelect.class, genes.get(1).getClass());        
+        assertEquals(SetIntegerValue.class, genes.get(1).getClass());        
                         
         assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part), ClassBuilder[class objenome.GenetainerTest$PartN], int arg0]", genes.get(1).path.toString());
     }
@@ -172,7 +173,7 @@ public class GenetainerTest {
         List<Objene> genes = o.getGeneList();
         
         assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
-        assertEquals(ClassSelect.class, genes.get(0).getClass());
+        assertEquals(SelectImplementation.class, genes.get(0).getClass());
         assertEquals("3rd level deep", 5, genes.get(0).path.size());
     }
     
@@ -188,11 +189,11 @@ public class GenetainerTest {
         List<Objene> genes = o.getGeneList();
         
         assertEquals(3, o.size());
-        assertEquals(ClassSelect.class, genes.get(0).getClass());
-        assertEquals(ClassSelect.class, genes.get(1).getClass());
-        assertEquals(IntegerSelect.class, genes.get(2).getClass());
-        assertEquals(1, ((IntegerSelect)genes.get(2)).getMin().intValue());
-        assertEquals(3, ((IntegerSelect)genes.get(2)).getMax().intValue());
+        assertEquals(SelectImplementation.class, genes.get(0).getClass());
+        assertEquals(SelectImplementation.class, genes.get(1).getClass());
+        assertEquals(SetIntegerValue.class, genes.get(2).getClass());
+        assertEquals(1, ((SetIntegerValue)genes.get(2)).getMin().intValue());
+        assertEquals(3, ((SetIntegerValue)genes.get(2)).getMax().intValue());
     }
     
 

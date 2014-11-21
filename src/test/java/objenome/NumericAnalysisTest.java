@@ -5,9 +5,10 @@
  */
 package objenome;
 
-import objenome.optimize.FindZeros;
+import objenome.gene.Between;
+import objenome.learn.FindZeros;
 import java.util.function.Function;
-import objenome.optimize.OptimizeMultivariate;
+import objenome.learn.OptimizeMultivariate;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 import static org.junit.Assert.assertEquals;

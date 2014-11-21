@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import objenome.dependency.Builder;
 import com.google.common.collect.SetMultimap;
 import objenome.util.ReflectGraph;
 import static org.junit.Assert.assertEquals;

@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import objenome.Between;
-import static objenome.Builder.of;
+import objenome.gene.Between;
+import static objenome.dependency.Builder.of;
 import objenome.Genetainer;
 import objenome.Objenome;
-import objenome.metric.Walltime;
-import objenome.optimize.OptimizeMultivariate;
+import objenome.metric.Microbenchmark;
+import objenome.learn.OptimizeMultivariate;
 
 public class OptimizeWallTimeList {
 
@@ -89,7 +89,7 @@ public class OptimizeWallTimeList {
         Objenome o = new OptimizeMultivariate(g, MapActivity.class, new Function<MapActivity, Double>() {
             public Double apply(MapActivity s) {
                   
-                Walltime w = new Walltime(100, 10) {
+                Microbenchmark w = new Microbenchmark(100, 10) {
                     
                     @Override public void init() {                     
                     }

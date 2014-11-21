@@ -41,6 +41,7 @@ public class Objenome {
     }
     
     public int size() { return genes.size(); }
+    
     /** gets the generated container of this Objenome with respect to the parent container.
         Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
@@ -51,7 +52,7 @@ public class Objenome {
         return new Phenotainer(this);
     }
 
-    /** call when if genes have changed */
+    /** call after genes have changed to update the container */
     public Phenotainer commit() {
         return container().commit();
     }
@@ -70,46 +71,16 @@ public class Objenome {
         return l;
     }
     
-    public Chromosome newChromosome(final Scoring scoring) {
-        return newChromosome(scoring, getGeneList());        
-    }
-    
-    
-    public AbstractListChromosome<Objene> newChromosome(final Scoring scoring, List<Objene> genes) {
-        return new AbstractListChromosome<Objene>(genes) {
 
-            @Override
-            protected void checkValidity(List<Objene> genes) throws InvalidRepresentationException {
-                String e = Objenome.this.parentContext.getChromosomeError(genes);
-                if (e!=null)
-                    throw new InvalidRepresentationException(new DummyLocalizable(e));
-            }
-
-            @Override
-            public double fitness() {
-                return scoring.apply(Objenome.this);
-            }
-
-            @Override
-            public AbstractListChromosome<Objene> newFixedLengthChromosome(List<Objene> list) {
-                return newChromosome(scoring, list);
-            }
-            
-        };
-    }
-
-    //WARNING this may not be in order, will need to check if test if this provides ordered or not
-    public Iterable<Objene> getGenes() {
-        return genes.values();
-    }
-
-    void mutate() {
+    /** mutates this genome's genes, and commits changes to apply to next generated object */
+    void mutate(/* .... mutation opcodes ... */) {
         for ( Objene g : genes.values()) {
             g.mutate();                
         }
         commit();
     }
 
+    /** fitness function */
     public interface Scoring extends Function<Objenome,Double> {
         
     }
