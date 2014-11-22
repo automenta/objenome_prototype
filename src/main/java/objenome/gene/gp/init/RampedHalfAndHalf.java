@@ -115,7 +115,6 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
 		grow = new Grow(false);
 		full = new Full(false);
 
-		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -137,19 +136,19 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
 	 * <li>{@link #RAMPING_START_DEPTH}
 	 * </ul>
 	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		populationSize = Config.getInstance().get(SIZE);
-		syntax = Config.getInstance().get(SYNTAX);
-		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
+	protected void setup(Config config) {
+		random = config.get(RANDOM_SEQUENCE);
+		populationSize = config.get(SIZE);
+		syntax = config.get(SYNTAX);
+		returnType = config.get(RETURN_TYPE);
+		allowDuplicates = config.get(ALLOW_DUPLICATES, allowDuplicates);
 
 		grow.setRandomSequence(random);
 		full.setRandomSequence(random);
 
-		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
-		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
-		Integer startDepth = Config.getInstance().get(RAMPING_START_DEPTH);
+		Integer maxDepth = config.get(MAXIMUM_DEPTH);
+		Integer maxInitialDepth = config.get(MAXIMUM_INITIAL_DEPTH);
+		Integer startDepth = config.get(RAMPING_START_DEPTH);
 
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			this.endDepth = maxInitialDepth;
@@ -174,7 +173,7 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
-			setup();
+			throw new UnsupportedOperationException("Unimplemented yet"); //setup();
 		}
 
 		// These could be expensive so only do them when we really have to
@@ -209,14 +208,16 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
 	 * @return a population of <code>STGPIndividual</code> objects
 	 */
 	@Override
-	public Population createPopulation() {
+	public Population createPopulation(Config config) {
+		setup(config);
+                
 		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation());
 
 		if (endDepth < startDepth) {
 			throw new IllegalStateException("End depth must be greater than the start depth.");
 		}
 
-		Population population = new Population();
+		Population population = new Population(config);
 
 		Method[] method = new Method[populationSize];
 		int[] programsPerDepth = programsPerDepth();

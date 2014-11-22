@@ -30,8 +30,8 @@ import objenome.gene.gp.epox.Variable;
 import objenome.gene.gp.epochx.event.ConfigEvent;
 import objenome.gene.gp.epochx.event.EventManager;
 import objenome.gene.gp.epochx.event.Listener;
-import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.STGPIndividual;
+import objenome.gene.gp.epochx.Population;
 
 
 /**
@@ -85,7 +85,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	 *        configuration settings from the config
 	 */
 	public HitsCount(boolean autoConfig) {
-		setup();
+		
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -103,11 +103,11 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	 * <li>{@link #POINT_ERROR}
 	 * </ul>
 	 */
-	protected void setup() {
-		inputVariables = Config.getInstance().get(INPUT_VARIABLES);
-		inputValueSets = Config.getInstance().get(INPUT_VALUE_SETS);
-		expectedOutputs = Config.getInstance().get(EXPECTED_OUTPUTS);
-		pointError = Config.getInstance().get(POINT_ERROR, pointError);
+	protected void setup(Config config) {
+		inputVariables = config.get(INPUT_VARIABLES);
+		inputValueSets = config.get(INPUT_VALUE_SETS);
+		expectedOutputs = config.get(EXPECTED_OUTPUTS);
+		pointError = config.get(POINT_ERROR, pointError);
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(TEMPLATE, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
-			setup();
+			setup(event.getConfig());
 		}
 	}
 	
@@ -136,7 +136,9 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	 * @throws IllegalArgumentException if the individual is not an STGPIndividual
 	 */
 	@Override
-	public DoubleFitness.Minimise evaluate(Individual individual) {
+	public DoubleFitness.Minimise evaluate(Population population, Individual individual) {
+                setup(population.getConfig());
+                
 		if (!(individual instanceof STGPIndividual)) {
 			throw new IllegalArgumentException("Unsupported representation");
 		}

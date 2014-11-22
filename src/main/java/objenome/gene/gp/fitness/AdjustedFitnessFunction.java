@@ -26,6 +26,7 @@ import objenome.gene.gp.epochx.Config;
 import objenome.gene.gp.epochx.Fitness;
 import objenome.gene.gp.epochx.Individual;
 import objenome.gene.gp.epochx.Config.ConfigKey;
+import objenome.gene.gp.epochx.Population;
 import objenome.gene.gp.epochx.event.ConfigEvent;
 import objenome.gene.gp.epochx.event.EventManager;
 import objenome.gene.gp.epochx.event.Listener;
@@ -85,7 +86,6 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	 *        configuration settings from the config
 	 */
 	public AdjustedFitnessFunction(AbstractFitnessFunction delegate, boolean autoConfig) {
-		setup();
 		
 		this.delegate = delegate;
 
@@ -102,8 +102,8 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	 * <li>{@link #MINIMUM_FITNESS_SCORE}
 	 * </ul>
 	 */
-	protected void setup() {
-		minFitnessScore = Config.getInstance().get(MINIMUM_FITNESS_SCORE, minFitnessScore);
+	protected void setup(Config config) {
+		minFitnessScore = config.get(MINIMUM_FITNESS_SCORE, minFitnessScore);
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(MINIMUM_FITNESS_SCORE)) {
-			setup();
+		if (event.isKindOf(MINIMUM_FITNESS_SCORE)) {                        
+			throw new UnsupportedOperationException("Unsupported yet"); //setup()
 		}
 	}
 
@@ -133,8 +133,10 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	 * DoubleFitness.Minimise 
 	 */
 	@Override
-	public DoubleFitness.Maximise evaluate(Individual individual) {
-		Fitness fitness = delegate.evaluate(individual);
+	public DoubleFitness.Maximise evaluate(Population population, Individual individual) {
+		setup(population.getConfig());
+                
+		Fitness fitness = delegate.evaluate(population, individual);
 		
 		if (!(fitness instanceof DoubleFitness.Minimise)) {
 			throw new IllegalStateException("Delegate must return instances of DoubleFitness.Minimise");

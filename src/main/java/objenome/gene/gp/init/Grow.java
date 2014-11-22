@@ -165,8 +165,8 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
-			//setup();
-                    throw new UnsupportedOperationException("Unimplemented yet");
+			
+                    throw new UnsupportedOperationException("Unimplemented yet"); //setup();
 		}
 
 		// These will be expensive so only do them when we really have to

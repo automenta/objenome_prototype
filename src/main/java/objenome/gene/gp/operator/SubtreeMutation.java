@@ -85,7 +85,6 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	public SubtreeMutation(boolean autoConfig) {
 		grower = new Grow(false);
 
-		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -103,13 +102,13 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
-		probability = Config.getInstance().get(PROBABILITY);
+	protected void setup(Config config) {
+		random = config.get(RANDOM_SEQUENCE);
+		maxDepth = config.get(MAXIMUM_DEPTH);
+		probability = config.get(PROBABILITY);
 
 		grower.setRandomSequence(random);
-		grower.setSyntax(Config.getInstance().get(SYNTAX));
+		grower.setSyntax(config.get(SYNTAX));
 	}
 
 	/**
@@ -122,7 +121,8 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH, PROBABILITY)) {
-			setup();
+        		setup(event.getConfig());
+
 		}
 	}
 

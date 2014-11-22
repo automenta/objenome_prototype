@@ -30,8 +30,8 @@ import objenome.gene.gp.epox.Variable;
 import objenome.gene.gp.epochx.event.ConfigEvent;
 import objenome.gene.gp.epochx.event.EventManager;
 import objenome.gene.gp.epochx.event.Listener;
-import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.STGPIndividual;
+import objenome.gene.gp.epochx.Population;
 
 /**
  * A fitness function for <code>STGPIndividual</code>s that calculates and assigns 
@@ -93,7 +93,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	 *        configuration settings from the config
 	 */
 	public SumOfError(boolean autoConfig) {
-		setup();
+		
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -110,10 +110,10 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	 * <li>{@link #EXPECTED_OUTPUTS}
 	 * </ul>
 	 */
-	protected void setup() {
-		inputVariables = Config.getInstance().get(INPUT_VARIABLES);
-		inputValueSets = Config.getInstance().get(INPUT_VALUE_SETS);
-		expectedOutputs = Config.getInstance().get(EXPECTED_OUTPUTS);
+	protected void setup(Config config) {
+		inputVariables = config.get(INPUT_VARIABLES);
+		inputValueSets = config.get(INPUT_VALUE_SETS);
+		expectedOutputs = config.get(EXPECTED_OUTPUTS);
 	}
 	
 	/**
@@ -126,7 +126,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(TEMPLATE, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS)) {
-			setup();
+			throw new UnsupportedOperationException("Unimplemented yet"); //setup();
 		}
 	}
 	
@@ -142,10 +142,14 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	 * individual's data-type is not Double.
 	 */
 	@Override
-	public DoubleFitness.Minimise evaluate(Individual individual) {
+	public DoubleFitness.Minimise evaluate(Population population, Individual individual) {
+                
+                
 		if (!(individual instanceof STGPIndividual)) {
 			throw new IllegalArgumentException("Unsupported representation");
 		}
+                
+                setup(population.getConfig());
 		
 		//TODO validate number of inputs etc
 		

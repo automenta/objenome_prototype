@@ -37,14 +37,16 @@ public class ConfigEvent implements Event {
 	 * The <code>ConfigKey</code> associated with the event. 
 	 */
 	private final ConfigKey<?> key;
+    private final Config config;
 
 	/**
 	 * Constructs a <code>ConfigEvent</code>.
 	 * 
 	 * @param key the <code>ConfigKey</code> associated with the event. 
 	 */
-	public ConfigEvent(ConfigKey<?> key) {
+	public ConfigEvent(Config config, ConfigKey<?> key) {
 		this.key = key;
+                this.config = config;
 	}
 
 	/**
@@ -73,4 +75,8 @@ public class ConfigEvent implements Event {
 
 		return false;
 	}
+
+    public Config getConfig() {
+        return config;
+    }
 }

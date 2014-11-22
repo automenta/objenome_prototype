@@ -79,6 +79,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	private RandomSequence random;
 	private Boolean strict;
 	private Double probability;
+    private Config config;
 
 	/**
 	 * Constructs a <code>OnePointCrossover</code> with control parameters
@@ -101,7 +102,6 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 		// Default config values
 		strict = false;
 		
-		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -118,10 +118,11 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * <li>{@link #STRICT}
 	 * </ul>
 	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		probability = Config.getInstance().get(PROBABILITY);
-		strict = Config.getInstance().get(STRICT, strict);
+	protected void setup(Config config) {
+            
+		random = config.get(RANDOM_SEQUENCE);
+		probability = config.get(PROBABILITY);
+		strict = config.get(STRICT, strict);
 	}
 
 	/**
@@ -134,7 +135,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, STRICT)) {
-			setup();
+                    setup(event.getConfig());                    
 		}
 	}
 

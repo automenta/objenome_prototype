@@ -27,6 +27,7 @@ import java.util.Map;
 import objenome.gene.gp.epochx.AbstractFitnessFunction;
 import objenome.gene.gp.epochx.Fitness;
 import objenome.gene.gp.epochx.Individual;
+import objenome.gene.gp.epochx.Population;
 
 /**
  * A fitness function which caches fitness scores and delegates fitness calculations to a
@@ -69,14 +70,14 @@ public class CachedFitnessFunction extends AbstractFitnessFunction {
 	 * @return the fitness of the given individual
 	 */
 	@Override
-	public Fitness evaluate(Individual individual) {
+	public Fitness evaluate(Population population, Individual individual) {
 		Object key = individual.hashCode();
 		
 		//TODO Use source generator if one is set
 		
 		Fitness fitness = cache.get(key);
 		if (fitness == null) {
-			fitness = delegate.evaluate(individual);
+			fitness = delegate.evaluate(population, individual);
 			cache.put(key, fitness);
 		}
 		

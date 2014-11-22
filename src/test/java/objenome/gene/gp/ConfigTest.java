@@ -36,14 +36,15 @@ import objenome.gene.gp.epochx.Population;
  */
 public class ConfigTest extends TestCase {
 
+    Config config = new Config();
 	/**
 	 * Test for the {@link Config#get(ConfigKey)} method.
 	 */
 	public void testGet() {
 		ConfigKey<Double> key = new ConfigKey<Double>();
-		assertNull(Config.getInstance().get(key));
-		Config.getInstance().set(key, 1.0);
-		assertNotNull(Config.getInstance().get(key));
+		assertNull(config.get(key));
+		config.set(key, 1.0);
+		assertNotNull(config.get(key));
 	}
 
 	/**
@@ -51,18 +52,17 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testSet() {
 		ConfigKey<Double> key = new ConfigKey<Double>();
-		Config.getInstance().set(key, 0.2);
-		assertEquals(0.2, Config.getInstance().get(key));
+		config.set(key, 0.2);
+		assertEquals(0.2, config.get(key));
 
-		Config.getInstance().set(key, 0.4);
-		assertEquals(0.4, Config.getInstance().get(key));
+		config.set(key, 0.4);
+		assertEquals(0.4, config.get(key));
 	}
 
 	/**
 	 * Test for the {@link Config#reset()} method.
 	 */
 	public void testReset() {
-		Config config = Config.getInstance();
 		config.set(Population.SIZE, 100);		
 		assertNotNull(config.get(Population.SIZE));
 

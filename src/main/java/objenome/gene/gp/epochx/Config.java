@@ -73,7 +73,7 @@ public class Config {
 	 */
 	public <T> void set(ConfigKey<T> key, T value) {
 		mapping.put(key, value);
-		EventManager.getInstance().fire(new ConfigEvent(key));
+		EventManager.getInstance().fire(new ConfigEvent(this, key));
 	}
 
 	/**

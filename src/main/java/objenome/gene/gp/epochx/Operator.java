@@ -47,7 +47,7 @@ public interface Operator {
 	 * @return the modified individuals; <code>null</code> when the operator
 	 *         could not be applied.
 	 */
-	public Individual[] apply(Individual ... individuals);
+	public Individual[] apply(Population population, Individual ... individuals);
 
 	/**
 	 * Returns the probability of the operator (the higher the value, the more

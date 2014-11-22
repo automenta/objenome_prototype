@@ -24,6 +24,8 @@ package objenome.gene.gp.epochx;
 
 public abstract class AbstractFitnessFunction implements FitnessFunction {
 
+    
+    
 	/** 
 	 * Evaluates all individuals in the given population by calling the 
 	 * <code>evaluate(Individual)</code> method and if the individual 
@@ -35,7 +37,7 @@ public abstract class AbstractFitnessFunction implements FitnessFunction {
 	@Override
 	public void evaluate(Population population) {
 		for (Individual individual: population) {
-			Fitness fitness = evaluate(individual);
+			Fitness fitness = evaluate(population, individual);
 			assignFitness(fitness, individual);
 		}
 	}
@@ -46,7 +48,7 @@ public abstract class AbstractFitnessFunction implements FitnessFunction {
 	 * @param individual
 	 * @return the fitness of the given individual
 	 */
-	public abstract Fitness evaluate(Individual individual);
+	public abstract Fitness evaluate(Population population, Individual individual);
 	
 	/**
 	 * 

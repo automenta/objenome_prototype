@@ -96,7 +96,6 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 		// Default config values
 		pointProbability = 0.01;
 				
-		setup();
 		
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -114,11 +113,11 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		syntax = Config.getInstance().get(SYNTAX);
-		pointProbability = Config.getInstance().get(POINT_PROBABILITY, pointProbability);
-		probability = Config.getInstance().get(PROBABILITY);
+	protected void setup(Config config) {
+		random = config.get(RANDOM_SEQUENCE);
+		syntax = config.get(SYNTAX);
+		pointProbability = config.get(POINT_PROBABILITY, pointProbability);
+		probability = config.get(PROBABILITY);
 	}
 	
 	/**
@@ -131,7 +130,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SYNTAX, POINT_PROBABILITY, PROBABILITY)) {
-			setup();
+			setup(event.getConfig());
 		}
 	}
 

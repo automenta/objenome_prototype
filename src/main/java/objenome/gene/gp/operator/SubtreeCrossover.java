@@ -94,8 +94,6 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 		// Default config values
 		terminalProbability = -1.0;
 		
-		setup();
-
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
 		}
@@ -112,11 +110,11 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * </ul>
 	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		terminalProbability = Config.getInstance().get(TERMINAL_PROBABILITY, terminalProbability);
-		probability = Config.getInstance().get(PROBABILITY);
-		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
+	protected void setup(Config config) {
+		random = config.get(RANDOM_SEQUENCE);
+		terminalProbability = config.get(TERMINAL_PROBABILITY, terminalProbability);
+		probability = config.get(PROBABILITY);
+		maxDepth = config.get(MAXIMUM_DEPTH);
 	}
 
 	/**
@@ -129,7 +127,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, TERMINAL_PROBABILITY, PROBABILITY, MAXIMUM_DEPTH)) {
-			setup();
+                    setup(event.getConfig());
+
 		}
 	}
 
