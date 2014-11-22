@@ -24,42 +24,40 @@ package objenome.gene.gp.source;
 import java.util.HashMap;
 import java.util.Map;
 
-import objenome.gene.gp.epochx.Individual;
-
+import objenome.gene.gp.Individual;
 
 /**
- * 
+ *
  */
 public class CachedSourceGenerator<T extends Individual> implements SourceGenerator<T> {
 
-	// The cache of fitness scores
-	private Map<Object, String> cache;
-	
-	private SourceGenerator<T> delegate;
-	
-	public CachedSourceGenerator(SourceGenerator<T> delegate) {
-		this.delegate = delegate;
-		
-		cache = new HashMap<Object, String>();
-	}
-	
-	@Override
-	public String getSource(T individual) {
-		Object key = key(individual);
-		
-		//TODO Use source generator if one is set
-		
-		String source = cache.get(key);
-		if (source == null) {
-			source = delegate.getSource(individual);
-			cache.put(key, source);
-		}
-		
-		return source;
-	}
-	
-	protected Object key(T individual) {
-		return individual.hashCode();
-	}
+    // The cache of fitness scores
+    private Map<Object, String> cache;
+
+    private SourceGenerator<T> delegate;
+
+    public CachedSourceGenerator(SourceGenerator<T> delegate) {
+        this.delegate = delegate;
+
+        cache = new HashMap<Object, String>();
+    }
+
+    @Override
+    public String getSource(T individual) {
+        Object key = key(individual);
+
+        //TODO Use source generator if one is set
+        String source = cache.get(key);
+        if (source == null) {
+            source = delegate.getSource(individual);
+            cache.put(key, source);
+        }
+
+        return source;
+    }
+
+    protected Object key(T individual) {
+        return individual.hashCode();
+    }
 
 }

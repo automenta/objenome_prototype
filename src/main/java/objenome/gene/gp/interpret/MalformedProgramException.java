@@ -25,28 +25,28 @@ package objenome.gene.gp.interpret;
  * Checked exception that indicates that a program being evaluated, executed or
  * otherwise processed has been found to be incorrectly formed according to the
  * appropriate syntax rules.
- * 
+ *
  * @since 2.0
  */
 public class MalformedProgramException extends Exception {
 
-	private static final long serialVersionUID = -5736308741313493577L;
+    private static final long serialVersionUID = -5736308741313493577L;
 
-	/**
-	 * Constructs an exception without a message.
-	 */
-	public MalformedProgramException() {
-		super();
-	}
+    /**
+     * Constructs an exception without a message.
+     */
+    public MalformedProgramException() {
+        super();
+    }
 
-	/**
-	 * Constructs an exception with the given message.
-	 * 
-	 * @param message a message describing the unexpected behaviour that
-	 *        occurred.
-	 */
-	public MalformedProgramException(final String message) {
-		super(message);
-	}
+    /**
+     * Constructs an exception with the given message.
+     *
+     * @param message a message describing the unexpected behaviour that
+     * occurred.
+     */
+    public MalformedProgramException(final String message) {
+        super(message);
+    }
 
 }

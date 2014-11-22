@@ -22,24 +22,24 @@
 package objenome.gene.gp.grammar;
 
 /**
- * A runtime exception that is thrown to indicate that a grammar string is
- * not in a valid BNF format.
+ * A runtime exception that is thrown to indicate that a grammar string is not
+ * in a valid BNF format.
  */
 public class MalformedGrammarException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4253637393156061665L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4253637393156061665L;
 
-	/**
-	 * Constructs a <code>MalformedGrammarException</code> with the specified
-	 * message.
-	 * 
-	 * @param message {@inheritDoc}
-	 */
-	public MalformedGrammarException(String message) {
-		super(message);
-	}
+    /**
+     * Constructs a <code>MalformedGrammarException</code> with the specified
+     * message.
+     *
+     * @param message {@inheritDoc}
+     */
+    public MalformedGrammarException(String message) {
+        super(message);
+    }
 
 }

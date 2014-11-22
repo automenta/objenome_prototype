@@ -19,17 +19,16 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.selection;
 
-import static objenome.gene.gp.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
-import objenome.gene.gp.epochx.AbstractSelector;
-import objenome.gene.gp.epochx.Config;
-import objenome.gene.gp.epochx.Fitness;
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.IndividualSelector;
-import objenome.gene.gp.epochx.Population;
+import objenome.gene.gp.AbstractSelector;
+import objenome.gene.gp.Config;
+import objenome.gene.gp.Fitness;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.IndividualSelector;
+import objenome.gene.gp.Population;
 import objenome.gene.gp.fitness.DoubleFitness;
 
 /**
@@ -39,80 +38,80 @@ import objenome.gene.gp.fitness.DoubleFitness;
  */
 public class RouletteSelector extends AbstractSelector {
 
-	/**
-	 * The individuals' selection probabilities.
-	 */
-	private double[] roulette;
+    /**
+     * The individuals' selection probabilities.
+     */
+    private double[] roulette;
 
-	/**
-	 * Compute the individuals' selection probabilities.
-	 * 
-	 * @param population the current population.
-	 */
-	@Override
-	public void setup(Population population) {
-		Fitness best = population.get(0).getFitness();
-		Fitness worst = best;
+    /**
+     * Compute the individuals' selection probabilities.
+     *
+     * @param population the current population.
+     */
+    @Override
+    public void setup(Population population) {
+        Fitness best = population.get(0).getFitness();
+        Fitness worst = best;
 
-		if (!(best instanceof DoubleFitness)) {
-			throw new IllegalArgumentException("Fitness not supported: " + best.getClass());
-		}
+        if (!(best instanceof DoubleFitness)) {
+            throw new IllegalArgumentException("Fitness not supported: " + best.getClass());
+        }
 
-		roulette = new double[population.size()];
-		double total = 0.0;
+        roulette = new double[population.size()];
+        double total = 0.0;
 
-		for (int i = 0; i < population.size(); i++) {
-			Fitness fitness = population.get(i).getFitness();
-			if (fitness.compareTo(best) > 0) {
-				best = fitness;
-			} else if (fitness.compareTo(worst) < 0) {
-				worst = fitness;
-			}
+        for (int i = 0; i < population.size(); i++) {
+            Fitness fitness = population.get(i).getFitness();
+            if (fitness.compareTo(best) > 0) {
+                best = fitness;
+            } else if (fitness.compareTo(worst) < 0) {
+                worst = fitness;
+            }
 
-			roulette[i] = ((DoubleFitness) fitness).getValue();
-			total += roulette[i];
-		}
+            roulette[i] = ((DoubleFitness) fitness).getValue();
+            total += roulette[i];
+        }
 
-		double bestValue = ((DoubleFitness) best).getValue();
-		double worstValue = ((DoubleFitness) worst).getValue();
+        double bestValue = ((DoubleFitness) best).getValue();
+        double worstValue = ((DoubleFitness) worst).getValue();
 
-		// invert if minimising - using adjusted fitness.
-		if (bestValue < worstValue) {
-			total = 0.0;
-			double delta = (bestValue < 0) ? Math.abs(bestValue) : 0.0;
-			for (int i = 0; i < population.size(); i++) {
-				roulette[i] = 1 / (1 + delta + roulette[i]);
-				total += roulette[i];
-			}
-		}
+        // invert if minimising - using adjusted fitness.
+        if (bestValue < worstValue) {
+            total = 0.0;
+            double delta = (bestValue < 0) ? Math.abs(bestValue) : 0.0;
+            for (int i = 0; i < population.size(); i++) {
+                roulette[i] = 1 / (1 + delta + roulette[i]);
+                total += roulette[i];
+            }
+        }
 
-		// normalise roulette values and accumulate.
-		double cumulative = 0.0;
-		for (int i = 0; i < population.size(); i++) {
-			roulette[i] = cumulative + (roulette[i] / total);
-			cumulative = roulette[i];
-		}
-		roulette[population.size() - 1] = 1.0;
+        // normalise roulette values and accumulate.
+        double cumulative = 0.0;
+        for (int i = 0; i < population.size(); i++) {
+            roulette[i] = cumulative + (roulette[i] / total);
+            cumulative = roulette[i];
+        }
+        roulette[population.size() - 1] = 1.0;
 
-		super.setup(population);
-	}
+        super.setup(population);
+    }
 
-	/**
-	 * Returns an individual using the fitness proportionate selection strategy.
-	 * 
-	 * @return an individual using the fitness proportionate selection strategy.
-	 */
-	@Override
-	public Individual select() {
-		double random = population.getConfig().get(RANDOM_SEQUENCE).nextDouble();
+    /**
+     * Returns an individual using the fitness proportionate selection strategy.
+     *
+     * @return an individual using the fitness proportionate selection strategy.
+     */
+    @Override
+    public Individual select() {
+        double random = population.getConfig().get(RANDOM_SEQUENCE).nextDouble();
 
-		for (int i = 0; i < roulette.length; i++) {
-			if (random < roulette[i]) {
-				return population.get(i);
-			}
-		}
+        for (int i = 0; i < roulette.length; i++) {
+            if (random < roulette[i]) {
+                return population.get(i);
+            }
+        }
 
-		throw new IllegalStateException("Illegal roulette probabilities");
-	}
+        throw new IllegalStateException("Illegal roulette probabilities");
+    }
 
 }

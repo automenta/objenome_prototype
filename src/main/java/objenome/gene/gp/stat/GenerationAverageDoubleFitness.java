@@ -19,68 +19,67 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.Fitness;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
-import objenome.gene.gp.epochx.event.stat.GenerationFitnesses;
+import objenome.gene.gp.Fitness;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
+import objenome.gene.gp.event.stat.GenerationFitnesses;
 import objenome.gene.gp.fitness.DoubleFitness;
 
 /**
- * Stat that provides the average fitness value of the population at the end of a
- * generation. This stat can only be used with <code>DoubleFitness</code>.
- * 
+ * Stat that provides the average fitness value of the population at the end of
+ * a generation. This stat can only be used with <code>DoubleFitness</code>.
+ *
  * @see DoubleFitness
  */
 public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
 
-	/**
-	 * The average fitness value.
-	 */
-	private double average;
+    /**
+     * The average fitness value.
+     */
+    private double average;
 
-	/**
-	 * Constructs a <code>GenerationAverageDoubleFitness</code>.
-	 */
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
-	}
+    /**
+     * Constructs a <code>GenerationAverageDoubleFitness</code>.
+     */
+    public GenerationAverageDoubleFitness() {
+        super(GenerationFitnesses.class);
+    }
 
-	/**
-	 * Computes the average fitness value of the population.
-	 * 
-	 * @param event the <code>EndGeneration</code> event object.
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
+    /**
+     * Computes the average fitness value of the population.
+     *
+     * @param event the <code>EndGeneration</code> event object.
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+        average = 0;
 
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
-		}
+        for (Fitness fitness : fitnesses) {
+            average += ((DoubleFitness) fitness).getValue();
+        }
 
-		average /= fitnesses.length;
-	}
+        average /= fitnesses.length;
+    }
 
-	/**
-	 * Returns the average fitness value.
-	 * 
-	 * @return the average fitness value.
-	 */
-	public double getAverage() {
-		return average;
-	}
+    /**
+     * Returns the average fitness value.
+     *
+     * @return the average fitness value.
+     */
+    public double getAverage() {
+        return average;
+    }
 
-	/**
-	 * Returns a string representation of the average fitness value.
-	 * 
-	 * @return a string representation of the average fitness value.
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(average);
-	}
+    /**
+     * Returns a string representation of the average fitness value.
+     *
+     * @return a string representation of the average fitness value.
+     */
+    @Override
+    public String toString() {
+        return Double.toString(average);
+    }
 }

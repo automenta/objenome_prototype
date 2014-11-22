@@ -19,75 +19,74 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
 import java.util.Arrays;
 
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.Population;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.Population;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 import objenome.gene.gp.STGPIndividual;
 
 /**
- * A stat that returns the number of non-terminals in all program trees in the 
- * population from the previous generation. All individuals in the population 
+ * A stat that returns the number of non-terminals in all program trees in the
+ * population from the previous generation. All individuals in the population
  * must be instances of <code>STGPIndividual</code>.
- * 
+ *
  * @since 2.0
  */
 public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 
-	private int[] nonTerminals;
+    private int[] nonTerminals;
 
-	/**
-	 * Constructs a <code>GenerationNonTerminals</code> stat and registers
-	 * its dependencies
-	 */
-	public GenerationNonTerminals() {
-		super(NO_DEPENDENCIES);
-	}
+    /**
+     * Constructs a <code>GenerationNonTerminals</code> stat and registers its
+     * dependencies
+     */
+    public GenerationNonTerminals() {
+        super(NO_DEPENDENCIES);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		Population population = event.getPopulation();
-		nonTerminals = new int[population.size()];
-		int index = 0;
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        Population population = event.getPopulation();
+        nonTerminals = new int[population.size()];
+        int index = 0;
 
-		for (Individual individual: population) {
-			if (individual instanceof STGPIndividual) {
-				nonTerminals[index++] = ((STGPIndividual) individual).getRoot().countNonTerminals();
-			}
-		}
-	}
-	
-	/**
-	 * Returns an array containing the number of non-terminal nodes in each 
-	 * program tree in the population
-	 * 
-	 * @return the number of non-terminal nodes in each program tree in the 
-	 * previous generation
-	 */
-	public int[] getNonTerminals() {
-		return nonTerminals;
-	}
+        for (Individual individual : population) {
+            if (individual instanceof STGPIndividual) {
+                nonTerminals[index++] = ((STGPIndividual) individual).getRoot().countNonTerminals();
+            }
+        }
+    }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Arrays.toString(nonTerminals);
-	}
+    /**
+     * Returns an array containing the number of non-terminal nodes in each
+     * program tree in the population
+     *
+     * @return the number of non-terminal nodes in each program tree in the
+     * previous generation
+     */
+    public int[] getNonTerminals() {
+        return nonTerminals;
+    }
+
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Arrays.toString(nonTerminals);
+    }
 }

@@ -21,30 +21,29 @@
  */
 package objenome.gene.gp.init;
 
-import objenome.gene.gp.epochx.InitialisationMethod;
-import objenome.gene.gp.epochx.Config.ConfigKey;
+import objenome.gene.gp.InitialisationMethod;
+import objenome.gene.gp.Config.ConfigKey;
 import objenome.gene.gp.STGPIndividual;
 
-
 /**
- * Initialisation method for <code>STGPIndividual</code>s. It does not define any 
- * methods, but initialisation procedures that generate <code>STGPIndividual</code> 
- * objects should implement this interface. 
- * 
+ * Initialisation method for <code>STGPIndividual</code>s. It does not define
+ * any methods, but initialisation procedures that generate
+ * <code>STGPIndividual</code> objects should implement this interface.
+ *
  * <p>
- * Where appropriate, implementations should use the 
- * <code>MAXIMUM_INITIAL_DEPTH</code> configuration parameter defined in this 
- * interface to specify the maximum depth of the program trees they generate. 
+ * Where appropriate, implementations should use the
+ * <code>MAXIMUM_INITIAL_DEPTH</code> configuration parameter defined in this
+ * interface to specify the maximum depth of the program trees they generate.
  * The {@link STGPIndividual#MAXIMUM_DEPTH} parameter should also be enforced.
- * 
+ *
  * @since 2.0
  */
 public interface STGPInitialisation extends InitialisationMethod {
 
-	/**
-	 * The key for setting and retrieving the maximum initial depth setting for 
-	 * program trees
-	 */
-	public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
-	
+    /**
+     * The key for setting and retrieving the maximum initial depth setting for
+     * program trees
+     */
+    public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
+
 }

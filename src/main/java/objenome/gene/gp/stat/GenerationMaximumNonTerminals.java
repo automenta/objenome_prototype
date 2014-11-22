@@ -19,71 +19,71 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 
 /**
- * A stat that returns the maximum number of non-terminals in all the program 
- * trees in the population from the previous completed generation. All 
- * individuals in the population must be instances of <code>STGPIndividual</code>.
- * 
+ * A stat that returns the maximum number of non-terminals in all the program
+ * trees in the population from the previous completed generation. All
+ * individuals in the population must be instances of
+ * <code>STGPIndividual</code>.
+ *
  * @see GenerationMinimumNonTerminals
  * @see GenerationMaximumTerminals
- * 
+ *
  * @since 2.0
  */
 public class GenerationMaximumNonTerminals extends AbstractStat<EndGeneration> {
 
-	private int max;
+    private int max;
 
-	/**
-	 * Constructs a <code>GenerationMaximumNonTerminals</code> stat and registers its
-	 * dependencies
-	 */
-	public GenerationMaximumNonTerminals() {
-		super(GenerationNonTerminals.class);
-	}
+    /**
+     * Constructs a <code>GenerationMaximumNonTerminals</code> stat and
+     * registers its dependencies
+     */
+    public GenerationMaximumNonTerminals() {
+        super(GenerationNonTerminals.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		int[] nonTerminals = AbstractStat.get(GenerationNonTerminals.class).getNonTerminals();
-		max = -1;
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        int[] nonTerminals = AbstractStat.get(GenerationNonTerminals.class).getNonTerminals();
+        max = -1;
 
-		for (int t: nonTerminals) {
-			if (t > max) {
-				max = t;
-			}
-		}
-	}
-	
-	/**
-	 * Returns the maximum number of non-terminals in the program trees in the 
-	 * previous generation
-	 *  
-	 * @return the maximum number of non-terminals in the program trees
-	 */
-	public int getMaximum() {
-		return max;
-	}
+        for (int t : nonTerminals) {
+            if (t > max) {
+                max = t;
+            }
+        }
+    }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Integer.toString(max);
-	}
+    /**
+     * Returns the maximum number of non-terminals in the program trees in the
+     * previous generation
+     *
+     * @return the maximum number of non-terminals in the program trees
+     */
+    public int getMaximum() {
+        return max;
+    }
+
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(max);
+    }
 }

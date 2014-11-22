@@ -24,7 +24,7 @@
 package org.encog.ml.prg.train.rewrite;
 
 import objenome.gene.gp.STGPIndividual;
-import objenome.gene.gp.epox.Node;
+import objenome.gene.gp.op.Node;
 import org.encog.ml.ea.rules.RewriteRule;
 
 /**
@@ -32,109 +32,109 @@ import org.encog.ml.ea.rules.RewriteRule;
  */
 public class RewriteBoolean implements RewriteRule {
 
-	/**
-	 * True, if the value has been rewritten.
-	 */
-	private boolean rewritten;
+    /**
+     * True, if the value has been rewritten.
+     */
+    private boolean rewritten;
 
-	/**
-	 * Returns true, if the specified constant value is a true const. Returns
-	 * false in any other case.
-	 * 
-	 * @param node The node to check.
-	 * @return True if the value is a true const.
-	 */
-	private boolean isTrue(Node node) {
-            Object v = node.evaluate();
-            if (v instanceof Boolean) {
-                return ((Boolean)v).booleanValue();
+    /**
+     * Returns true, if the specified constant value is a true const. Returns
+     * false in any other case.
+     *
+     * @param node The node to check.
+     * @return True if the value is a true const.
+     */
+    private boolean isTrue(Node node) {
+        Object v = node.evaluate();
+        if (v instanceof Boolean) {
+            return ((Boolean) v).booleanValue();
+        } else if (v instanceof Number) {
+            return ((Number) v).doubleValue() != 0;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true, if the specified constant value is a false const. Returns
+     * false in any other case.
+     *
+     * @param node The node to check.
+     * @return True if the value is a false const.
+     */
+    private boolean isFalse(Node node) {
+        return !isTrue(node);
+        /*
+         if (node.getTemplate() == StandardExtensions.EXTENSION_CONST_SUPPORT) {
+         ExpressionValue v = node.evaluate();
+         if (v.isBoolean()) {
+         if (!v.toBooleanValue()) {
+         return true;
+         }
+         }
+         }
+         return false;
+         */
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean rewrite(final STGPIndividual program) {
+        this.rewritten = false;
+        final Node node = program.getRoot();
+        final Node rewrittenRoot = internalRewrite(node);
+        if (rewrittenRoot != null) {
+            program.setRoot(rewrittenRoot);
+        }
+        return this.rewritten;
+    }
+
+    /**
+     * Attempt to rewrite the specified node.
+     *
+     * @param parent The node to attempt to rewrite.
+     * @return The rewritten node, or the original node, if no change was made.
+     */
+    private Node internalRewrite(final Node parent) {
+        Node rewrittenParent = parent;
+
+        rewrittenParent = tryAnd(rewrittenParent);
+
+        // try children
+        for (int i = 0; i < rewrittenParent.getChildren().length; i++) {
+            final Node childNode = (Node) rewrittenParent.getChildren()[i];
+            final Node rewriteChild = internalRewrite(childNode);
+            if (childNode != rewriteChild) {
+                rewrittenParent.setChild(i, rewriteChild);
+                this.rewritten = true;
             }
-            else if (v instanceof Number)
-                return ((Number)v).doubleValue()!=0;
-            return false;
-	}
+        }
 
-	/**
-	 * Returns true, if the specified constant value is a false const. Returns
-	 * false in any other case.
-	 * 
-	 * @param node The node to check.
-	 * @return True if the value is a false const.
-	 */
-	private boolean isFalse(Node node) {
-            return !isTrue(node);
-            /*
-		if (node.getTemplate() == StandardExtensions.EXTENSION_CONST_SUPPORT) {
-			ExpressionValue v = node.evaluate();
-			if (v.isBoolean()) {
-				if (!v.toBooleanValue()) {
-					return true;
-				}
-			}
-		}
-		return false;
-            */
-	}
+        return rewrittenParent;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean rewrite(final STGPIndividual program) {
-		this.rewritten = false;
-		final Node node = program.getRoot();
-		final Node rewrittenRoot = internalRewrite(node);
-		if (rewrittenRoot != null) {
-			program.setRoot(rewrittenRoot);
-		}
-		return this.rewritten;
-	}
+    /**
+     * Try to rewrite true and true, false and false.
+     *
+     * @param parent The node to attempt to rewrite.
+     * @return The rewritten node, or the original node if not rewritten.
+     */
+    private Node tryAnd(final Node parent) {
+        //if (parent.getTemplate() == StandardExtensions.EXTENSION_AND) {
+        final Node child1 = parent.getChildren()[0];
+        final Node child2 = parent.getChildren()[1];
 
-	/**
-	 * Attempt to rewrite the specified node.
-	 * @param parent The node to attempt to rewrite.
-	 * @return The rewritten node, or the original node, if no change was made.
-	 */
-	private Node internalRewrite(final Node parent) {
-		Node rewrittenParent = parent;
+        if (isTrue(child1)) /*&& child2.getTemplate() != StandardExtensions.EXTENSION_CONST_SUPPORT)*/ {
+            this.rewritten = true;
+            return child2;
+        }
 
-		rewrittenParent = tryAnd(rewrittenParent);
-
-		// try children
-		for (int i = 0; i < rewrittenParent.getChildren().length; i++) {
-			final Node childNode = (Node) rewrittenParent.getChildren()[i];
-			final Node rewriteChild = internalRewrite(childNode);
-			if (childNode != rewriteChild) {
-				rewrittenParent.setChild(i, rewriteChild);				
-				this.rewritten = true;
-			}
-		}
-
-		return rewrittenParent;
-	}
-
-	/**
-	 * Try to rewrite true and true, false and false.
-	 * @param parent The node to attempt to rewrite.
-	 * @return The rewritten node, or the original node if not rewritten.
-	 */
-	private Node tryAnd(final Node parent) {
-		//if (parent.getTemplate() == StandardExtensions.EXTENSION_AND) {
-			final Node child1 = parent.getChildren()[0];
-			final Node child2 = parent.getChildren()[1];
-
-			if (isTrue(child1))
-					/*&& child2.getTemplate() != StandardExtensions.EXTENSION_CONST_SUPPORT)*/ {
-				this.rewritten = true;
-				return child2;
-			}
-
-			if (isTrue(child2))
-					/*&& child1.getTemplate() != StandardExtensions.EXTENSION_CONST_SUPPORT)*/ {
-				this.rewritten = true;
-				return child1;
-			}
-		//}
-		return parent;
-	}
+        if (isTrue(child2)) /*&& child1.getTemplate() != StandardExtensions.EXTENSION_CONST_SUPPORT)*/ {
+            this.rewritten = true;
+            return child1;
+        }
+        //}
+        return parent;
+    }
 }

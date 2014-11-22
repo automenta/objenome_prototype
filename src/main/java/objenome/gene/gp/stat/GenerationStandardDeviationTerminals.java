@@ -19,77 +19,76 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
 
 /**
- * A stat that returns the standard deviation of the mean number of 
- * terminals in the program trees in the population from the previous 
- * completed generation. All individuals in the population must be instances of
+ * A stat that returns the standard deviation of the mean number of terminals in
+ * the program trees in the population from the previous completed generation.
+ * All individuals in the population must be instances of
  * <code>STGPIndividual</code>.
- * 
+ *
  * @see GenerationAverageTerminalsError
  * @see GenerationAverageTerminals
- * 
+ *
  * @since 2.0
  */
 public class GenerationStandardDeviationTerminals extends AbstractStat<EndGeneration> {
 
-	private double stdev;
+    private double stdev;
 
-	/**
-	 * Constructs a <code>GenerationStandardDeviationTerminals</code> stat and 
-	 * registers its dependencies
-	 */
-	@SuppressWarnings("unchecked")
-	public GenerationStandardDeviationTerminals() {
-		super(GenerationTerminals.class, GenerationAverageTerminals.class);
-	}
+    /**
+     * Constructs a <code>GenerationStandardDeviationTerminals</code> stat and
+     * registers its dependencies
+     */
+    @SuppressWarnings("unchecked")
+    public GenerationStandardDeviationTerminals() {
+        super(GenerationTerminals.class, GenerationAverageTerminals.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		int[] terminals = AbstractStat.get(GenerationTerminals.class).getTerminals();
-		double average = AbstractStat.get(GenerationAverageTerminals.class).getAverage();
-		
-		// Sum the squared differences
-		double sqDiff = 0.0;
-		for (int t: terminals) {
-			sqDiff += Math.pow(t - average, 2);
-		}
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        int[] terminals = AbstractStat.get(GenerationTerminals.class).getTerminals();
+        double average = AbstractStat.get(GenerationAverageTerminals.class).getAverage();
 
-		// Take the square root of the average
-		stdev = Math.sqrt(sqDiff / terminals.length);
-	}
-	
-	/**
-	 * Returns the standard deviation of the mean number of terminals in the
-	 * program trees in the previous generation
-	 * 
-	 * @return the standard deviation of the mean number of terminals in the
-	 * program trees
-	 */
-	public double getStandardDeviation() {
-		return stdev;
-	}
+        // Sum the squared differences
+        double sqDiff = 0.0;
+        for (int t : terminals) {
+            sqDiff += Math.pow(t - average, 2);
+        }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(stdev);
-	}
+        // Take the square root of the average
+        stdev = Math.sqrt(sqDiff / terminals.length);
+    }
+
+    /**
+     * Returns the standard deviation of the mean number of terminals in the
+     * program trees in the previous generation
+     *
+     * @return the standard deviation of the mean number of terminals in the
+     * program trees
+     */
+    public double getStandardDeviation() {
+        return stdev;
+    }
+
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Double.toString(stdev);
+    }
 }

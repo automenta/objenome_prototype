@@ -22,106 +22,101 @@
 package objenome.gene.gp.tools;
 
 /**
- * This class provides static utility methods for working with different
- * number types.
+ * This class provides static utility methods for working with different number
+ * types.
  */
 public class NumericUtils {
 
-	private NumericUtils() {}
+    private NumericUtils() {
+    }
 
-	/**
-	 * Converts the given object to a <code>Double</code>
-	 * 
-	 * @param o an object of some <code>Number</code> type
-	 * @return a <code>Double</code> that is equivalent to the given object or
-	 *         <code>null</code> if the object is not an instance of
-	 *         <code>Number</code>
-	 */
-	public static Double asDouble(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).doubleValue();
-		}
+    /**
+     * Converts the given object to a <code>Double</code>
+     *
+     * @param o an object of some <code>Number</code> type
+     * @return a <code>Double</code> that is equivalent to the given object or
+     * <code>null</code> if the object is not an instance of <code>Number</code>
+     */
+    public static Double asDouble(Object o) {
+        if (o instanceof Number) {
+            return ((Number) o).doubleValue();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Converts the given object to a <code>Float</code>
-	 * 
-	 * @param o an object of some <code>Number</code> type
-	 * @return a <code>Float</code> that is equivalent to the given object or
-	 *         <code>null</code> if the object is not an instance of
-	 *         <code>Number</code>
-	 */
-	public static Float asFloat(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).floatValue();
-		}
+    /**
+     * Converts the given object to a <code>Float</code>
+     *
+     * @param o an object of some <code>Number</code> type
+     * @return a <code>Float</code> that is equivalent to the given object or
+     * <code>null</code> if the object is not an instance of <code>Number</code>
+     */
+    public static Float asFloat(Object o) {
+        if (o instanceof Number) {
+            return ((Number) o).floatValue();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Converts the given object to an <code>Integer</code>
-	 * 
-	 * @param o an object of some <code>Number</code> type
-	 * @return an <code>Integer</code> that is equivalent to the given object or
-	 *         <code>null</code> if the object is not an instance of
-	 *         <code>Number</code>
-	 */
-	public static Integer asInteger(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).intValue();
-		}
+    /**
+     * Converts the given object to an <code>Integer</code>
+     *
+     * @param o an object of some <code>Number</code> type
+     * @return an <code>Integer</code> that is equivalent to the given object or
+     * <code>null</code> if the object is not an instance of <code>Number</code>
+     */
+    public static Integer asInteger(Object o) {
+        if (o instanceof Number) {
+            return ((Number) o).intValue();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Converts the given object to a <code>Long</code>
-	 * 
-	 * @param o an object of some <code>Number</code> type
-	 * @return a <code>Long</code> that is equivalent to the given object or
-	 *         <code>null</code> if the object is not an instance of
-	 *         <code>Number</code>
-	 */
-	public static Long asLong(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).longValue();
-		}
+    /**
+     * Converts the given object to a <code>Long</code>
+     *
+     * @param o an object of some <code>Number</code> type
+     * @return a <code>Long</code> that is equivalent to the given object or
+     * <code>null</code> if the object is not an instance of <code>Number</code>
+     */
+    public static Long asLong(Object o) {
+        if (o instanceof Number) {
+            return ((Number) o).longValue();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Converts the given object to a <code>Short</code>
-	 * 
-	 * @param o an object of some <code>Number</code> type
-	 * @return a <code>Short</code> that is equivalent to the given object or
-	 *         <code>null</code> if the object is not an instance of
-	 *         <code>Number</code>
-	 */
-	public static Short asShort(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).shortValue();
-		}
+    /**
+     * Converts the given object to a <code>Short</code>
+     *
+     * @param o an object of some <code>Number</code> type
+     * @return a <code>Short</code> that is equivalent to the given object or
+     * <code>null</code> if the object is not an instance of <code>Number</code>
+     */
+    public static Short asShort(Object o) {
+        if (o instanceof Number) {
+            return ((Number) o).shortValue();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Converts the given object to a <code>Byte</code>
-	 * 
-	 * @param o an object of some <code>Number</code> type
-	 * @return a <code>Byte</code> that is equivalent to the given object or
-	 *         <code>null</code> if the object is not an instance of
-	 *         <code>Number</code>
-	 */
-	public static Byte asByte(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).byteValue();
-		}
+    /**
+     * Converts the given object to a <code>Byte</code>
+     *
+     * @param o an object of some <code>Number</code> type
+     * @return a <code>Byte</code> that is equivalent to the given object or
+     * <code>null</code> if the object is not an instance of <code>Number</code>
+     */
+    public static Byte asByte(Object o) {
+        if (o instanceof Number) {
+            return ((Number) o).byteValue();
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

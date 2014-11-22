@@ -21,25 +21,26 @@
  */
 package objenome.gene.gp.fitness;
 
-import objenome.gene.gp.epochx.AbstractFitnessFunction;
-import objenome.gene.gp.epochx.Config.ConfigKey;
-import objenome.gene.gp.epox.Variable;
+import objenome.gene.gp.AbstractFitnessFunction;
+import objenome.gene.gp.Config.ConfigAware;
+import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.op.Variable;
 
 /**
  * A fitness function for evaluating STGP individuals.
- * 
+ *
  * @since 2.0
  */
-public abstract class STGPFitnessFunction extends AbstractFitnessFunction {
+public abstract class STGPFitnessFunction extends AbstractFitnessFunction implements ConfigAware {
 
-	/**
-	 * The key for setting the program's input variables
-	 */
-	public static final ConfigKey<Variable[]> INPUT_VARIABLES = new ConfigKey<Variable[]>();
-	
-	/**
-	 * The key for setting the sets of values to use as inputs
-	 */
-	public static final ConfigKey<Object[][]> INPUT_VALUE_SETS = new ConfigKey<Object[][]>();
+    /**
+     * The key for setting the program's input variables
+     */
+    public static final ConfigKey<Variable[]> INPUT_VARIABLES = new ConfigKey<Variable[]>();
+
+    /**
+     * The key for setting the sets of values to use as inputs
+     */
+    public static final ConfigKey<Object[][]> INPUT_VALUE_SETS = new ConfigKey<Object[][]>();
 
 }

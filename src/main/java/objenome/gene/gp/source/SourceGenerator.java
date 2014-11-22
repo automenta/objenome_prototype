@@ -21,20 +21,19 @@
  */
 package objenome.gene.gp.source;
 
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.Config.ConfigKey;
-
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.Config.ConfigKey;
 
 /**
  * Source generators take a candidate program and produce source code from it.
  */
 public interface SourceGenerator<T extends Individual> {
-	
-	/**
-	 * The key for setting the source generator
-	 */
-	public static final ConfigKey<SourceGenerator<?>> SOURCE_GENERATOR = new ConfigKey<SourceGenerator<?>>();
 
-	public String getSource(T individual);
-	
+    /**
+     * The key for setting the source generator
+     */
+    public static final ConfigKey<SourceGenerator<?>> SOURCE_GENERATOR = new ConfigKey<SourceGenerator<?>>();
+
+    public String getSource(T individual);
+
 }

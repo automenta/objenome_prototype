@@ -19,72 +19,72 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.Fitness;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
-import objenome.gene.gp.epochx.event.stat.GenerationFitnesses;
+import objenome.gene.gp.Fitness;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
+import objenome.gene.gp.event.stat.GenerationFitnesses;
 import objenome.gene.gp.fitness.DoubleFitness;
 
 /**
- * Stat that provides the standard deviation fitness value of the population at the end of
- * a generation. This stat can only be used with <code>DoubleFitness</code>.
- * 
+ * Stat that provides the standard deviation fitness value of the population at
+ * the end of a generation. This stat can only be used with
+ * <code>DoubleFitness</code>.
+ *
  * @see DoubleFitness
  */
 public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGeneration> {
 
-	/**
-	 * The standard deviation fitness value.
-	 */
-	private double stdev;
+    /**
+     * The standard deviation fitness value.
+     */
+    private double stdev;
 
-	/**
-	 * Constructs a <code>GenerationStandardDeviationDoubleFitness</code>.
-	 */
-	@SuppressWarnings("unchecked")
-	public GenerationStandardDeviationDoubleFitness() {
-		super(GenerationFitnesses.class, GenerationAverageDoubleFitness.class);
-	}
+    /**
+     * Constructs a <code>GenerationStandardDeviationDoubleFitness</code>.
+     */
+    @SuppressWarnings("unchecked")
+    public GenerationStandardDeviationDoubleFitness() {
+        super(GenerationFitnesses.class, GenerationAverageDoubleFitness.class);
+    }
 
-	/**
-	 * Computes the standard deviation fitness value.
-	 * 
-	 * @param event the <code>EndGeneration</code> event object.
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		double average = AbstractStat.get(GenerationAverageDoubleFitness.class).getAverage();
-		
-		// Sum the squared differences.
-		double sqDiff = 0;
-		for (int i = 0; i < fitnesses.length; i++) {
-			sqDiff += Math.pow(((DoubleFitness) fitnesses[i]).getValue() - average, 2);
-		}
+    /**
+     * Computes the standard deviation fitness value.
+     *
+     * @param event the <code>EndGeneration</code> event object.
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+        double average = AbstractStat.get(GenerationAverageDoubleFitness.class).getAverage();
 
-		// Take the square root of the average.
-		stdev = Math.sqrt(sqDiff / fitnesses.length);
-	}
+        // Sum the squared differences.
+        double sqDiff = 0;
+        for (int i = 0; i < fitnesses.length; i++) {
+            sqDiff += Math.pow(((DoubleFitness) fitnesses[i]).getValue() - average, 2);
+        }
 
-	/**
-	 * Returns the standard deviation fitness value.
-	 * 
-	 * @return the standard deviation fitness value.
-	 */
-	public double getStandardDeviation() {
-		return stdev;
-	}
+        // Take the square root of the average.
+        stdev = Math.sqrt(sqDiff / fitnesses.length);
+    }
 
-	/**
-	 * Returns a string representation of the standard deviation fitness value.
-	 * 
-	 * @return a string representation of the standard deviation fitness value.
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(stdev);
-	}
+    /**
+     * Returns the standard deviation fitness value.
+     *
+     * @return the standard deviation fitness value.
+     */
+    public double getStandardDeviation() {
+        return stdev;
+    }
+
+    /**
+     * Returns a string representation of the standard deviation fitness value.
+     *
+     * @return a string representation of the standard deviation fitness value.
+     */
+    @Override
+    public String toString() {
+        return Double.toString(stdev);
+    }
 }

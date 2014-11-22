@@ -24,8 +24,8 @@
 package org.encog.ml.prg.train.rewrite;
 
 import objenome.gene.gp.STGPIndividual;
-import objenome.gene.gp.epox.Literal;
-import objenome.gene.gp.epox.Node;
+import objenome.gene.gp.op.Literal;
+import objenome.gene.gp.op.Node;
 import objenome.gene.gp.tools.MathUtils;
 import objenome.gene.gp.tools.NumericUtils;
 import org.encog.ml.ea.rules.RewriteRule;
@@ -68,7 +68,7 @@ public class RewriteConstants implements RewriteRule {
             return rewrite;
         }
 
-		// if we could not rewrite the entire node, rewrite as many children as
+        // if we could not rewrite the entire node, rewrite as many children as
         // we can
         for (int i = 0; i < node.getChildren().length; i++) {
             Node childNode = (Node) node.getChildren()[i];
@@ -79,7 +79,7 @@ public class RewriteConstants implements RewriteRule {
             }
         }
 
-		// we may have rewritten some children, but the parent was not
+        // we may have rewritten some children, but the parent was not
         // rewritten, so return null.
         return null;
     }
@@ -92,7 +92,7 @@ public class RewriteConstants implements RewriteRule {
      */
     private Node tryNodeRewrite(Node parentNode) {
         return null;
-        
+
 //        Node result = null;
 //
 //        if (parentNode.isTerminal()) {

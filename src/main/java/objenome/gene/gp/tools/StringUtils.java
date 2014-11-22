@@ -23,32 +23,33 @@ package objenome.gene.gp.tools;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-
 /**
- * This class provides static utility methods for working with <code>Strings</code>.
+ * This class provides static utility methods for working with
+ * <code>Strings</code>.
  */
 public final class StringUtils {
 
-	private StringUtils() {}
+    private StringUtils() {
+    }
 
-	/**
-	 * Tests whether the given string contains any of the <code>char</code>s in the
-	 * provided array.
-	 * 
-	 * @param str an input string to test for specific <code>char</code>s
-	 * @param chrs an array of characters to look for in <code>str</code>
-	 * @return <code>true</code> if <code>str</code> contains one or more characters
-	 *         from the <code>chrs</code> array, and <code>false</code> if it contains
-	 *         none
-	 */
-	public static boolean containsAny(String str, char[] chrs) {
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if (ArrayUtils.contains(chrs, c)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Tests whether the given string contains any of the <code>char</code>s in
+     * the provided array.
+     *
+     * @param str an input string to test for specific <code>char</code>s
+     * @param chrs an array of characters to look for in <code>str</code>
+     * @return <code>true</code> if <code>str</code> contains one or more
+     * characters from the <code>chrs</code> array, and <code>false</code> if it
+     * contains none
+     */
+    public static boolean containsAny(String str, char[] chrs) {
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (ArrayUtils.contains(chrs, c)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

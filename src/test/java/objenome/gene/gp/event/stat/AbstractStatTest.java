@@ -19,30 +19,31 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.event.stat;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
-import objenome.gene.gp.epochx.event.stat.RunBestFitness;
+import objenome.gene.gp.Config;
 
 /**
- * The <code>AbstractStatTest</code> class provides unit tests for methods of the
- * {@link AbstractStat} class.
- * 
+ * The <code>AbstractStatTest</code> class provides unit tests for methods of
+ * the {@link AbstractStat} class.
+ *
  * @see AbstractStat
  */
 public class AbstractStatTest extends TestCase {
 
-	/**
-	 * Test for the {@link AbstractStat#reset()} method.
-	 */
-	public void testReset() {
-		assertNull(AbstractStat.get(RunBestFitness.class));
-		AbstractStat.register(RunBestFitness.class);
-		assertNotNull(AbstractStat.get(RunBestFitness.class));
+    /**
+     * Test for the {@link AbstractStat#reset()} method.
+     */
+    public void testReset() {
+        Config config = new Config();
+        
+        assertNull(config.get(RunBestFitness.class));
+                
+        assertNotNull(config.add(RunBestFitness.class));
 
-		AbstractStat.reset();
-		assertNull(AbstractStat.get(RunBestFitness.class));
-	}
+        config.resetStats();
+        
+        assertNull(config.get(RunBestFitness.class));
+    }
 }

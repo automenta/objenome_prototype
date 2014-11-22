@@ -19,13 +19,12 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.selection;
 
-import objenome.gene.gp.epochx.Config.ConfigKey;
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.IndividualSelector;
-import objenome.gene.gp.epochx.Population;
+import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.IndividualSelector;
+import objenome.gene.gp.Population;
 
 /**
  * This class represents an {@link IndividualSelector} that selects individuals
@@ -36,53 +35,53 @@ import objenome.gene.gp.epochx.Population;
  */
 public class TournamentSelector implements IndividualSelector {
 
-	/**
-	 * The key for setting and retrieving the tournament size.
-	 */
-	public static final ConfigKey<Integer> TOURNAMENT_SIZE = new ConfigKey<Integer>();
+    /**
+     * The key for setting and retrieving the tournament size.
+     */
+    public static final ConfigKey<Integer> TOURNAMENT_SIZE = new ConfigKey<Integer>();
 
-	/**
-	 * The random selector used to select the individuals participating in the
-	 * tournament.
-	 */
-	private final RandomSelector randomSelector;
+    /**
+     * The random selector used to select the individuals participating in the
+     * tournament.
+     */
+    private final RandomSelector randomSelector;
 
-	/**
-	 * The tournament size.
-	 */
-	private int size;
+    /**
+     * The tournament size.
+     */
+    private int size;
 
-	/**
-	 * Constructs a <code>TournamentSelector</code>.
-	 */
-	public TournamentSelector() {
-		randomSelector = new RandomSelector();
-	}
+    /**
+     * Constructs a <code>TournamentSelector</code>.
+     */
+    public TournamentSelector() {
+        randomSelector = new RandomSelector();
+    }
 
-	@Override
-	public void setup(Population population) {
-		randomSelector.setup(population);
-		size = population.getConfig().get(TOURNAMENT_SIZE);
-	}
+    @Override
+    public void setup(Population population) {
+        randomSelector.setup(population);
+        size = population.getConfig().get(TOURNAMENT_SIZE);
+    }
 
-	/**
-	 * Returns the selected individual using a tournament.
-	 * 
-	 * @return the selected individual using a tournament.
-	 */
-	@Override
-	public Individual select() {
-		Individual best = null;
+    /**
+     * Returns the selected individual using a tournament.
+     *
+     * @return the selected individual using a tournament.
+     */
+    @Override
+    public Individual select() {
+        Individual best = null;
 
-		// choose and compare randomly selected programs.
-		for (int i = 0; i < size; i++) {
-			Individual individual = randomSelector.select();
-			if ((best == null) || (individual.compareTo(best) > 0)) {
-				best = individual;
-			}
-		}
+        // choose and compare randomly selected programs.
+        for (int i = 0; i < size; i++) {
+            Individual individual = randomSelector.select();
+            if ((best == null) || (individual.compareTo(best) > 0)) {
+                best = individual;
+            }
+        }
 
-		return best;
-	}
+        return best;
+    }
 
 }

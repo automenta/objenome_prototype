@@ -19,13 +19,12 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.selection;
 
-import objenome.gene.gp.epochx.AbstractSelector;
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.Config;
-import static objenome.gene.gp.epochx.RandomSequence.RANDOM_SEQUENCE;
+import objenome.gene.gp.AbstractSelector;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.Config;
+import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 /**
  * This class represents an {@link IndividualSelector} that selects individuals
@@ -33,15 +32,15 @@ import static objenome.gene.gp.epochx.RandomSequence.RANDOM_SEQUENCE;
  */
 public class RandomSelector extends AbstractSelector {
 
-	/**
-	 * Returns a random individual from the current population.
-	 * 
-	 * @return a random individual from the current population.
-	 */
-	@Override
-	public Individual select() {
-		int index = population.getConfig().get(RANDOM_SEQUENCE).nextInt(population.size());
-		return population.get(index);
-	}
+    /**
+     * Returns a random individual from the current population.
+     *
+     * @return a random individual from the current population.
+     */
+    @Override
+    public Individual select() {
+        int index = population.getConfig().get(RANDOM_SEQUENCE).nextInt(population.size());
+        return population.get(index);
+    }
 
 }

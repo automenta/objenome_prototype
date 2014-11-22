@@ -24,71 +24,73 @@ package objenome.gene.gp.fitness;
 import java.util.HashMap;
 import java.util.Map;
 
-import objenome.gene.gp.epochx.AbstractFitnessFunction;
-import objenome.gene.gp.epochx.Fitness;
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.Population;
+import objenome.gene.gp.AbstractFitnessFunction;
+import objenome.gene.gp.Fitness;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.Population;
 
 /**
- * A fitness function which caches fitness scores and delegates fitness calculations to a
- * delegate fitness function. For the caching to work correctly the fitness cases must not 
- * be changed, or the cache must be cleared when they are changed. Caching is based on 
- * hash code so it is important that Individuals have a suitable hashCode implementation.
- * 
+ * A fitness function which caches fitness scores and delegates fitness
+ * calculations to a delegate fitness function. For the caching to work
+ * correctly the fitness cases must not be changed, or the cache must be cleared
+ * when they are changed. Caching is based on hash code so it is important that
+ * Individuals have a suitable hashCode implementation.
+ *
  * @since 2.0
  */
 public class CachedFitnessFunction extends AbstractFitnessFunction {
 
-	// The cache of fitness scores
-	private Map<Object, Fitness> cache;
-	
-	// The fitness function to delegate to when not in cache
-	private AbstractFitnessFunction delegate;
-	
-	/**
-	 * Constructs a <code>CachedFitnessFunction</code> fitness function. Fitness calculations
-	 * are performed by the given delegate, unless the individual's fitness has been 
-	 * cached.
-	 * 
-	 * @param delegate the fitness function the fitness calculations should be delegated to
-	 */
-	public CachedFitnessFunction(AbstractFitnessFunction delegate) {
-		this.delegate = delegate;
-		cache = new HashMap<Object, Fitness>();
-	}
-	
-	/**
-	 * Returns the fitness of the given individual. If the cache contains a fitness score
-	 * for the given individual then the fitness value from the cache is returned. 
-	 * Otherwise the fitness is calculated using the delegate fitness function and then 
-	 * cached for future evaluations.
-	 * 
-	 * The caching of individuals is based on hash codes. If two individuals return the 
-	 * same hash code then its assumed they have equal fitness scores.
-	 *  
-	 * @param individual the program to evaluate
-	 * @return the fitness of the given individual
-	 */
-	@Override
-	public Fitness evaluate(Population population, Individual individual) {
-		Object key = individual.hashCode();
-		
-		//TODO Use source generator if one is set
-		
-		Fitness fitness = cache.get(key);
-		if (fitness == null) {
-			fitness = delegate.evaluate(population, individual);
-			cache.put(key, fitness);
-		}
-		
-		return fitness;
-	}
-	
-	/**
-	 * Clears the cache.
-	 */
-	public void clear() {
-		cache.clear();
-	}
+    // The cache of fitness scores
+    private Map<Object, Fitness> cache;
+
+    // The fitness function to delegate to when not in cache
+    private AbstractFitnessFunction delegate;
+
+    /**
+     * Constructs a <code>CachedFitnessFunction</code> fitness function. Fitness
+     * calculations are performed by the given delegate, unless the individual's
+     * fitness has been cached.
+     *
+     * @param delegate the fitness function the fitness calculations should be
+     * delegated to
+     */
+    public CachedFitnessFunction(AbstractFitnessFunction delegate) {
+        this.delegate = delegate;
+        cache = new HashMap<Object, Fitness>();
+    }
+
+    /**
+     * Returns the fitness of the given individual. If the cache contains a
+     * fitness score for the given individual then the fitness value from the
+     * cache is returned. Otherwise the fitness is calculated using the delegate
+     * fitness function and then cached for future evaluations.
+     *
+     * The caching of individuals is based on hash codes. If two individuals
+     * return the same hash code then its assumed they have equal fitness
+     * scores.
+     *
+     * @param individual the program to evaluate
+     * @return the fitness of the given individual
+     */
+    @Override
+    public Fitness evaluate(Population population, Individual individual) {
+        Object key = individual.hashCode();
+
+        //TODO Use source generator if one is set
+        Fitness fitness = cache.get(key);
+        if (fitness == null) {
+            fitness = delegate.evaluate(population, individual);
+            cache.put(key, fitness);
+        }
+
+        return fitness;
+    }
+
+    /**
+     * Clears the cache.
+     */
+    public void clear() {
+        cache.clear();
+    }
 
 }

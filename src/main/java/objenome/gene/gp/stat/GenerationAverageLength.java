@@ -19,70 +19,69 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 
 /**
  * A stat that returns the mean length of the program trees in the population
- * from the previous completed generation. All individuals in the population 
+ * from the previous completed generation. All individuals in the population
  * must be instances of <code>STGPIndividual</code>.
- * 
+ *
  * @see GenerationAverageLengthError
  * @see GenerationStandardDeviationLength
- * 
+ *
  * @since 2.0
  */
 public class GenerationAverageLength extends AbstractStat<EndGeneration> {
 
-	private double average;
+    private double average;
 
-	/**
-	 * Constructs a <code>GenerationAverageLength</code> stat and registers its
-	 * dependencies
-	 */
-	public GenerationAverageLength() {
-		super(GenerationLengths.class);
-	}
+    /**
+     * Constructs a <code>GenerationAverageLength</code> stat and registers its
+     * dependencies
+     */
+    public GenerationAverageLength() {
+        super(GenerationLengths.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
-		average = 0;
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
+        average = 0;
 
-		for (int length: lengths) {
-			average += length;
-		}
+        for (int length : lengths) {
+            average += length;
+        }
 
-		average /= lengths.length;
-	}
-	
-	/**
-	 * Returns the mean length of the program trees in the previous generation
-	 * 
-	 * @return the mean length of the program trees
-	 */
-	public double getAverage() {
-		return average;
-	}
+        average /= lengths.length;
+    }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(average);
-	}
+    /**
+     * Returns the mean length of the program trees in the previous generation
+     *
+     * @return the mean length of the program trees
+     */
+    public double getAverage() {
+        return average;
+    }
+
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Double.toString(average);
+    }
 }

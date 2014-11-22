@@ -24,14 +24,14 @@ package objenome.gene.gp.grammar;
 /**
  * A node of a parse tree that was constructed to satisfy a grammar. It is the
  * instantiated form of a {@link GrammarNode}.
- * 
+ *
  * @see GrammarNode
  */
 public interface Symbol extends Cloneable {
 
-	/**
-	 * 
-	 */
-	public Symbol clone();
+    /**
+     *
+     */
+    public Symbol clone();
 
 }

@@ -2,9 +2,7 @@ package objenome.gene.gp;
 
 import junit.framework.TestCase;
 import objenome.gene.gp.benchmark.STGPMultiplexer6Bit;
-import static objenome.gene.gp.epochx.Config.Template.TEMPLATE;
-import objenome.gene.gp.epochx.EvolutionGenerator;
-import objenome.gene.gp.epochx.Population;
+import static objenome.gene.gp.Config.Template.TEMPLATE;
 import org.junit.Test;
 
 public class STGPIndividualTest extends TestCase {

@@ -21,57 +21,56 @@
  */
 package objenome.gene.gp.interpret;
 
-import objenome.gene.gp.epochx.Individual;
+import objenome.gene.gp.Individual;
 import objenome.gene.gp.source.SourceGenerator;
 
-
 /**
- * A <code>JavaInterpreter</code> provides the facility to evaluate individuals that represent
- * Java expressions and execute multi-line Java statements. Java language features
- * up to and including version 1.5 are supported. Individuals are converted into source code
- * using a <code>SourceGenerator</code> whose responsibility it is that valid Java source is 
- * produced from the individual.
- * 
+ * A <code>JavaInterpreter</code> provides the facility to evaluate individuals
+ * that represent Java expressions and execute multi-line Java statements. Java
+ * language features up to and including version 1.5 are supported. Individuals
+ * are converted into source code using a <code>SourceGenerator</code> whose
+ * responsibility it is that valid Java source is produced from the individual.
+ *
  * @see SourceGenerator
- * 
+ *
  * @since 2.0
  */
 public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 
-	private SourceGenerator<T> generator;
-	
-	// The bean shell beanShell.
-	//private final bsh.Interpreter beanShell;
-	
-	/**
-	 * Constructs a <code>JavaInterpreter</code> with a source generator
-	 * 
-	 * @param generator the SourceGenerator to use to convert individuals to Java source code
-	 */
-	public JavaInterpreter(SourceGenerator<T> generator) {
-		this.generator = generator;
-		
-		//beanShell = new bsh.Interpreter();
-	}
+    private SourceGenerator<T> generator;
 
-	/**
-	 * Evaluates any valid Java expression which may optionally contain the use
-	 * of any argument named in the <code>argNames</code> array which will be
-	 * provided with the associated value from the <code>argValues</code> array.
-	 * The result of evaluating the expression will be returned from this
-	 * method. The runtime <code>Object</code> return type will match the type
-	 * returned by the expression.
-	 * 
-	 * @param individual an individual representing a valid Java expression that is 
-	 * to be evaluated.
-	 * @param argNames {@inheritDoc}
-	 * @param argValues {@inheritDoc}
-	 * @return the return value from evaluating the expression.
-	 * @throws MalformedProgramException if the given expression is not valid
-	 *         according to the language's syntax rules.
-	 */
-	@Override
-	public Object[] eval(T individual, String[] argNames, Object[][] argValues) throws MalformedProgramException {
+    // The bean shell beanShell.
+    //private final bsh.Interpreter beanShell;
+    /**
+     * Constructs a <code>JavaInterpreter</code> with a source generator
+     *
+     * @param generator the SourceGenerator to use to convert individuals to
+     * Java source code
+     */
+    public JavaInterpreter(SourceGenerator<T> generator) {
+        this.generator = generator;
+
+        //beanShell = new bsh.Interpreter();
+    }
+
+    /**
+     * Evaluates any valid Java expression which may optionally contain the use
+     * of any argument named in the <code>argNames</code> array which will be
+     * provided with the associated value from the <code>argValues</code> array.
+     * The result of evaluating the expression will be returned from this
+     * method. The runtime <code>Object</code> return type will match the type
+     * returned by the expression.
+     *
+     * @param individual an individual representing a valid Java expression that
+     * is to be evaluated.
+     * @param argNames {@inheritDoc}
+     * @param argValues {@inheritDoc}
+     * @return the return value from evaluating the expression.
+     * @throws MalformedProgramException if the given expression is not valid
+     * according to the language's syntax rules.
+     */
+    @Override
+    public Object[] eval(T individual, String[] argNames, Object[][] argValues) throws MalformedProgramException {
 //		int noParamSets = argValues.length;
 //		int noParams = argNames.length;
 //		
@@ -97,33 +96,34 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 //		}
 //		
 //		return result;
-                throw new MalformedProgramException();
-	}
+        throw new MalformedProgramException();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void exec(T individual, String[] argNames, Object[][] argValues)
-			throws MalformedProgramException {
-		eval(individual, argNames, argValues);
-	}
-	
-	/**
-	 * Returns the source generator being used to convert individuals to source code.
-	 * 
-	 * @return the current source generator
-	 */
-	public SourceGenerator<T> getSourceGenerator() {
-		return generator;
-	}
-	
-	/**
-	 * Sets the source generator to use to convert individuals to source code
-	 * 
-	 * @param the source generator to set
-	 */
-	public void setSourceGenerator(SourceGenerator<T> generator) {
-		this.generator = generator;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void exec(T individual, String[] argNames, Object[][] argValues)
+            throws MalformedProgramException {
+        eval(individual, argNames, argValues);
+    }
+
+    /**
+     * Returns the source generator being used to convert individuals to source
+     * code.
+     *
+     * @return the current source generator
+     */
+    public SourceGenerator<T> getSourceGenerator() {
+        return generator;
+    }
+
+    /**
+     * Sets the source generator to use to convert individuals to source code
+     *
+     * @param the source generator to set
+     */
+    public void setSourceGenerator(SourceGenerator<T> generator) {
+        this.generator = generator;
+    }
 }

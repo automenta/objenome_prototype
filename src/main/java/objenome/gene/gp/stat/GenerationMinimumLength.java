@@ -19,70 +19,69 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 
 /**
  * A stat that returns the minimum length of all the program trees in the
  * population from the previous completed generation. All individuals in the
  * population must be instances of <code>STGPIndividual</code>.
- * 
+ *
  * @see GenerationMaximumLength
- * 
+ *
  * @since 2.0
  */
 public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 
-	private int min;
+    private int min;
 
-	/**
-	 * Constructs a <code>GenerationMinimumLength</code> stat and registers its
-	 * dependencies
-	 */
-	public GenerationMinimumLength() {
-		super(GenerationLengths.class);
-	}
+    /**
+     * Constructs a <code>GenerationMinimumLength</code> stat and registers its
+     * dependencies
+     */
+    public GenerationMinimumLength() {
+        super(GenerationLengths.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
-		min = Integer.MAX_VALUE;
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
+        min = Integer.MAX_VALUE;
 
-		for (int length: lengths) {
-			if (length < min) {
-				min = length;
-			}
-		}
-	}
+        for (int length : lengths) {
+            if (length < min) {
+                min = length;
+            }
+        }
+    }
 
-	/**
-	 * Returns the minimum length of the program trees in the previous
-	 * generation
-	 * 
-	 * @return the minimum length of the program trees
-	 */
-	public int getMinimum() {
-		return min;
-	}
+    /**
+     * Returns the minimum length of the program trees in the previous
+     * generation
+     *
+     * @return the minimum length of the program trees
+     */
+    public int getMinimum() {
+        return min;
+    }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Integer.toString(min);
-	}
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(min);
+    }
 }

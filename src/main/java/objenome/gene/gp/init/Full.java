@@ -21,23 +21,23 @@
  */
 package objenome.gene.gp.init;
 
-import objenome.gene.gp.epochx.event.InitialisationEvent;
-import objenome.gene.gp.epochx.RandomSequence;
-import objenome.gene.gp.epochx.event.Listener;
-import objenome.gene.gp.epochx.Population;
-import objenome.gene.gp.epochx.event.ConfigEvent;
-import objenome.gene.gp.epochx.Config;
-import objenome.gene.gp.epochx.event.EventManager;
-import static objenome.gene.gp.epochx.Population.SIZE;
-import static objenome.gene.gp.epochx.RandomSequence.RANDOM_SEQUENCE;
+import objenome.gene.gp.event.InitialisationEvent;
+import objenome.gene.gp.RandomSequence;
+import objenome.gene.gp.event.Listener;
+import objenome.gene.gp.Population;
+import objenome.gene.gp.event.ConfigEvent;
+import objenome.gene.gp.Config;
+import objenome.gene.gp.event.EventManager;
+import static objenome.gene.gp.Population.SIZE;
+import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.*;
 
 import java.util.*;
 
-import objenome.gene.gp.epochx.Config.Template;
-import objenome.gene.gp.epox.Node;
+import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.op.Node;
 import objenome.gene.gp.STGPIndividual;
-import objenome.gene.gp.epochx.InitialisationMethod;
+import objenome.gene.gp.InitialisationMethod;
 import objenome.gene.gp.tools.DataTypeUtils;
 
 /**
@@ -193,10 +193,10 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         updateSyntax();
 
         if (autoConfig) {
-            EventManager.getInstance().add(ConfigEvent.class, this);
+            config.on(ConfigEvent.class, this);
         }
 
-        EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation());
+        config.fire(new InitialisationEvent.StartInitialisation());
 
         Population population = new Population(config);
 
@@ -210,7 +210,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
             population.add(individual);
         }
 
-        EventManager.getInstance().fire(new InitialisationEvent.EndInitialisation(population));
+        config.fire(new InitialisationEvent.EndInitialisation(population));
 
         return population;
     }
@@ -280,7 +280,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         int arity = root.getArity();
 
         if (arity > 0) {
-			// Construct list of arg sets that produce the right return type
+            // Construct list of arg sets that produce the right return type
             // TODO Surely we can cut down the number of calls to this?!
             Class<?>[][] argTypeSets = dataTypeCombinations(arity, dataTypesTable[depth - currentDepth - 1]);
             List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
@@ -511,7 +511,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      */
     public void setDepth(int depth) {
         if (dataTypesTable != null && depth >= dataTypesTable.length) {
-			// Types possibilities table needs extending
+            // Types possibilities table needs extending
             // TODO No need to regenerate the whole table, just extend it
             dataTypesTable = null;
         }

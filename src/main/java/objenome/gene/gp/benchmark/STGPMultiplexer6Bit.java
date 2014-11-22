@@ -25,31 +25,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import objenome.gene.gp.epochx.Breeder;
-import objenome.gene.gp.epochx.Config.ConfigKey;
-import objenome.gene.gp.epochx.BranchedBreeder;
-import objenome.gene.gp.epochx.EvolutionaryStrategy;
-import objenome.gene.gp.epochx.FitnessEvaluator;
-import objenome.gene.gp.epochx.GenerationalStrategy;
-import objenome.gene.gp.epochx.GenerationalTemplate;
-import objenome.gene.gp.epochx.Initialiser;
-import objenome.gene.gp.epochx.MaximumGenerations;
-import objenome.gene.gp.epochx.Operator;
-import objenome.gene.gp.epochx.Population;
-import objenome.gene.gp.epochx.RandomSequence;
-import objenome.gene.gp.epochx.TerminationCriteria;
-import objenome.gene.gp.epochx.TerminationFitness;
-import objenome.gene.gp.epox.Node;
-import objenome.gene.gp.epox.Variable;
-import objenome.gene.gp.epox.VariableNode;
-import objenome.gene.gp.epox.bool.And;
-import objenome.gene.gp.epox.bool.Not;
-import objenome.gene.gp.epox.bool.Or;
-import objenome.gene.gp.epox.lang.If;
+import objenome.gene.gp.Breeder;
+import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.BranchedBreeder;
+import objenome.gene.gp.EvolutionaryStrategy;
+import objenome.gene.gp.FitnessEvaluator;
+import objenome.gene.gp.GenerationalStrategy;
+import objenome.gene.gp.GenerationalTemplate;
+import objenome.gene.gp.Initialiser;
+import objenome.gene.gp.MaximumGenerations;
+import objenome.gene.gp.Operator;
+import objenome.gene.gp.Population;
+import objenome.gene.gp.RandomSequence;
+import objenome.gene.gp.TerminationCriteria;
+import objenome.gene.gp.TerminationFitness;
+import objenome.gene.gp.op.Node;
+import objenome.gene.gp.op.Variable;
+import objenome.gene.gp.op.VariableNode;
+import objenome.gene.gp.op.bool.And;
+import objenome.gene.gp.op.bool.Not;
+import objenome.gene.gp.op.bool.Or;
+import objenome.gene.gp.op.lang.If;
 import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.random.MersenneTwisterFast;
 import objenome.gene.gp.selection.TournamentSelector;
 import objenome.gene.gp.STGPIndividual;
+import objenome.gene.gp.Config;
 import objenome.gene.gp.fitness.HitsCount;
 import objenome.gene.gp.init.Full;
 import objenome.gene.gp.operator.SubtreeCrossover;
@@ -114,15 +115,15 @@ public class STGPMultiplexer6Bit extends GenerationalTemplate {
      * @param template a map to be filled with the template config
      */
     @Override
-    protected void apply(Map<ConfigKey<?>, Object> template) {
-        super.apply(template);
+    protected void apply(Config c, Map<ConfigKey<?>, Object> template) {
+        super.apply(c, template);
 
         int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(BITS);
 
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
-        criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
-        criteria.add(new MaximumGenerations());
+        criteria.add(new TerminationFitness(c, new DoubleFitness.Minimise(0.0)));
+        criteria.add(new MaximumGenerations(c));
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
         template.put(STGPIndividual.MAXIMUM_DEPTH, 6);

@@ -25,16 +25,17 @@ package org.encog.ml.ea.rules;
 
 import objenome.gene.gp.STGPIndividual;
 
-
 /**
  * Defines a rewrite rule. Rewrite rules are used to rewrite a genome into a
  * more simple, yet equivalent, form.
  */
 public interface RewriteRule {
-	/**
-	 * Rewrite the specified genome.
-	 * @param genome The genome to rewrite.
-	 * @return True, if the genome was rewritten.
-	 */
-	boolean rewrite(STGPIndividual genome);
+
+    /**
+     * Rewrite the specified genome.
+     *
+     * @param genome The genome to rewrite.
+     * @return True, if the genome was rewritten.
+     */
+    boolean rewrite(STGPIndividual genome);
 }

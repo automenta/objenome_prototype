@@ -33,61 +33,61 @@ import objenome.gene.gp.tools.StringUtils;
  */
 public class GrammarLiteral implements GrammarNode {
 
-	// The literal value of this grammar terminal.
-	private String value;
+    // The literal value of this grammar terminal.
+    private String value;
 
-	/**
-	 * Constructs a terminal symbol with the specified value.
-	 * 
-	 * @param value snippet of source that this terminal represents.
-	 */
-	public GrammarLiteral(String value) {
-		this.value = value;
-	}
+    /**
+     * Constructs a terminal symbol with the specified value.
+     *
+     * @param value snippet of source that this terminal represents.
+     */
+    public GrammarLiteral(String value) {
+        this.value = value;
+    }
 
-	/**
-	 * Returns the literal value of this grammar terminal.
-	 * 
-	 * @return this grammar literal's value.
-	 */
-	public String getValue() {
-		return value;
-	}
+    /**
+     * Returns the literal value of this grammar terminal.
+     *
+     * @return this grammar literal's value.
+     */
+    public String getValue() {
+        return value;
+    }
 
-	/**
-	 * Sets the literal value of this grammar terminal.
-	 * 
-	 * @param value the new grammar literal value to set.
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    /**
+     * Sets the literal value of this grammar terminal.
+     *
+     * @param value the new grammar literal value to set.
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	/**
-	 * Returns a <code>String</code> representation of this grammar literal.
-	 * 
-	 * @return a string representation of this grammar literal.
-	 */
-	@Override
-	public String toString() {
-		return escape(value);
-	}
+    /**
+     * Returns a <code>String</code> representation of this grammar literal.
+     *
+     * @return a string representation of this grammar literal.
+     */
+    @Override
+    public String toString() {
+        return escape(value);
+    }
 
-	/*
-	 * If the input string contains any illegal chars then the whole string is
-	 * wrapped in quotes and returned. Otherwise the original string is
-	 * returned unmodified.
-	 */
-	private String escape(String input) {
-		char[] escapeChars = {'>', '<', '|'};
-		if (StringUtils.containsAny(input, escapeChars)) {
-			StringBuilder buffer = new StringBuilder();
-			buffer.append('\"');
-			buffer.append(input);
-			buffer.append('\"');
-			input = buffer.toString();
-		}
+    /*
+     * If the input string contains any illegal chars then the whole string is
+     * wrapped in quotes and returned. Otherwise the original string is
+     * returned unmodified.
+     */
+    private String escape(String input) {
+        char[] escapeChars = {'>', '<', '|'};
+        if (StringUtils.containsAny(input, escapeChars)) {
+            StringBuilder buffer = new StringBuilder();
+            buffer.append('\"');
+            buffer.append(input);
+            buffer.append('\"');
+            input = buffer.toString();
+        }
 
-		return input;
-	}
+        return input;
+    }
 }

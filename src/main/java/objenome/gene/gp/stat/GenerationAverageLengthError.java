@@ -19,68 +19,67 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.Population;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.Population;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 
 /**
  * A stat that returns the standard error of the mean length, as calculated by
  * the {@link GenerationAverageLength} stat. All individuals in the population
  * must be instances of <code>STGPIndividual</code>.
- * 
+ *
  * @see GenerationAverageLength
  * @see GenerationStandardDeviationLength
- * 
+ *
  * @since 2.0
  */
 public class GenerationAverageLengthError extends AbstractStat<EndGeneration> {
 
-	private double error;
+    private double error;
 
-	/**
-	 * Constructs a <code>GenerationAverageLengthError</code> stat and registers its
-	 * dependencies
-	 */
-	public GenerationAverageLengthError() {
-		super(GenerationStandardDeviationLength.class);
-	}
+    /**
+     * Constructs a <code>GenerationAverageLengthError</code> stat and registers
+     * its dependencies
+     */
+    public GenerationAverageLengthError() {
+        super(GenerationStandardDeviationLength.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		double stdev = AbstractStat.get(GenerationStandardDeviationLength.class).getStandardDeviation();
-		Population population = event.getPopulation();
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        double stdev = AbstractStat.get(GenerationStandardDeviationLength.class).getStandardDeviation();
+        Population population = event.getPopulation();
 
-		error = stdev / Math.sqrt(population.size());
-	}
+        error = stdev / Math.sqrt(population.size());
+    }
 
-	/**
-	 * Returns the standard error of the mean length of the program trees in the
-	 * previous generation
-	 * 
-	 * @return the error of the mean length of the program trees
-	 */
-	public double getError() {
-		return error;
-	}
+    /**
+     * Returns the standard error of the mean length of the program trees in the
+     * previous generation
+     *
+     * @return the error of the mean length of the program trees
+     */
+    public double getError() {
+        return error;
+    }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(error);
-	}
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Double.toString(error);
+    }
 }

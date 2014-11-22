@@ -19,75 +19,75 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
 
 /**
- * A stat that returns the standard deviation of the mean depth of the program 
- * trees in the population from the previous completed generation. All 
- * individuals in the population must be instances of <code>STGPIndividual</code>.
- * 
+ * A stat that returns the standard deviation of the mean depth of the program
+ * trees in the population from the previous completed generation. All
+ * individuals in the population must be instances of
+ * <code>STGPIndividual</code>.
+ *
  * @see GenerationAverageDepthError
  * @see GenerationAverageDepth
- * 
+ *
  * @since 2.0
  */
 public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration> {
 
-	private double stdev;
+    private double stdev;
 
-	/**
-	 * Constructs a <code>GenerationStandardDeviationDepth</code> stat and registers
-	 * its dependencies
-	 */
-	@SuppressWarnings("unchecked")
-	public GenerationStandardDeviationDepth() {
-		super(GenerationDepths.class, GenerationAverageDepth.class);
-	}
+    /**
+     * Constructs a <code>GenerationStandardDeviationDepth</code> stat and
+     * registers its dependencies
+     */
+    @SuppressWarnings("unchecked")
+    public GenerationStandardDeviationDepth() {
+        super(GenerationDepths.class, GenerationAverageDepth.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
-		double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
-		
-		// Sum the squared differences
-		double sqDiff = 0.0;
-		for (int depth: depths) {
-			sqDiff += Math.pow(depth - average, 2);
-		}
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
+        double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
 
-		// Take the square root of the average
-		stdev = Math.sqrt(sqDiff / depths.length);
-	}
-	
-	/**
-	 * Returns the standard deviation of the mean depth of the program trees in
-	 * the previous generation
-	 * 
-	 * @return the standard deviation of the mean depth of the program trees
-	 */
-	public double getStandardDeviation() {
-		return stdev;
-	}
+        // Sum the squared differences
+        double sqDiff = 0.0;
+        for (int depth : depths) {
+            sqDiff += Math.pow(depth - average, 2);
+        }
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(stdev);
-	}
+        // Take the square root of the average
+        stdev = Math.sqrt(sqDiff / depths.length);
+    }
+
+    /**
+     * Returns the standard deviation of the mean depth of the program trees in
+     * the previous generation
+     *
+     * @return the standard deviation of the mean depth of the program trees
+     */
+    public double getStandardDeviation() {
+        return stdev;
+    }
+
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Double.toString(stdev);
+    }
 }

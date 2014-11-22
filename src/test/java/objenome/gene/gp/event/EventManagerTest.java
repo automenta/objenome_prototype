@@ -23,9 +23,6 @@
 package objenome.gene.gp.event;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.epochx.event.EventManager;
-import objenome.gene.gp.epochx.event.Listener;
-import objenome.gene.gp.epochx.event.RunEvent;
 
 /**
  * The <code>EventManagerTest</code> class provides unit tests for methods of the
@@ -39,7 +36,7 @@ public class EventManagerTest extends TestCase {
 	 * Test for the {@link EventManager#reset()} method.
 	 */
 	public void testReset() {
-		EventManager manager = EventManager.getInstance();
+		EventManager manager = new EventManager();
 		Listener<RunEvent> listener = new Listener<RunEvent>() {
 
 			@Override

@@ -19,81 +19,80 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.Population;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.Population;
 import java.util.Arrays;
 
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 import objenome.gene.gp.STGPIndividual;
 
 /**
- * A stat that returns the average number of nodes at each depth level of the 
+ * A stat that returns the average number of nodes at each depth level of the
  * program trees in the population from the previous generation. All individuals
  * in the population must be instances of <code>STGPIndividual</code>.
- * 
+ *
  * @since 2.0
  */
 public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> {
 
-	private double[] averages;
+    private double[] averages;
 
-	/**
-	 * Constructs a <code>GenerationAverageNodesPerDepth</code> stat and registers 
-	 * its dependencies
-	 */
-	public GenerationAverageNodesPerDepth() {
-		super(GenerationAverageDepth.class);
-	}
+    /**
+     * Constructs a <code>GenerationAverageNodesPerDepth</code> stat and
+     * registers its dependencies
+     */
+    public GenerationAverageNodesPerDepth() {
+        super(GenerationAverageDepth.class);
+    }
 
-	/**
-	 * Triggers the generation of an updated value for this stat. Once this stat
-	 * has been registered, this method will be called on each
-	 * <code>EndGeneration</code> event.
-	 * 
-	 * @param event an object that encapsulates information about the event that
-	 *        occurred
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		int maxDepth = AbstractStat.get(GenerationMaximumDepth.class).getMaximum();
-		Population population = event.getPopulation();
-		
-		averages = new double[maxDepth];
+    /**
+     * Triggers the generation of an updated value for this stat. Once this stat
+     * has been registered, this method will be called on each
+     * <code>EndGeneration</code> event.
+     *
+     * @param event an object that encapsulates information about the event that
+     * occurred
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        int maxDepth = AbstractStat.get(GenerationMaximumDepth.class).getMaximum();
+        Population population = event.getPopulation();
 
-		// For each depth calculate an average
-		for (int d = 0; d < maxDepth; d++) {
-			// Get number of nodes for each program
-			int noNodes = 0;
-			for (Individual individual: population) {
-				if (individual instanceof STGPIndividual) {
-					noNodes += ((STGPIndividual) individual).getRoot().nodesAtDepth(d).size();
-				}
-			}
-			averages[d] = noNodes / (double) population.size();
-		}
-	}
-	
-	/**
-	 * Returns an array containing the average number of nodes at each depth 
-	 * level across all the programs in the previous generation
-	 * 
-	 * @return the error of the mean depth of the program trees
-	 */
-	public double[] getAverageNodesPerDepth() {
-		return averages;
-	}
+        averages = new double[maxDepth];
 
-	/**
-	 * Returns a string representation of the value of this stat
-	 * 
-	 * @return a <code>String</code> that represents the value of this stat
-	 */
-	@Override
-	public String toString() {
-		return Arrays.toString(averages);
-	}
+        // For each depth calculate an average
+        for (int d = 0; d < maxDepth; d++) {
+            // Get number of nodes for each program
+            int noNodes = 0;
+            for (Individual individual : population) {
+                if (individual instanceof STGPIndividual) {
+                    noNodes += ((STGPIndividual) individual).getRoot().nodesAtDepth(d).size();
+                }
+            }
+            averages[d] = noNodes / (double) population.size();
+        }
+    }
+
+    /**
+     * Returns an array containing the average number of nodes at each depth
+     * level across all the programs in the previous generation
+     *
+     * @return the error of the mean depth of the program trees
+     */
+    public double[] getAverageNodesPerDepth() {
+        return averages;
+    }
+
+    /**
+     * Returns a string representation of the value of this stat
+     *
+     * @return a <code>String</code> that represents the value of this stat
+     */
+    @Override
+    public String toString() {
+        return Arrays.toString(averages);
+    }
 }

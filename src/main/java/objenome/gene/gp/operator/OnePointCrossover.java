@@ -21,23 +21,22 @@
  */
 package objenome.gene.gp.operator;
 
-import static objenome.gene.gp.epochx.Config.Template.TEMPLATE;
-import static objenome.gene.gp.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static objenome.gene.gp.Config.Template.TEMPLATE;
+import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import objenome.gene.gp.epochx.AbstractOperator;
-import objenome.gene.gp.epochx.Config;
-import objenome.gene.gp.epochx.Config.ConfigKey;
-import objenome.gene.gp.epochx.Individual;
-import objenome.gene.gp.epochx.RandomSequence;
-import objenome.gene.gp.epox.Node;
-import objenome.gene.gp.epochx.event.ConfigEvent;
-import objenome.gene.gp.epochx.event.EventManager;
-import objenome.gene.gp.epochx.event.Listener;
-import objenome.gene.gp.epochx.event.OperatorEvent;
-import objenome.gene.gp.epochx.event.OperatorEvent.EndOperator;
+import objenome.gene.gp.AbstractOperator;
+import objenome.gene.gp.Config;
+import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.Individual;
+import objenome.gene.gp.RandomSequence;
+import objenome.gene.gp.op.Node;
+import objenome.gene.gp.event.ConfigEvent;
+import objenome.gene.gp.event.Listener;
+import objenome.gene.gp.event.OperatorEvent;
+import objenome.gene.gp.event.OperatorEvent.EndOperator;
 import objenome.gene.gp.STGPIndividual;
 
 /**
@@ -50,322 +49,326 @@ import objenome.gene.gp.STGPIndividual;
  * at these points are exchanged. It is recommended that a significant mutation
  * rate (Poli & Langdon use 30%) is used in combination with one-point crossover
  * since it encourages rapid convergence.
- * 
+ *
  * For more information about the one-point crossover operator see:<br />
  * R.Poli and W.B.Langdon, Genetic Programming with One-Point Crossover<br />
  * Soft Computing in Engineering Design and Manufacturing, pp. 180-189,
  * Springer-Verlag<br />
  * London, 23-27 June 1997.
- * 
+ *
  * @see KozaCrossover
  * @see SubtreeCrossover
- * 
+ *
  * @since 2.0
  */
 public class OnePointCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 
-	/**
-	 * The key for setting and retrieving whether the strict form of one-point
-	 * crossover should be used
-	 */
-	public static final ConfigKey<Boolean> STRICT = new ConfigKey<Boolean>();
-	
-	/**
-	 * The key for setting and retrieving the probability of this operator being applied
-	 */
-	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+    /**
+     * The key for setting and retrieving whether the strict form of one-point
+     * crossover should be used
+     */
+    public static final ConfigKey<Boolean> STRICT = new ConfigKey<Boolean>();
 
-	// Configuration settings
-	private RandomSequence random;
-	private Boolean strict;
-	private Double probability;
+    /**
+     * The key for setting and retrieving the probability of this operator being
+     * applied
+     */
+    public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+
+    // Configuration settings
+    private RandomSequence random;
+    private Boolean strict;
+    private Double probability;
     private Config config;
+    private final boolean autoConfig;
 
-	/**
-	 * Constructs a <code>OnePointCrossover</code> with control parameters
-	 * automatically loaded from the config
-	 */
-	public OnePointCrossover() {
-		this(true);
-	}
+    /**
+     * Constructs a <code>OnePointCrossover</code> with control parameters
+     * automatically loaded from the config
+     */
+    public OnePointCrossover() {
+        this(true);
+    }
 
-	/**
-	 * Constructs a <code>OnePointCrossover</code> with control parameters initially
-	 * loaded from the config. If the <code>autoConfig</code> argument is set to
-	 * <code>true</code> then the configuration will be automatically updated when
-	 * the config is modified.
-	 * 
-	 * @param autoConfig whether this operator should automatically update its
-	 *        configuration settings from the config
-	 */
-	public OnePointCrossover(boolean autoConfig) {
-		// Default config values
-		strict = false;
-		
+    /**
+     * Constructs a <code>OnePointCrossover</code> with control parameters
+     * initially loaded from the config. If the <code>autoConfig</code> argument
+     * is set to <code>true</code> then the configuration will be automatically
+     * updated when the config is modified.
+     *
+     * @param autoConfig whether this operator should automatically update its
+     * configuration settings from the config
+     */
+    public OnePointCrossover(boolean autoConfig) {
+        // Default config values
+        strict = false;
+        this.autoConfig = autoConfig;
 
-		if (autoConfig) {
-			EventManager.getInstance().add(ConfigEvent.class, this);
-		}
-	}
+    }
 
-	/**
-	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
-	 * change in any of the following configuration parameters:
-	 * <ul>
-	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
-	 * <li>{@link #PROBABILITY}
-	 * <li>{@link #STRICT}
-	 * </ul>
-	 */
-	protected void setup(Config config) {
-            
-		random = config.get(RANDOM_SEQUENCE);
-		probability = config.get(PROBABILITY);
-		strict = config.get(STRICT, strict);
-	}
+    /**
+     * Sets up this operator with the appropriate configuration settings. This
+     * method is called whenever a <code>ConfigEvent</code> occurs for a change
+     * in any of the following configuration parameters:
+     * <ul>
+     * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+     * <li>{@link #PROBABILITY}
+     * <li>{@link #STRICT}
+     * </ul>
+     */
+    public void setConfig(Config config) {
+        if (autoConfig) {
+            config.on(ConfigEvent.class, this);
+        }
 
-	/**
-	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <code>ConfigEvent</code> is for one of its required
-	 * parameters.
-	 * 
-	 * @param event {@inheritDoc}
-	 */
-	@Override
-	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, STRICT)) {
-                    setup(event.getConfig());                    
-		}
-	}
+        random = config.get(RANDOM_SEQUENCE);
+        probability = config.get(PROBABILITY);
+        strict = config.get(STRICT, strict);
+    }
 
-	/**
-	 * Performs a one-point crossover on the given individuals. Random crossover
-	 * points are chosen in both program trees from those points which align in
-	 * the two programs. Alignment is determined by nodes in the same position
-	 * having the same arity and data-type, or for the strict form of the
-	 * operator the nodes must be the same. The crossover points are located in
-	 * the same position in both program trees and the two subtrees at these
-	 * points are exchanged. See the paper referenced in the class documation
-	 * for more details of the operation of one-point crossover.
-	 * 
-	 * @param event the <code>EndOperator</code> event to be filled with information
-	 *        about this operation
-	 * @param parents an array of two individuals to undergo one-point
-	 *        crossover. Both individuals must be instances of
-	 *        <code>STGPIndividual</code>.
-	 * @return an array containing two <code>STGPIndividual</code>s that are the
-	 *         result of the crossover
-	 */
-	@Override
-	public STGPIndividual[] perform(EndOperator event, Individual ... parents) {
-		STGPIndividual program1 = (STGPIndividual) parents[0];
-		STGPIndividual program2 = (STGPIndividual) parents[1];
+    /**
+     * Receives configuration events and triggers this operator to configure its
+     * parameters if the <code>ConfigEvent</code> is for one of its required
+     * parameters.
+     *
+     * @param event {@inheritDoc}
+     */
+    @Override
+    public void onEvent(ConfigEvent event) {
+        if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, STRICT)) {
+            setConfig(event.getConfig());
+        }
+    }
 
-		// List the points that align
-		List<Integer> points1 = new ArrayList<Integer>();
-		List<Integer> points2 = new ArrayList<Integer>();
-		alignedPoints(program1.getRoot(), program2.getRoot(), points1, points2, 0, 0);
+    /**
+     * Performs a one-point crossover on the given individuals. Random crossover
+     * points are chosen in both program trees from those points which align in
+     * the two programs. Alignment is determined by nodes in the same position
+     * having the same arity and data-type, or for the strict form of the
+     * operator the nodes must be the same. The crossover points are located in
+     * the same position in both program trees and the two subtrees at these
+     * points are exchanged. See the paper referenced in the class documation
+     * for more details of the operation of one-point crossover.
+     *
+     * @param event the <code>EndOperator</code> event to be filled with
+     * information about this operation
+     * @param parents an array of two individuals to undergo one-point
+     * crossover. Both individuals must be instances of
+     * <code>STGPIndividual</code>.
+     * @return an array containing two <code>STGPIndividual</code>s that are the
+     * result of the crossover
+     */
+    @Override
+    public STGPIndividual[] perform(EndOperator event, Individual... parents) {
+        STGPIndividual program1 = (STGPIndividual) parents[0];
+        STGPIndividual program2 = (STGPIndividual) parents[1];
 
-		int randomIndex = random.nextInt(points1.size());
-		int swapPoint1 = points1.get(randomIndex);
-		int swapPoint2 = points2.get(randomIndex);
+        // List the points that align
+        List<Integer> points1 = new ArrayList<Integer>();
+        List<Integer> points2 = new ArrayList<Integer>();
+        alignedPoints(program1.getRoot(), program2.getRoot(), points1, points2, 0, 0);
 
-		Node subtree1 = program1.getNode(swapPoint1);
-		Node subtree2 = program2.getNode(swapPoint2);
+        int randomIndex = random.nextInt(points1.size());
+        int swapPoint1 = points1.get(randomIndex);
+        int swapPoint2 = points2.get(randomIndex);
 
-		// Clone so children and parents remain distinct for event
-		STGPIndividual child1 = program1.clone();
-		STGPIndividual child2 = program2.clone();
+        Node subtree1 = program1.getNode(swapPoint1);
+        Node subtree2 = program2.getNode(swapPoint2);
 
-		child1.setNode(swapPoint1, subtree2);
-		child2.setNode(swapPoint2, subtree1);
+        // Clone so children and parents remain distinct for event
+        STGPIndividual child1 = program1.clone();
+        STGPIndividual child2 = program2.clone();
 
-		((EndEvent) event).setSubtrees(new Node[]{subtree1, subtree2});
-		((EndEvent) event).setCrossoverPoints(new int[]{swapPoint1, swapPoint2});
+        child1.setNode(swapPoint1, subtree2);
+        child2.setNode(swapPoint2, subtree1);
 
-		return new STGPIndividual[]{child1, child2};
-	}
+        ((EndEvent) event).setSubtrees(new Node[]{subtree1, subtree2});
+        ((EndEvent) event).setCrossoverPoints(new int[]{swapPoint1, swapPoint2});
 
-	/**
-	 * Returns a <code>OnePointCrossoverEndEvent</code> with the operator and 
-	 * parents set
-	 */
-	@Override
-	protected EndEvent getEndEvent(Individual ... parents) {
-		return new EndEvent(this, parents);
-	}
+        return new STGPIndividual[]{child1, child2};
+    }
 
-	/*
-	 * Private helper method for apply method. Traverses the two program
-	 * trees and identifies the swap points that can be swapped because they're
-	 * connected to a part of the tree that aligns. Supports strict or
-	 * non-strict.
-	 */
-	private void alignedPoints(Node root1, Node root2, List<Integer> points1, List<Integer> points2, int current1,
-			int current2) {
-		points1.add(current1);
-		points2.add(current2);
+    /**
+     * Returns a <code>OnePointCrossoverEndEvent</code> with the operator and
+     * parents set
+     */
+    @Override
+    protected EndEvent getEndEvent(Individual... parents) {
+        return new EndEvent(this, parents);
+    }
 
-		boolean valid = false;
-		if (!strict) {
-			valid = (root1.getArity() == root2.getArity()) && (root1.dataType() == root2.dataType());
-		} else {
-			valid = root1.getClass().equals(root2.getClass());
-		}
+    /*
+     * Private helper method for apply method. Traverses the two program
+     * trees and identifies the swap points that can be swapped because they're
+     * connected to a part of the tree that aligns. Supports strict or
+     * non-strict.
+     */
+    private void alignedPoints(Node root1, Node root2, List<Integer> points1, List<Integer> points2, int current1,
+            int current2) {
+        points1.add(current1);
+        points2.add(current2);
 
-		if (valid) {
-			for (int i = 0; i < root1.getArity(); i++) {
-				Node child1 = root1.getChild(i);
-				Node child2 = root2.getChild(i);
-				alignedPoints(child1, child2, points1, points2, current1 + 1, current2 + 1);
+        boolean valid = false;
+        if (!strict) {
+            valid = (root1.getArity() == root2.getArity()) && (root1.dataType() == root2.dataType());
+        } else {
+            valid = root1.getClass().equals(root2.getClass());
+        }
 
-				current1 += child1.length();
-				current2 += child2.length();
-			}
-		}
-	}
+        if (valid) {
+            for (int i = 0; i < root1.getArity(); i++) {
+                Node child1 = root1.getChild(i);
+                Node child2 = root2.getChild(i);
+                alignedPoints(child1, child2, points1, points2, current1 + 1, current2 + 1);
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>
-	 * One-point crossover operates on 2 individuals.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public int inputSize() {
-		return 2;
-	}
+                current1 += child1.length();
+                current2 += child2.length();
+            }
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public double probability(Config config) {
-		return probability;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * One-point crossover operates on 2 individuals.
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public int inputSize() {
+        return 2;
+    }
 
-	/**
-	 * Sets the probability of this operator being selected. If automatic configuration is
-	 * enabled then any value set here will be overwritten by the {@link #PROBABILITY} 
-	 * configuration setting on the next config event.
-	 * 
-	 * @param probability the new probability to set
-	 */
-	public void setProbability(double probability) {
-		this.probability = probability;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public double probability() {
+        return probability;
+    }
 
-	/**
-	 * Returns whether strict one-point crossover is being used or not. If set
-	 * to <code>true</code> then alignment of the parent programs takes into
-	 * account not only the arity of the nodes, but also the node type.
-	 * 
-	 * @return <code>true</code> if strict one-point crossover is in use, and
-	 *         <code>false</code> otherwise
-	 */
-	public boolean isStrict() {
-		return strict;
-	}
+    /**
+     * Sets the probability of this operator being selected. If automatic
+     * configuration is enabled then any value set here will be overwritten by
+     * the {@link #PROBABILITY} configuration setting on the next config event.
+     *
+     * @param probability the new probability to set
+     */
+    public void setProbability(double probability) {
+        this.probability = probability;
+    }
 
-	/**
-	 * Sets whether strict one-point crossover should be used or not. Strict
-	 * one-point crossover causes alignment of the parent programs takes into
-	 * account not only the arity of the nodes, but also the node type. If
-	 * automatic configuration is enabled then any value set here will be
-	 * overwritten by the {@link #STRICT} configuration setting on the next
-	 * config event.
-	 * 
-	 * @param strict <code>true</code> if strict one-point crossover should be used
-	 *        and <code>false</code> otherwise
-	 */
-	public void setStrict(boolean strict) {
-		this.strict = strict;
-	}
+    /**
+     * Returns whether strict one-point crossover is being used or not. If set
+     * to <code>true</code> then alignment of the parent programs takes into
+     * account not only the arity of the nodes, but also the node type.
+     *
+     * @return <code>true</code> if strict one-point crossover is in use, and
+     * <code>false</code> otherwise
+     */
+    public boolean isStrict() {
+        return strict;
+    }
 
-	/**
-	 * Returns the random number sequence in use
-	 * 
-	 * @return the currently set random sequence
-	 */
-	public RandomSequence getRandomSequence() {
-		return random;
-	}
+    /**
+     * Sets whether strict one-point crossover should be used or not. Strict
+     * one-point crossover causes alignment of the parent programs takes into
+     * account not only the arity of the nodes, but also the node type. If
+     * automatic configuration is enabled then any value set here will be
+     * overwritten by the {@link #STRICT} configuration setting on the next
+     * config event.
+     *
+     * @param strict <code>true</code> if strict one-point crossover should be
+     * used and <code>false</code> otherwise
+     */
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
 
-	/**
-	 * Sets the random number sequence to use. If automatic configuration is
-	 * enabled then any value set here will be overwritten by the
-	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
-	 * config event.
-	 * 
-	 * @param random the random number generator to set
-	 */
-	public void setRandomSequence(RandomSequence random) {
-		this.random = random;
-	}
-	
-	/**
-	 * An event fired at the end of a one-point crossover
-	 * 
-	 * @see OnePointCrossover
-	 * 
-	 * @since 2.0
-	 */
-	public class EndEvent extends OperatorEvent.EndOperator {
+    /**
+     * Returns the random number sequence in use
+     *
+     * @return the currently set random sequence
+     */
+    public RandomSequence getRandomSequence() {
+        return random;
+    }
 
-		private Node[] subtrees;
-		private int[] points;
+    /**
+     * Sets the random number sequence to use. If automatic configuration is
+     * enabled then any value set here will be overwritten by the
+     * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
+     * config event.
+     *
+     * @param random the random number generator to set
+     */
+    public void setRandomSequence(RandomSequence random) {
+        this.random = random;
+    }
 
-		/**
-		 * Constructs a <code>OnePointCrossoverEndEvent</code> with the details of the
-		 * event
-		 * 
-		 * @param operator the operator that performed the crossover
-		 * @param parents an array of two individuals that the operator was
-		 *        performed on
-		 */
-		public EndEvent(OnePointCrossover operator, Individual[] parents) {
-			super(operator, parents);
-		}
+    /**
+     * An event fired at the end of a one-point crossover
+     *
+     * @see OnePointCrossover
+     *
+     * @since 2.0
+     */
+    public class EndEvent extends OperatorEvent.EndOperator {
 
-		/**
-		 * Returns an array of the two crossover points in the parent program trees
-		 * 
-		 * @return an array containing two indices which are the crossover points
-		 */
-		public int[] getCrossoverPoints() {
-			return points;
-		}
-		
-		/**
-		 * Sets an array of the crossover points in the two parent programs
-		 * 
-		 * @param points an array of the two crossover points in the parents
-		 */
-		public void setCrossoverPoints(int[] points) {
-			this.points = points;
-		}
+        private Node[] subtrees;
+        private int[] points;
 
-		/**
-		 * Returns an array of nodes which are the root nodes of the subtrees that
-		 * were exchanged. The nodes are given in the same order as the parents they
-		 * were taken from
-		 * 
-		 * @return the subtrees
-		 */
-		public Node[] getSubtrees() {
-			return subtrees;
-		}
+        /**
+         * Constructs a <code>OnePointCrossoverEndEvent</code> with the details
+         * of the event
+         *
+         * @param operator the operator that performed the crossover
+         * @param parents an array of two individuals that the operator was
+         * performed on
+         */
+        public EndEvent(OnePointCrossover operator, Individual[] parents) {
+            super(operator, parents);
+        }
 
-		/**
-		 * Sets an array containing the subtrees that were exchanged
-		 * 
-		 * @param subtrees the two subtrees that were exchanged
-		 */
-		public void setSubtrees(Node[] subtrees) {
-			this.subtrees = subtrees;
-		}
-	}
+        /**
+         * Returns an array of the two crossover points in the parent program
+         * trees
+         *
+         * @return an array containing two indices which are the crossover
+         * points
+         */
+        public int[] getCrossoverPoints() {
+            return points;
+        }
+
+        /**
+         * Sets an array of the crossover points in the two parent programs
+         *
+         * @param points an array of the two crossover points in the parents
+         */
+        public void setCrossoverPoints(int[] points) {
+            this.points = points;
+        }
+
+        /**
+         * Returns an array of nodes which are the root nodes of the subtrees
+         * that were exchanged. The nodes are given in the same order as the
+         * parents they were taken from
+         *
+         * @return the subtrees
+         */
+        public Node[] getSubtrees() {
+            return subtrees;
+        }
+
+        /**
+         * Sets an array containing the subtrees that were exchanged
+         *
+         * @param subtrees the two subtrees that were exchanged
+         */
+        public void setSubtrees(Node[] subtrees) {
+            this.subtrees = subtrees;
+        }
+    }
 }

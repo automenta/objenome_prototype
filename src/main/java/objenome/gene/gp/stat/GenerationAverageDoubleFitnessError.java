@@ -19,63 +19,62 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.stat;
 
-import objenome.gene.gp.epochx.Population;
-import objenome.gene.gp.epochx.event.GenerationEvent.EndGeneration;
-import objenome.gene.gp.epochx.event.stat.AbstractStat;
+import objenome.gene.gp.Population;
+import objenome.gene.gp.event.GenerationEvent.EndGeneration;
+import objenome.gene.gp.event.stat.AbstractStat;
 import objenome.gene.gp.fitness.DoubleFitness;
 
 /**
- * Stat that provides the average fitness error of the population at the end of a
- * generation. This stat can only be used with <code>DoubleFitness</code>.
- * 
+ * Stat that provides the average fitness error of the population at the end of
+ * a generation. This stat can only be used with <code>DoubleFitness</code>.
+ *
  * @see DoubleFitness
  */
 public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGeneration> {
 
-	/**
-	 * The average fitness error.
-	 */
-	private double error;
+    /**
+     * The average fitness error.
+     */
+    private double error;
 
-	/**
-	 * Constructs a <code>GenerationAverageDoubleFitnessError</code>.
-	 */
-	public GenerationAverageDoubleFitnessError() {
-		super(GenerationStandardDeviationDoubleFitness.class);
-	}
+    /**
+     * Constructs a <code>GenerationAverageDoubleFitnessError</code>.
+     */
+    public GenerationAverageDoubleFitnessError() {
+        super(GenerationStandardDeviationDoubleFitness.class);
+    }
 
-	/**
-	 * Computes the average fitness error of the population.
-	 * 
-	 * @param event the <code>EndGeneration</code> event object.
-	 */
-	@Override
-	public void refresh(EndGeneration event) {
-		double stdev = AbstractStat.get(GenerationStandardDeviationDoubleFitness.class).getStandardDeviation();
-		Population population = event.getPopulation();
-		
-		error = stdev / Math.sqrt(population.size());
-	}
+    /**
+     * Computes the average fitness error of the population.
+     *
+     * @param event the <code>EndGeneration</code> event object.
+     */
+    @Override
+    public void refresh(EndGeneration event) {
+        double stdev = AbstractStat.get(GenerationStandardDeviationDoubleFitness.class).getStandardDeviation();
+        Population population = event.getPopulation();
 
-	/**
-	 * Returns the average fitness error.
-	 * 
-	 * @return the average fitness error.
-	 */
-	public double getError() {
-		return error;
-	}
+        error = stdev / Math.sqrt(population.size());
+    }
 
-	/**
-	 * Returns a string representation of the average fitness error.
-	 * 
-	 * @return a string representation of the average fitness error.
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(error);
-	}
+    /**
+     * Returns the average fitness error.
+     *
+     * @return the average fitness error.
+     */
+    public double getError() {
+        return error;
+    }
+
+    /**
+     * Returns a string representation of the average fitness error.
+     *
+     * @return a string representation of the average fitness error.
+     */
+    @Override
+    public String toString() {
+        return Double.toString(error);
+    }
 }

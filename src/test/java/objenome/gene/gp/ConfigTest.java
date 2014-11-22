@@ -23,9 +23,7 @@
 package objenome.gene.gp;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.epochx.Config;
-import objenome.gene.gp.epochx.Config.ConfigKey;
-import objenome.gene.gp.epochx.Population;
+import objenome.gene.gp.Config.ConfigKey;
 
 
 /**

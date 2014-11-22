@@ -19,196 +19,194 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.fitness;
 
 import java.util.Comparator;
 
-import objenome.gene.gp.epochx.Fitness;
+import objenome.gene.gp.Fitness;
 
 /**
  * Represents a <code>Fitness</code> score as a <code>double</code> value. The
  * natural ordering of a fitness represented as a <code>double</code> may be
  * either maximising or minimising. A maximising fitness considers an individual
  * with a larger fitness score as being fitter than one with a smaller score.
- * With a minimising fitness the opposite is true. Fitness scores may range
- * from Double.MIN_VALUE to Double.MAX_VALUE.
+ * With a minimising fitness the opposite is true. Fitness scores may range from
+ * Double.MIN_VALUE to Double.MAX_VALUE.
  */
 public abstract class DoubleFitness implements Fitness {
 
-	/**
-	 * The comparator used by the {@link Maximise} double fitness
-	 * implementation.
-	 */
-	private static final Comparator<Double> MAXIMISE = new Comparator<Double>() {
+    /**
+     * The comparator used by the {@link Maximise} double fitness
+     * implementation.
+     */
+    private static final Comparator<Double> MAXIMISE = new Comparator<Double>() {
 
-		@Override
-		public int compare(Double d1, Double d2) {
-			return Double.compare(d1, d2);
-		}
-	};
+        @Override
+        public int compare(Double d1, Double d2) {
+            return Double.compare(d1, d2);
+        }
+    };
 
-	/**
-	 * The comparator used by the {@link Minimise} double fitness
-	 * implementation.
-	 */
-	private static final Comparator<Double> MINIMISE = new Comparator<Double>() {
+    /**
+     * The comparator used by the {@link Minimise} double fitness
+     * implementation.
+     */
+    private static final Comparator<Double> MINIMISE = new Comparator<Double>() {
 
-		@Override
-		public int compare(Double d1, Double d2) {
-			return Double.compare(d2, d1);
-		}
-	};
+        @Override
+        public int compare(Double d1, Double d2) {
+            return Double.compare(d2, d1);
+        }
+    };
 
-	/**
-	 * The actual double fitness value.
-	 */
-	private final double fitness;
+    /**
+     * The actual double fitness value.
+     */
+    private final double fitness;
 
-	/**
-	 * Constructs a <code>DoubleFitness</code> with the specified value as the
-	 * fitness score.
-	 * 
-	 * @param fitness the <code>double</code> value that represents the fitness
-	 */
-	public DoubleFitness(double fitness) {
-		this.fitness = fitness;
-	}
+    /**
+     * Constructs a <code>DoubleFitness</code> with the specified value as the
+     * fitness score.
+     *
+     * @param fitness the <code>double</code> value that represents the fitness
+     */
+    public DoubleFitness(double fitness) {
+        this.fitness = fitness;
+    }
 
-	/**
-	 * Returns the <code>double</code> value of this fitness.
-	 * 
-	 * @return the explicit fitness value this instance represents
-	 */
-	public double getValue() {
-		return fitness;
-	}
+    /**
+     * Returns the <code>double</code> value of this fitness.
+     *
+     * @return the explicit fitness value this instance represents
+     */
+    public double getValue() {
+        return fitness;
+    }
 
-	/**
-	 * Compares the quality of this fitness to the specified instance for order.
-	 * Returns a negative integer, zero, or a positive integer as this instance
-	 * represents the quality of an individual that is less fit, equally fit, or
-	 * more fit than the specified object. The given <code>Fitness</code> object
-	 * must be an instance of <code>DoubleFitness</code>.
-	 * 
-	 * @param o an instance of <code>DoubleFitness</code> to compare against
-	 *        this object for order
-	 * @return a negative integer, zero, or a positive integer as this object is
-	 *         less fit than, equally fit as, or fitter than the specified
-	 *         object.
-	 */
-	@Override
-	public int compareTo(Fitness o) {
-		if (this.getClass().isAssignableFrom(o.getClass())) {
-			return comparator().compare(fitness, ((DoubleFitness) o).fitness);
-		} else {
-			throw new IllegalArgumentException("Expected " + this.getClass() + ", found " + o.getClass());
-		}
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof DoubleFitness) {
-			DoubleFitness fitnessObj = (DoubleFitness) obj;
-			
-			return fitnessObj.fitness == this.fitness;
-		}
-		
-		return false;
-	}
+    /**
+     * Compares the quality of this fitness to the specified instance for order.
+     * Returns a negative integer, zero, or a positive integer as this instance
+     * represents the quality of an individual that is less fit, equally fit, or
+     * more fit than the specified object. The given <code>Fitness</code> object
+     * must be an instance of <code>DoubleFitness</code>.
+     *
+     * @param o an instance of <code>DoubleFitness</code> to compare against
+     * this object for order
+     * @return a negative integer, zero, or a positive integer as this object is
+     * less fit than, equally fit as, or fitter than the specified object.
+     */
+    @Override
+    public int compareTo(Fitness o) {
+        if (this.getClass().isAssignableFrom(o.getClass())) {
+            return comparator().compare(fitness, ((DoubleFitness) o).fitness);
+        } else {
+            throw new IllegalArgumentException("Expected " + this.getClass() + ", found " + o.getClass());
+        }
+    }
 
-	@Override
-	public DoubleFitness clone() {
-		try {
-			return (DoubleFitness) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError();
-		}
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DoubleFitness) {
+            DoubleFitness fitnessObj = (DoubleFitness) obj;
 
-	/**
-	 * Returns a String representation of this fitness' <code>double</code>
-	 * value.
-	 * 
-	 * @return a String representation of this fitness object
-	 */
-	@Override
-	public String toString() {
-		return Double.toString(fitness);
-	}
+            return fitnessObj.fitness == this.fitness;
+        }
 
-	/**
-	 * Returns a <code>Comparator</code> that provides the ordering of
-	 * fitness values.
-	 * 
-	 * @return a <code>Comparator</code> for ordering fitness values
-	 */
-	public abstract Comparator<Double> comparator();
+        return false;
+    }
 
-	/**
-	 * A <code>Fitness</code> score with a <code>double</code> value and a
-	 * maximising natural ordering.
-	 */
-	public static class Maximise extends DoubleFitness {
+    @Override
+    public DoubleFitness clone() {
+        try {
+            return (DoubleFitness) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
+        }
+    }
 
-		/**
-		 * Constructs a <code>DoubleFitness</code> with a maximising ordering.
-		 * 
-		 * @param fitness {@inheritDoc}
-		 */
-		public Maximise(double fitness) {
-			super(fitness);
-		}
+    /**
+     * Returns a String representation of this fitness' <code>double</code>
+     * value.
+     *
+     * @return a String representation of this fitness object
+     */
+    @Override
+    public String toString() {
+        return Double.toString(fitness);
+    }
 
-		/**
-		 * Returns a <code>Comparator</code> that provides a maximising ordering
-		 * for <code>double</code> values.
-		 * 
-		 * @return a <code>Comparator</code> for ordering double fitness values
-		 *         with a maximising order.
-		 */
-		@Override
-		public Comparator<Double> comparator() {
-			return MAXIMISE;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			return (obj instanceof Maximise) && super.equals(obj);
-		}
-	}
+    /**
+     * Returns a <code>Comparator</code> that provides the ordering of fitness
+     * values.
+     *
+     * @return a <code>Comparator</code> for ordering fitness values
+     */
+    public abstract Comparator<Double> comparator();
 
-	/**
-	 * A <code>Fitness</code> score with a <code>double</code> value and a
-	 * minimising natural ordering.
-	 */
-	public static class Minimise extends DoubleFitness {
+    /**
+     * A <code>Fitness</code> score with a <code>double</code> value and a
+     * maximising natural ordering.
+     */
+    public static class Maximise extends DoubleFitness {
 
-		/**
-		 * Constructs a <code>DoubleFitness</code> with a minimising ordering.
-		 * 
-		 * @param fitness {@inheritDoc}
-		 */
-		public Minimise(double fitness) {
-			super(fitness);
-		}
+        /**
+         * Constructs a <code>DoubleFitness</code> with a maximising ordering.
+         *
+         * @param fitness {@inheritDoc}
+         */
+        public Maximise(double fitness) {
+            super(fitness);
+        }
 
-		/**
-		 * Returns a <code>Comparator</code> that provides a minimising ordering
-		 * for <code>double</code> values.
-		 * 
-		 * @return a <code>Comparator</code> for ordering double fitness values
-		 *         with a minimising order.
-		 */
-		@Override
-		public Comparator<Double> comparator() {
-			return MINIMISE;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			return (obj instanceof Minimise) && super.equals(obj);
-		}
-	}
+        /**
+         * Returns a <code>Comparator</code> that provides a maximising ordering
+         * for <code>double</code> values.
+         *
+         * @return a <code>Comparator</code> for ordering double fitness values
+         * with a maximising order.
+         */
+        @Override
+        public Comparator<Double> comparator() {
+            return MAXIMISE;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return (obj instanceof Maximise) && super.equals(obj);
+        }
+    }
+
+    /**
+     * A <code>Fitness</code> score with a <code>double</code> value and a
+     * minimising natural ordering.
+     */
+    public static class Minimise extends DoubleFitness {
+
+        /**
+         * Constructs a <code>DoubleFitness</code> with a minimising ordering.
+         *
+         * @param fitness {@inheritDoc}
+         */
+        public Minimise(double fitness) {
+            super(fitness);
+        }
+
+        /**
+         * Returns a <code>Comparator</code> that provides a minimising ordering
+         * for <code>double</code> values.
+         *
+         * @return a <code>Comparator</code> for ordering double fitness values
+         * with a minimising order.
+         */
+        @Override
+        public Comparator<Double> comparator() {
+            return MINIMISE;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return (obj instanceof Minimise) && super.equals(obj);
+        }
+    }
 
 }
