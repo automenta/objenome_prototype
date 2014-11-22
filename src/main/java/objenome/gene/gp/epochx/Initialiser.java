@@ -50,11 +50,12 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
 	 */
 	@Override
 	public Population process(Population population) {
+            InitialisationMethod handler = getHandler(population.getConfig());
 		if (handler == null) {
 			throw new IllegalStateException("The initialisation method has not been set.");
 		}
 
-		return handler.createPopulation();
+		return handler.createPopulation(population.getConfig());
 	}
 
 }

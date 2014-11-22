@@ -43,7 +43,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
 	/**
 	 * The proxied object.
 	 */
-	protected T handler;
+	//protected T handler;
 
 	/**
 	 * Constructs a <code>ProxyComponent</code>.
@@ -70,13 +70,12 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
 		}
 	}
 
-	/**
-	 * Sets up this proxy with the appropriate configuration settings. This
-	 * method is called whenever a <code>ConfigEvent</code> occurs for a
-	 * change in the parameter specified by the <code>key</code> object.
-	 */
 	protected void setup() {
-		handler = Config.getInstance().get(key);
+		
 	}
+        
+        public T getHandler(Config config) {
+            return config.get(key);
+        }
 
 }

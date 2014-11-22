@@ -242,7 +242,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double probability() {
+	public double probability(Config config) {
 		return probability;
 	}
 

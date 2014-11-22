@@ -58,8 +58,8 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
 	 *         reached; <code>false</code> otherwise.
 	 */
 	@Override
-	public boolean terminate() {
-		return generation >= Config.getInstance().get(MAXIMUM_GENERATIONS);
+	public boolean terminate(Config config) {
+		return generation >= config.get(MAXIMUM_GENERATIONS);
 	}
 
 	/**

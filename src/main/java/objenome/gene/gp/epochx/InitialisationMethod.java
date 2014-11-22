@@ -48,6 +48,6 @@ public interface InitialisationMethod {
 	 * 
 	 * @return a population of new individuals.
 	 */
-	public Population createPopulation();
+	public Population createPopulation(Config config);
 
 }

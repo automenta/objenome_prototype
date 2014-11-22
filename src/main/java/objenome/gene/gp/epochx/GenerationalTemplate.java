@@ -44,12 +44,12 @@ public class GenerationalTemplate extends Template {
 	 * {@link GenerationalStrategy}.
 	 */
 	@Override
-	protected void fill(Map<ConfigKey<?>, Object> template) {
+	protected void apply(Map<ConfigKey<?>, Object> template) {
 		ArrayList<Component> components = new ArrayList<Component>();
 		components.add(new Initialiser());
 		components.add(new FitnessEvaluator());
 		components.add(new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator()));
-		template.put(Evolver.COMPONENTS, components);
+		template.put(EvolutionGenerator.COMPONENTS, components);
 	}
 
 }

@@ -50,8 +50,8 @@ public class Reproduction extends AbstractOperator {
 	}
 
 	@Override
-	public double probability() {
-		return Config.getInstance().get(PROBABILITY, DEFAULT_PROBABILITY);
+	public double probability(Config config) {
+		return config.get(PROBABILITY, DEFAULT_PROBABILITY);
 	}
 
 }

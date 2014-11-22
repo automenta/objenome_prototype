@@ -212,7 +212,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double probability() {
+	public double probability(Config config) {
 		return probability;
 	}
 

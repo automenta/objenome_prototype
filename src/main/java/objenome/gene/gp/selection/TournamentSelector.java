@@ -22,7 +22,6 @@
 
 package objenome.gene.gp.selection;
 
-import objenome.gene.gp.epochx.Config;
 import objenome.gene.gp.epochx.Config.ConfigKey;
 import objenome.gene.gp.epochx.Individual;
 import objenome.gene.gp.epochx.IndividualSelector;
@@ -63,7 +62,7 @@ public class TournamentSelector implements IndividualSelector {
 	@Override
 	public void setup(Population population) {
 		randomSelector.setup(population);
-		size = Config.getInstance().get(TOURNAMENT_SIZE);
+		size = population.getConfig().get(TOURNAMENT_SIZE);
 	}
 
 	/**

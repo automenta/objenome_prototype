@@ -306,7 +306,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double probability() {
+	public double probability(Config config) {
 		return probability;
 	}
 

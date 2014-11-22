@@ -61,7 +61,7 @@ public class TerminationFitness implements TerminationCriteria, Listener<EndGene
 	 *         greater than the threshold fitness; <code>false</code> otherwise.
 	 */
 	@Override
-	public boolean terminate() {
+	public boolean terminate(Config config) {
 		return fittest != null && fittest.compareTo(threshold) >= 0;
 	}
 

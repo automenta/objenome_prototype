@@ -24,15 +24,8 @@ package objenome.gene.gp.epochx;
 
 import java.util.ArrayList;
 
-import objenome.gene.gp.epochx.Config.ConfigKey;
-import objenome.gene.gp.epochx.event.EventManager;
-import objenome.gene.gp.epochx.event.RunEvent.EndRun;
-import objenome.gene.gp.epochx.event.RunEvent.StartRun;
-
 /**
- * The <code>Evolver</code> class is responsible for performing an evolutionary
- * simulation. A typical evolutionary simulation consists of three
- * {@link Component}s that are executed in sequence:
+ * Evolutionary simulation
  * <ol>
  * <li>{@link Initialiser}
  * <li>{@link FitnessEvaluator}
@@ -40,9 +33,9 @@ import objenome.gene.gp.epochx.event.RunEvent.StartRun;
  * </ol>
  * 
  * The specific list of components used is obtained from the {@link Config},
- * using the appropriate <code>ConfigKey</code> {@link #COMPONENTS}.
+ * using the appropriate <code>Class</code> {@link #COMPONENTS}.
  */
-public class Evolver {
+public class EvolutionGenerator extends Config {
 
 	/**
 	 * The key for setting and retrieving the list of components.
@@ -52,7 +45,8 @@ public class Evolver {
 	/**
 	 * Constructs an <code>Evolver</code>.
 	 */
-	public Evolver() {
+	public EvolutionGenerator() {
+            super();
 	}
 
 	/**
@@ -68,30 +62,27 @@ public class Evolver {
 	 */
 	public Population run() {
 		Pipeline pipeline = new Pipeline();
-		setupPipeline(pipeline);
+                
+                pipeline.add(new Initialiser());
+		pipeline.add(new FitnessEvaluator());
+		pipeline.add(new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator()));
 
-		EventManager.getInstance().fire(new StartRun(0));
+                
+                /* Initialises the supplied <code>Pipeline</code> with the components that
+                * an evolutionary run is composed of. The specific list of components used
+                * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
+		for (Component component: get(COMPONENTS)) {
+			pipeline.add(component);
+		}
 
-		Population population = pipeline.process(new Population());
+		//EventManager.getInstance().fire(new StartRun(0));
 
-		EventManager.getInstance().fire(new EndRun(0, population));
+		Population population = pipeline.process(new Population(this));
+
+		//EventManager.getInstance().fire(new EndRun(0, population));
 
 		return population;
 	}
 
-	/**
-	 * Initialises the supplied <code>Pipeline</code> with the components that
-	 * an evolutionary run is composed of. The specific list of components used
-	 * is obtained from the {@link Config}, using the appropriate <code>ConfigKey</code>
-	 * {@link #COMPONENTS}.
-	 * 
-	 * @param pipeline the <code>Pipeline</code> that should be initialised with
-	 *        a sequence of components that comprise an evolutionary run
-	 */
-	protected void setupPipeline(Pipeline pipeline) {
-		for (Component component: Config.getInstance().get(COMPONENTS)) {
-			pipeline.add(component);
-		}
-	}
 
 }

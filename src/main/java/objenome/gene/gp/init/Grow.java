@@ -71,6 +71,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 
 	// Lookup table of the return types valid at each depth level
 	private Class<?>[][] dataTypesTable;
+    private final boolean autoConfig;
 
 	/**
 	 * Constructs a <code>GrowInitialisation</code> with control parameters 
@@ -92,13 +93,9 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 	public Grow(boolean autoConfig) {
 		// Default config values
 		allowDuplicates = true;
+                this.autoConfig = autoConfig;
 		
-		setup();
-		updateSyntax();
 		
-		if (autoConfig) {
-			EventManager.getInstance().add(ConfigEvent.class, this);
-		}
 	}
 
 	/**
@@ -115,20 +112,25 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <code>true</code>)
 	 * </ul>
 	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		populationSize = Config.getInstance().get(SIZE);
-		syntax = Config.getInstance().get(SYNTAX);
-		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
+	protected void setup(Config config) {
+		random = config.get(RANDOM_SEQUENCE);
+		populationSize = config.get(SIZE);
+		syntax = config.get(SYNTAX);
+		returnType = config.get(RETURN_TYPE);
+		allowDuplicates = config.get(ALLOW_DUPLICATES, allowDuplicates);
 		
-		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
-		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
+		Integer maxDepth = config.get(MAXIMUM_DEPTH);
+		Integer maxInitialDepth = config.get(MAXIMUM_INITIAL_DEPTH);
 		
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			this.maxDepth = maxInitialDepth;
 		} else {
 			this.maxDepth = (maxDepth == null) ? -1 : maxDepth;
+		}
+		updateSyntax();
+		
+		if (autoConfig) {
+			EventManager.getInstance().add(ConfigEvent.class, this);
 		}
 	}
 
@@ -163,7 +165,8 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
-			setup();
+			//setup();
+                    throw new UnsupportedOperationException("Unimplemented yet");
 		}
 
 		// These will be expensive so only do them when we really have to
@@ -190,10 +193,10 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 	 * @return a population of <code>STGPIndividual</code> objects
 	 */
 	@Override
-	public Population createPopulation() {
+	public Population createPopulation(Config config) {
 		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation());
 		
-		Population population = new Population();
+		Population population = new Population(config);
 		
 		for (int i = 0; i < populationSize; i++) {
 			STGPIndividual individual;

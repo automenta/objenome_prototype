@@ -93,8 +93,8 @@ public class STGPQuarticRegression extends GenerationalTemplate {
 	 * @param template a map to be filled with the template config
 	 */
 	@Override
-	protected void fill(Map<ConfigKey<?>, Object> template) {
-		super.fill(template);
+	protected void apply(Map<ConfigKey<?>, Object> template) {
+		super.apply(template);
 		
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();

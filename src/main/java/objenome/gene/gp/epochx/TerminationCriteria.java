@@ -40,6 +40,6 @@ public interface TerminationCriteria {
 	 * @return <code>true</code> if the current evolutionary run should 
 	 * terminate or <code>false</code> if it should continue.
 	 */
-	public boolean terminate();
+	public boolean terminate(Config config);
 
 }

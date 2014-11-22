@@ -262,7 +262,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double probability() {
+	public double probability(Config config) {
 		return probability;
 	}
 

@@ -45,7 +45,7 @@ public class Config {
 	/**
 	 * The singleton instance.
 	 */
-	private static final Config singleton = new Config();
+	//private static final Config singleton = new Config();
 
 	/**
 	 * The key -&gt; value mapping.
@@ -56,17 +56,9 @@ public class Config {
 	 * No instance are allowed, appart from the singleton.
 	 * 
 	 */
-	private Config() {
+	public Config() {
 	}
 
-	/**
-	 * Returns the singleton <code>Config</code> instance.
-	 * 
-	 * @return the singleton <code>Config</code> instance
-	 */
-	public static Config getInstance() {
-		return singleton;
-	}
 
 	/**
 	 * Sets the value of the specified configuration key. If the given key
@@ -123,16 +115,7 @@ public class Config {
 
 		return value;
 	}
-	
-	/**
-	 * This method was originally designed to initialize the default values. The preferred
-	 * method is to specify a {@link Template} object using the {@link #set(ConfigKey, Object)}.
-	 * Calls to this method will initialize the configuration with the {@link GenerationalTemplate}. 
-	 */
-	@Deprecated
-	public void defaults() {
-		set(Template.TEMPLATE, new GenerationalTemplate());
-	}
+
 
 	/**
 	 * Removes all configuration parameter mapping. The configuration will be
@@ -171,7 +154,7 @@ public class Config {
 		 * Constructs a new <code>Template</code>.
 		 */
 		public Template() {
-			fill(template);
+			apply(template);
 		}
 
 		/**
@@ -179,7 +162,7 @@ public class Config {
 		 * 
 		 * @param template the default configuration parameters mapping.
 		 */
-		protected abstract void fill(Map<ConfigKey<?>, Object> template);
+		protected abstract void apply(Map<ConfigKey<?>, Object> template);
 
 		/**
 		 * Retrieves the value of the configuration parameter associated with the

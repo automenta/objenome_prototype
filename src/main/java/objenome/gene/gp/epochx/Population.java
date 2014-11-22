@@ -19,7 +19,6 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.epochx;
 
 import java.util.ArrayList;
@@ -35,140 +34,145 @@ import objenome.gene.gp.epochx.Config.ConfigKey;
 public class Population implements Iterable<Individual>, Cloneable {
 
 	// TODO: make it serializable
+    /**
+     * The key for setting and retrieving the population size configuration
+     * parameter.
+     */
+    public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
 
-	/**
-	 * The key for setting and retrieving the population size configuration
-	 * parameter.
-	 */
-	public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
+    /**
+     * The list of individuals of this propulation.
+     */
+    private ArrayList<Individual> individuals;
+    private final Config config;
 
-	/**
-	 * The list of individuals of this propulation.
-	 */
-	private ArrayList<Individual> individuals;
+    /**
+     * Constructs an empty <code>Population</code>.
+     */
+    public Population(Config config) {
+        this.config = config;
+        individuals = new ArrayList<Individual>(config.get(SIZE));
+    }
 
-	/**
-	 * Constructs an empty <code>Population</code>.
-	 */
-	public Population() {
-		individuals = new ArrayList<Individual>(Config.getInstance().get(SIZE));
-	}
+    public Config getConfig() {
+        return config;
+    }
 
-	/**
-	 * Returns the number of individuals within this population.
-	 * 
-	 * @return the number of individuals in this population
-	 */
-	public int size() {
-		return individuals.size();
-	}
+    /**
+     * Returns the number of individuals within this population.
+     *
+     * @return the number of individuals in this population
+     */
+    public int size() {
+        return individuals.size();
+    }
 
-	/**
-	 * Appends the specified individual to the end of this population.
-	 * 
-	 * @param individual the individual to add to this population
-	 */
-	public void add(Individual individual) {
-		individuals.add(individual);
-	}
+    /**
+     * Appends the specified individual to the end of this population.
+     *
+     * @param individual the individual to add to this population
+     */
+    public void add(Individual individual) {
+        individuals.add(individual);
+    }
 
-	/**
-	 * Returns the individual at the specified index in this population.
-	 * 
-	 * @param index the index of the individual to be returned
-	 * @return the individual at the specified index position
-	 * @throws IndexOutOfBoundsException if the index is out of range
+    /**
+     * Returns the individual at the specified index in this population.
+     *
+     * @param index the index of the individual to be returned
+     * @return the individual at the specified index position
+     * @throws IndexOutOfBoundsException if the index is out of range
 	 *         <code>(index < 0 || index > size())</code>
-	 */
-	public Individual get(int index) {
-		return individuals.get(index);
-	}
+     */
+    public Individual get(int index) {
+        return individuals.get(index);
+    }
 
-	/**
-	 * Returns the individual in this population with the best fitness. If
-	 * multiple individuals have equal fitnesses then the individual with the
-	 * lowest index will be returned.
-	 * 
-	 * @return an <code>Individual</code> with the best fitness in this
-	 *         population.
-	 */
-	public Individual fittest() {
-		Individual fittest = null;
+    /**
+     * Returns the individual in this population with the best fitness. If
+     * multiple individuals have equal fitnesses then the individual with the
+     * lowest index will be returned.
+     *
+     * @return an <code>Individual</code> with the best fitness in this
+     * population.
+     */
+    public Individual fittest() {
+        Individual fittest = null;
 
-		for (Individual individual: individuals) {
-			if ((fittest == null) || (individual.compareTo(fittest) > 0)) {
-				fittest = individual;
-			}
-		}
+        for (Individual individual : individuals) {
+            if ((fittest == null) || (individual.compareTo(fittest) > 0)) {
+                fittest = individual;
+            }
+        }
 
-		return fittest;
-	}
+        return fittest;
+    }
 
-	/**
-	 * Returns the group of best individuals of the population.
-	 * 
-	 * @param size the number of individuals of the group (elite).
-	 * 
-	 * @return the group of best individuals of the population.
-	 */
-	public Individual[] elites(int size) {
-		Population copy = this.clone();
-		copy.sort();
-		
-		Individual[] fittest = new Individual[size];
+    /**
+     * Returns the group of best individuals of the population.
+     *
+     * @param size the number of individuals of the group (elite).
+     *
+     * @return the group of best individuals of the population.
+     */
+    public Individual[] elites(int size) {
+        Population copy = this.clone();
+        copy.sort();
 
-		for (int i = 0; i < size; i++) {
-			fittest[i] = copy.get(i);
-		}
+        Individual[] fittest = new Individual[size];
 
-		return fittest;
-	}
-	
-	/**
-	 * Sorts this population according to the natural ordering provided by its
-	 * individuals' fitness from best to worst.
-	 */
-	public void sort() {
-		Collections.sort(individuals, new Comparator<Individual>() {
+        for (int i = 0; i < size; i++) {
+            fittest[i] = copy.get(i);
+        }
 
-			@Override
-			public int compare(Individual o1, Individual o2) {
-				return o2.compareTo(o1);
-			}
-		});
-	}
+        return fittest;
+    }
 
-	/**
-	 * Returns an iterator over the individuals in this population.
-	 * 
-	 * @return an iterator over the individuals in this population.
-	 */
-	@Override
-	public Iterator<Individual> iterator() {
-		return individuals.iterator();
-	}
-	
-	/**
-	 * Returns true if this population contains the specified individual.
-	 * 
-	 * @return true if this population contains the individual and false 
-	 * otherwise
-	 */
-	public boolean contains(Individual individual) {
-		return individuals.contains(individual);
-	}
-	
-	@Override
-	public Population clone() {
-		try {
-			Population clone = (Population) super.clone();
-			
-			clone.individuals = new ArrayList<Individual>(individuals);
-			
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			// This shouldn't happen, since we are Cloneable.
-		    throw new InternalError();
-		}
-	}
+    /**
+     * Sorts this population according to the natural ordering provided by its
+     * individuals' fitness from best to worst.
+     */
+    public void sort() {
+        Collections.sort(individuals, new Comparator<Individual>() {
+
+            @Override
+            public int compare(Individual o1, Individual o2) {
+                return o2.compareTo(o1);
+            }
+        });
+    }
+
+    /**
+     * Returns an iterator over the individuals in this population.
+     *
+     * @return an iterator over the individuals in this population.
+     */
+    @Override
+    public Iterator<Individual> iterator() {
+        return individuals.iterator();
+    }
+
+    /**
+     * Returns true if this population contains the specified individual.
+     *
+     * @return true if this population contains the individual and false
+     * otherwise
+     */
+    public boolean contains(Individual individual) {
+        return individuals.contains(individual);
+    }
+
+    @Override
+    public Population clone() {
+        try {
+            Population clone = (Population) super.clone();
+
+            clone.individuals = new ArrayList<Individual>(individuals);
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            // This shouldn't happen, since we are Cloneable.
+            throw new InternalError();
+        }
+    }
 }

@@ -73,8 +73,6 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * construction and firing of appropriate <code>ConfigEvents</code>.
 	 */
 	public BranchedBreeder() {
-		setup();
-		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
 
 	/**
@@ -97,15 +95,20 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 */
 	@Override
 	public Population process(Population population) {
-		selector.setup(population);
+                
+		setup(population.getConfig());
+		
+                EventManager.getInstance().add(ConfigEvent.class, this);
 
-		Population newPopulation = new Population();
+                selector.setup(population);
+
+		Population newPopulation = new Population(population.getConfig());
 		int size = population.size();
 
 		double[] probabilities = new double[operators.size()];
 		double cumulative = 0.0;
 		for (int i = 0; i < operators.size(); i++) {
-			cumulative += operators.get(i).probability();
+			cumulative += operators.get(i).probability(null);
 			probabilities[i] = cumulative;
 		}
 
@@ -160,11 +163,11 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * <li><code>BranchedBreeder.ELITISM</code>
 	 * </ul>
 	 */
-	protected void setup() {
-		operators = Config.getInstance().get(OPERATORS);
-		selector = Config.getInstance().get(SELECTOR);
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		elitism = Config.getInstance().get(ELITISM, 0);
+	protected void setup(Config config) {
+		operators = config.get(OPERATORS);
+		selector = config.get(SELECTOR);
+		random = config.get(RANDOM_SEQUENCE);
+		elitism = config.get(ELITISM, 0);
 	}
 
 	/**
@@ -177,7 +180,8 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
-			setup();
+			//setup();
+                    throw new UnsupportedOperationException("Implementable soon");
 		}
 	}
 

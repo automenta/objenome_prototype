@@ -114,8 +114,8 @@ public class STGPMultiplexer6Bit extends GenerationalTemplate {
      * @param template a map to be filled with the template config
      */
     @Override
-    protected void fill(Map<ConfigKey<?>, Object> template) {
-        super.fill(template);
+    protected void apply(Map<ConfigKey<?>, Object> template) {
+        super.apply(template);
 
         int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(BITS);
 

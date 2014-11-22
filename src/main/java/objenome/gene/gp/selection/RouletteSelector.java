@@ -104,7 +104,7 @@ public class RouletteSelector extends AbstractSelector {
 	 */
 	@Override
 	public Individual select() {
-		double random = Config.getInstance().get(RANDOM_SEQUENCE).nextDouble();
+		double random = population.getConfig().get(RANDOM_SEQUENCE).nextDouble();
 
 		for (int i = 0; i < roulette.length; i++) {
 			if (random < roulette[i]) {

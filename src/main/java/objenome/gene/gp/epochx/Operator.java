@@ -55,6 +55,6 @@ public interface Operator {
 	 * 
 	 * @return the probability of the operator.
 	 */
-	public double probability();
+	public double probability(Config config);
 
 }

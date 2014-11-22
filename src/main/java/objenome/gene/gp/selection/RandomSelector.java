@@ -40,7 +40,7 @@ public class RandomSelector extends AbstractSelector {
 	 */
 	@Override
 	public Individual select() {
-		int index = Config.getInstance().get(RANDOM_SEQUENCE).nextInt(population.size());
+		int index = population.getConfig().get(RANDOM_SEQUENCE).nextInt(population.size());
 		return population.get(index);
 	}
 
