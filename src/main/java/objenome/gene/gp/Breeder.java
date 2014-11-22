@@ -23,7 +23,7 @@ package objenome.gene.gp;
 
 import java.util.List;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * A <code>Breeder</code> is a component that is responsible for applying

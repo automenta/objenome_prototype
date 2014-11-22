@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.op.Node;
 import org.apache.commons.lang3.ObjectUtils;
 

@@ -21,14 +21,14 @@
  */
 package objenome.gene.gp.event;
 
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * An event which indicates that the configuration has changed. The event has
  * the <code>ConfigKey</code> object that has changed.
  *
- * @see Config
+ * @see GPContainer
  */
 public class ConfigEvent implements Event {
 
@@ -36,14 +36,14 @@ public class ConfigEvent implements Event {
      * The <code>ConfigKey</code> associated with the event.
      */
     private final ConfigKey<?> key;
-    private final Config config;
+    private final GPContainer config;
 
     /**
      * Constructs a <code>ConfigEvent</code>.
      *
      * @param key the <code>ConfigKey</code> associated with the event.
      */
-    public ConfigEvent(Config config, ConfigKey<?> key) {
+    public ConfigEvent(GPContainer config, ConfigKey<?> key) {
         this.key = key;
         this.config = config;
     }
@@ -76,7 +76,7 @@ public class ConfigEvent implements Event {
         return false;
     }
 
-    public Config getConfig() {
+    public GPContainer getConfig() {
         return config;
     }
 }

@@ -25,13 +25,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * A <code>Population</code> is an ordered collection of {@link Individual}s.
  */
-public class Population implements Iterable<Individual>, Cloneable {
+public class Population<I extends Individual> implements Iterable<I>, Cloneable {
 
     // TODO: make it serializable
     /**
@@ -43,18 +44,18 @@ public class Population implements Iterable<Individual>, Cloneable {
     /**
      * The list of individuals of this propulation.
      */
-    private ArrayList<Individual> individuals;
-    private final Config config;
+    private List<I> individuals;
+    private final GPContainer config;
 
     /**
      * Constructs an empty <code>Population</code>.
      */
-    public Population(Config config) {
+    public Population(GPContainer config) {
         this.config = config;
-        individuals = new ArrayList<Individual>(config.get(SIZE));
+        individuals = new ArrayList<I>(config.get(SIZE));
     }
 
-    public Config getConfig() {
+    public GPContainer getConfig() {
         return config;
     }
 
@@ -72,7 +73,7 @@ public class Population implements Iterable<Individual>, Cloneable {
      *
      * @param individual the individual to add to this population
      */
-    public void add(Individual individual) {
+    public void add(I individual) {
         individuals.add(individual);
     }
 
@@ -84,7 +85,7 @@ public class Population implements Iterable<Individual>, Cloneable {
      * @throws IndexOutOfBoundsException if the index is out of range
 	 *         <code>(index < 0 || index > size())</code>
      */
-    public Individual get(int index) {
+    public I get(int index) {
         return individuals.get(index);
     }
 
@@ -96,10 +97,10 @@ public class Population implements Iterable<Individual>, Cloneable {
      * @return an <code>Individual</code> with the best fitness in this
      * population.
      */
-    public Individual fittest() {
-        Individual fittest = null;
+    public I fittest() {
+        I fittest = null;
 
-        for (Individual individual : individuals) {
+        for (I individual : individuals) {
             if ((fittest == null) || (individual.compareTo(fittest) > 0)) {
                 fittest = individual;
             }
@@ -148,7 +149,7 @@ public class Population implements Iterable<Individual>, Cloneable {
      * @return an iterator over the individuals in this population.
      */
     @Override
-    public Iterator<Individual> iterator() {
+    public Iterator<I> iterator() {
         return individuals.iterator();
     }
 
@@ -158,7 +159,7 @@ public class Population implements Iterable<Individual>, Cloneable {
      * @return true if this population contains the individual and false
      * otherwise
      */
-    public boolean contains(Individual individual) {
+    public boolean contains(I individual) {
         return individuals.contains(individual);
     }
 
@@ -167,7 +168,7 @@ public class Population implements Iterable<Individual>, Cloneable {
         try {
             Population clone = (Population) super.clone();
 
-            clone.individuals = new ArrayList<Individual>(individuals);
+            clone.individuals = new ArrayList<I>(individuals);
 
             return clone;
         } catch (CloneNotSupportedException e) {

@@ -33,7 +33,7 @@ public abstract class AbstractFitnessFunction implements FitnessFunction {
      */
     @Override
     public void evaluate(Population population) {
-        for (Individual individual : population) {
+        for (Individual individual : (Iterable<Individual>)population) {
             Fitness fitness = evaluate(population, individual);
             assignFitness(fitness, individual);
         }

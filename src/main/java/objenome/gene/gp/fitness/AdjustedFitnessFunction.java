@@ -22,11 +22,11 @@
 package objenome.gene.gp.fitness;
 
 import objenome.gene.gp.AbstractFitnessFunction;
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigAware;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.GPContainerAware;
 import objenome.gene.gp.Fitness;
 import objenome.gene.gp.Individual;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.Population;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
@@ -57,7 +57,7 @@ import objenome.gene.gp.event.Listener;
  *
  * @since 2.0
  */
-public class AdjustedFitnessFunction extends AbstractFitnessFunction implements Listener<ConfigEvent>, ConfigAware {
+public class AdjustedFitnessFunction extends AbstractFitnessFunction implements Listener<ConfigEvent>, GPContainerAware {
 
     /**
      * The key for setting the minimum fitness score possible, used when
@@ -104,7 +104,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * <li>{@link #MINIMUM_FITNESS_SCORE}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }

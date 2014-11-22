@@ -21,6 +21,7 @@
  */
 package objenome.gene.gp;
 
+import objenome.gene.gp.GPContainer.GPContainerAware;
 import objenome.gene.gp.event.GenerationEvent.EndGeneration;
 import objenome.gene.gp.event.Listener;
 
@@ -29,7 +30,7 @@ import objenome.gene.gp.event.Listener;
  * value. Given a threshold fitness value, the run is terminated when the
  * current fitness is equal to or greater than the threshold fitness.
  */
-public class TerminationFitness implements TerminationCriteria, Listener<EndGeneration> {
+public class TerminationFitness implements TerminationCriteria, Listener<EndGeneration>, GPContainerAware {
 
     /**
      * The threshold fitness value.
@@ -46,8 +47,13 @@ public class TerminationFitness implements TerminationCriteria, Listener<EndGene
      *
      * @param threshold the threshold fitness value.
      */
-    public TerminationFitness(Config c, Fitness threshold) {
+    public TerminationFitness(Fitness threshold) {
         this.threshold = threshold;
+    
+    }
+
+    @Override
+    public void setConfig(GPContainer c) {
         c.on(EndGeneration.class, this);
     }
 
@@ -59,7 +65,7 @@ public class TerminationFitness implements TerminationCriteria, Listener<EndGene
      * than the threshold fitness; <code>false</code> otherwise.
      */
     @Override
-    public boolean terminate(Config config) {
+    public boolean terminate(GPContainer config) {
         return fittest != null && fittest.compareTo(threshold) >= 0;
     }
 
@@ -72,5 +78,6 @@ public class TerminationFitness implements TerminationCriteria, Listener<EndGene
     public void onEvent(EndGeneration event) {
         fittest = event.getPopulation().fittest().getFitness();
     }
+
 
 }

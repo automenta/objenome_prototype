@@ -27,14 +27,14 @@ import objenome.gene.gp.event.Listener;
 import objenome.gene.gp.event.OperatorEvent;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.AbstractOperator;
-import objenome.gene.gp.Config;
+import objenome.gene.gp.GPContainer;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.MAXIMUM_DEPTH;
 
 import java.util.*;
 
-import objenome.gene.gp.Config.ConfigKey;
-import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.event.OperatorEvent.EndOperator;
 import objenome.gene.gp.STGPIndividual;
@@ -69,8 +69,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 
     // Configuration settings
     private RandomSequence random;
-    private double terminalProbability;
-    private double probability;
+    private Double terminalProbability;
+    private Double probability;
     private Integer maxDepth;
     private final boolean autoConfig;
 
@@ -109,13 +109,18 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
      * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
+        super.setConfig(config);
+        
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
         random = config.get(RANDOM_SEQUENCE);
         terminalProbability = config.get(TERMINAL_PROBABILITY, terminalProbability);
         probability = config.get(PROBABILITY);
+
+        System.out.println("subtree prob = " + probability);
+        
         maxDepth = config.get(MAXIMUM_DEPTH);
     }
 
@@ -128,7 +133,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, TERMINAL_PROBABILITY, PROBABILITY, MAXIMUM_DEPTH)) {
+        if (event.isKindOf(STProblem.PROBLEM, RANDOM_SEQUENCE, TERMINAL_PROBABILITY, PROBABILITY, MAXIMUM_DEPTH)) {
             setConfig(event.getConfig());
 
         }

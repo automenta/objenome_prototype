@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * This class implements the reproduction (copy) operator.

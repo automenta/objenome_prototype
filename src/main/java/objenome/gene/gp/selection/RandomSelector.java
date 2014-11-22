@@ -23,7 +23,7 @@ package objenome.gene.gp.selection;
 
 import objenome.gene.gp.AbstractSelector;
 import objenome.gene.gp.Individual;
-import objenome.gene.gp.Config;
+import objenome.gene.gp.GPContainer;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 /**

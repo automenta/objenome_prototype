@@ -21,16 +21,16 @@
  */
 package objenome.gene.gp.fitness;
 
-import static objenome.gene.gp.Config.Template.TEMPLATE;
+import static objenome.gene.gp.STProblem.PROBLEM;
 
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
 import objenome.gene.gp.STGPIndividual;
-import objenome.gene.gp.Config.ConfigAware;
+import objenome.gene.gp.GPContainer.GPContainerAware;
 import objenome.gene.gp.Population;
 
 /**
@@ -51,7 +51,7 @@ import objenome.gene.gp.Population;
  *
  * @since 2.0
  */
-public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEvent>, ConfigAware {
+public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEvent>, GPContainerAware {
 
     /**
      * The key for setting the expected output values from the programs being
@@ -104,7 +104,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
      * <li>{@link #POINT_ERROR}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
@@ -124,7 +124,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(TEMPLATE, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
+        if (event.isKindOf(PROBLEM, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
             setConfig(event.getConfig());
         }
     }

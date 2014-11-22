@@ -21,8 +21,9 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
-import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.GPContainer.GPContainerAware;
+import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
 
@@ -31,13 +32,13 @@ import objenome.gene.gp.event.Listener;
  * them as {@link Component}s. The wrapped object is specified by a
  * <code>ConfigKey</code> and changes in the configuration are monitored.
  */
-public abstract class ProxyComponent<T> implements Component, Listener<ConfigEvent> {
+public abstract class ProxyComponent<T> implements Component, Listener<ConfigEvent>, GPContainerAware {
 
     /**
      * The <code>ConfigKey</code> of the proxied object.
      */
     protected ConfigKey<T> key;
-    private final Config config;
+    private GPContainer config;
 
     /**
      * The proxied object.
@@ -48,12 +49,18 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
      *
      * @param key the <code>ConfigKey</code> of the proxied object.
      */
-    public ProxyComponent(Config config, ConfigKey<T> key) {
+    public ProxyComponent(ConfigKey<T> key) {
         this.key = key;
+    }
+
+    @Override
+    public void setConfig(GPContainer config) {
         this.config = config;
         setup();
         config.on(ConfigEvent.class, this);
     }
+    
+    
 
     /**
      * Receives configuration events and refresh its configuration if the
@@ -64,7 +71,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(Template.TEMPLATE, key)) {
+        if (event.isKindOf(STProblem.PROBLEM, key)) {
             setup();
         }
     }
@@ -77,4 +84,9 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
         return config.get(key);
     }
 
+    public GPContainer getConfig() {
+        return config;
+    }
+
+    
 }

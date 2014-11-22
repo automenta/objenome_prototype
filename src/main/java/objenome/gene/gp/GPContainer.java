@@ -24,7 +24,7 @@ package objenome.gene.gp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import objenome.Container;
 
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Event;
@@ -33,7 +33,7 @@ import objenome.gene.gp.event.Listener;
 import objenome.gene.gp.event.stat.AbstractStat;
 
 /**
- * The <code>Config</code> class provides a centralised store for configuration
+ * Provides a centralised store for configuration
  * parameters. It uses a singleton which is obtainable with the
  * <code>getInstance</code> method. Each parameter is referenced with a
  * {@link ConfigKey} which is used to both set new parameters and retrieve
@@ -45,69 +45,66 @@ import objenome.gene.gp.event.stat.AbstractStat;
  * TODO subclass a Container and store properties with NORMAL, THREAD or
  * SINGLETON scope
  */
-public class Config {
+public class GPContainer extends Container {
 
     public final EventManager events = new EventManager();
 
     /**
      * stats repository, TODO rename
      */
-    public final HashMap<Class<?>, Object> REPOSITORY = new HashMap<Class<?>, Object>();
+    public final HashMap<Class<?>, Object> stat = new HashMap<Class<?>, Object>();
 
     /**
      * The key -&gt; value mapping.
      */
-    public final HashMap<ConfigKey<?>, Object> mapping = new HashMap<ConfigKey<?>, Object>();
+    public final HashMap<ConfigKey<?>, Object> prop = new HashMap<ConfigKey<?>, Object>();
 
     /**
      * No instance are allowed, appart from the singleton.
      *
      */
-    public Config() {
+    public GPContainer() {
+        super();
     }
 
-    public interface ConfigAware {
+    public interface GPContainerAware {
 
-        public void setConfig(Config c);
+        public void setConfig(GPContainer c);
     }
+
+
 
     /**
-     * TODO see if this is actually use()
-     */
-    public <X> X get(Class<? extends X> c) {
-        return (X) REPOSITORY.get(c);
-    }
-
-        /**
      * Removes the specified <code>AbstractStat</code> from the repository.
      *
      * @param type the class of <code>AbstractStat</code> to be removed.
      */
     public <E extends Event> void remove(Class<? extends AbstractStat<E>> type) {
-        if (REPOSITORY.containsKey(type)) {
-            AbstractStat<E> stat = type.cast(REPOSITORY.remove(type));
+        super.remove(type);
+        if (stat.containsKey(type)) {
+            AbstractStat<E> stat = type.cast(this.stat.remove(type));
             off(stat.getEvent(), stat.getListener());
             off(stat.getClearEvent(), stat.getListener());
         }
     }
 
-    
-    public <X extends Object & Event> AbstractStat<? extends X> add(Class<? extends AbstractStat<X>> type) {
+    public <X extends Object & Event> AbstractStat<X> stat(Class<? extends AbstractStat<X>> type) {
 
+        
         // if the repository already contains an instance of the specified stat,
         // we do not create a new one; otherwise, we create a new instance and
         // register its listener in the EventManager
-        if (!REPOSITORY.containsKey(type)) {
+        if (!stat.containsKey(type)) {
             try {
-                AbstractStat<X> stat = (AbstractStat<X>) type.newInstance();
-                REPOSITORY.put(stat.getClass(), stat);
-                on(stat.getEvent(), stat.listener);
-                return stat;
+                AbstractStat<X> s = the(type);
+                this.stat.put(type, s);
+                on(s.getEvent(), s.listener);
+                return s;
             } catch (Exception e) {
                 throw new RuntimeException("Could not create an instance of " + type, e);
             }
         }
-        return (AbstractStat<? extends X>) REPOSITORY.get(type);
+        return the(type);
 
     }
     /**
@@ -115,7 +112,7 @@ public class Config {
      * repository.
      */    
     public <E extends Event> void resetStats() {
-        List<Class<?>> registered = new ArrayList<Class<?>>(REPOSITORY.keySet());
+        List<Class<?>> registered = new ArrayList<Class<?>>(stat.keySet());
 
         for (Class<?> type : registered) {
             remove((Class<? extends AbstractStat<E>>) type);
@@ -133,12 +130,29 @@ public class Config {
      * that a new value is to be set for
      * @param value the new value to set for the specified configuration key
      */
-    public <T> void set(ConfigKey<T> key, T value) {
-        if (value instanceof ConfigAware) {
-            ((ConfigAware) value).setConfig(this);
-        }
-        mapping.put(key, value);
+    public <T> GPContainer set(ConfigKey<T> key, T value) {
+        makeConfigAware(this, value);
+        prop.put(key, value);
         fire(new ConfigEvent(this, key));
+        return this;
+    }
+    
+    public static void makeConfigAware(GPContainer config, Object value) {
+        System.out.println("SET: " + value);
+        if (value instanceof GPContainerAware) {
+            ((GPContainerAware) value).setConfig(config);
+        }
+        if (value instanceof Iterable)  {
+            Iterable ii = (Iterable)value;
+            for (Object i : ii)
+                if (i instanceof GPContainerAware)
+                    ((GPContainerAware)i).setConfig(config);
+        }        
+    }
+    
+    /** convenience method  */
+    public <T> GPContainer with(ConfigKey<T> key, T value) {
+        return set(key, value);
     }
 
     /**
@@ -171,10 +185,10 @@ public class Config {
      */
     @SuppressWarnings("unchecked")
     public <T> T get(ConfigKey<T> key, T defaultValue) {
-        T value = (T) mapping.get(key);
+        T value = (T) prop.get(key);
 
         if (value == null) {
-            Template template = (Template) mapping.get(Template.TEMPLATE);
+            STProblem template = (STProblem) prop.get(STProblem.PROBLEM);
             return (template == null) ? defaultValue : template.get(key, defaultValue);
         }
 
@@ -186,7 +200,7 @@ public class Config {
      * empty this call returns.
      */
     public void reset() {
-        mapping.clear();
+        prop.clear();
     }
 
     public <T extends Event, V extends T> void fire(T event) {
@@ -212,58 +226,4 @@ public class Config {
     public static class ConfigKey<T> {
     }
 
-    /**
-     * The <code>Template</code> class provides a mechanism for setting default
-     * configuration parameter values.
-     */
-    public abstract static class Template implements ConfigAware {
-
-        /**
-         * The key for setting <code>Template</code> parameter.
-         */
-        public final static ConfigKey<Template> TEMPLATE = new ConfigKey<Template>();
-
-        /**
-         * The key -&gt; value mapping.
-         */
-        private final HashMap<ConfigKey<?>, Object> template = new HashMap<ConfigKey<?>, Object>(1);
-        private Config config;
-
-        /**
-         * Constructs a new <code>Template</code>.
-         */
-        public Template() {
-        }
-
-        @Override
-        public void setConfig(Config c) {
-            this.config = c;
-            apply(config, template);
-        }
-
-        /**
-         * Sets the default configuration parameters.
-         *
-         * @param template the default configuration parameters mapping.
-         */
-        protected abstract void apply(Config c, Map<ConfigKey<?>, Object> template);
-
-        /**
-         * Retrieves the value of the configuration parameter associated with
-         * the specified key.
-         *
-         * @param key the <code>ConfigKey</code> for the configuration parameter
-         * to retrieve
-         * @param defaultValue the default value to be returned if the parameter
-         * has not been set
-         * @return the value of the specified configuration parameter, or
-         * <code>null</code> if it has not been set. The object type is defined
-         * by the generic type of the key.
-         */
-        @SuppressWarnings("unchecked")
-        private <T> T get(ConfigKey<T> key, T defaultValue) {
-            T value = (T) template.get(key);
-            return (value == null) ? defaultValue : value;
-        }
-    }
 }

@@ -22,7 +22,7 @@
 package objenome.gene.gp.source;
 
 import objenome.gene.gp.Individual;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * Source generators take a candidate program and produce source code from it.

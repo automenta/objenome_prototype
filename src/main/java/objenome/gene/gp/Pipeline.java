@@ -57,7 +57,7 @@ public class Pipeline implements Component {
      * provided as a parameter.
      */
     @Override
-    public Population process(Population population) {
+    public <I extends Individual> Population<I> process(Population<I> population) {
         for (Component component : pipeline) {
             population = component.process(population);
         }

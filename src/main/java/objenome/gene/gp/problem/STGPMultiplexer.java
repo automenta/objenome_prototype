@@ -19,19 +19,18 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package objenome.gene.gp.benchmark;
+package objenome.gene.gp.problem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import objenome.gene.gp.Breeder;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.EvolutionaryStrategy;
 import objenome.gene.gp.FitnessEvaluator;
 import objenome.gene.gp.GenerationalStrategy;
-import objenome.gene.gp.GenerationalTemplate;
 import objenome.gene.gp.Initialiser;
 import objenome.gene.gp.MaximumGenerations;
 import objenome.gene.gp.Operator;
@@ -43,12 +42,15 @@ import objenome.gene.gp.op.Node;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.op.VariableNode;
 import objenome.gene.gp.op.bool.And;
-import objenome.gene.gp.op.bool.Nor;
+import objenome.gene.gp.op.bool.Not;
 import objenome.gene.gp.op.bool.Or;
+import objenome.gene.gp.op.lang.If;
 import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.random.MersenneTwisterFast;
 import objenome.gene.gp.selection.TournamentSelector;
 import objenome.gene.gp.STGPIndividual;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.fitness.HitsCount;
 import objenome.gene.gp.init.Full;
 import objenome.gene.gp.operator.SubtreeCrossover;
@@ -57,11 +59,21 @@ import objenome.gene.gp.tools.BenchmarkSolutions;
 import objenome.gene.gp.tools.BooleanUtils;
 
 /**
- * This template sets up EpochX to run the majority-3 benchmark with the STGP
- * representation. The majority-3 problem involves evolving a program which
- * receives an array of 3 boolean values. A program that solves the majority-3
- * problem will return true if more than half of the inputs are true, otherwise
- * it should return false.
+ * This template sets up EpochX to run the 6-bit multiplexer benchmark with the
+ * STGP representation. The 6-bit multiplexer problem involves evolving a
+ * program which receives an array of 6 boolean values. The first 2 values are
+ * address bits, which the program should convert into an index for which of the
+ * remaining data registers to return. {a0, a1, d0, d1, d2, d3}.
+ *
+ * <table>
+ * <tr>
+ * <td>a0</td><td>a1</td><td>return value</td>
+ * <td>false</td><td>false</td><td>d0</td>
+ * <td>true</td><td>false</td><td>d1</td>
+ * <td>false</td><td>true</td><td>d2</td>
+ * <td>true</td><td>true</td><td>d3</td>
+ * </tr>
+ * </table>
  *
  * The following configuration is used:
  *
@@ -79,30 +91,40 @@ import objenome.gene.gp.tools.BooleanUtils;
  * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
  * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
  * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>,
- * <code>OrFunction</code>, <code>NorFunction<code>,
- * <code>VariableNode("D0", Boolean)<code>, <code>VariableNode("D1", Boolean)<code>, <code>VariableNode("D2", Boolean)<code>
+ * <code>OrFunction</code>, <code>NotFunction<code>,
+ * <code>IfFunction<code>, <code>VariableNode("A0", Boolean)<code>, <code>VariableNode("A1", Boolean)<code>,
+ * <code>VariableNode("D2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>,
+ * <code>VariableNode("D5", Boolean)<code>
  * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
  * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
- * <li>{@link HitsCount#INPUT_VARIABLES}: <code>D0</code>, <code>D1</code>,
- * <code>D2</code>
+ * <li>{@link HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>,
+ * <code>D2</code>, <code>D3</code>, <code>D4</code>, <code>D5</code>
  * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input
  * combinations]
  * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
  *
  * @since 2.0
  */
-public class STGPMajority3 extends GenerationalTemplate {
+public class STGPMultiplexer extends STProblem {
 
-    private static final int NO_BITS = 3;
+    final int BITS;
 
+    public STGPMultiplexer(int bits) {
+        this.BITS = bits;
+    }
+
+    
     /**
      * Sets up the given template with the benchmark config settings
      *
      * @param template a map to be filled with the template config
      */
     @Override
-    protected void apply(Map<ConfigKey<?>, Object> template) {
-        super.apply(template);
+    protected void apply(GPContainer c, Map<ConfigKey<?>, Object> template) {
+
+        generates();
+                
+        int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(BITS);
 
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
@@ -114,10 +136,12 @@ public class STGPMajority3 extends GenerationalTemplate {
 
         template.put(Breeder.SELECTOR, new TournamentSelector());
         template.put(TournamentSelector.TOURNAMENT_SIZE, 7);
+        
         List<Operator> operators = new ArrayList<Operator>();
         operators.add(new SubtreeCrossover());
         operators.add(new SubtreeMutation());
         template.put(Breeder.OPERATORS, operators);
+        
         template.put(SubtreeCrossover.PROBABILITY, 1.0);
         template.put(SubtreeMutation.PROBABILITY, 0.0);
         template.put(Initialiser.METHOD, new Full());
@@ -129,10 +153,16 @@ public class STGPMajority3 extends GenerationalTemplate {
         List<Node> syntaxList = new ArrayList<Node>();
         syntaxList.add(new And());
         syntaxList.add(new Or());
-        syntaxList.add(new Nor());
+        syntaxList.add(new Not());
+        syntaxList.add(new If());
 
-        Variable[] variables = new Variable[NO_BITS];
-        for (int i = 0; i < NO_BITS; i++) {
+        Variable[] variables = new Variable[BITS];
+
+        for (int i = 0; i < noAddressBits; i++) {
+            variables[i] = new Variable("A" + i, Boolean.class);
+            syntaxList.add(new VariableNode(variables[i]));
+        }
+        for (int i = noAddressBits; i < BITS; i++) {
             variables[i] = new Variable("D" + i, Boolean.class);
             syntaxList.add(new VariableNode(variables[i]));
         }
@@ -143,10 +173,10 @@ public class STGPMajority3 extends GenerationalTemplate {
         template.put(STGPIndividual.RETURN_TYPE, Boolean.class);
 
         // Generate inputs and expected outputs
-        Boolean[][] inputValues = BooleanUtils.generateBoolSequences(NO_BITS);
+        Boolean[][] inputValues = BooleanUtils.generateBoolSequences(BITS);
         Boolean[] expectedOutputs = new Boolean[inputValues.length];
         for (int i = 0; i < inputValues.length; i++) {
-            expectedOutputs[i] = BenchmarkSolutions.majority(inputValues[i]);
+            expectedOutputs[i] = BenchmarkSolutions.multiplexer(inputValues[i], noAddressBits);
         }
 
         // Setup fitness function

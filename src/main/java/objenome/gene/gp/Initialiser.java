@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * <code>Initialiser</code> components are responsible for creating individuals,
@@ -38,8 +38,8 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
     /**
      * Constructs a <code>Initialiser</code>.
      */
-    public Initialiser(Config config) {
-        super(config, METHOD);
+    public Initialiser() {
+        super(METHOD);
     }
 
     /**

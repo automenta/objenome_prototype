@@ -19,14 +19,14 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package objenome.gene.gp.benchmark;
+package objenome.gene.gp.problem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import objenome.gene.gp.Breeder;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.EvolutionaryStrategy;
 import objenome.gene.gp.FitnessEvaluator;
@@ -42,10 +42,9 @@ import objenome.gene.gp.TerminationFitness;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.op.VariableNode;
-import objenome.gene.gp.op.math.Add;
-import objenome.gene.gp.op.math.DivisionProtected;
-import objenome.gene.gp.op.math.Multiply;
-import objenome.gene.gp.op.math.Subtract;
+import objenome.gene.gp.op.bool.And;
+import objenome.gene.gp.op.bool.Nor;
+import objenome.gene.gp.op.bool.Or;
 import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.random.MersenneTwisterFast;
 import objenome.gene.gp.selection.TournamentSelector;
@@ -55,11 +54,14 @@ import objenome.gene.gp.init.Full;
 import objenome.gene.gp.operator.SubtreeCrossover;
 import objenome.gene.gp.operator.SubtreeMutation;
 import objenome.gene.gp.tools.BenchmarkSolutions;
+import objenome.gene.gp.tools.BooleanUtils;
 
 /**
- * This template sets up EpochX to run the quartic regression benchmark with the
- * STGP representation. Quartic regression involves evolving an equivalent
- * function to the formula: x + x^2 + x^3 + x^4
+ * This template sets up EpochX to run the majority-3 benchmark with the STGP
+ * representation. The majority-3 problem involves evolving a program which
+ * receives an array of 3 boolean values. A program that solves the majority-3
+ * problem will return true if more than half of the inputs are true, otherwise
+ * it should return false.
  *
  * The following configuration is used:
  *
@@ -76,20 +78,22 @@ import objenome.gene.gp.tools.BenchmarkSolutions;
  * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
  * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
  * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
- * <li>{@link STGPIndividual#SYNTAX}: <code>AddFunction</code>,
- * <code>SubtractFunction</code>, <code>MultiplyFunction<code>,
- * <code>DivisionProtectedFunction<code>, <code>VariableNode("X", Double)<code>
- * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Double</code>
+ * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>,
+ * <code>OrFunction</code>, <code>NorFunction<code>,
+ * <code>VariableNode("D0", Boolean)<code>, <code>VariableNode("D1", Boolean)<code>, <code>VariableNode("D2", Boolean)<code>
+ * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
  * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
- * <li>{@link HitsCount#POINT_ERROR}: <code>0.01</code>
- * <li>{@link HitsCount#INPUT_VARIABLES}: <code>X</code>
- * <li>{@link HitsCount#INPUT_VALUE_SETS}: [20 random values between -1.0 and
- * +1.0]
+ * <li>{@link HitsCount#INPUT_VARIABLES}: <code>D0</code>, <code>D1</code>,
+ * <code>D2</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input
+ * combinations]
  * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
  *
  * @since 2.0
  */
-public class STGPQuarticRegression extends GenerationalTemplate {
+public class STGPMajority3 extends GenerationalTemplate {
+
+    private static final int NO_BITS = 3;
 
     /**
      * Sets up the given template with the benchmark config settings
@@ -122,32 +126,33 @@ public class STGPQuarticRegression extends GenerationalTemplate {
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
 
         // Setup syntax
-        Variable varX = new Variable("X", Double.class);
-        Node[] syntax = new Node[]{
-            new Add(),
-            new Subtract(),
-            new Multiply(),
-            new DivisionProtected(),
-            new VariableNode(varX)
-        };
+        List<Node> syntaxList = new ArrayList<Node>();
+        syntaxList.add(new And());
+        syntaxList.add(new Or());
+        syntaxList.add(new Nor());
+
+        Variable[] variables = new Variable[NO_BITS];
+        for (int i = 0; i < NO_BITS; i++) {
+            variables[i] = new Variable("D" + i, Boolean.class);
+            syntaxList.add(new VariableNode(variables[i]));
+        }
+
+        Node[] syntax = syntaxList.toArray(new Node[syntaxList.size()]);
+
         template.put(STGPIndividual.SYNTAX, syntax);
-        template.put(STGPIndividual.RETURN_TYPE, Double.class);
+        template.put(STGPIndividual.RETURN_TYPE, Boolean.class);
 
         // Generate inputs and expected outputs
-        int noPoints = 20;
-        Double[][] inputs = new Double[noPoints][1];
-        Double[] expectedOutputs = new Double[noPoints];
-        for (int i = 0; i < noPoints; i++) {
-            // Inputs values between -1.0 and +1.0
-            inputs[i][0] = (randomSequence.nextDouble() * 2) - 1;
-            expectedOutputs[i] = BenchmarkSolutions.quarticRegression(inputs[i][0]);
+        Boolean[][] inputValues = BooleanUtils.generateBoolSequences(NO_BITS);
+        Boolean[] expectedOutputs = new Boolean[inputValues.length];
+        for (int i = 0; i < inputValues.length; i++) {
+            expectedOutputs[i] = BenchmarkSolutions.majority(inputValues[i]);
         }
 
         // Setup fitness function
         template.put(FitnessEvaluator.FUNCTION, new HitsCount());
-        template.put(HitsCount.POINT_ERROR, 0.01);
-        template.put(HitsCount.INPUT_VARIABLES, new Variable[]{varX});
-        template.put(HitsCount.INPUT_VALUE_SETS, inputs);
+        template.put(HitsCount.INPUT_VARIABLES, variables);
+        template.put(HitsCount.INPUT_VALUE_SETS, inputValues);
         template.put(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
     }
 }

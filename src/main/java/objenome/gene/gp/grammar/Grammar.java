@@ -23,7 +23,7 @@ package objenome.gene.gp.grammar;
 
 import java.io.*;
 import java.util.*;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * A grammar object is constructed from a context-free language grammar. In the

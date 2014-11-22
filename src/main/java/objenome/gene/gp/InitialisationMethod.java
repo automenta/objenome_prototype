@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * An instance of <code>Initialiser</code> is responsible for creating the
@@ -47,6 +47,6 @@ public interface InitialisationMethod {
      *
      * @return a population of new individuals.
      */
-    public Population createPopulation(Config config);
+    public Population createPopulation(GPContainer config);
 
 }

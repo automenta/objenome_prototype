@@ -23,7 +23,7 @@ package objenome.gene.gp;
 
 import java.util.List;
 
-import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.EventManager;
 import objenome.gene.gp.event.GenerationEvent.EndGeneration;
@@ -44,7 +44,7 @@ import objenome.gene.gp.event.Listener;
  *  }
  * </pre>
  *
- * The {@link TerminationCriteria} is obtained from the {@link Config}, using
+ * The {@link TerminationCriteria} is obtained from the {@link GPContainer}, using
  * the appropriate <code>ConfigKey</code>. A new population is generated using
  * the pipeline's components, which typically will include a {@link Breeder} and
  * {@link FitnessEvaluator} instances.
@@ -59,7 +59,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
      * The list of termination criteria.
      */
     private List<TerminationCriteria> criteria;
-    private Config config;
+    private GPContainer config;
 
     /**
      * Constructs a <code>GenerationalStrategy</code> with the provided
@@ -121,7 +121,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
 
     /**
      * Looks up the {@link TerminationCriteria} and the {@link FitnessEvaluator}
-     * in the {@link Config}.
+     * in the {@link GPContainer}.
      */
     protected void setup() {
         criteria = config.get(EvolutionaryStrategy.TERMINATION_CRITERIA);
@@ -134,7 +134,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(Template.TEMPLATE, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
+        if (event.isKindOf(STProblem.PROBLEM, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
             setup();
         }
     }

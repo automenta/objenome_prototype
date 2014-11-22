@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 /**
  * Implementations of <code>FitnessEvaluator</code> are components that are
@@ -40,8 +40,8 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
     /**
      * Constructs a <code>FitnessEvaluator</code>.
      */
-    public FitnessEvaluator(Config config) {
-        super(config, FUNCTION);
+    public FitnessEvaluator() {
+        super(FUNCTION);
     }
 
     /**

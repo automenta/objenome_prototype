@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.selection;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.IndividualSelector;
 import objenome.gene.gp.Population;

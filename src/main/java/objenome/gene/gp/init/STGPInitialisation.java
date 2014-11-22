@@ -22,7 +22,7 @@
 package objenome.gene.gp.init;
 
 import objenome.gene.gp.InitialisationMethod;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.STGPIndividual;
 
 /**

@@ -21,10 +21,10 @@
  */
 package objenome.gene.gp.fitness;
 
-import static objenome.gene.gp.Config.Template.TEMPLATE;
+import static objenome.gene.gp.STProblem.PROBLEM;
 
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.event.ConfigEvent;
@@ -111,7 +111,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
      * <li>{@link #EXPECTED_OUTPUTS}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
@@ -130,7 +130,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(TEMPLATE, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS)) {
+        if (event.isKindOf(PROBLEM, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS)) {
             throw new UnsupportedOperationException("Unimplemented yet"); //setup();
         }
     }

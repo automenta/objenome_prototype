@@ -19,14 +19,14 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package objenome.gene.gp.benchmark;
+package objenome.gene.gp.problem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import objenome.gene.gp.Breeder;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.EvolutionaryStrategy;
 import objenome.gene.gp.FitnessEvaluator;
@@ -43,9 +43,9 @@ import objenome.gene.gp.op.Node;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.op.VariableNode;
 import objenome.gene.gp.op.bool.And;
-import objenome.gene.gp.op.bool.Nand;
-import objenome.gene.gp.op.bool.Nor;
+import objenome.gene.gp.op.bool.Not;
 import objenome.gene.gp.op.bool.Or;
+import objenome.gene.gp.op.lang.If;
 import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.random.MersenneTwisterFast;
 import objenome.gene.gp.selection.TournamentSelector;
@@ -58,12 +58,26 @@ import objenome.gene.gp.tools.BenchmarkSolutions;
 import objenome.gene.gp.tools.BooleanUtils;
 
 /**
- * This template sets up EpochX to run the even-5-parity benchmark with the STGP
- * representation. The even-5-parity problem involves evolving a program which
- * receives an array of 5 boolean values. A program that solves the
- * even-n-parity problem will return true in all circumstances where an even
- * number of the inputValues are true (or 1), and return false whenever there is
- * an odd number of true inputValues.
+ * This template sets up EpochX to run the 11-bit multiplexer benchmark with the
+ * STGP representation. The 11-bit multiplexer problem involves evolving a
+ * program which receives an array of 11 boolean values. The first 3 values are
+ * address bits, which the program should convert into an index for which of the
+ * remaining data registers to return. {a0, a1, a2, d0, d1, d2, d3, d4, d5, d6,
+ * d7}.
+ *
+ * <table>
+ * <tr>
+ * <td>a0</td><td>a1</td><td>a2</td><td>return value</td>
+ * <td>false</td><td>false</td><td>false</td><td>d0</td>
+ * <td>true</td><td>false</td><td>false</td><td>d1</td>
+ * <td>false</td><td>true</td><td>false</td><td>d2</td>
+ * <td>true</td><td>true</td><td>false</td><td>d3</td>
+ * <td>false</td><td>false</td><td>true</td><td>d4</td>
+ * <td>true</td><td>false</td><td>true</td><td>d5</td>
+ * <td>false</td><td>true</td><td>true</td><td>d6</td>
+ * <td>true</td><td>true</td><td>true</td><td>d7</td>
+ * </tr>
+ * </table>
  *
  * The following configuration is used:
  *
@@ -81,22 +95,26 @@ import objenome.gene.gp.tools.BooleanUtils;
  * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
  * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
  * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>,
- * <code>OrFunction</code>, <code>NandFunction<code>,
- * <code>NorFunction<code>, <code>VariableNode("D0", Boolean)<code>, <code>VariableNode("D1", Boolean)<code>,
- * <code>VariableNode("D2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>
+ * <code>OrFunction</code>, <code>NotFunction<code>,
+ * <code>IfFunction<code>, <code>VariableNode("A0", Boolean)<code>, <code>VariableNode("A1", Boolean)<code>,
+ * <code>VariableNode("A2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>,
+ * <code>VariableNode("D5", Boolean)<code>, <code>VariableNode("D6", Boolean)<code>, <code>VariableNode("D7", Boolean)<code>,
+ * <code>VariableNode("D8", Boolean)<code>, <code>VariableNode("D9", Boolean)<code>, <code>VariableNode("D10", Boolean)<code>
  * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
  * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
- * <li>{@link HitsCount#INPUT_VARIABLES}: <code>D0</code>, <code>D1</code>,
- * <code>D2</code>, <code>D3</code>, <code>D4</code>
+ * <li>{@link HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>,
+ * <code>A2</code>, <code>D3</code>, <code>D4</code>, <code>D5</code>,
+ * <code>D6</code>, <code>D7</code>, <code>D8</code>, <code>D9</code>,
+ * <code>D10</code>
  * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input
  * combinations]
  * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
  *
  * @since 2.0
  */
-public class STGPEven5Parity extends GenerationalTemplate {
+public class STGPMultiplexer11Bit extends GenerationalTemplate {
 
-    private static final int NO_BITS = 5;
+    private static final int NO_BITS = 11;
 
     /**
      * Sets up the given template with the benchmark config settings
@@ -106,6 +124,8 @@ public class STGPEven5Parity extends GenerationalTemplate {
     @Override
     protected void apply(Map<ConfigKey<?>, Object> template) {
         super.apply(template);
+
+        int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(NO_BITS);
 
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
@@ -132,11 +152,16 @@ public class STGPEven5Parity extends GenerationalTemplate {
         List<Node> syntaxList = new ArrayList<Node>();
         syntaxList.add(new And());
         syntaxList.add(new Or());
-        syntaxList.add(new Nand());
-        syntaxList.add(new Nor());
+        syntaxList.add(new Not());
+        syntaxList.add(new If());
 
         Variable[] variables = new Variable[NO_BITS];
-        for (int i = 0; i < NO_BITS; i++) {
+
+        for (int i = 0; i < noAddressBits; i++) {
+            variables[i] = new Variable("A" + i, Boolean.class);
+            syntaxList.add(new VariableNode(variables[i]));
+        }
+        for (int i = noAddressBits; i < NO_BITS; i++) {
             variables[i] = new Variable("D" + i, Boolean.class);
             syntaxList.add(new VariableNode(variables[i]));
         }
@@ -150,7 +175,7 @@ public class STGPEven5Parity extends GenerationalTemplate {
         Boolean[][] inputValues = BooleanUtils.generateBoolSequences(NO_BITS);
         Boolean[] expectedOutputs = new Boolean[inputValues.length];
         for (int i = 0; i < inputValues.length; i++) {
-            expectedOutputs[i] = BenchmarkSolutions.evenParity(inputValues[i]);
+            expectedOutputs[i] = BenchmarkSolutions.multiplexer(inputValues[i], noAddressBits);
         }
 
         // Setup fitness function

@@ -50,8 +50,8 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
      */
     @Override
     public void refresh(EndElitism event) {
-        long start = AbstractStat.get(ElitismStartTime.class).getTime();
-        long end = AbstractStat.get(ElitismEndTime.class).getTime();
+        long start = put(ElitismStartTime.class).getTime();
+        long end = put(ElitismEndTime.class).getTime();
 
         duration = end - start;
     }
@@ -72,6 +72,7 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
     public String toString() {
         return Long.toString(getDuration());
     }
+
 
     /**
      * Stat that provides the elitism duration time in nano seconds.

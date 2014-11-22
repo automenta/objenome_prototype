@@ -25,8 +25,8 @@ import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.List;
 
-import objenome.gene.gp.Config.ConfigKey;
-import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
 
@@ -161,7 +161,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
      * <li><code>BranchedBreeder.ELITISM</code>
      * </ul>
      */
-    protected void setup(Config config) {
+    protected void setup(GPContainer config) {
         operators = config.get(OPERATORS);
         selector = config.get(SELECTOR);
         random = config.get(RANDOM_SEQUENCE);
@@ -177,7 +177,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(Template.TEMPLATE, OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
+        if (event.isKindOf(STProblem.PROBLEM, OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
             //setup();
             throw new UnsupportedOperationException("Implementable soon");
         }

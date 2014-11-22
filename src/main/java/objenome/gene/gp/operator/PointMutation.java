@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.operator;
 
-import static objenome.gene.gp.Config.Template.TEMPLATE;
+import static objenome.gene.gp.STProblem.PROBLEM;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.SYNTAX;
 
@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import objenome.gene.gp.AbstractOperator;
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.RandomSequence;
 import objenome.gene.gp.op.Node;
@@ -111,7 +111,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      * <li>{@link #PROBABILITY}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
@@ -130,7 +130,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SYNTAX, POINT_PROBABILITY, PROBABILITY)) {
+        if (event.isKindOf(PROBLEM, RANDOM_SEQUENCE, SYNTAX, POINT_PROBABILITY, PROBABILITY)) {
             setConfig(event.getConfig());
         }
     }

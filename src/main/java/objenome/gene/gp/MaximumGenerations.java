@@ -21,7 +21,8 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.GPContainerAware;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.event.GenerationEvent.EndGeneration;
 import objenome.gene.gp.event.Listener;
 
@@ -29,7 +30,7 @@ import objenome.gene.gp.event.Listener;
  * This class represents a termination criteria based on the maximum number of
  * generations.
  */
-public class MaximumGenerations implements TerminationCriteria, Listener<EndGeneration> {
+public class MaximumGenerations implements TerminationCriteria, Listener<EndGeneration>, GPContainerAware {
 
     /**
      * The key for setting and retrieving the maximum number of generations.
@@ -44,9 +45,13 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
     /**
      * Constructs a <code>MaximumGenerations</code>.
      */
-    public MaximumGenerations(Config config) {
+    public MaximumGenerations() {
+    }
+    @Override
+    public void setConfig(GPContainer config) {
         config.on(EndGeneration.class, this);
     }
+    
 
     /**
      * Returns <code>true</code> when the maximum number of generations is
@@ -56,7 +61,7 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
      * reached; <code>false</code> otherwise.
      */
     @Override
-    public boolean terminate(Config config) {
+    public boolean terminate(GPContainer config) {
         return generation >= config.get(MAXIMUM_GENERATIONS);
     }
 
@@ -70,5 +75,6 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
     public void onEvent(EndGeneration event) {
         generation = event.getGeneration();
     }
+
 
 }

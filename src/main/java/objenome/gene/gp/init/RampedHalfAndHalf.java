@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.init;
 
-import static objenome.gene.gp.Config.Template.TEMPLATE;
+import static objenome.gene.gp.STProblem.PROBLEM;
 import static objenome.gene.gp.Population.SIZE;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.MAXIMUM_DEPTH;
@@ -33,8 +33,8 @@ import static objenome.gene.gp.init.RampedHalfAndHalf.Method.GROW;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.InitialisationMethod;
 import objenome.gene.gp.Population;
 import objenome.gene.gp.RandomSequence;
@@ -135,7 +135,7 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
      * <li>{@link #RAMPING_START_DEPTH}
      * </ul>
      */
-    protected void setup(Config config) {
+    protected void setup(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
@@ -174,16 +174,16 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
+        if (event.isKindOf(PROBLEM, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
             throw new UnsupportedOperationException("Unimplemented yet"); //setup();
         }
 
         // These could be expensive so only do them when we really have to
-        if (event.isKindOf(TEMPLATE, RETURN_TYPE)) {
+        if (event.isKindOf(PROBLEM, RETURN_TYPE)) {
             grow.setReturnType(returnType);
             full.setReturnType(returnType);
         }
-        if (event.isKindOf(TEMPLATE, SYNTAX)) {
+        if (event.isKindOf(PROBLEM, SYNTAX)) {
             grow.setSyntax(syntax);
             full.setSyntax(syntax);
         }
@@ -210,7 +210,7 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
      * @return a population of <code>STGPIndividual</code> objects
      */
     @Override
-    public Population createPopulation(Config config) {
+    public Population createPopulation(GPContainer config) {
         setup(config);
 
         config.fire(new InitialisationEvent.StartInitialisation());

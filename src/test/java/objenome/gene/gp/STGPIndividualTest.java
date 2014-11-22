@@ -1,25 +1,23 @@
 package objenome.gene.gp;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.benchmark.STGPMultiplexer6Bit;
-import static objenome.gene.gp.Config.Template.TEMPLATE;
+import objenome.gene.gp.problem.STGPMultiplexer;
+import static objenome.gene.gp.STProblem.PROBLEM;
 import org.junit.Test;
 
 public class STGPIndividualTest extends TestCase {
 
 	@Test public void testEmpty() {                                   
             
-            EvolutionGenerator e = new EvolutionGenerator();
-            e.set(TEMPLATE, new STGPMultiplexer6Bit());
+            Evolution e = new Evolution<STGPIndividual>().solve(new STGPMultiplexer(6));
             
-            Population p = e.run();
-            STGPIndividual best = (STGPIndividual)p.fittest();
+            Population<STGPIndividual> p = e.run();
+            
+            STGPIndividual best = p.fittest();
             
             /*System.out.println(p.fittest());
-            System.out.println(p.size());
-            
-            System.out.println(p);
-            
+            System.out.println(p.size());            
+            System.out.println(p);            
             System.out.println(best.evaluate());*/
             
             assertTrue(best.depth() > 3);            

@@ -48,7 +48,8 @@ public class GenerationBestFitness extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+        AbstractStat<EndGeneration> x = put(GenerationFitnesses.class);
+        Fitness[] fitnesses = put(GenerationFitnesses.class).getFitnesses();
         best = null;
 
         for (Fitness fitness : fitnesses) {

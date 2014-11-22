@@ -22,7 +22,8 @@
 package objenome.gene.gp.event.stat;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.Config;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.event.GenerationEvent;
 
 /**
  * The <code>AbstractStatTest</code> class provides unit tests for methods of
@@ -36,14 +37,21 @@ public class AbstractStatTest extends TestCase {
      * Test for the {@link AbstractStat#reset()} method.
      */
     public void testReset() {
-        Config config = new Config();
+        GPContainer config = new GPContainer();        
         
-        assertNull(config.get(RunBestFitness.class));
-                
-        assertNotNull(config.add(RunBestFitness.class));
+        AbstractStat<GenerationEvent.EndGeneration> a, a2, b;
+        
+        assertTrue(!config.contains(RunBestFitness.class));
+        
+        assertNotNull(a = config.stat(RunBestFitness.class));                
+        assertNotNull(a2 = config.stat(RunBestFitness.class));                
 
-        config.resetStats();
+        assertTrue("singleton accessed twice is identical", a==a2);
         
-        assertNull(config.get(RunBestFitness.class));
+        config.resetStats();       
+                
+        assertNotNull(b = config.stat(RunBestFitness.class));
+        
+        assertTrue("Different instances as a result of resetStats removing the first", a!=b);
     }
 }

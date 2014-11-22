@@ -23,18 +23,18 @@
 package objenome.gene.gp;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
 
 
 /**
  * The <code>ConfigTest</code> class provides unit tests for methods of the
- * {@link Config} class.
+ * {@link GPContainer} class.
  * 
- * @see Config
+ * @see GPContainer
  */
 public class ConfigTest extends TestCase {
 
-    Config config = new Config();
+    GPContainer config = new GPContainer();
 	/**
 	 * Test for the {@link Config#get(ConfigKey)} method.
 	 */

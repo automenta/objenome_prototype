@@ -228,6 +228,11 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         }
     }
 
+    
+    public <T> T the(final Class<? extends T> c) {        
+        usable(c, Scope.SINGLETON, use(c));
+        return get((Object)c);
+    }
 
 
     @Override
@@ -278,7 +283,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         Builder b = super.usable(key, scope, factory);
 
         String keyString = InjectionUtils.getKeyName(key);
-        singletonsCache.remove(keyString); // just in case we are overriding a previous singleton bean...
+        //singletonsCache.remove(keyString); // just in case we are overriding a previous singleton bean...
         ThreadLocal<Object> threadLocal = threadLocalsCache.remove(keyString); // just in case we are overriding a previous thread local...
         if (threadLocal != null) {
             threadLocal.remove();

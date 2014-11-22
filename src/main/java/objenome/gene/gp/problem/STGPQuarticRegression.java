@@ -19,26 +19,15 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package objenome.gene.gp.benchmark;
+package objenome.gene.gp.problem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import objenome.gene.gp.op.Node;
-import objenome.gene.gp.op.Variable;
-import objenome.gene.gp.op.VariableNode;
-import objenome.gene.gp.op.math.Add;
-import objenome.gene.gp.op.math.DivisionProtected;
-import objenome.gene.gp.op.math.Multiply;
-import objenome.gene.gp.op.math.Subtract;
-import objenome.gene.gp.fitness.DoubleFitness;
-import objenome.gene.gp.random.MersenneTwisterFast;
-import objenome.gene.gp.selection.TournamentSelector;
-import objenome.gene.gp.STGPIndividual;
-import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.Breeder;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.EvolutionaryStrategy;
 import objenome.gene.gp.FitnessEvaluator;
 import objenome.gene.gp.GenerationalStrategy;
@@ -50,6 +39,17 @@ import objenome.gene.gp.Population;
 import objenome.gene.gp.RandomSequence;
 import objenome.gene.gp.TerminationCriteria;
 import objenome.gene.gp.TerminationFitness;
+import objenome.gene.gp.op.Node;
+import objenome.gene.gp.op.Variable;
+import objenome.gene.gp.op.VariableNode;
+import objenome.gene.gp.op.math.Add;
+import objenome.gene.gp.op.math.DivisionProtected;
+import objenome.gene.gp.op.math.Multiply;
+import objenome.gene.gp.op.math.Subtract;
+import objenome.gene.gp.fitness.DoubleFitness;
+import objenome.gene.gp.random.MersenneTwisterFast;
+import objenome.gene.gp.selection.TournamentSelector;
+import objenome.gene.gp.STGPIndividual;
 import objenome.gene.gp.fitness.HitsCount;
 import objenome.gene.gp.init.Full;
 import objenome.gene.gp.operator.SubtreeCrossover;
@@ -57,9 +57,9 @@ import objenome.gene.gp.operator.SubtreeMutation;
 import objenome.gene.gp.tools.BenchmarkSolutions;
 
 /**
- * This template sets up EpochX to run the cubic regression benchmark with the
- * STGP representation. Cubic regression involves evolving an equivalent
- * function to the formula: x + x^2 + x^3
+ * This template sets up EpochX to run the quartic regression benchmark with the
+ * STGP representation. Quartic regression involves evolving an equivalent
+ * function to the formula: x + x^2 + x^3 + x^4
  *
  * The following configuration is used:
  *
@@ -89,7 +89,7 @@ import objenome.gene.gp.tools.BenchmarkSolutions;
  *
  * @since 2.0
  */
-public class STGPCubicRegression extends GenerationalTemplate {
+public class STGPQuarticRegression extends GenerationalTemplate {
 
     /**
      * Sets up the given template with the benchmark config settings
@@ -102,8 +102,8 @@ public class STGPCubicRegression extends GenerationalTemplate {
 
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
-        criteria.add(new TerminationFitness(config, new DoubleFitness.Minimise(0.0)));
-        criteria.add(new MaximumGenerations(config));
+        criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
+        criteria.add(new MaximumGenerations());
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
         template.put(STGPIndividual.MAXIMUM_DEPTH, 6);
@@ -140,7 +140,7 @@ public class STGPCubicRegression extends GenerationalTemplate {
         for (int i = 0; i < noPoints; i++) {
             // Inputs values between -1.0 and +1.0
             inputs[i][0] = (randomSequence.nextDouble() * 2) - 1;
-            expectedOutputs[i] = BenchmarkSolutions.cubicRegression(inputs[i][0]);
+            expectedOutputs[i] = BenchmarkSolutions.quarticRegression(inputs[i][0]);
         }
 
         // Setup fitness function

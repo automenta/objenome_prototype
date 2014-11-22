@@ -26,7 +26,7 @@ import objenome.gene.gp.RandomSequence;
 import objenome.gene.gp.event.Listener;
 import objenome.gene.gp.Population;
 import objenome.gene.gp.event.ConfigEvent;
-import objenome.gene.gp.Config;
+import objenome.gene.gp.GPContainer;
 import static objenome.gene.gp.Population.SIZE;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.*;
@@ -34,7 +34,7 @@ import static objenome.gene.gp.STGPIndividual.*;
 import java.math.BigInteger;
 import java.util.*;
 
-import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.STGPIndividual;
 import objenome.gene.gp.InitialisationMethod;
@@ -111,7 +111,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      * <code>true</code>)
      * </ul>
      */
-    protected void setup(Config config) {
+    protected void setup(GPContainer config) {
         random = config.get(RANDOM_SEQUENCE);
         populationSize = config.get(SIZE);
         syntax = config.get(SYNTAX);
@@ -163,16 +163,16 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
+        if (event.isKindOf(STProblem.PROBLEM, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
 
             throw new UnsupportedOperationException("Unimplemented yet"); //setup();
         }
 
         // These will be expensive so only do them when we really have to
-        if (event.isKindOf(Template.TEMPLATE, RETURN_TYPE)) {
+        if (event.isKindOf(STProblem.PROBLEM, RETURN_TYPE)) {
             dataTypesTable = null;
         }
-        if (event.isKindOf(Template.TEMPLATE, SYNTAX)) {
+        if (event.isKindOf(STProblem.PROBLEM, SYNTAX)) {
             updateSyntax();
         }
     }
@@ -191,7 +191,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      * @return a population of <code>STGPIndividual</code> objects
      */
     @Override
-    public Population createPopulation(Config config) {
+    public Population createPopulation(GPContainer config) {
         config.fire(new InitialisationEvent.StartInitialisation());
 
         Population population = new Population(config);

@@ -19,36 +19,35 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-
 package objenome.gene.gp.event;
 
 import junit.framework.TestCase;
 
 /**
- * The <code>EventManagerTest</code> class provides unit tests for methods of the
- * {@link EventManager} class.
- * 
+ * The <code>EventManagerTest</code> class provides unit tests for methods of
+ * the {@link EventManager} class.
+ *
  * @see EventManager
  */
 public class EventManagerTest extends TestCase {
 
-	/**
-	 * Test for the {@link EventManager#reset()} method.
-	 */
-	public void testReset() {
-		EventManager manager = new EventManager();
-		Listener<RunEvent> listener = new Listener<RunEvent>() {
+    /**
+     * Test for the {@link EventManager#reset()} method.
+     */
+    public void testReset() {
+        EventManager manager = new EventManager();
+        Listener<RunEvent> listener = new Listener<RunEvent>() {
 
-			@Override
-			public void onEvent(RunEvent event) {
-			}
-		};
+            @Override
+            public void onEvent(RunEvent event) {
+            }
+        };
 
-		manager.add(RunEvent.class, listener);
-		assertTrue(manager.remove(RunEvent.class, listener));
+        manager.add(RunEvent.class, listener);
+        assertTrue(manager.remove(RunEvent.class, listener));
 
-		manager.add(RunEvent.class, listener);
-		manager.reset();
-		assertFalse(manager.remove(RunEvent.class, listener));
-	}
+        manager.add(RunEvent.class, listener);
+        manager.reset();
+        assertFalse(manager.remove(RunEvent.class, listener));
+    }
 }

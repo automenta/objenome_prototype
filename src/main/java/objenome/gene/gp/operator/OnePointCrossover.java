@@ -21,15 +21,15 @@
  */
 package objenome.gene.gp.operator;
 
-import static objenome.gene.gp.Config.Template.TEMPLATE;
+import static objenome.gene.gp.STProblem.PROBLEM;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import objenome.gene.gp.AbstractOperator;
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.RandomSequence;
 import objenome.gene.gp.op.Node;
@@ -79,7 +79,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
     private RandomSequence random;
     private Boolean strict;
     private Double probability;
-    private Config config;
+    private GPContainer config;
     private final boolean autoConfig;
 
     /**
@@ -116,7 +116,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
      * <li>{@link #STRICT}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
@@ -135,7 +135,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, STRICT)) {
+        if (event.isKindOf(PROBLEM, RANDOM_SEQUENCE, PROBABILITY, STRICT)) {
             setConfig(event.getConfig());
         }
     }

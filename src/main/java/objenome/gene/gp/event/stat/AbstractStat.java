@@ -25,8 +25,8 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import objenome.gene.gp.Config;
-import objenome.gene.gp.Config.ConfigAware;
+import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.GPContainer.GPContainerAware;
 
 import objenome.gene.gp.event.Event;
 import objenome.gene.gp.event.EventManager;
@@ -39,7 +39,7 @@ import objenome.gene.gp.event.Listener;
  *
  * @see Event
  */
-public abstract class AbstractStat<T extends Event> implements ConfigAware {
+public abstract class AbstractStat<T extends Event> implements GPContainerAware {
 
     /**
      * An empty list of dependencies.
@@ -71,7 +71,7 @@ public abstract class AbstractStat<T extends Event> implements ConfigAware {
      * the {@link #clear()} method is specified.
      */
     private Listener<T> clearOnListener;
-    private Config config;
+    private GPContainer config;
     private List<Class<? extends AbstractStat<?>>> dependencies;
 
     /**
@@ -151,7 +151,7 @@ public abstract class AbstractStat<T extends Event> implements ConfigAware {
 
 
     @Override
-    public void setConfig(Config c) {
+    public void setConfig(GPContainer c) {
         this.config = c;
         for (Class<? extends AbstractStat<?>> dependency : dependencies) {
             config.get(dependency);
@@ -169,7 +169,7 @@ public abstract class AbstractStat<T extends Event> implements ConfigAware {
         
     }
 
-    public Config getConfig() {
+    public GPContainer getConfig() {
         return config;
     }
 
@@ -178,6 +178,10 @@ public abstract class AbstractStat<T extends Event> implements ConfigAware {
         return listener;
     }
     
+    public <X extends Object & Event> AbstractStat<X> put(Class<? extends AbstractStat<X>> type) {
+        return getConfig().put(type);
+    }
+
     
     
     /**

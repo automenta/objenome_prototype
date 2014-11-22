@@ -27,12 +27,12 @@ import objenome.gene.gp.event.Listener;
 import objenome.gene.gp.event.OperatorEvent;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.AbstractOperator;
-import objenome.gene.gp.Config;
+import objenome.gene.gp.GPContainer;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.*;
 
-import objenome.gene.gp.Config.ConfigKey;
-import objenome.gene.gp.Config.Template;
+import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.STProblem;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.event.OperatorEvent.EndOperator;
 import objenome.gene.gp.STGPIndividual;
@@ -63,7 +63,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
     // Configuration settings
     private RandomSequence random;
     private Integer maxDepth;
-    private double probability;
+    private Double probability;
     private final boolean autoConfig;
 
     /**
@@ -100,7 +100,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
      * <li>{@link #PROBABILITY}
      * </ul>
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
         if (autoConfig) {
             config.on(ConfigEvent.class, this);
         }
@@ -122,7 +122,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH, PROBABILITY)) {
+        if (event.isKindOf(STProblem.PROBLEM, RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH, PROBABILITY)) {
             setConfig(event.getConfig());
 
         }

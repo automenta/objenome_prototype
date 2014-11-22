@@ -22,8 +22,8 @@
 package objenome.gene.gp.fitness;
 
 import objenome.gene.gp.AbstractFitnessFunction;
-import objenome.gene.gp.Config.ConfigAware;
-import objenome.gene.gp.Config.ConfigKey;
+import objenome.gene.gp.GPContainer.GPContainerAware;
+import objenome.gene.gp.GPContainer.ConfigKey;
 import objenome.gene.gp.op.Variable;
 
 /**
@@ -31,7 +31,7 @@ import objenome.gene.gp.op.Variable;
  *
  * @since 2.0
  */
-public abstract class STGPFitnessFunction extends AbstractFitnessFunction implements ConfigAware {
+public abstract class STGPFitnessFunction extends AbstractFitnessFunction implements GPContainerAware {
 
     /**
      * The key for setting the program's input variables

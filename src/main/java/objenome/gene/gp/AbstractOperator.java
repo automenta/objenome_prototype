@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.Config.ConfigAware;
+import objenome.gene.gp.GPContainer.GPContainerAware;
 import objenome.gene.gp.event.Event;
 import objenome.gene.gp.event.EventManager;
 import objenome.gene.gp.event.Listener;
@@ -48,17 +48,17 @@ import objenome.gene.gp.event.OperatorEvent.StartOperator;
  * @see EventManager
  * @see Listener
  */
-public abstract class AbstractOperator implements Operator, ConfigAware {
-    private Config config;
+public abstract class AbstractOperator implements Operator, GPContainerAware {
+    private GPContainer config;
 
     /**
      * override in subclasses
      */
-    public void setConfig(Config config) {
+    public void setConfig(GPContainer config) {
 
     }
 
-    public Config getConfig() {
+    public GPContainer getConfig() {
         return config;
     }
 

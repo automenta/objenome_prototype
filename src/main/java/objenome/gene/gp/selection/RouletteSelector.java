@@ -24,7 +24,7 @@ package objenome.gene.gp.selection;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 import objenome.gene.gp.AbstractSelector;
-import objenome.gene.gp.Config;
+import objenome.gene.gp.GPContainer;
 import objenome.gene.gp.Fitness;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.IndividualSelector;

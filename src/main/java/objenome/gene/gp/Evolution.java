@@ -22,6 +22,7 @@
 package objenome.gene.gp;
 
 import java.util.ArrayList;
+import static objenome.gene.gp.STProblem.PROBLEM;
 
 /**
  * Evolutionary simulation
@@ -31,10 +32,10 @@ import java.util.ArrayList;
  * <li>{@link EvolutionaryStrategy}
  * </ol>
  *
- * The specific list of components used is obtained from the {@link Config},
+ * The specific list of components used is obtained from the {@link GPContainer},
  * using the appropriate <code>Class</code> {@link #COMPONENTS}.
  */
-public class EvolutionGenerator extends Config {
+public class Evolution<I extends Individual> extends GPContainer {
 
     /**
      * The key for setting and retrieving the list of components.
@@ -44,7 +45,7 @@ public class EvolutionGenerator extends Config {
     /**
      * Constructs an <code>Evolver</code>.
      */
-    public EvolutionGenerator() {
+    public Evolution() {
         super();
     }
 
@@ -59,21 +60,27 @@ public class EvolutionGenerator extends Config {
      * pipeline of components, as returned by the final component in that
      * pipeline
      */
-    public Population run() {
+    public Population<I> run() {
         Pipeline pipeline = new Pipeline();
 
         /* Initialises the supplied <code>Pipeline</code> with the components that
          * an evolutionary run is composed of. The specific list of components used
          * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
         for (Component component : get(COMPONENTS)) {
+            GPContainer.makeConfigAware(this, component);
             pipeline.add(component);
         }
 
         //config.fire(new StartRun(0));
-        Population population = pipeline.process(new Population(this));
+        Population<I> population = pipeline.process(new Population<I>(this));
 
         //config.fire(new EndRun(0, population));
         return population;
     }
 
+    
+    public Evolution<I> solve(STProblem problem) {
+        set(PROBLEM, problem);
+        return this;
+    }
 }
