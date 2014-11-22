@@ -9,7 +9,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import java.util.List;
 
 /**
- * Gene of an Objosome
+ * Gene of an Objenome
  */
 abstract public class Objene<V> extends AtomicDouble {
    
