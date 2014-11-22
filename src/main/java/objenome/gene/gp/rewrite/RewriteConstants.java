@@ -91,37 +91,39 @@ public class RewriteConstants implements RewriteRule {
      * @return The rewritten node, or original node, if no rewrite could happen.
      */
     private Node tryNodeRewrite(Node parentNode) {
-        Node result = null;
-
-        if (parentNode.isTerminal()) {
-            return null;
-        }
-
+        return null;
         
-        if (parentNode.allConstDescendants()) {
-            Object v = parentNode.evaluate();
-            double ck = NumericUtils.asFloat( v );
-
-            // do not rewrite if it produces a div by 0 or other bad result.
-            if (Double.isNaN(ck) || Double.isInfinite(ck)) {
-                return result;
-            }
-
-            
-            result = parentNode
-                    .getOwner()
-                    .getContext()
-                    .getFunctions()
-                    .factorNode("#const", parentNode.getOwner(),
-                            new Node[]{});
-
-            // is it an integer?
-            if (MathUtils.equalEnough(ck, ((int) ck))) { //Math.abs(ck - ) < Encog.DEFAULT_DOUBLE_EQUAL) {
-                return new Literal((int) ck);
-            } else {
-                return new Literal(ck);
-            }
-        }
-        return result;
+//        Node result = null;
+//
+//        if (parentNode.isTerminal()) {
+//            return null;
+//        }
+//
+//        
+//        if (parentNode.allConstDescendants()) {
+//            Object v = parentNode.evaluate();
+//            double ck = NumericUtils.asFloat( v );
+//
+//            // do not rewrite if it produces a div by 0 or other bad result.
+//            if (Double.isNaN(ck) || Double.isInfinite(ck)) {
+//                return result;
+//            }
+//
+//            
+//            result = parentNode
+//                    .getOwner()
+//                    .getContext()
+//                    .getFunctions()
+//                    .factorNode("#const", parentNode.getOwner(),
+//                            new Node[]{});
+//
+//            // is it an integer?
+//            if (MathUtils.equalEnough(ck, ((int) ck))) { //Math.abs(ck - ) < Encog.DEFAULT_DOUBLE_EQUAL) {
+//                return new Literal((int) ck);
+//            } else {
+//                return new Literal(ck);
+//            }
+//        }
+//        return result;
     }
 }

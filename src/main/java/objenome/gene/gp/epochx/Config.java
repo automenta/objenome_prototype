@@ -37,6 +37,8 @@ import objenome.gene.gp.epochx.event.EventManager;
  * parameter value with its generic type.
  * 
  * @see ConfigKey
+ * 
+ * TODO subclass a Container and store properties with NORMAL, THREAD or SINGLETON scope
  */
 public class Config {
 
