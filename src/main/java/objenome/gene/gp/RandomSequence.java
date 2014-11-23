@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * An implementation of this interface is used to generate a stream of numbers
@@ -32,7 +32,7 @@ public interface RandomSequence {
     /**
      * The key for setting and retrieving the random number generator.
      */
-    public static final ConfigKey<RandomSequence> RANDOM_SEQUENCE = new ConfigKey<RandomSequence>();
+    public static final GPKey<RandomSequence> RANDOM_SEQUENCE = new GPKey<RandomSequence>();
 
     /**
      * Gets the next <code>int</code> between <code>0</code> (inclusive) and

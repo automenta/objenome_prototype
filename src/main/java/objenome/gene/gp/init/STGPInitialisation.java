@@ -22,7 +22,7 @@
 package objenome.gene.gp.init;
 
 import objenome.gene.gp.InitialisationMethod;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.STGPIndividual;
 
 /**
@@ -44,6 +44,6 @@ public interface STGPInitialisation extends InitialisationMethod {
      * The key for setting and retrieving the maximum initial depth setting for
      * program trees
      */
-    public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
+    public static final GPKey<Integer> MAXIMUM_INITIAL_DEPTH = new GPKey<Integer>();
 
 }

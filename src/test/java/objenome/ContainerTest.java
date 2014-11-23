@@ -320,4 +320,19 @@ public class ContainerTest {
         Part p = c.get(Part.class);
         assertEquals(0, p.function());
     }    
+    
+/** tests what happens when a key is replaced */
+    @Test public void testSingleton() {
+        Container c = new Container();
+        Part x = c.the("part", new Part0());
+        Part y = c.the("part", new Part0());
+        assertTrue(x==y);
+        Part z = c.the("part2", new Part0());
+        assertTrue(x!=z);
+        Part w = c.the(new Part0());
+        assertTrue(w!=z);
+        Part v = c.the(Part0.class);
+        assertTrue(v==w);
+    }
+    
 }

@@ -33,7 +33,7 @@ import static objenome.gene.gp.STGPIndividual.MAXIMUM_DEPTH;
 
 import java.util.*;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.STProblem;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.event.OperatorEvent.EndOperator;
@@ -59,13 +59,13 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
      * The key for setting and retrieving the probability with which a terminal
      * will be selected as the crossover point
      */
-    public static final ConfigKey<Double> TERMINAL_PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> TERMINAL_PROBABILITY = new GPKey<Double>();
 
     /**
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
 
     // Configuration settings
     private RandomSequence random;

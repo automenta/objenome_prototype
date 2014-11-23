@@ -26,7 +26,7 @@ import objenome.gene.gp.GPContainer;
 import objenome.gene.gp.GPContainer.GPContainerAware;
 import objenome.gene.gp.Fitness;
 import objenome.gene.gp.Individual;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.Population;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
@@ -63,7 +63,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * The key for setting the minimum fitness score possible, used when
      * calculating the adjusted fitness score.
      */
-    public static final ConfigKey<Double> MINIMUM_FITNESS_SCORE = new ConfigKey<Double>();
+    public static final GPKey<Double> MINIMUM_FITNESS_SCORE = new GPKey<Double>();
 
     // The delegate that fitness calculations will be passed to
     private AbstractFitnessFunction delegate;

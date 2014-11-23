@@ -23,7 +23,7 @@ package objenome.gene.gp;
 
 import java.util.List;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * An <code>EvolutionaryStrategy</code> is a component that is responsible for
@@ -40,6 +40,6 @@ public interface EvolutionaryStrategy extends Component {
      * The key for setting and retrieving a list of
      * <code>TerminationCriteria</code>.
      */
-    public static final ConfigKey<List<TerminationCriteria>> TERMINATION_CRITERIA = new ConfigKey<List<TerminationCriteria>>();
+    public static final GPKey<List<TerminationCriteria>> TERMINATION_CRITERIA = new GPKey<List<TerminationCriteria>>();
 
 }

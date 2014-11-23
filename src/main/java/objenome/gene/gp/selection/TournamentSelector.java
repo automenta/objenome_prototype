@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.selection;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.IndividualSelector;
 import objenome.gene.gp.Population;
@@ -38,7 +38,7 @@ public class TournamentSelector implements IndividualSelector {
     /**
      * The key for setting and retrieving the tournament size.
      */
-    public static final ConfigKey<Integer> TOURNAMENT_SIZE = new ConfigKey<Integer>();
+    public static final GPKey<Integer> TOURNAMENT_SIZE = new GPKey<Integer>();
 
     /**
      * The random selector used to select the individuals participating in the

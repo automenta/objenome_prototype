@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.op.Node;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -47,19 +47,19 @@ public class STGPIndividual extends AbstractIndividual {
      * The key for setting and retrieving the set of nodes that individuals are
      * constructed from
      */
-    public static final ConfigKey<Node[]> SYNTAX = new ConfigKey<Node[]>();
+    public static final GPKey<Node[]> SYNTAX = new GPKey<Node[]>();
 
     /**
      * The key for setting and retrieving the required data-type for the root
      * node
      */
-    public static final ConfigKey<Class<?>> RETURN_TYPE = new ConfigKey<Class<?>>();
+    public static final GPKey<Class<?>> RETURN_TYPE = new GPKey<Class<?>>();
 
     /**
      * The key for setting and retrieving the maximum depth setting for program
      * trees
      */
-    public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
+    public static final GPKey<Integer> MAXIMUM_DEPTH = new GPKey<Integer>();
 
     // The root node of the program tree
     private Node root;

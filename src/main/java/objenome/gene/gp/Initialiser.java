@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * <code>Initialiser</code> components are responsible for creating individuals,
@@ -33,7 +33,7 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
      * The key for setting and retrieving the <code>InitialisationMethod</code>
      * used by this component.
      */
-    public static final ConfigKey<InitialisationMethod> METHOD = new ConfigKey<InitialisationMethod>();
+    public static final GPKey<InitialisationMethod> METHOD = new GPKey<InitialisationMethod>();
 
     /**
      * Constructs a <code>Initialiser</code>.

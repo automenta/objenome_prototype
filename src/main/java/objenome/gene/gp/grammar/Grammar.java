@@ -23,7 +23,7 @@ package objenome.gene.gp.grammar;
 
 import java.io.*;
 import java.util.*;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * A grammar object is constructed from a context-free language grammar. In the
@@ -76,7 +76,7 @@ public class Grammar {
     /**
      * The key for setting and retrieving a language grammar
      */
-    public static final ConfigKey<Grammar> GRAMMAR = new ConfigKey<Grammar>();
+    public static final GPKey<Grammar> GRAMMAR = new GPKey<Grammar>();
 
     // Index into the rulesets.
     private final Map<String, GrammarLiteral> literals;

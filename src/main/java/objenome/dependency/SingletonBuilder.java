@@ -2,13 +2,13 @@ package objenome.dependency;
 
 import objenome.AbstractContainer;
 
-public class SingletonFactory implements Builder {
+public class SingletonBuilder implements Builder {
 
     public final Object instance;
 
     public final Class<?> type;
 
-    public SingletonFactory(final Object instance) {
+    public SingletonBuilder(final Object instance) {
 
         this.instance = instance;
 
@@ -17,7 +17,7 @@ public class SingletonFactory implements Builder {
 
     @Override
     public <T> T instance(AbstractContainer context) {
-
+ 
         return (T) instance;
     }
 

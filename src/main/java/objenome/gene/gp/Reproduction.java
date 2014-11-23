@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * This class implements the reproduction (copy) operator.
@@ -31,7 +31,7 @@ public class Reproduction extends AbstractOperator {
     /**
      * The property key under which the reproduction probability is stored.
      */
-    public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
 
     /**
      * The default reproduction probability.

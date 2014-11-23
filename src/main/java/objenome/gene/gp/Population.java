@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * A <code>Population</code> is an ordered collection of {@link Individual}s.
@@ -39,7 +39,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      * The key for setting and retrieving the population size configuration
      * parameter.
      */
-    public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
+    public static final GPKey<Integer> SIZE = new GPKey<Integer>();
 
     /**
      * The list of individuals of this propulation.

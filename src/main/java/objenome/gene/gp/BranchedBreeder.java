@@ -25,7 +25,7 @@ import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.List;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.STProblem;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
@@ -43,7 +43,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
     /**
      * The key for setting and retrieving the size of the elite.
      */
-    public static final ConfigKey<Integer> ELITISM = new ConfigKey<Integer>();
+    public static final GPKey<Integer> ELITISM = new GPKey<Integer>();
 
     /**
      * The list of operators to be used to generate new individuals.

@@ -22,7 +22,7 @@
 package objenome.gene.gp.event;
 
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * An event which indicates that the configuration has changed. The event has
@@ -35,7 +35,7 @@ public class ConfigEvent implements Event {
     /**
      * The <code>ConfigKey</code> associated with the event.
      */
-    private final ConfigKey<?> key;
+    private final GPKey<?> key;
     private final GPContainer config;
 
     /**
@@ -43,7 +43,7 @@ public class ConfigEvent implements Event {
      *
      * @param key the <code>ConfigKey</code> associated with the event.
      */
-    public ConfigEvent(GPContainer config, ConfigKey<?> key) {
+    public ConfigEvent(GPContainer config, GPKey<?> key) {
         this.key = key;
         this.config = config;
     }
@@ -53,7 +53,7 @@ public class ConfigEvent implements Event {
      *
      * @return the <code>ConfigKey</code>.
      */
-    public ConfigKey<?> getKey() {
+    public GPKey<?> getKey() {
         return key;
     }
 
@@ -66,8 +66,8 @@ public class ConfigEvent implements Event {
      * @return <code>true</code> if this <code>ConfigEvent</code>'s key is one
      * of the specified keys; <code>false</code> otherwise.
      */
-    public boolean isKindOf(ConfigKey<?>... keys) {
-        for (ConfigKey<?> k : keys) {
+    public boolean isKindOf(GPKey<?>... keys) {
+        for (GPKey<?> k : keys) {
             if (k == key) {
                 return true;
             }

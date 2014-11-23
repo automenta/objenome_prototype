@@ -23,7 +23,7 @@
 package objenome.gene.gp;
 
 import junit.framework.TestCase;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 
 /**
@@ -39,7 +39,7 @@ public class ConfigTest extends TestCase {
 	 * Test for the {@link Config#get(ConfigKey)} method.
 	 */
 	public void testGet() {
-		ConfigKey<Double> key = new ConfigKey<Double>();
+		GPKey<Double> key = new GPKey<Double>();
 		assertNull(config.get(key));
 		config.set(key, 1.0);
 		assertNotNull(config.get(key));
@@ -49,7 +49,7 @@ public class ConfigTest extends TestCase {
 	 * Test for the {@link Config#set(ConfigKey, Object)} method.
 	 */
 	public void testSet() {
-		ConfigKey<Double> key = new ConfigKey<Double>();
+		GPKey<Double> key = new GPKey<Double>();
 		config.set(key, 0.2);
 		assertEquals(0.2, config.get(key));
 

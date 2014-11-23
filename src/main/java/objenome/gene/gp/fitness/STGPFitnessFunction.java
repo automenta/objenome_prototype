@@ -23,7 +23,7 @@ package objenome.gene.gp.fitness;
 
 import objenome.gene.gp.AbstractFitnessFunction;
 import objenome.gene.gp.GPContainer.GPContainerAware;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.op.Variable;
 
 /**
@@ -36,11 +36,11 @@ public abstract class STGPFitnessFunction extends AbstractFitnessFunction implem
     /**
      * The key for setting the program's input variables
      */
-    public static final ConfigKey<Variable[]> INPUT_VARIABLES = new ConfigKey<Variable[]>();
+    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<Variable[]>();
 
     /**
      * The key for setting the sets of values to use as inputs
      */
-    public static final ConfigKey<Object[][]> INPUT_VALUE_SETS = new ConfigKey<Object[][]>();
+    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<Object[][]>();
 
 }

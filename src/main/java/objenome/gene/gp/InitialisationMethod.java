@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * An instance of <code>Initialiser</code> is responsible for creating the
@@ -33,7 +33,7 @@ public interface InitialisationMethod {
      * The key for setting and retrieving whether the initialisation method
      * should allow duplicate individuals or not
      */
-    public static final ConfigKey<Boolean> ALLOW_DUPLICATES = new ConfigKey<Boolean>();
+    public static final GPKey<Boolean> ALLOW_DUPLICATES = new GPKey<Boolean>();
 
     /**
      * Returns a newly created individual.

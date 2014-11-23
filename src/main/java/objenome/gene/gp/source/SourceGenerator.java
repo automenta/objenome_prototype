@@ -22,7 +22,7 @@
 package objenome.gene.gp.source;
 
 import objenome.gene.gp.Individual;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * Source generators take a candidate program and produce source code from it.
@@ -32,7 +32,7 @@ public interface SourceGenerator<T extends Individual> {
     /**
      * The key for setting the source generator
      */
-    public static final ConfigKey<SourceGenerator<?>> SOURCE_GENERATOR = new ConfigKey<SourceGenerator<?>>();
+    public static final GPKey<SourceGenerator<?>> SOURCE_GENERATOR = new GPKey<SourceGenerator<?>>();
 
     public String getSource(T individual);
 

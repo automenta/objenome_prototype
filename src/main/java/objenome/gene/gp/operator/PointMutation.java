@@ -30,7 +30,7 @@ import java.util.List;
 
 import objenome.gene.gp.AbstractOperator;
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.RandomSequence;
 import objenome.gene.gp.op.Node;
@@ -61,13 +61,13 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      * The key for setting and retrieving the probability of each node being
      * mutated
      */
-    public static final ConfigKey<Double> POINT_PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> POINT_PROBABILITY = new GPKey<Double>();
 
     /**
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
 
     // Configuration settings
     private Node[] syntax;

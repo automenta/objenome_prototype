@@ -22,7 +22,7 @@
 package objenome.gene.gp;
 
 import objenome.gene.gp.GPContainer.GPContainerAware;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.event.GenerationEvent.EndGeneration;
 import objenome.gene.gp.event.Listener;
 
@@ -35,7 +35,7 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
     /**
      * The key for setting and retrieving the maximum number of generations.
      */
-    public static final ConfigKey<Integer> MAXIMUM_GENERATIONS = new ConfigKey<Integer>();
+    public static final GPKey<Integer> MAXIMUM_GENERATIONS = new GPKey<Integer>();
 
     /**
      * The generation counter.

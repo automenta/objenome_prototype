@@ -24,7 +24,7 @@ package objenome.gene.gp.fitness;
 import static objenome.gene.gp.STProblem.PROBLEM;
 
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.event.ConfigEvent;
@@ -57,12 +57,12 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
      * The key for setting the expected output values from the programs being
      * evaluated
      */
-    public static final ConfigKey<Double[]> EXPECTED_OUTPUTS = new ConfigKey<Double[]>();
+    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<Double[]>();
 
     /**
      * The key for setting the acceptable error for each point to count as a hit
      */
-    public static final ConfigKey<Double> POINT_ERROR = new ConfigKey<Double>();
+    public static final GPKey<Double> POINT_ERROR = new GPKey<Double>();
 
     // Configuration settings
     private Object[] expectedOutputs;

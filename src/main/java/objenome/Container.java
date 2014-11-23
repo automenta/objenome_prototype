@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import objenome.dependency.ClassBuilder;
 import objenome.dependency.SetterDependency;
+import objenome.dependency.SingletonBuilder;
 import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
 
@@ -229,9 +230,18 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     }
 
     
+    public <T> T the(Object key, Builder builder) {        
+        usable(key, Scope.SINGLETON, builder);
+        return get((Object)key);
+    }    
     public <T> T the(final Class<? extends T> c) {        
-        usable(c, Scope.SINGLETON, use(c));
-        return get((Object)c);
+        return the(c, use(c));
+    }
+    public <T> T the(Object key, Object value) {        
+        return the(key, new SingletonBuilder(value));
+    }
+    public <T> T the(Object value) {        
+        return the(value.getClass(), new SingletonBuilder(value));
     }
 
 

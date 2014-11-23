@@ -24,7 +24,7 @@ package objenome.gene.gp.fitness;
 import static objenome.gene.gp.STProblem.PROBLEM;
 
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.op.Variable;
 import objenome.gene.gp.event.ConfigEvent;
@@ -58,7 +58,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
     /**
      * The key for setting the program's input variables
      */
-    public static final ConfigKey<Variable[]> INPUT_VARIABLES = new ConfigKey<Variable[]>();
+    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<Variable[]>();
 
     /**
      * The key for setting the sets of values to use as inputs. The length of
@@ -66,13 +66,13 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
      * number of values in each set should match the length of the
      * INPUT_VARIABLES array.
      */
-    public static final ConfigKey<Object[][]> INPUT_VALUE_SETS = new ConfigKey<Object[][]>();
+    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<Object[][]>();
 
     /**
      * The key for setting the expected output values from the programs being
      * evaluated
      */
-    public static final ConfigKey<Double[]> EXPECTED_OUTPUTS = new ConfigKey<Double[]>();
+    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<Double[]>();
 
     // Configuration settings
     private Variable[] inputVariables;

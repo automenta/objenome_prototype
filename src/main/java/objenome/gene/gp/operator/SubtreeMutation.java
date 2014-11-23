@@ -31,7 +31,7 @@ import objenome.gene.gp.GPContainer;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.*;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.STProblem;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.event.OperatorEvent.EndOperator;
@@ -56,7 +56,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
 
     private final Grow grower;
 

@@ -22,7 +22,7 @@
 package objenome.gene.gp;
 
 import objenome.gene.gp.GPContainer.GPContainerAware;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.STProblem;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
@@ -37,7 +37,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
     /**
      * The <code>ConfigKey</code> of the proxied object.
      */
-    protected ConfigKey<T> key;
+    protected GPKey<T> key;
     private GPContainer config;
 
     /**
@@ -49,7 +49,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
      *
      * @param key the <code>ConfigKey</code> of the proxied object.
      */
-    public ProxyComponent(ConfigKey<T> key) {
+    public ProxyComponent(GPKey<T> key) {
         this.key = key;
     }
 

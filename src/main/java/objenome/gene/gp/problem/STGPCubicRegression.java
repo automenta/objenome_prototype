@@ -38,7 +38,7 @@ import objenome.gene.gp.selection.TournamentSelector;
 import objenome.gene.gp.STGPIndividual;
 import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.Breeder;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.EvolutionaryStrategy;
 import objenome.gene.gp.FitnessEvaluator;
 import objenome.gene.gp.GenerationalStrategy;
@@ -97,7 +97,7 @@ public class STGPCubicRegression extends GenerationalTemplate {
      * @param template a map to be filled with the template config
      */
     @Override
-    protected void apply(Map<ConfigKey<?>, Object> template) {
+    protected void apply(Map<GPKey<?>, Object> template) {
         super.apply(template);
 
         template.put(Population.SIZE, 100);

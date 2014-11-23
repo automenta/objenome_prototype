@@ -29,7 +29,7 @@ import java.util.List;
 
 import objenome.gene.gp.AbstractOperator;
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.Individual;
 import objenome.gene.gp.RandomSequence;
 import objenome.gene.gp.op.Node;
@@ -67,13 +67,13 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
      * The key for setting and retrieving whether the strict form of one-point
      * crossover should be used
      */
-    public static final ConfigKey<Boolean> STRICT = new ConfigKey<Boolean>();
+    public static final GPKey<Boolean> STRICT = new GPKey<Boolean>();
 
     /**
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
 
     // Configuration settings
     private RandomSequence random;

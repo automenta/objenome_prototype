@@ -23,7 +23,7 @@ package objenome.gene.gp;
 
 import java.util.List;
 
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 
 /**
  * A <code>Breeder</code> is a component that is responsible for applying
@@ -40,11 +40,11 @@ public interface Breeder extends Component {
     /**
      * The key for setting and retrieving the genetic operators.
      */
-    public static final ConfigKey<List<Operator>> OPERATORS = new ConfigKey<List<Operator>>();
+    public static final GPKey<List<Operator>> OPERATORS = new GPKey<List<Operator>>();
 
     /**
      * The key for setting and retrieving the <code>IndividualSelector</code>.
      */
-    public static final ConfigKey<IndividualSelector> SELECTOR = new ConfigKey<IndividualSelector>();
+    public static final GPKey<IndividualSelector> SELECTOR = new GPKey<IndividualSelector>();
 
 }

@@ -34,7 +34,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.GPContainer.ConfigKey;
+import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.InitialisationMethod;
 import objenome.gene.gp.Population;
 import objenome.gene.gp.RandomSequence;
@@ -66,7 +66,7 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
      * The key for setting and retrieving the smallest maximum depth setting
      * from which the ramping will begin
      */
-    public static final ConfigKey<Integer> RAMPING_START_DEPTH = new ConfigKey<Integer>();
+    public static final GPKey<Integer> RAMPING_START_DEPTH = new GPKey<Integer>();
 
     // Configuration settings
     private Node[] syntax; // TODO We don't really need to store this
