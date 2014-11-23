@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.init;
 
-import static objenome.gene.gp.STProblem.PROBLEM;
+import static objenome.gene.gp.ProblemSTGP.ProblemSTGP;
 import static objenome.gene.gp.Population.SIZE;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.MAXIMUM_DEPTH;

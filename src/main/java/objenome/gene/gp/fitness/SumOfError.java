@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.fitness;
 
-import static objenome.gene.gp.STProblem.PROBLEM;
+import static objenome.gene.gp.ProblemSTGP.ProblemSTGP;
 
 import objenome.gene.gp.GPContainer;
 import objenome.gene.gp.GPContainer.GPKey;

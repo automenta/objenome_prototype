@@ -21,7 +21,7 @@
  */
 package objenome.gene.gp.operator;
 
-import static objenome.gene.gp.STProblem.PROBLEM;
+import static objenome.gene.gp.ProblemSTGP.ProblemSTGP;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.ArrayList;

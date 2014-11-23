@@ -23,7 +23,7 @@ package objenome.gene.gp;
 
 import java.util.List;
 
-import objenome.gene.gp.STProblem;
+import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.EventManager;
 import objenome.gene.gp.event.GenerationEvent.EndGeneration;
@@ -134,7 +134,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(STProblem.PROBLEM, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
+        if (event.isKindOf(ProblemSTGP.PROBLEM, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
             setup();
         }
     }

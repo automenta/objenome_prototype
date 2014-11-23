@@ -22,6 +22,7 @@
 
 package objenome.gene.gp;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import junit.framework.TestCase;
 import objenome.gene.gp.GPContainer.GPKey;
 
@@ -64,7 +65,7 @@ public class ConfigTest extends TestCase {
 		config.set(Population.SIZE, 100);		
 		assertNotNull(config.get(Population.SIZE));
 
-		config.reset();
+		config.clear();
 		assertNull(config.get(Population.SIZE));
 	}
 }

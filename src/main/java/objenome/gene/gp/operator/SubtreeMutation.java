@@ -32,7 +32,7 @@ import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.*;
 
 import objenome.gene.gp.GPContainer.GPKey;
-import objenome.gene.gp.STProblem;
+import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.event.OperatorEvent.EndOperator;
 import objenome.gene.gp.STGPIndividual;
@@ -122,7 +122,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(STProblem.PROBLEM, RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH, PROBABILITY)) {
+        if (event.isKindOf(ProblemSTGP.PROBLEM, RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH, PROBABILITY)) {
             setConfig(event.getConfig());
 
         }

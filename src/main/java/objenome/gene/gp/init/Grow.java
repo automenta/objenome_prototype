@@ -34,7 +34,7 @@ import static objenome.gene.gp.STGPIndividual.*;
 import java.math.BigInteger;
 import java.util.*;
 
-import objenome.gene.gp.STProblem;
+import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.STGPIndividual;
 import objenome.gene.gp.InitialisationMethod;
@@ -163,16 +163,16 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(STProblem.PROBLEM, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
+        if (event.isKindOf(ProblemSTGP.PROBLEM, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
 
             throw new UnsupportedOperationException("Unimplemented yet"); //setup();
         }
 
         // These will be expensive so only do them when we really have to
-        if (event.isKindOf(STProblem.PROBLEM, RETURN_TYPE)) {
+        if (event.isKindOf(ProblemSTGP.PROBLEM, RETURN_TYPE)) {
             dataTypesTable = null;
         }
-        if (event.isKindOf(STProblem.PROBLEM, SYNTAX)) {
+        if (event.isKindOf(ProblemSTGP.PROBLEM, SYNTAX)) {
             updateSyntax();
         }
     }

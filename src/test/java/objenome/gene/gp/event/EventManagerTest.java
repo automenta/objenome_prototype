@@ -22,6 +22,9 @@
 package objenome.gene.gp.event;
 
 import junit.framework.TestCase;
+import objenome.gene.gp.event.EventManager;
+import objenome.gene.gp.event.Listener;
+import objenome.gene.gp.event.RunEvent;
 
 /**
  * The <code>EventManagerTest</code> class provides unit tests for methods of

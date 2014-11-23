@@ -21,12 +21,11 @@
  */
 package objenome.gene.gp.problem;
 
+import static com.google.common.collect.Lists.newArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import objenome.gene.gp.Breeder;
-import objenome.gene.gp.GPContainer.GPKey;
 import objenome.gene.gp.BranchedBreeder;
 import objenome.gene.gp.EvolutionaryStrategy;
 import objenome.gene.gp.FitnessEvaluator;
@@ -49,8 +48,7 @@ import objenome.gene.gp.fitness.DoubleFitness;
 import objenome.gene.gp.random.MersenneTwisterFast;
 import objenome.gene.gp.selection.TournamentSelector;
 import objenome.gene.gp.STGPIndividual;
-import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.STProblem;
+import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.fitness.HitsCount;
 import objenome.gene.gp.init.Full;
 import objenome.gene.gp.operator.SubtreeCrossover;
@@ -105,49 +103,41 @@ import objenome.gene.gp.tools.BooleanUtils;
  *
  * @since 2.0
  */
-public class STGPMultiplexer extends STProblem {
+public class STGPMultiplexer extends ProblemSTGP {
 
     final int BITS;
 
     public STGPMultiplexer(int bits) {
+        super();
+        
         this.BITS = bits;
-    }
-
-    
-    /**
-     * Sets up the given template with the benchmark config settings
-     *
-     * @param template a map to be filled with the template config
-     */
-    @Override
-    protected void apply(GPContainer c, Map<GPKey<?>, Object> template) {
-
-        generates();
                 
         int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(BITS);
 
-        template.put(Population.SIZE, 100);
-        List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
-        criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
-        criteria.add(new MaximumGenerations());
-        template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
-        template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-        template.put(STGPIndividual.MAXIMUM_DEPTH, 6);
-
-        template.put(Breeder.SELECTOR, new TournamentSelector());
-        template.put(TournamentSelector.TOURNAMENT_SIZE, 7);
+        the(Population.SIZE, 100);
         
-        List<Operator> operators = new ArrayList<Operator>();
-        operators.add(new SubtreeCrossover());
-        operators.add(new SubtreeMutation());
-        template.put(Breeder.OPERATORS, operators);
         
-        template.put(SubtreeCrossover.PROBABILITY, 1.0);
-        template.put(SubtreeMutation.PROBABILITY, 0.0);
-        template.put(Initialiser.METHOD, new Full());
+        the(EvolutionaryStrategy.TERMINATION_CRITERIA, newArrayList(new TerminationCriteria[] {
+            new TerminationFitness(new DoubleFitness.Minimise(0.0)),
+            new MaximumGenerations()
+        }));
+        
+        the(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
+        the(STGPIndividual.MAXIMUM_DEPTH, 6);
 
-        RandomSequence randomSequence = new MersenneTwisterFast();
-        template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
+        the(Breeder.SELECTOR, new TournamentSelector());
+        the(TournamentSelector.TOURNAMENT_SIZE, 7);
+        
+        the(Breeder.OPERATORS, newArrayList(new Operator[] {
+            new SubtreeCrossover(),
+            new SubtreeMutation()           
+        }));
+        
+        the(SubtreeCrossover.PROBABILITY, 1.0);
+        the(SubtreeMutation.PROBABILITY, 0.0);
+        the(Initialiser.METHOD, new Full());
+        ;
+        the(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
 
         // Setup syntax
         List<Node> syntaxList = new ArrayList<Node>();
@@ -167,10 +157,8 @@ public class STGPMultiplexer extends STProblem {
             syntaxList.add(new VariableNode(variables[i]));
         }
 
-        Node[] syntax = syntaxList.toArray(new Node[syntaxList.size()]);
-
-        template.put(STGPIndividual.SYNTAX, syntax);
-        template.put(STGPIndividual.RETURN_TYPE, Boolean.class);
+        the(STGPIndividual.SYNTAX, syntaxList.toArray(new Node[syntaxList.size()]));
+        the(STGPIndividual.RETURN_TYPE, Boolean.class);
 
         // Generate inputs and expected outputs
         Boolean[][] inputValues = BooleanUtils.generateBoolSequences(BITS);
@@ -180,9 +168,9 @@ public class STGPMultiplexer extends STProblem {
         }
 
         // Setup fitness function
-        template.put(FitnessEvaluator.FUNCTION, new HitsCount());
-        template.put(HitsCount.INPUT_VARIABLES, variables);
-        template.put(HitsCount.INPUT_VALUE_SETS, inputValues);
-        template.put(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
+        the(FitnessEvaluator.FUNCTION, new HitsCount());
+        the(HitsCount.INPUT_VARIABLES, variables);
+        the(HitsCount.INPUT_VALUE_SETS, inputValues);
+        the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
     }
 }

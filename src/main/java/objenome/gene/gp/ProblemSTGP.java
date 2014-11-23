@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 /**
  * Static-typed Problem solvable by Evolution
  */
-public abstract class STProblem extends GPContainer {
+public abstract class ProblemSTGP extends GPContainer<STGPIndividual> {
     /**
      * The key for setting <code>Template</code> parameter.
      */
@@ -25,10 +25,10 @@ public abstract class STProblem extends GPContainer {
     /**
      * Constructs a new <code>Template</code>.
      */
-    public STProblem() {
+    public ProblemSTGP() {
         super();
         
-        use(Evolution.COMPONENTS, Lists.newArrayList(new Component[] {
+        the(COMPONENTS, Lists.newArrayList(new Component[] {
             new Initialiser(),
             new FitnessEvaluator(),
             new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator())            

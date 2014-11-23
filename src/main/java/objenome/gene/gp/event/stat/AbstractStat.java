@@ -47,6 +47,12 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
     public static final List<Class<? extends AbstractStat<?>>> NO_DEPENDENCIES = new ArrayList<Class<? extends AbstractStat<?>>>(
             0);
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
+    
     /**
      * This is the stat listener. When the stat is registered, its listener is
      * added to the {@link EventManager}.
@@ -178,10 +184,10 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
         return listener;
     }
     
-    public <X extends Object & Event> AbstractStat<X> put(Class<? extends AbstractStat<X>> type) {
-        return getConfig().put(type);
-    }
-
+//    public <X extends Object & Event> AbstractStat<X> put(Class<? extends AbstractStat<X>> type) {
+//        return getConfig().put(type);
+//    }
+//
     
     
     /**

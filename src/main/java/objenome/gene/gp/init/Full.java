@@ -27,14 +27,13 @@ import objenome.gene.gp.event.Listener;
 import objenome.gene.gp.Population;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.GPContainer;
-import objenome.gene.gp.event.EventManager;
 import static objenome.gene.gp.Population.SIZE;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 import static objenome.gene.gp.STGPIndividual.*;
 
 import java.util.*;
 
-import objenome.gene.gp.STProblem;
+import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.op.Node;
 import objenome.gene.gp.STGPIndividual;
 import objenome.gene.gp.InitialisationMethod;
@@ -113,14 +112,14 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      * </ul>
      */
     protected void setup(GPContainer config) {
-        random = config.get(RANDOM_SEQUENCE);
-        populationSize = config.get(SIZE);
-        syntax = config.get(SYNTAX);
-        returnType = config.get(RETURN_TYPE);
-        allowDuplicates = config.get(ALLOW_DUPLICATES, allowDuplicates);
+        random = config.the(RANDOM_SEQUENCE);
+        populationSize = config.the(SIZE);
+        syntax = config.the(SYNTAX);
+        returnType = config.the(RETURN_TYPE);
+        allowDuplicates = config.the(ALLOW_DUPLICATES, allowDuplicates);
 
-        Integer maxDepth = config.get(MAXIMUM_DEPTH);
-        Integer maxInitialDepth = config.get(MAXIMUM_INITIAL_DEPTH);
+        Integer maxDepth = config.the(MAXIMUM_DEPTH);
+        Integer maxInitialDepth = config.the(MAXIMUM_INITIAL_DEPTH);
 
         // Use max initial depth if possible, unless it is greater than max depth
         if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
@@ -160,18 +159,18 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(STProblem.PROBLEM, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
-            //setup();
-            throw new UnsupportedOperationException("Unsupported yet");
-        }
-
-        // These will be expensive so only do them when we really have to
-        if (event.isKindOf(STProblem.PROBLEM, RETURN_TYPE)) {
-            dataTypesTable = null;
-        }
-        if (event.isKindOf(STProblem.PROBLEM, SYNTAX)) {
-            updateSyntax();
-        }
+//        if (event.isKindOf(ProblemSTGP.PROBLEM, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
+//            //setup();
+//            throw new UnsupportedOperationException("Unsupported yet");
+//        }
+//
+//        // These will be expensive so only do them when we really have to
+//        if (event.isKindOf(ProblemSTGP.PROBLEM, RETURN_TYPE)) {
+//            dataTypesTable = null;
+//        }
+//        if (event.isKindOf(ProblemSTGP.PROBLEM, SYNTAX)) {
+//            updateSyntax();
+//        }
     }
 
     /**

@@ -23,7 +23,7 @@ package objenome.gene.gp;
 
 import objenome.gene.gp.GPContainer.GPContainerAware;
 import objenome.gene.gp.GPContainer.GPKey;
-import objenome.gene.gp.STProblem;
+import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.event.ConfigEvent;
 import objenome.gene.gp.event.Listener;
 
@@ -71,9 +71,9 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(STProblem.PROBLEM, key)) {
-            setup();
-        }
+//        if (event.isKindOf(ProblemSTGP.PROBLEM, key)) {
+//            setup();
+//        }
     }
 
     protected void setup() {
@@ -81,7 +81,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
     }
 
     public T getHandler() {
-        return config.get(key);
+        return (T)config.get(key);
     }
 
     public GPContainer getConfig() {

@@ -231,20 +231,34 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
     
     public <T> T the(Object key, Builder builder) {        
-        usable(key, Scope.SINGLETON, builder);
+        if (builder!=null)
+            usable(key, Scope.SINGLETON, builder);
         return get((Object)key);
     }    
     public <T> T the(final Class<? extends T> c) {        
-        return the(c, use(c));
+        T existing = get((Object)c);
+        if (existing == null) {
+            return the(c, new ClassBuilder(this, c).instance(this));
+        }
+        return existing;        
     }
     public <T> T the(Object key, Object value) {        
         return the(key, new SingletonBuilder(value));
     }
-    public <T> T the(Object value) {        
-        return the(value.getClass(), new SingletonBuilder(value));
+    public <T> T the(Object value) {    
+        T existing = get((Object)value);
+        if (existing == null) {
+            return the(value.getClass(), new SingletonBuilder(value));
+        }
+        return existing;
+    }
+
+    public Map<String, Object> getSingletons() {
+        return singletonsCache;
     }
 
 
+    
     @Override
     public <T> T get(final Class<? extends T> c) {
         //if c is actually a key and not an arbitrary class this container has never been told about:
@@ -350,6 +364,19 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         }
     }
 
+    public void clear() {
+        builders.clear();
+        scopes.clear();
+        constructorDependencies.clear();
+        setterDependencies.clear();
+        forConstructMethod.clear();        
+        clearCache();
+    }
+    public void clearCache() {
+        singletonsCache.clear();
+        threadLocalsCache.clear();        
+    }
+    
     @Override
     public <T> T remove(Object k) {
         String key = InjectionUtils.getKeyName(k);

@@ -45,7 +45,7 @@ import objenome.gene.gp.event.stat.AbstractStat;
  * TODO subclass a Container and store properties with NORMAL, THREAD or
  * SINGLETON scope
  */
-public class GPContainer extends Container {
+public class GPContainer<I extends Individual> extends Container {
     /**
      * The key for setting and retrieving the list of components.
      */
@@ -61,7 +61,7 @@ public class GPContainer extends Container {
     /**
      * The key -&gt; value mapping.
      */
-    public final HashMap<GPKey<?>, Object> prop = new HashMap<GPKey<?>, Object>();
+    //public final HashMap<GPKey<?>, Object> prop = new HashMap<GPKey<?>, Object>();
 
     /**
      * No instance are allowed, appart from the singleton.
@@ -82,62 +82,62 @@ public class GPContainer extends Container {
      * pipeline of components, as returned by the final component in that
      * pipeline
      */
-    public Population<Individual> run() {
+    public Population<I> run() {
         Pipeline pipeline = new Pipeline();
         /* Initialises the supplied <code>Pipeline</code> with the components that
          * an evolutionary run is composed of. The specific list of components used
          * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
-        for (Component component : the(COMPONENTS)) {
+        for (Component component : get(COMPONENTS)) {
             GPContainer.setContainerAware(this, component);
             pipeline.add(component);
         }
         //config.fire(new StartRun(0));
-        Population<Individual> population = pipeline.process(new Population<Individual>(this));
+        Population<I> population = pipeline.process(new Population<I>(this));
         //config.fire(new EndRun(0, population));
         return population;
     }
 
-    public interface GPContainerAware {
+    public static interface GPContainerAware {
 
         public void setConfig(GPContainer c);
     }
 
 
 
-    /**
-     * Removes the specified <code>AbstractStat</code> from the repository.
-     *
-     * @param type the class of <code>AbstractStat</code> to be removed.
-     */
-    public <E extends Event> void remove(Class<? extends AbstractStat<E>> type) {
-        super.remove(type);
-        if (stat.containsKey(type)) {
-            AbstractStat<E> stat = type.cast(this.stat.remove(type));
-            off(stat.getEvent(), stat.getListener());
-            off(stat.getClearEvent(), stat.getListener());
-        }
-    }
+//    /**
+//     * Removes the specified <code>AbstractStat</code> from the repository.
+//     *
+//     * @param type the class of <code>AbstractStat</code> to be removed.
+//     */
+//    public <E extends Event> void remove(Class<? extends AbstractStat<E>> type) {
+//        super.remove(type);
+//        if (stat.containsKey(type)) {
+//            AbstractStat<E> stat = type.cast(this.stat.remove(type));
+//            off(stat.getEvent(), stat.getListener());
+//            off(stat.getClearEvent(), stat.getListener());
+//        }
+//    }
 
-    /** define a statistic to collect, creating a singleton component keyed by its class */
-    public <X extends Object & Event> AbstractStat<X> stat(Class<? extends AbstractStat<X>> type) {
-
-        
-        // if the repository already contains an instance of the specified stat,
-        // we do not create a new one; otherwise, we create a new instance and
-        // register its listener in the EventManager
-        if (!stat.containsKey(type)) {
-            try {
-                AbstractStat<X> s = the(type);
-                this.stat.put(type, s);
-                on(s.getEvent(), s.listener);
-                return s;
-            } catch (Exception e) {
-                throw new RuntimeException("Could not create an instance of " + type, e);
-            }
-        }
-        return the(type);
-
-    }
+//    /** define a statistic to collect, creating a singleton component keyed by its class */
+//    public <X extends Object & Event> AbstractStat<X> stat(Class<? extends AbstractStat<X>> type) {
+//
+//        
+//        // if the repository already contains an instance of the specified stat,
+//        // we do not create a new one; otherwise, we create a new instance and
+//        // register its listener in the EventManager
+//        if (!stat.containsKey(type)) {
+//            try {
+//                AbstractStat<X> s = the(type);
+//                this.stat.put(type, s);
+//                on(s.getEvent(), s.listener);
+//                return s;
+//            } catch (Exception e) {
+//                throw new RuntimeException("Could not create an instance of " + type, e);
+//            }
+//        }
+//        return the(type);
+//
+//    }
     /**
      * Removes all registered <code>AbstractStat</code> objects from the
      * repository.
@@ -146,10 +146,21 @@ public class GPContainer extends Container {
         List<Class<?>> registered = new ArrayList<Class<?>>(stat.keySet());
 
         for (Class<?> type : registered) {
-            remove((Class<? extends AbstractStat<E>>) type);
+            remove((Object)type);
         }
+        
+        stat.clear();
     }    
 
+    public <X extends Object & Event> AbstractStat<X> stat(AbstractStat<X> a) {
+        if (!stat.containsKey(a.getClass())) {            
+            stat.put(a.getClass(), a);
+            return the(a.getClass(), a);            
+        }
+        return super.the(a.getClass());
+    }
+
+    
     /**
      * Sets the value of the specified configuration key. If the given key
      * already has a value associated with it, then it will be overwritten. The
@@ -163,7 +174,8 @@ public class GPContainer extends Container {
      */
     public <T> GPContainer set(GPKey<T> key, T value) {
         setContainerAware(this, value);
-        prop.put(key, value);
+        remove(key);
+        the(key, value);
         fire(new ConfigEvent(this, key));
         return this;
     }
@@ -186,6 +198,10 @@ public class GPContainer extends Container {
         return set(key, value);
     }
 
+    public <T> T get(GPKey<T> key) {
+        return (T)the(key, null);
+    }
+    
 //    /**
 //     * Retrieves the value of the configuration parameter associated with the
 //     * specified key. If no value has been set for the given key then
@@ -230,8 +246,10 @@ public class GPContainer extends Container {
      * Removes all configuration parameter mapping. The configuration will be
      * empty this call returns.
      */
-    public void reset() {
-        prop.clear();
+    @Override
+    public void clearCache() {
+        resetStats();
+        //prop.clear();
     }
 
     public <T extends Event, V extends T> void fire(T event) {

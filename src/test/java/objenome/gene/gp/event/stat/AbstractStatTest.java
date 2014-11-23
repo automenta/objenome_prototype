@@ -34,7 +34,7 @@ import objenome.gene.gp.event.GenerationEvent;
 public class AbstractStatTest extends TestCase {
 
     /**
-     * Test for the {@link AbstractStat#reset()} method.
+     * Test for the {@link AbstractStat#clear()} method.
      */
     public void testReset() {
         GPContainer config = new GPContainer();        
@@ -43,14 +43,16 @@ public class AbstractStatTest extends TestCase {
         
         assertTrue(!config.contains(RunBestFitness.class));
         
-        assertNotNull(a = config.stat(RunBestFitness.class));                
-        assertNotNull(a2 = config.stat(RunBestFitness.class));                
+        a = config.stat(new RunBestFitness());
+        assertNotNull(a);
+        a2 = config.stat(new RunBestFitness());
+        assertNotNull(a2);                
 
         assertTrue("singleton accessed twice is identical", a==a2);
         
         config.resetStats();       
                 
-        assertNotNull(b = config.stat(RunBestFitness.class));
+        assertNotNull(b = config.stat(new RunBestFitness()));
         
         assertTrue("Different instances as a result of resetStats removing the first", a!=b);
     }

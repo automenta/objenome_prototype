@@ -21,7 +21,6 @@
  */
 package objenome.gene.gp.fitness;
 
-import static objenome.gene.gp.STProblem.PROBLEM;
 
 import objenome.gene.gp.GPContainer;
 import objenome.gene.gp.GPContainer.GPKey;
@@ -109,10 +108,10 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
             config.on(ConfigEvent.class, this);
         }
 
-        inputVariables = config.get(INPUT_VARIABLES);
-        inputValueSets = config.get(INPUT_VALUE_SETS);
-        expectedOutputs = config.get(EXPECTED_OUTPUTS);
-        pointError = config.get(POINT_ERROR, pointError);
+        inputVariables = config.the(INPUT_VARIABLES);
+        inputValueSets = config.the(INPUT_VALUE_SETS);
+        expectedOutputs = config.the(EXPECTED_OUTPUTS);
+        pointError = config.the(POINT_ERROR, pointError);
     }
 
     /**
@@ -124,7 +123,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(PROBLEM, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
+        if (event.isKindOf(INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
             setConfig(event.getConfig());
         }
     }

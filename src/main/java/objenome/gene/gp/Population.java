@@ -52,7 +52,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      */
     public Population(GPContainer config) {
         this.config = config;
-        individuals = new ArrayList<I>(config.get(SIZE));
+        individuals = new ArrayList<I>(/*config.get(SIZE)*/);
     }
 
     public GPContainer getConfig() {

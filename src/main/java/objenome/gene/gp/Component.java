@@ -36,5 +36,5 @@ public interface Component {
      * processing of the provided population
      */
     public <I extends Individual> Population<I> process(Population<I> population);
-
+    
 }
