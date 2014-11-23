@@ -134,17 +134,17 @@ public class STGPRegression extends ProblemSTGP {
 
         // Generate inputs and expected outputs        
         Double[][] inputsGiven = new Double[functionPoints][1];
-        Double[] outputsExpected = new Double[functionPoints];
+        Double[] expectedOutputs = new Double[functionPoints];
         for (int i = 0; i < functionPoints; i++) {
             // Inputs values between -1.0 and +1.0
             inputsGiven[i][0] = (randomSequence.nextDouble() * 2) - 1;
-            outputsExpected[i] = func.apply(inputsGiven[i][0]);
+            expectedOutputs[i] = func.apply(inputsGiven[i][0]);
         }
 
         // Setup fitness function
         the(FitnessEvaluator.FUNCTION, new HitsCount());
         the(HitsCount.POINT_ERROR, 0.01);
         the(HitsCount.INPUT_VALUE_SETS, inputsGiven);
-        the(HitsCount.EXPECTED_OUTPUTS, outputsExpected);
+        the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
     }
 }
