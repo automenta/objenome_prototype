@@ -87,7 +87,7 @@ public class GPContainer<I extends Individual> extends Container {
         /* Initialises the supplied <code>Pipeline</code> with the components that
          * an evolutionary run is composed of. The specific list of components used
          * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
-        for (Component component : get(COMPONENTS)) {
+        for (Component component : (Iterable<Component>)the(COMPONENTS)) {
             GPContainer.setContainerAware(this, component);
             pipeline.add(component);
         }
@@ -181,7 +181,6 @@ public class GPContainer<I extends Individual> extends Container {
     }
     
     public static void setContainerAware(GPContainer config, Object value) {
-        System.out.println("setContainerAware: " + value);
         if (value instanceof GPContainerAware) {
             ((GPContainerAware) value).setConfig(config);
         }
@@ -198,9 +197,7 @@ public class GPContainer<I extends Individual> extends Container {
         return set(key, value);
     }
 
-    public <T> T get(GPKey<T> key) {
-        return (T)the(key, null);
-    }
+ 
     
 //    /**
 //     * Retrieves the value of the configuration parameter associated with the

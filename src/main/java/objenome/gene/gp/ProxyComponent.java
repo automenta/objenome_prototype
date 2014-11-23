@@ -38,7 +38,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
      * The <code>ConfigKey</code> of the proxied object.
      */
     protected GPKey<T> key;
-    private GPContainer config;
+    protected GPContainer config;
 
     /**
      * The proxied object.

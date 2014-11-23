@@ -21,13 +21,15 @@
  */
 package objenome.gene.gp;
 
+import objenome.gene.gp.GPContainer.GPContainerAware;
+
 /**
  * An instance of <code>Operator</code> represents a genetic operator used to
  * generate new individuals. In general, a genetic operator takes <it>n</it>
  * individuals as input and performs random modifications to generate new
  * individuals.
  */
-public interface Operator {
+public interface Operator extends GPContainerAware {
 
     /**
      * Returns the number of individuals expected by the operator.

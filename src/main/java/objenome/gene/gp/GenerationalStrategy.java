@@ -23,9 +23,7 @@ package objenome.gene.gp;
 
 import java.util.List;
 
-import objenome.gene.gp.ProblemSTGP;
 import objenome.gene.gp.event.ConfigEvent;
-import objenome.gene.gp.event.EventManager;
 import objenome.gene.gp.event.GenerationEvent.EndGeneration;
 import objenome.gene.gp.event.GenerationEvent.StartGeneration;
 import objenome.gene.gp.event.Listener;
@@ -125,6 +123,9 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
      */
     protected void setup() {
         criteria = config.get(EvolutionaryStrategy.TERMINATION_CRITERIA);
+        for (TerminationCriteria x : criteria) {
+            GPContainer.setContainerAware(config, x);
+        }
     }
 
     /**
@@ -134,7 +135,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
      */
     @Override
     public void onEvent(ConfigEvent event) {
-        if (event.isKindOf(ProblemSTGP.PROBLEM, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
+        if (event.isKindOf(/*ProblemSTGP.PROBLEM, */EvolutionaryStrategy.TERMINATION_CRITERIA)) {
             setup();
         }
     }

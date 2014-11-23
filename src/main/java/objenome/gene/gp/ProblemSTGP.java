@@ -14,7 +14,7 @@ public abstract class ProblemSTGP extends GPContainer<STGPIndividual> {
     /**
      * The key for setting <code>Template</code> parameter.
      */
-    //public static final GPKey<STProblem> PROBLEM = new GPKey<STProblem>();
+    public static final GPKey<ProblemSTGP> PROBLEM = new GPKey<ProblemSTGP>();
     /**
      * The key -&gt; value mapping.
      */

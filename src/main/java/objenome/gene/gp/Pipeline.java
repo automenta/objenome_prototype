@@ -60,7 +60,7 @@ public class Pipeline implements Component {
     @Override
     public <I extends Individual> Population<I> process(Population<I> population) {
         this.container = population.getConfig();
-        for (Component component : pipeline) {
+        for (Component component : pipeline) {            
             population = component.process(population);
         }
 

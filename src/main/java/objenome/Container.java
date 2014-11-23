@@ -55,7 +55,13 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     
     
     
-
+    
+    public <T> T get(Object key, T defaultValue) {
+        T existing = get(key);
+        if (existing == null)
+            return defaultValue;
+        return existing;
+    }
     
 
     @Override

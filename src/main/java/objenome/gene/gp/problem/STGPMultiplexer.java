@@ -127,14 +127,15 @@ public class STGPMultiplexer extends ProblemSTGP {
 
         the(Breeder.SELECTOR, new TournamentSelector());
         the(TournamentSelector.TOURNAMENT_SIZE, 7);
+
+        the(SubtreeCrossover.PROBABILITY, 1.0);
+        the(SubtreeMutation.PROBABILITY, 0.0);
         
         the(Breeder.OPERATORS, newArrayList(new Operator[] {
             new SubtreeCrossover(),
             new SubtreeMutation()           
         }));
         
-        the(SubtreeCrossover.PROBABILITY, 1.0);
-        the(SubtreeMutation.PROBABILITY, 0.0);
         the(Initialiser.METHOD, new Full());
         ;
         the(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());

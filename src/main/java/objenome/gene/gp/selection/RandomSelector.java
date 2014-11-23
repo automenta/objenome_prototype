@@ -21,9 +21,11 @@
  */
 package objenome.gene.gp.selection;
 
+import java.util.Random;
 import objenome.gene.gp.AbstractSelector;
 import objenome.gene.gp.Individual;
-import objenome.gene.gp.GPContainer;
+import objenome.gene.gp.IndividualSelector;
+import objenome.gene.gp.RandomSequence;
 import static objenome.gene.gp.RandomSequence.RANDOM_SEQUENCE;
 
 /**
@@ -39,7 +41,7 @@ public class RandomSelector extends AbstractSelector {
      */
     @Override
     public Individual select() {
-        int index = population.getConfig().get(RANDOM_SEQUENCE).nextInt(population.size());
+        int index = ((RandomSequence)population.getConfig().get(RANDOM_SEQUENCE)).nextInt(population.size());
         return population.get(index);
     }
 

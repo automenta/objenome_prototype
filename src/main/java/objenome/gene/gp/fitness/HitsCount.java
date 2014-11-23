@@ -108,10 +108,10 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
             config.on(ConfigEvent.class, this);
         }
 
-        inputVariables = config.the(INPUT_VARIABLES);
-        inputValueSets = config.the(INPUT_VALUE_SETS);
-        expectedOutputs = config.the(EXPECTED_OUTPUTS);
-        pointError = config.the(POINT_ERROR, pointError);
+        inputVariables = config.get(INPUT_VARIABLES);
+        inputValueSets = config.get(INPUT_VALUE_SETS);
+        expectedOutputs = config.get(EXPECTED_OUTPUTS);
+        pointError = config.get(POINT_ERROR, pointError);
     }
 
     /**

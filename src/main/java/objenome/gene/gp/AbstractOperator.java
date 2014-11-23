@@ -48,7 +48,7 @@ import objenome.gene.gp.event.OperatorEvent.StartOperator;
  * @see EventManager
  * @see Listener
  */
-public abstract class AbstractOperator implements Operator, GPContainerAware {
+public abstract class AbstractOperator implements Operator {
     private GPContainer config;
 
     /**

@@ -50,6 +50,9 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
      */
     @Override
     public Population process(Population population) {
+        if (this.config == null)
+            setConfig(population.getConfig());
+        
         FitnessFunction handler = getHandler();
         if (handler == null) {
             throw new IllegalStateException("The fitness function has not been set.");

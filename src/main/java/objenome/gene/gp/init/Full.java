@@ -112,14 +112,14 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      * </ul>
      */
     protected void setup(GPContainer config) {
-        random = config.the(RANDOM_SEQUENCE);
-        populationSize = config.the(SIZE);
-        syntax = config.the(SYNTAX);
-        returnType = config.the(RETURN_TYPE);
+        random = config.get(RANDOM_SEQUENCE);
+        populationSize = config.get(SIZE);
+        syntax = config.get(SYNTAX);
+        returnType = config.get(RETURN_TYPE);
         allowDuplicates = config.the(ALLOW_DUPLICATES, allowDuplicates);
 
-        Integer maxDepth = config.the(MAXIMUM_DEPTH);
-        Integer maxInitialDepth = config.the(MAXIMUM_INITIAL_DEPTH);
+        Integer maxDepth = config.get(MAXIMUM_DEPTH);
+        Integer maxInitialDepth = config.get(MAXIMUM_INITIAL_DEPTH);
 
         // Use max initial depth if possible, unless it is greater than max depth
         if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {

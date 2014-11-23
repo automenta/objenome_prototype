@@ -62,7 +62,7 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
      */
     @Override
     public boolean terminate(GPContainer config) {
-        return generation >= config.get(MAXIMUM_GENERATIONS);
+        return generation >= (Integer)config.get(MAXIMUM_GENERATIONS);
     }
 
     /**
