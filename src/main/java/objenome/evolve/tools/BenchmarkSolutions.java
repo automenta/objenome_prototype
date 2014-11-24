@@ -22,6 +22,7 @@
 package objenome.evolve.tools;
 
 import java.util.function.Function;
+import objenome.evolve.problem.STGPBoolean.BooleanCases;
 
 /**
  * This class provides correct solutions to various benchmark problems that can
@@ -162,6 +163,18 @@ public final class BenchmarkSolutions {
 
         return noAddressBits;
     }
+    
+    public static BooleanCases multiplexerProblem(int bits) {
+        int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(bits);
+        Boolean[][] inputValues = BooleanUtils.generateBoolSequences(bits);
+        Boolean[] expectedOutputs = new Boolean[inputValues.length];
+        for (int i = 0; i < inputValues.length; i++) {
+            expectedOutputs[i] = BenchmarkSolutions.multiplexer(inputValues[i], noAddressBits);
+        }
+        return new BooleanCases(inputValues, expectedOutputs);
+    }
+        
+
 
     /**
      * Calculates and returns the correct result of the majority benchmark

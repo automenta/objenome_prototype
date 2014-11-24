@@ -56,8 +56,8 @@ public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGe
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-        double average = AbstractStat.get(GenerationAverageDoubleFitness.class).getAverage();
+        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
+        double average = getConfig().the(GenerationAverageDoubleFitness.class).getAverage();
 
         // Sum the squared differences.
         double sqDiff = 0;

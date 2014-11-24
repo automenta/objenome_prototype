@@ -49,8 +49,8 @@ public abstract class OperatorDuration extends AbstractStat<EndOperator> {
      */
     @Override
     public void refresh(EndOperator event) {
-        long start = AbstractStat.get(OperatorStartTime.class).getTime();
-        long end = AbstractStat.get(OperatorEndTime.class).getTime();
+        long start = getConfig().the(OperatorStartTime.class).getTime();
+        long end = getConfig().the(OperatorEndTime.class).getTime();
 
         duration = end - start;
     }

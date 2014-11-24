@@ -50,7 +50,7 @@ public class GenerationFitnessDiversity extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         HashSet<String> unique = new HashSet<String>();
 
         for (Fitness fitness : fitnesses) {

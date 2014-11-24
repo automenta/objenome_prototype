@@ -53,7 +53,7 @@ public class RunBestIndividuals extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Individual[] generationBest = AbstractStat.get(GenerationBestIndividuals.class).getBestIndividuals();
+        Individual[] generationBest = getConfig().the(GenerationBestIndividuals.class).getBestIndividuals();
         int comparison = generationBest[0].compareTo(best.get(0));
 
         if (comparison > 0) {

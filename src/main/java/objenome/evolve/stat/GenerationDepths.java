@@ -58,7 +58,7 @@ public class GenerationDepths extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Population population = event.getPopulation();
+        Population<?> population = event.getPopulation();
         depths = new int[population.size()];
         int index = 0;
 

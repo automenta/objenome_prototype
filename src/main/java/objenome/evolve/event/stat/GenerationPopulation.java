@@ -33,7 +33,7 @@ public class GenerationPopulation extends AbstractStat<EndGeneration> {
     /**
      * The current population.
      */
-    private Population population;
+    private Population<?> population;
 
     /**
      * Constructs a <code>GenerationPopulation</code>.

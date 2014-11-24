@@ -52,7 +52,7 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Population population = event.getPopulation();
+        Population<?> population = event.getPopulation();
         fitnesses = new Fitness[population.size()];
         int index = 0;
 

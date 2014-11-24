@@ -57,7 +57,7 @@ public class GenerationMinimumNonTerminals extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] nonTerminals = AbstractStat.get(GenerationNonTerminals.class).getNonTerminals();
+        int[] nonTerminals = getConfig().the(GenerationNonTerminals.class).getNonTerminals();
         min = Integer.MAX_VALUE;
 
         for (int t : nonTerminals) {

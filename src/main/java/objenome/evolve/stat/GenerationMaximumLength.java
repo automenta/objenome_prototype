@@ -55,7 +55,7 @@ public class GenerationMaximumLength extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
+        int[] lengths = getConfig().the(GenerationLengths.class).getLengths();
         max = -1;
 
         for (int length : lengths) {

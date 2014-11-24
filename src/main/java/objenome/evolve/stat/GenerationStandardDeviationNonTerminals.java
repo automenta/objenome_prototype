@@ -58,8 +58,8 @@ public class GenerationStandardDeviationNonTerminals extends AbstractStat<EndGen
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] nonTerminals = AbstractStat.get(GenerationNonTerminals.class).getNonTerminals();
-        double average = AbstractStat.get(GenerationAverageNonTerminals.class).getAverage();
+        int[] nonTerminals = getConfig().the(GenerationNonTerminals.class).getNonTerminals();
+        double average = getConfig().the(GenerationAverageNonTerminals.class).getAverage();
 
         // Sum the squared differences
         double sqDiff = 0.0;

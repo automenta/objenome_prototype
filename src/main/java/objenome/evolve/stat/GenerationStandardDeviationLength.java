@@ -58,8 +58,8 @@ public class GenerationStandardDeviationLength extends AbstractStat<EndGeneratio
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
-        double average = AbstractStat.get(GenerationAverageLength.class).getAverage();
+        int[] lengths = getConfig().the(GenerationLengths.class).getLengths();
+        double average = getConfig().the(GenerationAverageLength.class).getAverage();
 
         // Sum the squared differences
         double sqDiff = 0.0;

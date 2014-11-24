@@ -48,7 +48,7 @@ public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         worst = null;
 
         for (Fitness fitness : fitnesses) {

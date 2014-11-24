@@ -56,7 +56,7 @@ public class GenerationAverageLength extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
+        int[] lengths = getConfig().the(GenerationLengths.class).getLengths();
         average = 0;
 
         for (int length : lengths) {

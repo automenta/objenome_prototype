@@ -53,8 +53,6 @@ import objenome.evolve.fitness.HitsCount;
 import objenome.evolve.init.Full;
 import objenome.evolve.operator.SubtreeCrossover;
 import objenome.evolve.operator.SubtreeMutation;
-import objenome.evolve.tools.BenchmarkSolutions;
-import objenome.evolve.tools.BooleanUtils;
 
 /**
  * This template sets up EpochX to run the 6-bit multiplexer benchmark with the
@@ -103,16 +101,28 @@ import objenome.evolve.tools.BooleanUtils;
  *
  * @since 2.0
  */
-public class STGPMultiplexer extends ProblemSTGP {
+public class STGPBoolean extends ProblemSTGP {
 
-    final int BITS;
+   
+    public static class BooleanCases {
+        
+        public final Boolean[][] inputValues;
+        public final Boolean[] expectedOutputs;
 
-    public STGPMultiplexer(int bits) {
+        public BooleanCases(Boolean[][] inputValues, Boolean[] expectedOutputs) {
+            this.inputValues = inputValues;
+            this.expectedOutputs = expectedOutputs;
+        }
+        
+    }
+ 
+    public STGPBoolean(BooleanCases c) {
+        this(c.inputValues, c.expectedOutputs);        
+    }
+
+    public STGPBoolean(Boolean[][] inputValues, Boolean[] expectedOutputs) {
         super();
         
-        this.BITS = bits;
-                
-        int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(BITS);
 
         the(Population.SIZE, 100);
         
@@ -136,41 +146,28 @@ public class STGPMultiplexer extends ProblemSTGP {
             new SubtreeMutation()           
         }));
         
-        the(Initialiser.METHOD, new Full());
-        ;
+        the(Initialiser.METHOD, new Full());        
         the(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
 
         // Setup syntax
-        List<Node> syntaxList = new ArrayList<Node>();
-        syntaxList.add(new And());
-        syntaxList.add(new Or());
-        syntaxList.add(new Not());
-        syntaxList.add(new If());
-
-        Variable[] variables = new Variable[BITS];
-
-        for (int i = 0; i < noAddressBits; i++) {
-            variables[i] = new Variable("A" + i, Boolean.class);
-            syntaxList.add(new VariableNode(variables[i]));
+        List<Node> syntaxList = new ArrayList<Node>() {{
+            add(new And());
+            add(new Or());
+            add(new Not());
+            add(new If());
+        }};
+        
+        for (int i = 0; i < inputValues[0].length; i++) {
+            syntaxList.add(new VariableNode(new Variable("b" + i, Boolean.class)));
         }
-        for (int i = noAddressBits; i < BITS; i++) {
-            variables[i] = new Variable("D" + i, Boolean.class);
-            syntaxList.add(new VariableNode(variables[i]));
-        }
+
 
         the(STGPIndividual.SYNTAX, syntaxList.toArray(new Node[syntaxList.size()]));
         the(STGPIndividual.RETURN_TYPE, Boolean.class);
 
-        // Generate inputs and expected outputs
-        Boolean[][] inputValues = BooleanUtils.generateBoolSequences(BITS);
-        Boolean[] expectedOutputs = new Boolean[inputValues.length];
-        for (int i = 0; i < inputValues.length; i++) {
-            expectedOutputs[i] = BenchmarkSolutions.multiplexer(inputValues[i], noAddressBits);
-        }
 
         // Setup fitness function
         the(FitnessEvaluator.FUNCTION, new HitsCount());
-        the(HitsCount.INPUT_VARIABLES, variables);
         the(HitsCount.INPUT_VALUE_SETS, inputValues);
         the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
     }

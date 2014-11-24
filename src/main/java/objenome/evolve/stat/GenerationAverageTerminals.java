@@ -56,7 +56,7 @@ public class GenerationAverageTerminals extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] terminals = AbstractStat.get(GenerationTerminals.class).getTerminals();
+        int[] terminals = getConfig().the(GenerationTerminals.class).getTerminals();
         average = 0;
 
         for (int t : terminals) {

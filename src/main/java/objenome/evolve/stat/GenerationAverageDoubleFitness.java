@@ -54,7 +54,7 @@ public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> 
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         average = 0;
 
         for (Fitness fitness : fitnesses) {

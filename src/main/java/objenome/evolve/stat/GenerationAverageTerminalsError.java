@@ -57,7 +57,7 @@ public class GenerationAverageTerminalsError extends AbstractStat<EndGeneration>
      */
     @Override
     public void refresh(EndGeneration event) {
-        double stdev = AbstractStat.get(GenerationStandardDeviationTerminals.class).getStandardDeviation();
+        double stdev = getConfig().the(GenerationStandardDeviationTerminals.class).getStandardDeviation();
         Population population = event.getPopulation();
 
         error = stdev / Math.sqrt(population.size());

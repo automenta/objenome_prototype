@@ -39,7 +39,7 @@ public abstract class GenerationEvent implements Event {
     /**
      * The current population.
      */
-    private final Population population;
+    private final Population<?> population;
 
     /**
      * Constructs a <code>GenerationEvent</code>.
@@ -66,7 +66,7 @@ public abstract class GenerationEvent implements Event {
      *
      * @return the population of this event.
      */
-    public Population getPopulation() {
+    public Population<?> getPopulation() {
         return population;
     }
 

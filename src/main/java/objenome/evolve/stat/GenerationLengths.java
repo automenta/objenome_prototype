@@ -58,7 +58,7 @@ public class GenerationLengths extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Population population = event.getPopulation();
+        Population<?> population = event.getPopulation();
         lengths = new int[population.size()];
         int index = 0;
 

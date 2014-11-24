@@ -58,8 +58,8 @@ public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
-        double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
+        int[] depths = getConfig().the(GenerationDepths.class).getDepths();
+        double average = getConfig().the(GenerationAverageDepth.class).getAverage();
 
         // Sum the squared differences
         double sqDiff = 0.0;

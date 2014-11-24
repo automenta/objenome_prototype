@@ -55,7 +55,7 @@ public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
+        int[] depths = getConfig().the(GenerationDepths.class).getDepths();
         max = -1;
 
         for (int depth : depths) {

@@ -56,7 +56,7 @@ public class GenerationAverageNonTerminals extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] nonTerminals = AbstractStat.get(GenerationNonTerminals.class).getNonTerminals();
+        int[] nonTerminals = getConfig().the(GenerationNonTerminals.class).getNonTerminals();
         average = 0;
 
         for (int nt : nonTerminals) {

@@ -50,8 +50,8 @@ public abstract class RunDuration extends AbstractStat<EndRun> {
      */
     @Override
     public void refresh(EndRun event) {
-        long start = AbstractStat.get(RunStartTime.class).getTime();
-        long end = AbstractStat.get(RunEndTime.class).getTime();
+        long start = getConfig().the(RunStartTime.class).getTime();
+        long end = getConfig().the(RunEndTime.class).getTime();
 
         duration = end - start;
     }

@@ -50,8 +50,8 @@ public abstract class GenerationDuration extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        long start = AbstractStat.get(GenerationStartTime.class).getTime();
-        long end = AbstractStat.get(GenerationEndTime.class).getTime();
+        long start = getConfig().the(GenerationStartTime.class).getTime();
+        long end = getConfig().the(GenerationEndTime.class).getTime();
 
         duration = end - start;
     }
