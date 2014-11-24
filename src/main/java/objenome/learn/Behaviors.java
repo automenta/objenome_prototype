@@ -10,7 +10,7 @@ package objenome.learn;
  *  that can eventually implement the method by dynamic compilation.
  *  an 'intelligent' alternative to UnsupportedOperationException.
  */
-public abstract class TrainedMethod extends RuntimeException {
+public abstract class Behaviors extends RuntimeException {
 
     //TODO expression evaluators that can be returned as Behavior inputs and outputs
     

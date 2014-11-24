@@ -48,13 +48,28 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     public Genetainer(boolean concurrent) {
         super(concurrent);
     }
+    
+    public Genetainer(AbstractPrototainer p) {
+        super(p.builders, p.scopes, p.setterDependencies, p.constructorDependencies, p.forConstructMethod);
+    }
         
     @Override
     public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses) {
+        if (abstractClass == null)
+            throw new RuntimeException("abstractClass is null");        
+        
         return (MultiClassBuilder)usable(abstractClass, scope, 
                 new MultiClassBuilder(abstractClass, Lists.newArrayList( klasses ) ));
     }
 
+    public Builder any(Object key, Class<?>[] klasses) {
+        Builder b = getBuilder(key);
+        if (b instanceof ClassBuilder) {
+            return any( ((ClassBuilder)b).type(), klasses );
+        }
+        return null;
+    }
+    
     protected List<Objene> getGenes(ClassBuilder cb, List<Object> path, List<Objene> genes) {
         cb.updateConstructorDependencies(false);
 

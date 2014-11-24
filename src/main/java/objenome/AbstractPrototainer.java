@@ -115,13 +115,13 @@ public class AbstractPrototainer implements Prototainer  {
         //sd.setContainerKey(sourceFromContainer);
     }
 
-    @Override
-    public void use(Object sourceFromContainer, String beanProperty) {
-        // use by constructor and setter...
-        String s = InjectionUtils.getKeyName(sourceFromContainer);
-        autowireBySetter(beanProperty, s);
-        autowireByConstructor(s);
-    }
+//    @Override
+//    public void use(Object sourceFromContainer, String beanProperty) {
+//        // use by constructor and setter...
+//        String s = InjectionUtils.getKeyName(sourceFromContainer);
+//        autowireBySetter(beanProperty, s);
+//        autowireByConstructor(s);
+//    }
  
 
     @Override

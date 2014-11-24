@@ -393,7 +393,7 @@ public class InjectionUtils {
                 sb.append(s.substring(1));
             }
             return sb.toString();
-        }
+        }        
         return obj.toString();
     }
 

@@ -8,6 +8,7 @@ package objenome;
 import objenome.dependency.Builder;
 import objenome.dependency.Scope;
 import com.google.common.collect.Sets;
+import com.sun.javafx.runtime.VersionInfo;
 import java.util.List;
 import java.util.Set;
 import objenome.dependency.MultiClassBuilder;
@@ -21,6 +22,7 @@ public interface Multainer extends Prototainer {
     
     
     
+        
     default public Builder any(Class<?> abstractClass, Class<?>[] klasses) {
         if (klasses.length == 0)
             usable(abstractClass, abstractClass);

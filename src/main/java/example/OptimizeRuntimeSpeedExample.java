@@ -12,7 +12,7 @@ import objenome.Objenome;
 import objenome.metric.Microbenchmark;
 import objenome.learn.OptimizeMultivariate;
 
-public class OptimizeWallTimeList {
+public class OptimizeRuntimeSpeedExample {
 
     final static int NumItems = 1000;
     final static int NumIterations = 10;

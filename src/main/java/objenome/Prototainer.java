@@ -124,20 +124,19 @@ public interface Prototainer  {
         return c;
     }
     
-    //TODO make 'use' versions of all 'usable' methods
     
-    /**
-     * Configure a bean dependency to be auto-wired by the container. It wires
- by constructor and by setter. By constructor is uses the type of
- sourceFromContainer. By setter it looks for a property with the given
- name and try to apply.
-     *
-     * @param sourceFromContainer The bean inside the container that will be
-     * wired automatically inside any other bean the depends on it.
-     * @param property The name of the property to apply, whey trying
- auto-wiring by setter.
-     */
-    void use(Object sourceFromContainer, String property);
+//    /**
+//     * Configure a bean dependency to be auto-wired by the container. It wires
+// by constructor and by setter. By constructor is uses the type of
+// sourceFromContainer. By setter it looks for a property with the given
+// name and try to apply.
+//     *
+//     * @param sourceFromContainer The bean inside the container that will be
+//     * wired automatically inside any other bean the depends on it.
+//     * @param property The name of the property to apply, whey trying
+// auto-wiring by setter.
+//     */
+//    void use(Object sourceFromContainer, String property);
 
 
     
