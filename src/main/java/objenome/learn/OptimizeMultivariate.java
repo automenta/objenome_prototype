@@ -100,7 +100,7 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
     protected void apply(double[] values) {              
         for (int i = 0; i < values.length; i++)
             variables.get(i).setValue(values[i]);
-        objenome.commit();        
+        //objenome.commit();        
     }
 
     @Override

@@ -6,18 +6,17 @@
 package objenome.gene;
 
 import java.util.List;
-import objenome.Objene;
 import objenome.Phenotainer;
 import objenome.dependency.MultiClassBuilder;
 
 /** stores a double value between 0...N which is used to select equally
  *  from the list of N classes in its creator Multiclass
  */
-public class SelectImplementation extends Objene<Class> implements Numeric {
+public class SelectImplementation extends SetConstantValue<Class> implements Numeric {
     public final MultiClassBuilder multiclass;
 
     public SelectImplementation(List<Object> path, MultiClassBuilder multiclass) {
-        super(path, Math.random());
+        super(null, path, Math.random());
         this.multiclass = multiclass;
     }
 
@@ -32,7 +31,8 @@ public class SelectImplementation extends Objene<Class> implements Numeric {
     }
 
     @Override public void apply(Phenotainer c) { 
-        c.use(getValue());
+        c.remove(multiclass.abstractClass);
+        c.use(multiclass.abstractClass, getValue());
     }
 
     @Override

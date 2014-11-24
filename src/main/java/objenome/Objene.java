@@ -5,13 +5,10 @@
  */
 package objenome;
 
-import com.google.common.util.concurrent.AtomicDouble;
-import java.util.List;
-
 /**
  * Gene of an Objenome
  */
-abstract public class Objene<V> extends AtomicDouble {
+public interface Objene {
    
     /**
      * the DI target instance key that this affects.
@@ -21,28 +18,18 @@ abstract public class Objene<V> extends AtomicDouble {
      *  --DependencyKey (which will contain a String key and possible Parameter reference)
      * 
      */
-    public final List<Object> path;
 
-   
-    public Objene(List<Object> path, double initialValue) {
-        super(initialValue);
-        this.path = path;
-    }
 
     /** apply the consequences of this gene to an Phenotainer */
-    abstract public void apply(Phenotainer c);
+    public void apply(Phenotainer c);
 
-    /** gets the data value */
-    abstract public V getValue();
+
+
+
+    public String key();
+
+    public void mutate();
     
-    @Override
-    public String toString() {
-        Object lastPathElement = path.get(path.size()-1);        
-        return lastPathElement + " => " + getValue();
-    }    
-
-    abstract public String key();
-
-    abstract public void mutate();
+    
     
 }

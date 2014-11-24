@@ -175,3 +175,60 @@ public class STGPMultiplexer extends ProblemSTGP {
         the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
     }
 }
+
+
+/**
+ * This template sets up EpochX to run the 11-bit multiplexer benchmark with the
+ * STGP representation. The 11-bit multiplexer problem involves evolving a
+ * program which receives an array of 11 boolean values. The first 3 values are
+ * address bits, which the program should convert into an index for which of the
+ * remaining data registers to return. {a0, a1, a2, d0, d1, d2, d3, d4, d5, d6,
+ * d7}.
+ *
+ * <table>
+ * <tr>
+ * <td>a0</td><td>a1</td><td>a2</td><td>return value</td>
+ * <td>false</td><td>false</td><td>false</td><td>d0</td>
+ * <td>true</td><td>false</td><td>false</td><td>d1</td>
+ * <td>false</td><td>true</td><td>false</td><td>d2</td>
+ * <td>true</td><td>true</td><td>false</td><td>d3</td>
+ * <td>false</td><td>false</td><td>true</td><td>d4</td>
+ * <td>true</td><td>false</td><td>true</td><td>d5</td>
+ * <td>false</td><td>true</td><td>true</td><td>d6</td>
+ * <td>true</td><td>true</td><td>true</td><td>d7</td>
+ * </tr>
+ * </table>
+ *
+ * The following configuration is used:
+ *
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}:
+ * <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link STGPIndividual#MAXIMUM_DEPTH}: <code>6</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>SubtreeCrossover</code>,
+ * <code>SubtreeMutation</code>
+ * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
+ * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>,
+ * <code>OrFunction</code>, <code>NotFunction<code>,
+ * <code>IfFunction<code>, <code>VariableNode("A0", Boolean)<code>, <code>VariableNode("A1", Boolean)<code>,
+ * <code>VariableNode("A2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>,
+ * <code>VariableNode("D5", Boolean)<code>, <code>VariableNode("D6", Boolean)<code>, <code>VariableNode("D7", Boolean)<code>,
+ * <code>VariableNode("D8", Boolean)<code>, <code>VariableNode("D9", Boolean)<code>, <code>VariableNode("D10", Boolean)<code>
+ * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>,
+ * <code>A2</code>, <code>D3</code>, <code>D4</code>, <code>D5</code>,
+ * <code>D6</code>, <code>D7</code>, <code>D8</code>, <code>D9</code>,
+ * <code>D10</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input
+ * combinations]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ *
+ * @since 2.0
+ */

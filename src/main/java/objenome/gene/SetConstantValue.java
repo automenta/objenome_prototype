@@ -5,16 +5,20 @@
  */
 package objenome.gene;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import objenome.Objene;
 import objenome.Phenotainer;
 
-abstract public class SetConstantValue<X> extends Objene<X> {
+abstract public class SetConstantValue<X> extends AtomicDouble implements Objene {
     final Parameter p;
 
+    public final List<Object> path;
+
     public SetConstantValue(Parameter p, List<Object> path, double initialValue) {
-        super(path, initialValue);
+        super(initialValue);
+        this.path = path;
         this.p = p;
     }
 
@@ -30,5 +34,15 @@ abstract public class SetConstantValue<X> extends Objene<X> {
     public String key() {
         return getClass().getSimpleName() + "(" + p.getDeclaringExecutable()+"|" + p.getName() + ')';
     }    
+    
+    
+    @Override
+    public String toString() {
+        Object lastPathElement = path.get(path.size()-1);        
+        return lastPathElement + " => " + getValue();
+    }        
+    
+    /** gets the data value */
+    abstract public X getValue();
 }
 

@@ -39,7 +39,7 @@ public abstract class NumericSolver<C>  {
     }
 
     protected double eval() {
-        objenome.commit();
+        //objenome.commit();
         return function.apply(objenome.get(model));
     }
     

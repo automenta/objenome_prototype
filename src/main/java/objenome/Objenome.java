@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
-import org.apache.commons.math3.exception.util.DummyLocalizable;
-import org.apache.commons.math3.genetics.AbstractListChromosome;
-import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 /**
@@ -46,16 +43,17 @@ public class Objenome {
         Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
     public Phenotainer container() {
-        if (pheno!=null)
-            return pheno;
+       /* if (pheno!=null)
+            return pheno;*/
+        //return pheno;
         
-        return new Phenotainer(this);
+        return new Phenotainer(this);        
     }
 
     /** call after genes have changed to update the container */
-    public Phenotainer commit() {
-        return container().commit();
-    }
+    //public Phenotainer commit() {
+        //return container().commit();
+    //}
     
     public <T> T get(Object key) {
         return container().get(key);
@@ -77,7 +75,7 @@ public class Objenome {
         for ( Objene g : genes.values()) {
             g.mutate();                
         }
-        commit();
+        //commit();
     }
 
     /** fitness function */

@@ -15,19 +15,17 @@ public class STGPRegressionTest extends TestCase {
             
             STGPIndividual best = p.fittest();
             
+            assertTrue(best.depth() > 1);            
+            assertEquals(100, p.size());
+            assertNotNull(p.fittest());
+
+            
             System.out.println(p.fittest());
             System.out.println(p.size());            
             System.out.println(p);            
             System.out.println(best.evaluate());
             
-            assertTrue(best.depth() > 3);            
-            assertEquals(100, p.size());
-            assertNotNull(p.fittest());
             
             
-            
-            
-		
-		//final int noSuccess = getNoSuccesses(model, false, false);
 	}
 }

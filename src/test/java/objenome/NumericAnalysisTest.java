@@ -8,6 +8,7 @@ package objenome;
 import objenome.gene.Between;
 import objenome.learn.FindZeros;
 import java.util.function.Function;
+import objenome.gene.SetDoubleValue;
 import objenome.learn.OptimizeMultivariate;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
@@ -71,7 +72,7 @@ public class NumericAnalysisTest {
             }
         }).run();
         
-        double bestParam = o.getGeneList().get(0).doubleValue();
+        double bestParam = ((SetDoubleValue)o.getGeneList().get(0)).doubleValue();
         assertEquals(-3.97454, bestParam, 0.001);
     }
     
@@ -101,7 +102,7 @@ public class NumericAnalysisTest {
         
         
         
-        double bestParam = o.getGeneList().get(1).doubleValue();        
+        double bestParam = ((SetDoubleValue)o.getGeneList().get(1)).doubleValue();
         assertEquals(-2.5919, bestParam, 0.001);
     }
     

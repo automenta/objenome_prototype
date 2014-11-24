@@ -10,6 +10,7 @@ import java.util.List;
 import static objenome.dependency.Builder.of;
 import static objenome.dependency.Builder.the;
 import objenome.gene.SelectImplementation;
+import objenome.gene.SetConstantValue;
 import objenome.gene.SetIntegerValue;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -112,7 +113,7 @@ public class GenetainerTest {
         
         assertEquals(SelectImplementation.class, genes.get(0).getClass());
         
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", genes.get(0).path.toString());
+        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", ((SetConstantValue)genes.get(0)).path.toString());
     }
     
     
@@ -156,11 +157,11 @@ public class GenetainerTest {
         
         assertEquals(SelectImplementation.class, genes.get(0).getClass());
                  
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", genes.get(0).path.toString());
+        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", ((SetConstantValue)genes.get(0)).path.toString());
         
         assertEquals(SetIntegerValue.class, genes.get(1).getClass());        
                         
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part), ClassBuilder[class objenome.GenetainerTest$PartN], int arg0]", genes.get(1).path.toString());
+        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part), ClassBuilder[class objenome.GenetainerTest$PartN], int arg0]", ((SetConstantValue)genes.get(1)).path.toString());
     }
     
     @Test public void testRecurse2LevelsGeneration() {
@@ -174,7 +175,7 @@ public class GenetainerTest {
         
         assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
         assertEquals(SelectImplementation.class, genes.get(0).getClass());
-        assertEquals("3rd level deep", 5, genes.get(0).path.size());
+        assertEquals("3rd level deep", 5, ((SetConstantValue)genes.get(0)).path.size());
     }
     
     @Test public void testMultitypeRecurse() {

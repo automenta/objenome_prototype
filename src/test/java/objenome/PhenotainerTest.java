@@ -129,9 +129,11 @@ public class PhenotainerTest {
         Objenome o = g.genome(Machine.class);
 
         Set<Class> uniqueClasses = new HashSet();
-        for (int i = 0; i < 55; i++) {            
+        for (int i = 0; i < 55; i++) {  
+            
             Container c = o.container();
             Machine m = c.get(Machine.class);
+            
             
             assertEquals("iteration " + i,  ((SelectImplementation)o.getGeneList().get(0)).getValue(), m.part.getClass() );
             uniqueClasses.add(m.part.getClass());

@@ -56,7 +56,7 @@ public class GenerationAverageDepth extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        int[] depths = getConfig().get(GenerationDepths.class).getDepths();
+        int[] depths = getConfig().the(GenerationDepths.class).getDepths();
         average = 0;
 
         for (int depth : depths) {

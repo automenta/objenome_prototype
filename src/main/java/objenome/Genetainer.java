@@ -9,16 +9,19 @@ import objenome.dependency.Builder;
 import objenome.gene.Parameterized;
 import objenome.dependency.Scope;
 import com.google.common.collect.Lists;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
+import javassist.Modifier;
 import objenome.gene.SetBooleanValue;
 import objenome.gene.SetDoubleValue;
 import objenome.gene.SetIntegerValue;
 import objenome.dependency.ClassBuilder;
 import objenome.dependency.ClassBuilder.DependencyKey;
 import objenome.dependency.MultiClassBuilder;
+import objenome.gene.ImplementAbstractMethod;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
@@ -45,7 +48,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     public Genetainer(boolean concurrent) {
         super(concurrent);
     }
-    
+        
     @Override
     public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses) {
         return (MultiClassBuilder)usable(abstractClass, scope, 
@@ -61,6 +64,13 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             throw new RuntimeException(this + " unknown how to Build component: " + path);
         }
 
+        Class c = cb.type();
+        for (Method m : c.getMethods()) {
+            if (Modifier.isAbstract( m.getModifiers() )) {
+                genes.add( new ImplementAbstractMethod(m) );
+            }
+        }
+        
         for (Object v : cb.getInitValues()) {
             //System.out.println("  Class Builder Init Value: "+ cb + " " + v);           
             
