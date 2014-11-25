@@ -28,12 +28,12 @@ public class DynamicJarExample {
         System.out.println(o);
         
         System.out.println(j.getClasses());
-//        
+
         Genetainer g = new Genetainer(j);
         g.any(j.getClass("nars.core.Build"), 
-                of(j.getClass("nars.core.build.Default"),j.getClass("nars.core.build.Neuromorphic")));
-        Objenome objenome = g.genome(j.getClass("nars.core.Build"));
+                of(j.getClass("nars.core.build.Default"), j.getClass("nars.core.build.Neuromorphic")));
         
+        Objenome objenome = g.genome(j.getClass("nars.core.Build"));        
         
         System.out.println(objenome);
         System.out.println(objenome.getGeneList());
