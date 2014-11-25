@@ -187,7 +187,13 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
                 }
 
                 path.add(b);
-                return getGenes( b.type(), path, genes);
+                
+                if (k!=b.type())
+                    getGenes( b.type(), path, genes);
+                else
+                    getGenes( (ClassBuilder)b, path, genes);
+                return genes;
+                
             }
             else {
                 throw new RuntimeException("decide what this means: Builder=" + b);                

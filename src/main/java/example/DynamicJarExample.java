@@ -38,7 +38,7 @@ public class DynamicJarExample {
         System.out.println(objenome);
         System.out.println(objenome.getGeneList());
         
-        Object b = objenome.get("nars.core.Build");
+        Object b = objenome.get(j.getClass("nars.core.Build"));
         System.out.println(b);
         System.out.println(b.getClass());
         
