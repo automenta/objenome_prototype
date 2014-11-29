@@ -1,0 +1,57 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package objenome;
+
+import objenome.dependency.Builder;
+import com.google.common.collect.SetMultimap;
+import java.util.Set;
+import objenome.util.Packatainer;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+/**
+ *
+ * @author me
+ */
+public class PackatainerTest {
+    
+    @Test 
+    public void test1() {
+
+        
+    
+        Packatainer rg = new Packatainer(/*new String[] { "objenome" },*/
+                Genetainer.class, Container.class, Builder.class);
+                
+        SetMultimap<Class, Class> anc = rg.includeAncestorImplementations();
+
+        assertEquals(6, anc.keySet().size());
+        assertTrue(anc.size() > anc.keySet().size());
+        
+        for (Class c : anc.keySet()) {
+            System.out.println(c + "=" + anc.get(c));
+        }
+        
+        Set<Class> c = rg.getImplementable();
+        assertTrue(c.size() > 1);
+        
+        //System.out.println(c);
+        
+        for (Class ci : rg.getImplementable()) {
+            Genetainer g = new Genetainer(rg);
+            try {
+                System.out.println(ci + ": " + g.genome(ci).getGeneList());
+            }
+            catch (Exception e) {
+                System.out.println("  unable: " + ci + ": " + e.toString());
+            }
+        }
+            
+    }
+    
+    
+}
