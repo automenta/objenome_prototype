@@ -6,6 +6,7 @@
 package objenome.solution;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import java.util.List;
 import objenome.Objene;
 import objenome.Phenotainer;
 import objenome.problem.DecideNumericValue;
@@ -23,6 +24,10 @@ abstract public class SetConstantValue<X> extends AtomicDouble implements Objene
         c.use(problem.parameter, getValue());
     }
         
+    public List getPath() {
+        return problem.path;
+    }
+    
     @Override
     public String key() {
         return getClass().getSimpleName() + "(" + problem.parameter.getDeclaringExecutable()+"|" + problem.parameter.getName() + ')';

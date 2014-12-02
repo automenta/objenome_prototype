@@ -5,26 +5,27 @@
  */
 package objenome.solution;
 
+import objenome.problem.DevelopMethod;
 import java.lang.reflect.Method;
 import objenome.Objene;
 import objenome.Phenotainer;
+import objenome.problem.Problem;
 
 /**
  * Uses a dynamically generated expression to complete an abstract or interface method
  * TODO
  */
-public class ImplementAbstractMethod implements Objene {
+public class GPEvolveMethods implements Objene {
     public static String DYNAMIC_SUFFIX = "$$D";
+    private final DevelopMethod[] methods;
     
-    public final Method method;
+    
 
-    public ImplementAbstractMethod(Method m) {
-        this.method = m;
+    
+    public GPEvolveMethods(DevelopMethod... m) {
+        this.methods = m;
     }
 
-    public Class type() {
-        return method.getDeclaringClass();
-    }
     
     @Override
     public void apply(Phenotainer c) {
@@ -33,7 +34,7 @@ public class ImplementAbstractMethod implements Objene {
 
     @Override
     public String key() {
-        return "implement(" + method.toString() + ")";
+        return "implement(" + methods.toString() + ")";
     }
 
     @Override

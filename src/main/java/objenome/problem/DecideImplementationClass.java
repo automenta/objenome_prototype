@@ -5,13 +5,9 @@
  */
 package objenome.solution.dependency;
 
-import com.google.common.collect.Lists;
-import java.util.Collection;
 import java.util.List;
 import objenome.AbstractContainer;
-import objenome.Objene;
 import objenome.problem.Problem;
-import objenome.solution.SetImplementationClass;
 
 /**
  *
@@ -26,10 +22,8 @@ public class DecideImplementationClass implements Problem, Builder {
         selection
     */
     public final List<Class> implementors;
-    private final List<Object> path;
 
-    public DecideImplementationClass(List<Object> path, Class abstractClass, List<Class> implementations) {
-        this.path = path;
+    public DecideImplementationClass(Class abstractClass, List<Class> implementations) {
         this.abstractClass = abstractClass;
         this.implementors = implementations;
     }

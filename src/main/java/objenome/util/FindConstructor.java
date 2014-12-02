@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import objenome.solution.ImplementAbstractMethod;
+import objenome.solution.GPEvolveMethods;
 
 /**
  * Find constructor with polymorphism! Class.getConstructor only finds an exact
@@ -67,7 +67,7 @@ public class FindConstructor {
             //if dynamic, Find a matching shadow constructor in the parent class to which gene 
             //Parameters will be mapped against
             Class x = c.getDeclaringClass();
-            if (x.getName().endsWith(ImplementAbstractMethod.DYNAMIC_SUFFIX)) {
+            if (x.getName().endsWith(GPEvolveMethods.DYNAMIC_SUFFIX)) {
                 Class parent = x.getSuperclass();
                 c = parent.getConstructor(c.getParameterTypes());
                 if (c == null)
