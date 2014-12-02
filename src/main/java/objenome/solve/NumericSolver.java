@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.learn;
+package objenome.solve;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import objenome.Objene;
 import objenome.Objenome;
-import objenome.gene.Numeric;
+import objenome.solution.Numeric;
 
 /**
  *

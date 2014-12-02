@@ -1,4 +1,4 @@
-package objenome.dependency;
+package objenome.solution.dependency;
 
 /**
  * Some factories can also implement this interface to perform some cleanup when

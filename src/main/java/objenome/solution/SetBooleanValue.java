@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.gene;
+package objenome.solution;
 
-import java.lang.reflect.Parameter;
-import java.util.List;
+import objenome.problem.DecideNumericValue.DecideBooleanValue;
 
 /**
  * Boolean backed by a double, 0..0.5 = false, 0.5..1.0 = true
  */
 public class SetBooleanValue extends SetConstantValue<Boolean> implements Numeric {
     
-    public SetBooleanValue(Parameter p, List<Object> path) {
-        super(p, path, Math.random());        
-        assert(p.getType() == boolean.class);
+    public SetBooleanValue(DecideBooleanValue d, boolean b) {
+        super(d);        
+        setValue(b ? 1.0 : 0.0);
     }
     
     @Override

@@ -5,11 +5,11 @@
  */
 package objenome;
 
-import objenome.gene.Between;
-import objenome.learn.FindZeros;
+import objenome.problem.Between;
+import objenome.solve.FindZeros;
 import java.util.function.Function;
-import objenome.gene.SetDoubleValue;
-import objenome.learn.OptimizeMultivariate;
+import objenome.solution.SetDoubleValue;
+import objenome.solve.OptimizeMultivariate;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 import static org.junit.Assert.assertEquals;
@@ -64,8 +64,22 @@ public class NumericAnalysisTest {
         
 
     }    
-    
+
     @Test public void testFindZeros() {
+        Genetainer g = new Genetainer();
+        System.err.println(g.genome(ExampleScalarFunction.class).getGeneList());
+        
+//        Objenome o = new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
+//            public Double apply(ExampleScalarFunction s) {                
+//                return s.output(0.0) + s.output(0.5) + s.output(1.0);
+//            }
+//        }).run();
+//        
+//        double bestParam = ((SetDoubleValue)o.getGeneList().get(0)).doubleValue();
+//        assertEquals(-3.97454, bestParam, 0.001);
+    }
+    
+    @Test public void testFindZerosOld() {
         Objenome o = new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
             public Double apply(ExampleScalarFunction s) {                
                 return s.output(0.0) + s.output(0.5) + s.output(1.0);

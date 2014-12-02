@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.learn;
+package objenome.problem;
 
 /**
  *
  * @author me
  */
-public class Genetic {
+public interface Problem {
     
 }

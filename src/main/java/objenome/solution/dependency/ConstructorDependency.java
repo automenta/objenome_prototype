@@ -1,4 +1,4 @@
-package objenome.dependency;
+package objenome.solution.dependency;
 
 /**
  * A simple implementation of the Dependency interface.

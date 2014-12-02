@@ -5,7 +5,7 @@
  */
 package objenome;
 
-import objenome.dependency.Builder;
+import objenome.solution.dependency.Builder;
 import com.google.common.collect.SetMultimap;
 import java.util.Set;
 import objenome.util.Packatainer;

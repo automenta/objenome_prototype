@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.learn;
+package objenome.solve;
 
 
 /** thrown by an empty static method to supply training examples to a learning method

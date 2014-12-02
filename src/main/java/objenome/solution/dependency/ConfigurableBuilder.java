@@ -1,4 +1,4 @@
-package objenome.dependency;
+package objenome.solution.dependency;
 
 /**
  * An IoC factory that knows how to create instances and can be configured by

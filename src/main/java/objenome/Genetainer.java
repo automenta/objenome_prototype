@@ -5,23 +5,33 @@
  */
 package objenome;
 
-import objenome.dependency.Builder;
-import objenome.gene.Parameterized;
-import objenome.dependency.Scope;
+import objenome.solve.RandomSolver;
+import objenome.solve.Solver;
+import objenome.problem.Problem;
+import objenome.solution.dependency.Builder;
+import objenome.solution.Parameterized;
+import objenome.solution.dependency.Scope;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import static java.util.stream.Collectors.toList;
-import objenome.gene.SetBooleanValue;
-import objenome.gene.SetDoubleValue;
-import objenome.gene.SetIntegerValue;
-import objenome.dependency.ClassBuilder;
-import objenome.dependency.ClassBuilder.DependencyKey;
-import objenome.dependency.MultiClassBuilder;
-import objenome.gene.ImplementAbstractMethod;
+import objenome.problem.DecideNumericValue;
+import objenome.problem.DecideNumericValue.DecideBooleanValue;
+import objenome.problem.DecideNumericValue.DecideDoubleValue;
+import objenome.problem.DecideNumericValue.DecideIntegerValue;
+import objenome.solution.SetBooleanValue;
+import objenome.solution.SetDoubleValue;
+import objenome.solution.dependency.ClassBuilder;
+import objenome.solution.dependency.ClassBuilder.DependencyKey;
+import objenome.solution.dependency.DecideImplementationClass;
+import objenome.solution.ImplementAbstractMethod;
+import objenome.solution.SetImplementationClass;
+import objenome.solution.SetIntegerValue;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
@@ -54,12 +64,12 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
         
     @Override
-    public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses) {
+    public DecideImplementationClass any(Class abstractClass, Scope scope, Class<?>... klasses) {
         if (abstractClass == null)
             throw new RuntimeException("abstractClass is null");        
         
-        return (MultiClassBuilder)usable(abstractClass, scope, 
-                new MultiClassBuilder(abstractClass, Lists.newArrayList( klasses ) ));
+        return (DecideImplementationClass)usable(abstractClass, scope, 
+                new DecideImplementationClass(abstractClass, Lists.newArrayList( klasses ) ));
     }
 
     public Builder any(Object key, Class<?>[] klasses) {
@@ -70,7 +80,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         return null;
     }
     
-    protected List<Objene> getGenes(ClassBuilder cb, List<Object> path, List<Objene> genes) {
+    protected List<Problem> getProblems(ClassBuilder cb, List<Object> path, List<Problem> problems) {
         cb.updateConstructorDependencies(false);
 
         if (cb.getInitValues() == null) {
@@ -82,7 +92,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         Class c = cb.type();
         for (Method m : c.getMethods()) {
             if (Modifier.isAbstract( m.getModifiers() )) {
-                genes.add( new ImplementAbstractMethod(m) );
+                problems.add( new ImplementAbstractMethod(m) );
             }
         }
         
@@ -99,15 +109,15 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             
             Builder bv = getBuilder(((DependencyKey)v).key);
             if (bv instanceof Parameterized) {
-                genes.addAll( ((Parameterized)bv).getGenes(nextPath) );
+                problems.addAll( ((Parameterized)bv).getProblems(nextPath) );
             }
-            if (bv instanceof MultiClassBuilder) {
+            if (bv instanceof DecideImplementationClass) {
                 //recurse for each choice
-                getGenes(((MultiClassBuilder)bv).implementors, nextPath, genes);
+                getProblems(((DecideImplementationClass)bv).implementors, nextPath, problems);
             }
             else {
                 //System.out.println("  Class Builder Init Value Builder: "+ cb + " " + bv);
-                getGenes(bv, nextPath, genes);
+                getProblems(bv, nextPath, problems);
             }
         }
         for (Parameter p : cb.getInitPrimitives()) {
@@ -115,15 +125,17 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             nextPath.add(p);
             
             if (p.getType() == int.class) {
-                genes.add(new SetIntegerValue(p, nextPath, 
-                        getIntMinDefault(), getIntMaxDefault()) );
+                problems.add(new DecideIntegerValue(p, nextPath, getIntMinDefault(), getIntMaxDefault()));
+                
+                /*problems.add(new SetIntegerValue(p, nextPath, 
+                        getIntMinDefault(), getIntMaxDefault()) );*/
             }
             else if (p.getType() == double.class) {
-                genes.add(new SetDoubleValue(p, nextPath, 
+                problems.add(new SetDoubleValue(p, nextPath, 
                         getDoubleMinDefault(), getDoubleMaxDefault()) );
             }
             else if (p.getType() == boolean.class) {
-                genes.add(new SetBooleanValue(p, nextPath) );    
+                problems.add(new SetBooleanValue(p, nextPath) );    
             }
             else {
                 throw new RuntimeException("primitive Parameter " + nextPath + " " + p + " not yet supported");
@@ -133,18 +145,18 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         //TODO handle setters, etc
         //System.out.println("Class Builder: "+ path + " " + cb);
 
-        return genes;
+        return problems;
     }
     
-    protected List<Objene> getGenes(Iterable keys, List<Object> parentPath, List<Objene> genes) {
+    protected List<Problem> getProblems(Iterable keys, List<Object> parentPath, List<Problem> problems) {
         for (Object k : keys) {
-            genes = getGenes(k, parentPath, genes);
+            problems = getGenes(k, parentPath, problems);
         }
-        return genes;
+        return problems;
     }
     
-    protected List<Objene> getGenes(Object k, List<Object> parentPath, List<Objene> genes) {
-        if (genes == null) genes = new ArrayList();
+    protected List<Problem> getProblems(Object k, List<Object> parentPath, List<Problem> problems) {
+        if (problems == null) problems = new ArrayList();
             
         //TODO lazily calculate as needed, not immediately because it may not be used
         List<Object> path;
@@ -166,33 +178,33 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             //System.out.println(k + "=" + cb);
                     
             path.add(cb);                
-            getGenes(cb, path, genes);
+            getProblems(cb, path, problems);
         }
         else {
             
             if (b instanceof Parameterized) {
-                genes.addAll( ((Parameterized)b).getGenes(path) );
+                problems.addAll( ((Parameterized)b).getProblems(path) );
             }            
         
-            if (b instanceof MultiClassBuilder) {
-                MultiClassBuilder mcb = (MultiClassBuilder)b;
+            if (b instanceof DecideImplementationClass) {
+                DecideImplementationClass mcb = (DecideImplementationClass)b;
                 path.add(mcb);
 
-                return getGenes(mcb.implementors, path, genes);
+                return getProblems(mcb.implementors, path, problems);
             }
             else if (b instanceof ClassBuilder) {                      
                 if (b.equals(previousPathElement)) {
-                    return genes;
+                    return problems;
                     //throw new RuntimeException("Cyclic dependency: " + path + " -> " + b);
                 }
 
                 path.add(b);
                 
                 if (k!=b.type())
-                    getGenes( b.type(), path, genes);
+                    getProblems( b.type(), path, problems);
                 else
-                    getGenes( (ClassBuilder)b, path, genes);
-                return genes;
+                    getProblems( (ClassBuilder)b, path, problems);
+                return problems;
                 
             }
             else {
@@ -203,7 +215,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             }
         }
         
-        return genes;
+        return problems;
         
     }
 
@@ -217,7 +229,56 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
   analogous to AbstractContainer.genome(Object key) except this represents of set of desired
   keys for which to evolve a set of Objosomes can be evolved to generate
      */
-    public Objenome genome(Object... keys) {
+    @Deprecated public Objenome genome(Object... keys) {
+        try {
+            return genome((Solver)new RandomSolver(), keys);
+        } catch (IncompleteSolutionException ex) {
+            throw new RuntimeException(ex.toString(), ex);
+        }
+    }
+    
+    public interface Solution {
+        public Objene apply(Problem p);
+    }
+    
+    public static class RandomSolution implements Solution {
+
+        @Override
+        public Objene apply(Problem p) {
+            if (p instanceof DecideNumericValue) {
+                if (p instanceof DecideBooleanValue) {
+                    return new SetBooleanValue(((DecideBooleanValue)p), Math.random() < 0.5);
+                }
+                else if (p instanceof DecideIntegerValue) {
+                    return new SetIntegerValue(((DecideIntegerValue)p), Math.random());
+                }
+                else if (p instanceof DecideDoubleValue) {
+                    return new SetDoubleValue(((DecideDoubleValue)p), Math.random());
+                }
+            }
+            else if (p instanceof DecideImplementationClass) {
+                return new SetImplementationClass(((DecideImplementationClass)p), Math.random());
+            }
+            else {
+                return null;
+            }
+        }
+        
+        
+    }
+    
+    
+    
+    
+    public static class IncompleteSolutionException extends Exception {
+
+        public IncompleteSolutionException(Objenome g, Object[] keys, Map<Problem,Solution> p) {
+            super("Incomplete solution for " + Arrays.toString(keys) + " in " + g + ": " + p.toString());
+        }    
+        
+    }
+    
+    public Objenome genome(Solver p, Object... keys) throws IncompleteSolutionException {
         List<? extends Object> k;
         if (keys.length == 0) {
             //default: use all autowired dependents
@@ -227,9 +288,12 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             k = Lists.newArrayList(keys);
         }
         
-        return new Objenome(this, getGenes(k, null, null));
+        List<Problem> p = getProblems(k, null, null);
+        
+        List<Objene> g = new ArrayList();
+        return new Objenome(this, g);
+        
     }
-    
    
     /** realize of phenotype of a chromosome */
     public AbstractContainer build(Objenome objsome, Object[] keys) {

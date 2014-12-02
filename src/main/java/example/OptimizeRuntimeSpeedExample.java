@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import objenome.gene.Between;
-import static objenome.dependency.Builder.of;
+import objenome.problem.Between;
+import static objenome.solution.dependency.Builder.of;
 import objenome.Genetainer;
 import objenome.Objenome;
 import objenome.metric.Microbenchmark;
-import objenome.learn.OptimizeMultivariate;
+import objenome.solve.OptimizeMultivariate;
 
 public class OptimizeRuntimeSpeedExample {
 

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import objenome.dependency.Builder;
+import objenome.solution.dependency.Builder;
 
 /**
  * Container representing dynamically loaded .jar files and all they provide

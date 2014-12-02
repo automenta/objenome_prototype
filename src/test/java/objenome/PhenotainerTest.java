@@ -5,10 +5,10 @@
  */
 package objenome;
 
-import objenome.dependency.Builder;
+import objenome.solution.dependency.Builder;
 import java.util.HashSet;
 import java.util.Set;
-import static objenome.dependency.Builder.of;
+import static objenome.solution.dependency.Builder.of;
 import objenome.GenetainerTest.Machine;
 import objenome.GenetainerTest.Part;
 import objenome.GenetainerTest.Part0;
@@ -17,10 +17,10 @@ import objenome.GenetainerTest.PartN;
 import objenome.GenetainerTest.PartWithSubPart;
 import objenome.GenetainerTest.SubPart0;
 import objenome.GenetainerTest.SubPart1;
-import objenome.gene.SelectImplementation;
-import objenome.gene.SetIntegerValue;
-import objenome.dependency.ClassBuilder;
-import objenome.dependency.MultiClassBuilder;
+import objenome.solution.SetImplementationClass;
+import objenome.solution.SetIntegerValue;
+import objenome.solution.dependency.ClassBuilder;
+import objenome.solution.dependency.DecideImplementationClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -37,7 +37,7 @@ public class PhenotainerTest {
         Genetainer g = new Genetainer();
 
         Builder builder = g.any(Part.class, of(PartN.class));
-        assertTrue("an any expression of one element is reduced to an autowired 'use()'", (builder instanceof ClassBuilder) && (!(builder instanceof MultiClassBuilder)));
+        assertTrue("an any expression of one element is reduced to an autowired 'use()'", (builder instanceof ClassBuilder) && (!(builder instanceof DecideImplementationClass)));
                         
         Objenome o = g.genome(Part.class);
 
@@ -62,7 +62,7 @@ public class PhenotainerTest {
                         
         Objenome o = g.genome(Machine.class);
 
-        SelectImplementation partSelect = (SelectImplementation)o.getGeneList().get(0);
+        SetImplementationClass partSelect = (SetImplementationClass)o.getGeneList().get(0);
         
         Container c = o.container();
         
@@ -112,7 +112,7 @@ public class PhenotainerTest {
         Container c = o.container();
         
         for (Builder b : c.getBuilders().values()) {
-            assertTrue(!(b instanceof MultiClassBuilder));                
+            assertTrue(!(b instanceof DecideImplementationClass));                
         }
 
         
@@ -135,7 +135,7 @@ public class PhenotainerTest {
             Machine m = c.get(Machine.class);
             
             
-            assertEquals("iteration " + i,  ((SelectImplementation)o.getGeneList().get(0)).getValue(), m.part.getClass() );
+            assertEquals("iteration " + i,  ((SetImplementationClass)o.getGeneList().get(0)).getValue(), m.part.getClass() );
             uniqueClasses.add(m.part.getClass());
             
             o.mutate();            

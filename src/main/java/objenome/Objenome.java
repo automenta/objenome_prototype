@@ -82,5 +82,6 @@ public class Objenome {
     public interface Scoring extends Function<Objenome,Double> {
         
     }
+
     
 }

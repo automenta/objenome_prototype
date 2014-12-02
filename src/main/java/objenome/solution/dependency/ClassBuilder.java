@@ -1,4 +1,4 @@
-package objenome.dependency;
+package objenome.solution.dependency;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

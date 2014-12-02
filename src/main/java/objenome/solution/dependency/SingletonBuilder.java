@@ -1,4 +1,4 @@
-package objenome.dependency;
+package objenome.solution.dependency;
 
 import objenome.AbstractContainer;
 

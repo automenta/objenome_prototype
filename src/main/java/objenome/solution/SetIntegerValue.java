@@ -3,56 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.gene;
+package objenome.solution;
 
-import java.lang.reflect.Parameter;
-import java.util.List;
+import objenome.problem.Between;
+import objenome.problem.DecideNumericValue.DecideIntegerValue;
 
 /**
  *
  * @author me
  */
 public class SetIntegerValue extends SetConstantValue<Integer> implements Numeric {
-    private int max;
-    private int min;
     
-    public SetIntegerValue(Parameter p, List<Object> path, int defaultMin, int defaultMax) {
-        super(p, path, Math.random());
-        //assert(p.getType() == int.class);
-        this.min = defaultMin;
-        this.max = defaultMax;
+    public SetIntegerValue(DecideIntegerValue d, @Between(min=0, max=1) double normalizedValue) {
+        super(d);
         
-        Between between = p.getDeclaredAnnotation(Between.class);
-        if (between!=null) {
-            min = (int)between.min();
-            max = (int)between.max();
-        }
+        setNormalizedValue(normalizedValue);
     }
         
     @Override
     public Integer getValue() {
         return intValue();
-            //((doubleValue() * (max-min)) + min);
     }
 
     @Override
     public Integer getMin() {
-        return min;
+        return ((DecideIntegerValue)problem).min;
     }
 
     @Override
     public Integer getMax() {
-        return max;
+        return ((DecideIntegerValue)problem).max;
     }
-
-    public void setMax(int max) {
-        this.max = max;
+    
+    public void setNormalizedValue(@Between(min=0, max=1) double v) {
+        setValue(v * (getMax() - getMin()) + getMin());
     }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
+    
     @Override
     public void setValue(double d) {
         this.set(d);

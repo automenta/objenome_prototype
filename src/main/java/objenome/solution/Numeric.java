@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.gene;
+package objenome.solution;
 
 /**
  * Indicates the gene produces a Number result (Ex: Integer, Double)

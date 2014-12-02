@@ -3,27 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.gene;
+package objenome.solution;
 
-import java.util.List;
+import objenome.Objene;
 import objenome.Phenotainer;
-import objenome.dependency.MultiClassBuilder;
+import objenome.problem.Between;
+import objenome.solution.dependency.DecideImplementationClass;
 
 /** stores a double value between 0...N which is used to select equally
  *  from the list of N classes in its creator Multiclass
  */
-public class SelectImplementation extends SetConstantValue<Class> implements Numeric {
-    public final MultiClassBuilder multiclass;
+public class SetImplementationClass implements Objene, Numeric {
+    public final DecideImplementationClass multiclass;
+    double value;
 
-    public SelectImplementation(List<Object> path, MultiClassBuilder multiclass) {
-        super(null, path, Math.random());
+    public SetImplementationClass(DecideImplementationClass multiclass, @Between(min=0,max=1) double normalizedValue) {
+        super();
+        this.value = normalizedValue;
         this.multiclass = multiclass;
     }
 
-    @Override
     public Class getValue() {
         int num = multiclass.size();
-        int which = (int) (doubleValue()*multiclass.size());
+        int which = (int) (value * multiclass.size());
         if (which == num) {
             which = num - 1;
         }
@@ -58,12 +60,12 @@ public class SelectImplementation extends SetConstantValue<Class> implements Num
 
     @Override
     public Number getNumber() {
-        return doubleValue();
+        return value;
     }
 
     @Override
     public void setValue(double d) {
-        set(d);
+        this.value = d;
     }
 
     @Override

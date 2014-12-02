@@ -3,50 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.gene;
+package objenome.solution;
 
-import java.lang.reflect.Parameter;
-import java.util.List;
+import objenome.problem.Between;
+import objenome.problem.DecideNumericValue.DecideDoubleValue;
 
 /**
  *
  * @author me
  */
 public class SetDoubleValue extends SetConstantValue<Double> implements Numeric {
-    private double max;
-    private double min;
-
     
-    public SetDoubleValue(Parameter p, List<Object> path, double defaultMin, double defaultMax) {
-        super(p, path, Math.random());        
-        assert(p.getType() == double.class);
-
-        this.min = defaultMin;
-        this.max = defaultMax;
-        
-        Between between = p.getDeclaredAnnotation(Between.class);
-        if (between!=null) {
-            this.min = between.min();
-            this.max = between.max();
-        }
+    
+    public SetDoubleValue(DecideDoubleValue d, @Between(min=0, max=1) double normalizedValue) {
+        super(d);        
+        setNormalizedValue(normalizedValue);        
     }
 
     @Override
     public Double getMin() {
-        return min;
+        return ((DecideDoubleValue)problem).min;
     }
 
     @Override
     public Double getMax() {
-        return max;
+        return ((DecideDoubleValue)problem).max;
     }
 
+    public void setNormalizedValue(@Between(min=0, max=1) double v) {
+        setValue(v * (getMax() - getMin()) + getMin());
+    }
+    
     @Override
     public void setValue(double d) {
         this.set(d);
     }
-
-    
     
     @Override
     public Double getValue() {

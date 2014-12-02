@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.learn;
+package objenome.solve;
 
 import java.util.function.Function;
 import objenome.Genetainer;
 import objenome.Objene;
 import objenome.Objenome;
-import objenome.gene.Numeric;
+import objenome.solution.Numeric;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.BisectionSolver;
 

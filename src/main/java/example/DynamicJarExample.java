@@ -8,7 +8,7 @@ package example;
 import objenome.Genetainer;
 import objenome.Jartainer;
 import objenome.Objenome;
-import static objenome.dependency.Builder.of;
+import static objenome.solution.dependency.Builder.of;
 
 /**
  *

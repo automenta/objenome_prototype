@@ -5,20 +5,20 @@
  */
 package objenome;
 
-import objenome.dependency.Builder;
-import objenome.dependency.Scope;
+import objenome.solution.dependency.Builder;
+import objenome.solution.dependency.Scope;
 import com.google.common.collect.Sets;
 import com.sun.javafx.runtime.VersionInfo;
 import java.util.List;
 import java.util.Set;
-import objenome.dependency.MultiClassBuilder;
+import objenome.solution.dependency.DecideImplementationClass;
 
 /**
  * Non-determinate "Multi" Container
  */
 public interface Multainer extends Prototainer {
     
-    public MultiClassBuilder any(Class abstractClass, Scope scope, Class<?>... klasses);
+    public DecideImplementationClass any(Class abstractClass, Scope scope, Class<?>... klasses);
     
     
     

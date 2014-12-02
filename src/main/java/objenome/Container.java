@@ -1,8 +1,8 @@
 package objenome;
 
-import objenome.dependency.Builder;
-import objenome.dependency.Scope;
-import objenome.dependency.Interceptor;
+import objenome.solution.dependency.Builder;
+import objenome.solution.dependency.Scope;
+import objenome.solution.dependency.Interceptor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,9 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import objenome.dependency.ClassBuilder;
-import objenome.dependency.SetterDependency;
-import objenome.dependency.SingletonBuilder;
+import objenome.solution.dependency.ClassBuilder;
+import objenome.solution.dependency.SetterDependency;
+import objenome.solution.dependency.SingletonBuilder;
 import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
 

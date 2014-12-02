@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.learn;
+package objenome.solve;
 
 import java.util.function.Function;
 import objenome.Genetainer;
 import objenome.Objenome;
-import objenome.gene.Numeric;
+import objenome.solution.Numeric;
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;

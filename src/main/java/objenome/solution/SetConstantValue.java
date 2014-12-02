@@ -3,42 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.gene;
+package objenome.solution;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import java.lang.reflect.Parameter;
-import java.util.List;
 import objenome.Objene;
 import objenome.Phenotainer;
+import objenome.problem.DecideNumericValue;
 
 abstract public class SetConstantValue<X> extends AtomicDouble implements Objene {
-    final Parameter p;
-
-    public final List<Object> path;
-
-    public SetConstantValue(Parameter p, List<Object> path, double initialValue) {
-        super(initialValue);
-        this.path = path;
-        this.p = p;
+    
+    public final DecideNumericValue problem;
+    
+    public SetConstantValue(DecideNumericValue p) {
+        super();
+        this.problem = p;
     }
 
     @Override public void apply(Phenotainer c) { 
-        c.use(getParameter(), getValue());
+        c.use(problem.parameter, getValue());
     }
-    
-    public Parameter getParameter() {
-        return p;
-    }
-    
+        
     @Override
     public String key() {
-        return getClass().getSimpleName() + "(" + p.getDeclaringExecutable()+"|" + p.getName() + ')';
+        return getClass().getSimpleName() + "(" + problem.parameter.getDeclaringExecutable()+"|" + problem.parameter.getName() + ')';
     }    
     
     
     @Override
     public String toString() {
-        Object lastPathElement = path.get(path.size()-1);        
+        Object lastPathElement = problem.path.get(problem.path.size()-1);        
         return lastPathElement + " => " + getValue();
     }        
     

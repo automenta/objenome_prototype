@@ -6,8 +6,8 @@
 package objenome;
 
 import java.util.List;
-import objenome.gene.ImplementAbstractMethod;
-import objenome.gene.SetDoubleValue;
+import objenome.solution.ImplementAbstractMethod;
+import objenome.solution.SetDoubleValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

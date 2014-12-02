@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.dependency;
+package objenome.solution.dependency;
 
 import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import objenome.AbstractContainer;
 import objenome.Objene;
-import objenome.gene.Parameterized;
-import objenome.gene.SelectImplementation;
+import objenome.problem.Problem;
+import objenome.solution.SetImplementationClass;
 
 /**
  *
  * @author me
  */
-public class MultiClassBuilder implements Builder, Parameterized {
+public class DecideImplementationClass implements Problem, Builder {
 
     
     public final Class abstractClass;
@@ -26,8 +26,10 @@ public class MultiClassBuilder implements Builder, Parameterized {
         selection
     */
     public final List<Class> implementors;
+    private final List<Object> path;
 
-    public MultiClassBuilder(Class abstractClass, List<Class> implementations) {
+    public DecideImplementationClass(List<Object> path, Class abstractClass, List<Class> implementations) {
+        this.path = path;
         this.abstractClass = abstractClass;
         this.implementors = implementations;
     }
@@ -48,20 +50,9 @@ public class MultiClassBuilder implements Builder, Parameterized {
         return abstractClass;
     }
 
-    
-    @Override
-    public Collection<? extends Objene> getGenes(List<Object> path) {
-        /*if (implementors.size() == 1)
-            return Collections.EMPTY_LIST;*/
-        
-        return Lists.newArrayList(new SelectImplementation(path, this));
-    }
-
     @Override
     public String toString() {
         return "MultiClassBuilder(" + implementors.toString() + ")";
     }
-    
-    
     
 }

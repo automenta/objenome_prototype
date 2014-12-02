@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import objenome.gene.ImplementAbstractMethod;
+import objenome.solution.ImplementAbstractMethod;
 
 /**
  * Find constructor with polymorphism! Class.getConstructor only finds an exact

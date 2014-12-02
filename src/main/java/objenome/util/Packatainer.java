@@ -14,8 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import objenome.AbstractPrototainer;
-import objenome.dependency.Builder;
-import objenome.dependency.MultiClassBuilder;
+import objenome.solution.dependency.Builder;
+import objenome.solution.dependency.DecideImplementationClass;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -96,7 +96,7 @@ public class Packatainer extends AbstractPrototainer {
     public SetMultimap<Class, Class> includeAncestorImplementations() {        
         SetMultimap<Class, Class> r = getAncestorImplementations();
         for (Class c : r.keySet()) {
-            usable(c, new MultiClassBuilder(c, new ArrayList( r.get(c) ) ));
+            usable(c, new DecideImplementationClass(c, new ArrayList( r.get(c) ) ));
         }
         return r;
     }

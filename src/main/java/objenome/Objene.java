@@ -6,7 +6,7 @@
 package objenome;
 
 /**
- * Gene of an Objenome
+ * Gene of an Objenome; a particular solution to an objenomic problem
  */
 public interface Objene {
    
