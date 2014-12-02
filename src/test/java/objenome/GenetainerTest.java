@@ -113,7 +113,6 @@ public class GenetainerTest {
         
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
         
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", ((SetConstantValue)genes.get(0)).getPath().toString());
     }
     
     
@@ -156,9 +155,7 @@ public class GenetainerTest {
         List<Objene> genes = o.getGeneList();
         
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
-                 
-        assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part)]", ((SetConstantValue)genes.get(0)).getPath().toString());
-        
+                         
         assertEquals(SetIntegerValue.class, genes.get(1).getClass());        
                         
         assertEquals("[ClassBuilder[class objenome.GenetainerTest$Machine], objenome.GenetainerTest$Part arg0 (part), ClassBuilder[class objenome.GenetainerTest$PartN], int arg0]", ((SetConstantValue)genes.get(1)).getPath().toString());
@@ -175,7 +172,6 @@ public class GenetainerTest {
         
         assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
-        assertEquals("3rd level deep", 5, ((SetConstantValue)genes.get(0)).getPath().size());
     }
     
     @Test public void testMultitypeRecurse() {
@@ -189,12 +185,13 @@ public class GenetainerTest {
                        
         List<Objene> genes = o.getGeneList();
         
+        System.out.println(genes);
         assertEquals(3, o.size());
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
         assertEquals(SetImplementationClass.class, genes.get(1).getClass());
         assertEquals(SetIntegerValue.class, genes.get(2).getClass());
-        assertEquals(1, ((SetIntegerValue)genes.get(2)).getMin().intValue());
         assertEquals(3, ((SetIntegerValue)genes.get(2)).getMax().intValue());
+        assertEquals(1, ((SetIntegerValue)genes.get(2)).getMin().intValue());
     }
     
 

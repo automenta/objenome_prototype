@@ -31,53 +31,45 @@ abstract public class DecideNumericValue implements Problem {
     }
     
     public static class DecideIntegerValue extends DecideNumericValue  {
-        public final int min;
-        public final int max;
+        public int min;
+        public int max;
 
         public DecideIntegerValue(Parameter p, List path, int min, int max) {
             super(p, path);
             this.min = min;
             this.max = max;
-        }    
-        
-        public DecideIntegerValue(Parameter p, List path) {
-            super(p, path);
             
             Between between = p.getDeclaredAnnotation(Between.class);
             if (between!=null) {
                 this.min = (int)between.min();
                 this.max = (int)between.max();
             }
-            else {
-                this.min = 0;
-                this.max = 1;
-            }
             
+        }    
+        
+        public DecideIntegerValue(Parameter p, List path) {
+            this(p, path, 0, 1);
         }        
     }
     public static class DecideDoubleValue extends DecideNumericValue  {
-        public final double min;
-        public final double max;
+        public double min;
+        public double max;
 
-        public DecideDoubleValue(Parameter p, List path, double min, double  max) {
+        public DecideDoubleValue(Parameter p, List path, double min, double max) {
             super(p, path);
             this.min = min;
             this.max = max;
-        }    
         
-        public DecideDoubleValue(Parameter p, List path) {
-            super(p, path);
-            
             Between between = p.getDeclaredAnnotation(Between.class);
             if (between!=null) {
                 this.min = between.min();
                 this.max = between.max();
             }
-            else {
-                this.min = 0;
-                this.max = 1;
-            }
-            
+
+        }    
+        
+        public DecideDoubleValue(Parameter p, List path) {
+            this(p, path, 0, 1);
         }
 
     }

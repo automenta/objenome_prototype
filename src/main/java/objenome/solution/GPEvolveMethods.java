@@ -5,11 +5,11 @@
  */
 package objenome.solution;
 
+import com.google.common.collect.Sets;
 import objenome.problem.DevelopMethod;
-import java.lang.reflect.Method;
+import java.util.Set;
 import objenome.Objene;
 import objenome.Phenotainer;
-import objenome.problem.Problem;
 
 /**
  * Uses a dynamically generated expression to complete an abstract or interface method
@@ -17,13 +17,13 @@ import objenome.problem.Problem;
  */
 public class GPEvolveMethods implements Objene {
     public static String DYNAMIC_SUFFIX = "$$D";
-    private final DevelopMethod[] methods;
+    private final Set<DevelopMethod> methods;
     
     
 
     
     public GPEvolveMethods(DevelopMethod... m) {
-        this.methods = m;
+        this.methods = Sets.newHashSet(m);
     }
 
     
@@ -45,6 +45,10 @@ public class GPEvolveMethods implements Objene {
     @Override
     public String toString() {
         return key();
+    }
+
+    public void addMethodToDevelop(DevelopMethod m) {
+        methods.add(m);
     }
     
     

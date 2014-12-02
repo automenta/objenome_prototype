@@ -17,14 +17,17 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import objenome.problem.DecideNumericValue;
 import objenome.problem.DecideNumericValue.DecideBooleanValue;
 import objenome.problem.DecideNumericValue.DecideDoubleValue;
 import objenome.problem.DecideNumericValue.DecideIntegerValue;
 import objenome.problem.DevelopMethod;
+import objenome.solution.GPEvolveMethods;
 import objenome.solution.SetBooleanValue;
 import objenome.solution.SetDoubleValue;
 import objenome.solution.dependency.ClassBuilder;
@@ -240,6 +243,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
     
     public static class RandomSolution implements Solution {
+        private GPEvolveMethods gpEvolveMethods;
 
         @Override
         public Objene apply(Problem p) {
@@ -256,6 +260,13 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             }
             else if (p instanceof DecideImplementationClass) {
                 return new SetImplementationClass(((DecideImplementationClass)p), Math.random());
+            }
+            else if (p instanceof DevelopMethod) {
+                if (gpEvolveMethods == null) {
+                    gpEvolveMethods = new GPEvolveMethods();
+                }
+                gpEvolveMethods.addMethodToDevelop((DevelopMethod)p);                                
+                return gpEvolveMethods;
             }
             return null;
         }
@@ -302,9 +313,14 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             throw new IncompleteSolutionException(missing, keys, this);
 
         
-        List<Objene> g = new ArrayList();
-        for (Map.Entry<Problem, Solution> e : problems.entrySet()) {
-            g.add(e.getValue().apply(e.getKey()));
+        Set<Objene> g = new HashSet();
+        for (Map.Entry<Problem, Solution> e : problems.entrySet()) {            
+            Objene gene = e.getValue().apply(e.getKey());
+            if (gene == null) {
+                missing.add(e.getKey());
+                throw new IncompleteSolutionException(missing, keys, this);
+            }
+            g.add(gene);
         }
         
         return new Objenome(this, g);
