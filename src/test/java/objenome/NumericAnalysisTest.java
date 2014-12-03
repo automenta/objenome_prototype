@@ -65,31 +65,21 @@ public class NumericAnalysisTest {
 
     }    
 
-    @Test public void testFindZeros() {
+    @Test public void testFindZeros() throws Genetainer.IncompleteSolutionException {
         Genetainer g = new Genetainer();
-        System.err.println(g.genome(ExampleScalarFunction.class).getGeneList());
         
-//        Objenome o = new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
-//            public Double apply(ExampleScalarFunction s) {                
-//                return s.output(0.0) + s.output(0.5) + s.output(1.0);
-//            }
-//        }).run();
-//        
-//        double bestParam = ((SetDoubleValue)o.getGeneList().get(0)).doubleValue();
-//        assertEquals(-3.97454, bestParam, 0.001);
-    }
-    
-    @Test public void testFindZerosOld() {
-        Objenome o = new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {
+        Objenome o = g.genome(new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {            
             public Double apply(ExampleScalarFunction s) {                
                 return s.output(0.0) + s.output(0.5) + s.output(1.0);
             }
-        }).run();
+        }), ExampleScalarFunction.class);
         
+        System.err.println(o.getGeneList());
+             
         double bestParam = ((SetDoubleValue)o.getGeneList().get(0)).doubleValue();
         assertEquals(-3.97454, bestParam, 0.001);
     }
-    
+
     @Test public void testMultivariate() {
         
         Objenome o = new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {

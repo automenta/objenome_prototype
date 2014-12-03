@@ -12,7 +12,7 @@ import objenome.problem.DecideNumericValue.DecideDoubleValue;
  *
  * @author me
  */
-public class SetDoubleValue extends SetConstantValue<Double> implements Numeric {
+public class SetDoubleValue extends SetConstantValue<Double> implements SetNumericValue {
     
     
     public SetDoubleValue(DecideDoubleValue d, @Between(min=0, max=1) double normalizedValue) {

@@ -7,6 +7,10 @@ package objenome.problem;
 
 import java.lang.reflect.Parameter;
 import java.util.List;
+import objenome.solution.SetBooleanValue;
+import objenome.solution.SetDoubleValue;
+import objenome.solution.SetIntegerValue;
+import objenome.solution.SetNumericValue;
 
 /**
  *
@@ -21,13 +25,20 @@ abstract public class DecideNumericValue implements Problem {
         this.parameter = p;
         this.path = path;
     }
-    
-    
+
+    abstract public SetNumericValue newDefaultSetValue();    
     
     public static class DecideBooleanValue extends DecideNumericValue  {
         public DecideBooleanValue(Parameter p, List path) {
             super(p, path);
         }    
+
+        @Override
+        public SetNumericValue newDefaultSetValue() {
+            return new SetBooleanValue(this,false);
+        }
+        
+        
     }
     
     public static class DecideIntegerValue extends DecideNumericValue  {
@@ -50,6 +61,12 @@ abstract public class DecideNumericValue implements Problem {
         public DecideIntegerValue(Parameter p, List path) {
             this(p, path, 0, 1);
         }        
+
+        @Override
+        public SetNumericValue newDefaultSetValue() {
+            return new SetIntegerValue(this,0);
+        }
+    
     }
     public static class DecideDoubleValue extends DecideNumericValue  {
         public double min;
@@ -70,6 +87,11 @@ abstract public class DecideNumericValue implements Problem {
         
         public DecideDoubleValue(Parameter p, List path) {
             this(p, path, 0, 1);
+        }
+
+        @Override
+        public SetNumericValue newDefaultSetValue() {
+            return new SetDoubleValue(this,0);
         }
 
     }

@@ -10,7 +10,7 @@ import objenome.problem.DecideNumericValue.DecideBooleanValue;
 /**
  * Boolean backed by a double, 0..0.5 = false, 0.5..1.0 = true
  */
-public class SetBooleanValue extends SetConstantValue<Boolean> implements Numeric {
+public class SetBooleanValue extends SetConstantValue<Boolean> implements SetNumericValue {
     
     public SetBooleanValue(DecideBooleanValue d, boolean b) {
         super(d);        

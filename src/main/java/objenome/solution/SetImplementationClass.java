@@ -13,7 +13,7 @@ import objenome.solution.dependency.DecideImplementationClass;
 /** stores a double value between 0...N which is used to select equally
  *  from the list of N classes in its creator Multiclass
  */
-public class SetImplementationClass implements Objene, Numeric {
+public class SetImplementationClass implements Objene, SetNumericValue {
     public final DecideImplementationClass multiclass;
     double value;
 

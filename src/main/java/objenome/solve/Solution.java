@@ -5,16 +5,15 @@
  */
 package objenome.solve;
 
-import java.util.Map;
-import objenome.Genetainer;
+import objenome.Objene;
 import objenome.problem.Problem;
 
 /**
  *
  * @author me
  */
-public interface Solver {
+public interface Solution {
 
-    public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets);
+    public Objene apply(Problem p);
     
 }

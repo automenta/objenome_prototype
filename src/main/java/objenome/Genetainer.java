@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import objenome.solve.Solution;
 import objenome.solve.RandomSolver;
 import objenome.solve.Solver;
 import objenome.problem.Problem;
@@ -22,19 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
-import objenome.problem.DecideNumericValue;
 import objenome.problem.DecideNumericValue.DecideBooleanValue;
 import objenome.problem.DecideNumericValue.DecideDoubleValue;
 import objenome.problem.DecideNumericValue.DecideIntegerValue;
 import objenome.problem.DevelopMethod;
-import objenome.solution.GPEvolveMethods;
-import objenome.solution.SetBooleanValue;
-import objenome.solution.SetDoubleValue;
 import objenome.solution.dependency.ClassBuilder;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
 import objenome.solution.dependency.DecideImplementationClass;
-import objenome.solution.SetImplementationClass;
-import objenome.solution.SetIntegerValue;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
@@ -230,7 +225,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
   analogous to AbstractContainer.genome(Object key) except this represents of set of desired
   keys for which to evolve a set of Objosomes can be evolved to generate
      */
-    @Deprecated public Objenome genome(Object... keys) {
+    public Objenome genome(Object... keys) {
         try {
             return genome((Solver)new RandomSolver(), keys);
         } catch (IncompleteSolutionException ex) {
@@ -238,41 +233,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         }
     }
     
-    public interface Solution {
-        public Objene apply(Problem p);
-    }
     
-    public static class RandomSolution implements Solution {
-        private GPEvolveMethods gpEvolveMethods;
-
-        @Override
-        public Objene apply(Problem p) {
-            if (p instanceof DecideNumericValue) {
-                if (p instanceof DecideBooleanValue) {
-                    return new SetBooleanValue(((DecideBooleanValue)p), Math.random() < 0.5);
-                }
-                else if (p instanceof DecideIntegerValue) {
-                    return new SetIntegerValue(((DecideIntegerValue)p), Math.random());
-                }
-                else if (p instanceof DecideDoubleValue) {
-                    return new SetDoubleValue(((DecideDoubleValue)p), Math.random());
-                }
-            }
-            else if (p instanceof DecideImplementationClass) {
-                return new SetImplementationClass(((DecideImplementationClass)p), Math.random());
-            }
-            else if (p instanceof DevelopMethod) {
-                if (gpEvolveMethods == null) {
-                    gpEvolveMethods = new GPEvolveMethods();
-                }
-                gpEvolveMethods.addMethodToDevelop((DevelopMethod)p);                                
-                return gpEvolveMethods;
-            }
-            return null;
-        }
-        
-        
-    }
     
     
     
@@ -286,47 +247,74 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     }
     
     public Objenome genome(Solver solver, Object... keys) throws IncompleteSolutionException {
+        return genome( (Iterable)Lists.newArrayList(solver), keys);
+    }
+    
+    public Objenome genome(Iterable<Solver> solvers, Object... targets) throws IncompleteSolutionException {
         List<? extends Object> k;
-        if (keys.length == 0) {
+        if (targets.length == 0) {
             //default: use all autowired dependents
             k = getKeyClasses();
         }
         else {
-            k = Lists.newArrayList(keys);
+            k = Lists.newArrayList(targets);
         }
         
         List<Problem> p = getProblems(k, null, null);
         
-        Map<Problem,Solution> problems = new HashMap();
+        Map<Problem,Solution> problemSolutions = new HashMap();
         for (Problem x : p) {
-            problems.put(x, null);
+            problemSolutions.put(x, null);
         }
-        solver.solve(this, problems);
-                
+        
+        Map<Problem,Solution> remainingProblems = null;
+        for (Solver solver : solvers) {
+            if (remainingProblems == null)
+                remainingProblems = new HashMap(problemSolutions.size());
+            else
+                remainingProblems.clear();
+            
+            //extract the keys with missing solutions to add to the solver
+            for (Map.Entry<Problem, Solution> e : problemSolutions.entrySet()) {
+                if (e.getValue() == null)
+                    remainingProblems.put(e.getKey(), null);
+            }
+            
+            if (remainingProblems.isEmpty())
+                break;
+            
+            solver.solve(this, remainingProblems, targets);
+            
+            //merge the new results with the main problems/solutions map
+            problemSolutions.putAll(remainingProblems);
+        }
+       
+        return genome(targets, problemSolutions);
+    }
+
+    public Objenome genome(Object[] targets, Map<Problem,Solution> problemSolutions) throws IncompleteSolutionException {
         List<Problem> missing = new ArrayList();
-        for (Map.Entry<Problem, Solution> e : problems.entrySet()) {
+        for (Map.Entry<Problem, Solution> e : problemSolutions.entrySet()) {
             if (e.getValue() == null)
                 missing.add(e.getKey());
         }
         
         if (!missing.isEmpty())
-            throw new IncompleteSolutionException(missing, keys, this);
-
+            throw new IncompleteSolutionException(missing, targets, this);
         
         Set<Objene> g = new HashSet();
-        for (Map.Entry<Problem, Solution> e : problems.entrySet()) {            
+        for (Map.Entry<Problem, Solution> e : problemSolutions.entrySet()) {            
             Objene gene = e.getValue().apply(e.getKey());
             if (gene == null) {
                 missing.add(e.getKey());
-                throw new IncompleteSolutionException(missing, keys, this);
+                throw new IncompleteSolutionException(missing, targets, this);
             }
             g.add(gene);
         }
         
-        return new Objenome(this, g);
-        
+        return new Objenome(this, g);        
     }
-   
+    
     /** realize of phenotype of a chromosome */
     public AbstractContainer build(Objenome objsome, Object[] keys) {
 

@@ -8,7 +8,7 @@ package objenome.solve;
 import java.util.function.Function;
 import objenome.Genetainer;
 import objenome.Objenome;
-import objenome.solution.Numeric;
+import objenome.solution.SetNumericValue;
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;
@@ -61,7 +61,7 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
         double[] upper = new double[variables.size()];
         double[] mid = new double[variables.size()];
         int j = 0;
-        for (Numeric n : variables) {
+        for (SetNumericValue n : variables) {
             lower[j] = n.getMin().doubleValue();
             upper[j] = n.getMax().doubleValue();
             mid[j] = (lower[j] + upper[j]) * 0.5f;

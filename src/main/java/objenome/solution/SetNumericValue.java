@@ -5,10 +5,13 @@
  */
 package objenome.solution;
 
+import objenome.solve.Solution;
+
 /**
  * Indicates the gene produces a Number result (Ex: Integer, Double)
  */
-public interface Numeric {
+public interface SetNumericValue extends Solution {
+    
     
     public Number getMin();
     public Number getMax();

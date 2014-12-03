@@ -6,51 +6,89 @@
 package objenome.solve;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import objenome.Genetainer;
 import objenome.Objene;
 import objenome.Objenome;
-import objenome.solution.Numeric;
+import objenome.problem.DecideNumericValue;
+import objenome.problem.Problem;
+import objenome.solution.SetNumericValue;
 
 /**
  *
  * @author me
  */
-public abstract class NumericSolver<C>  {
-    public final Objenome objenome;
-    public final List<Numeric> variables = new ArrayList();
+public abstract class NumericSolver<C> implements Solver  {
+    
     public final Function<C, Double> function;
     public final Class<? extends C> model;
 
-    public NumericSolver(Objenome o, Class<? extends C> model, Function<C, Double> function) {
+    public NumericSolver(Class<? extends C> model, Function<C, Double> function) {
         this.model = model;
         this.function = function;
-        this.objenome = o;
         
-        for (Objene g : o.getGeneList()) {
-            if (!(g instanceof Numeric)) {
-                throw new RuntimeException(this + " only applicable if " + o + " has only Numeric genes; " + g + " is not Numeric");
+    }
+    
+    abstract public void solve(Objenome o, List<SetNumericValue> variables);
+
+    @Override
+    public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets) {
+        final List<SetNumericValue> variables = new ArrayList();
+        
+        //store backup in case it needs restored
+        HashMap originalProblems = new HashMap(p);
+        
+        for (Map.Entry<Problem, Solution> e : p.entrySet()) {
+            if (e.getValue() == null) {
+                if (!(e.getKey() instanceof DecideNumericValue)) {
+                    //wont be able to solve with non-numerical ambiguities
+                    return;
+                }
             }
-            variables.add((Numeric) g);
+       }
+         
+        for (Map.Entry<Problem, Solution> e : p.entrySet()) {
+            if (e.getValue() == null) {
+                if (e.getKey() instanceof DecideNumericValue) {
+                    SetNumericValue v = ((DecideNumericValue)e.getKey()).newDefaultSetValue();
+                    variables.add(v);
+                    e.setValue(v);
+                }
+            }
         }
+        
         if (variables.isEmpty()) {
-            throw new RuntimeException(o + " has no numeric variables to solve");
+            return;
         }
+    
+        
+        Objenome o;
+        try {
+            o = g.genome(targets, p);
+            solve(o, variables);
+        } catch (Genetainer.IncompleteSolutionException ex) {
+            p.clear();
+            p.putAll(originalProblems);
+        }
+        
     }
 
-    protected double eval() {
-        //objenome.commit();
-        return function.apply(objenome.get(model));
+    
+    protected double eval(Objenome o) {
+        return function.apply(o.get(model));
     }
     
     
     /** var = gene, from different casts */
-    public double getMin(Numeric var, Objene gene) {
+    public double getMin(SetNumericValue var, Objene gene) {
         return var.getMin().doubleValue();
     }
     
     /** var = gene, from different casts */
-    public double getMax(Numeric var, Objene gene) {
+    public double getMax(SetNumericValue var, Objene gene) {
         return var.getMax().doubleValue();
     }    
 }

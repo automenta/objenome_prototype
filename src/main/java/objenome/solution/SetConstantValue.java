@@ -10,8 +10,10 @@ import java.util.List;
 import objenome.Objene;
 import objenome.Phenotainer;
 import objenome.problem.DecideNumericValue;
+import objenome.problem.Problem;
+import objenome.solve.Solution;
 
-abstract public class SetConstantValue<X> extends AtomicDouble implements Objene {
+abstract public class SetConstantValue<X> extends AtomicDouble implements Objene, Solution {
     
     public final DecideNumericValue problem;
     
@@ -20,6 +22,13 @@ abstract public class SetConstantValue<X> extends AtomicDouble implements Objene
         this.problem = p;
     }
 
+    @Override
+    public Objene apply(Problem p) {
+        return this;
+    }
+
+    
+    
     @Override public void apply(Phenotainer c) { 
         c.use(problem.parameter, getValue());
     }

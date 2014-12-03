@@ -5,10 +5,13 @@
  */
 package objenome;
 
+import objenome.problem.Problem;
+import objenome.solve.Solution;
+
 /**
  * Gene of an Objenome; a particular solution to an objenomic problem
  */
-public interface Objene {
+public interface Objene extends Solution {
    
     /**
      * the DI target instance key that this affects.
@@ -24,6 +27,8 @@ public interface Objene {
     public void apply(Phenotainer c);
 
 
+    @Override
+    public default Objene apply(Problem p) { return this; }
 
 
     public String key();

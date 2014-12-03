@@ -17,11 +17,11 @@ import objenome.solve.Solver;
 public class RandomSolver implements Solver {
 
     @Override
-    public void solve(Genetainer g, Map<Problem, Genetainer.Solution> p) {
-        for (Map.Entry<Problem, Genetainer.Solution> e : p.entrySet()) {
-            Genetainer.Solution existingSolution = e.getValue();
+    public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets) {
+        for (Map.Entry<Problem, Solution> e : p.entrySet()) {
+            Solution existingSolution = e.getValue();
             if (existingSolution == null) {
-                e.setValue(new Genetainer.RandomSolution());
+                e.setValue(new RandomSolution());
             }
         }
     }
