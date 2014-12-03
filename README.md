@@ -1,7 +1,7 @@
 Evolutionary Dependency Injection
 ------------------------------
 
-A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container that **automatically assembles software** from combinations of components.  Ambiguities in the choice of particular dependencies form a set of combinatorial parameters that can be optimized to maximize a goal function.  It can also be used in the basic deterministic mode as a **minimal**, **fluent**, **pure Java**, **no-nonsense** **dependency injection library**.
+A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container that **automatically assembles software** from combinations of components.  Ambiguities in the choice of particular dependencies form a set of combinatorial parameters that can be optimized to maximize a goal function.  And at its core, a **deterministic**, **minimal**, **fluent**, **pure Java**, **no-nonsense** **dependency-injection container**.
 
 
 ![base](https://raw.githubusercontent.com/automenta/objenome/master/objenome.jpg)
@@ -21,4 +21,4 @@ At its core, Objenome contains a refactored and generalized version of [MentaCon
 
 [Apache Commons Math](http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/) provides genetic algorithm, numeric optimization, and other numeric solvers.
 
-An adapted version of the Genetic Programming library [EpochX 2.0](https://github.com/tc33/) is included in the 'evolve' packages.  There are significant architectural differences, including the elimination of all EpochX's need for static classes, and further refactoring to simplify the API. (Currently, this fork does not include EpochX's Context-free-grammar (CFG) packages, though these can be integrated later.)  GP evolution configuration has been modified to use the an Objenome dependency-injection container __internally__.  Javassist dynamic bytecode is available to automatically replace unimplemented abstract methods of constructed instances with procedures and expressions evolved to maximize a provided fitness function.
+An adapted version of the Genetic Programming library [EpochX 2.0](https://github.com/tc33/) is included in the 'evolve' packages.  There are significant architectural differences, including the elimination of all EpochX's need for static classes, and further refactoring to simplify the API. (Currently, this fork does not include EpochX's Context-free-grammar (CFG) packages, though these can be integrated later.)  GP evolution configuration has been modified to use an Objenome dependency-injection container __internally__.  Javassist dynamic bytecode is available to automatically replace unimplemented abstract methods of constructed instances with procedures and expressions evolved to maximize a provided fitness function.
