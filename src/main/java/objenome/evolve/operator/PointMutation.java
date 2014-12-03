@@ -60,13 +60,13 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      * The key for setting and retrieving the probability of each node being
      * mutated
      */
-    public static final GPKey<Double> POINT_PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> POINT_PROBABILITY = new GPKey<>();
 
     /**
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<>();
 
     // Configuration settings
     private Node[] syntax;
@@ -152,7 +152,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
         STGPIndividual program = (STGPIndividual) parents[0];
         STGPIndividual child = program.clone();
 
-        List<Integer> points = new ArrayList<Integer>();
+        List<Integer> points = new ArrayList<>();
 
         //TODO It would be more efficient to traverse the tree than use getNode
         int length = program.length();
@@ -214,7 +214,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
         }
 
         // Filter the syntax down to valid replacements
-        List<Node> replacements = new ArrayList<Node>();
+        List<Node> replacements = new ArrayList<>();
         for (Node replacement : syntax) {
             if ((replacement.getArity() == arity) && !nodesEqual(replacement, n)) {
                 Class<?> replacementReturn = replacement.dataType(argTypes);

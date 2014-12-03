@@ -38,7 +38,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      * The key for setting and retrieving the population size configuration
      * parameter.
      */
-    public static final GPKey<Integer> SIZE = new GPKey<Integer>();
+    public static final GPKey<Integer> SIZE = new GPKey<>();
 
     /**
      * The list of individuals of this propulation.
@@ -51,7 +51,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      */
     public Population(GPContainer config) {
         this.config = config;
-        individuals = new ArrayList<I>(/*config.get(SIZE)*/);
+        individuals = new ArrayList<>(/*config.get(SIZE)*/);
     }
 
     public GPContainer getConfig() {
@@ -167,7 +167,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
         try {
             Population clone = (Population) super.clone();
 
-            clone.individuals = new ArrayList<I>(individuals);
+            clone.individuals = new ArrayList<>(individuals);
 
             return clone;
         } catch (CloneNotSupportedException e) {

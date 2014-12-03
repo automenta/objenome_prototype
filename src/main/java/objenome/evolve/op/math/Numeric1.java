@@ -76,6 +76,6 @@ abstract public class Numeric1 extends Node implements Function<Double,Double> {
     }
     
     @Override public Double apply(Double x) {
-        return func(x.doubleValue());
+        return func(x);
     }
 }

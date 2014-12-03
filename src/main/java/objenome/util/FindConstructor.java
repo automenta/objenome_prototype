@@ -57,7 +57,7 @@ public class FindConstructor {
         
         
         // First find the applicable methods 
-        List<Constructor<?>> applicableMethods = new LinkedList<Constructor<?>>();
+        List<Constructor<?>> applicableMethods = new LinkedList<>();
 
         int assigned = 0;
         for (int i = 0; i < toTest.length; i++) {

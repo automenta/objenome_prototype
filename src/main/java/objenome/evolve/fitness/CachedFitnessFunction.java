@@ -55,7 +55,7 @@ public class CachedFitnessFunction extends AbstractFitnessFunction {
      */
     public CachedFitnessFunction(AbstractFitnessFunction delegate) {
         this.delegate = delegate;
-        cache = new HashMap<Object, Fitness>();
+        cache = new HashMap<>();
     }
 
     /**

@@ -63,7 +63,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * The key for setting the minimum fitness score possible, used when
      * calculating the adjusted fitness score.
      */
-    public static final GPKey<Double> MINIMUM_FITNESS_SCORE = new GPKey<Double>();
+    public static final GPKey<Double> MINIMUM_FITNESS_SCORE = new GPKey<>();
 
     // The delegate that fitness calculations will be passed to
     private AbstractFitnessFunction delegate;

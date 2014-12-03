@@ -51,14 +51,14 @@ public class GPContainer<I extends Individual> extends Container {
     /**
      * The key for setting and retrieving the list of components.
      */
-    public static final GPKey<ArrayList<Component>> COMPONENTS = new GPKey<ArrayList<Component>>();
+    public static final GPKey<ArrayList<Component>> COMPONENTS = new GPKey<>();
 
     public final EventManager events = new EventManager();
 
     /**
      * stats repository, TODO rename
      */
-    public final HashMap<Class<?>, Object> stat = new HashMap<Class<?>, Object>();
+    public final HashMap<Class<?>, Object> stat = new HashMap<>();
 
     /**
      * The key -&gt; value mapping.
@@ -162,10 +162,10 @@ public class GPContainer<I extends Individual> extends Container {
      * repository.
      */    
     public <E extends Event> void resetStats() {
-        List<Class<?>> registered = new ArrayList<Class<?>>(stat.keySet());
+        List<Class<?>> registered = new ArrayList<>(stat.keySet());
 
         for (Class<?> type : registered) {
-            remove((Object)type);
+            remove(type);
         }
         
         stat.clear();

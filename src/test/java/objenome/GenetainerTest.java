@@ -10,6 +10,7 @@ import objenome.problem.Between;
 import objenome.solution.SetConstantValue;
 import objenome.solution.SetImplementationClass;
 import objenome.solution.SetIntegerValue;
+import objenome.solution.SetNumericValue;
 import static objenome.solution.dependency.Builder.of;
 import static objenome.solution.dependency.Builder.the;
 import objenome.solve.Solution;
@@ -191,8 +192,8 @@ public class GenetainerTest {
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
         assertEquals(SetImplementationClass.class, genes.get(1).getClass());
         assertEquals(SetIntegerValue.class, genes.get(2).getClass());
-        assertEquals(3, ((SetIntegerValue)genes.get(2)).getMax().intValue());
-        assertEquals(1, ((SetIntegerValue)genes.get(2)).getMin().intValue());
+        assertEquals(3, ((SetNumericValue)genes.get(2)).getMax().intValue());
+        assertEquals(1, ((SetNumericValue)genes.get(2)).getMin().intValue());
     }
     
 

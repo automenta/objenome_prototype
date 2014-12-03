@@ -22,9 +22,9 @@ public class InjectionUtils {
 
     public static final char PREFIX_SEPARATOR = '.';
 
-    private static Map<Class<?>, Map<String, Object>> settersMaps = new HashMap<Class<?>, Map<String, Object>>();
+    private static Map<Class<?>, Map<String, Object>> settersMaps = new HashMap<>();
 
-    private static Map<Class<?>, Map<String, Object>> fieldsMaps = new HashMap<Class<?>, Map<String, Object>>();
+    private static Map<Class<?>, Map<String, Object>> fieldsMaps = new HashMap<>();
 
     public static void prepareForInjection(Class<?> klass, Map<String, Object> setters, Map<String, Object> fields) {
 
@@ -73,7 +73,7 @@ public class InjectionUtils {
 
                     } else if (obj instanceof Method) {
 
-                        List<Method> list = new ArrayList<Method>();
+                        List<Method> list = new ArrayList<>();
 
                         list.add((Method) obj);
 
@@ -294,7 +294,7 @@ public class InjectionUtils {
 
             try {
 
-                Class k = (Class) targetType; // not sure how to avoid this raw type!
+                Class k = targetType; // not sure how to avoid this raw type!
 
                 newValue = Enum.valueOf(k, value);
 
@@ -667,13 +667,13 @@ public class InjectionUtils {
         // if not in cache, prepare maps for injection...
         if (setters == null) {
 
-            setters = new HashMap<String, Object>();
+            setters = new HashMap<>();
 
             fields = null;
 
             if (tryField) {
 
-                fields = new HashMap<String, Object>();
+                fields = new HashMap<>();
 
             }
 
@@ -777,7 +777,7 @@ public class InjectionUtils {
 
                     while (it.hasNext()) {
 
-                        m = (Method) it.next();
+                        m = it.next();
 
                         Class<?> type = m.getParameterTypes()[0];
 

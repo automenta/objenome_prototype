@@ -56,7 +56,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<>();
 
     private final Grow grower;
 

@@ -33,7 +33,7 @@ public interface InitialisationMethod {
      * The key for setting and retrieving whether the initialisation method
      * should allow duplicate individuals or not
      */
-    public static final GPKey<Boolean> ALLOW_DUPLICATES = new GPKey<Boolean>();
+    public static final GPKey<Boolean> ALLOW_DUPLICATES = new GPKey<>();
 
     /**
      * Returns a newly created individual.

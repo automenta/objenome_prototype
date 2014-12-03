@@ -51,7 +51,7 @@ public final class SgConstructor extends SgBehavior {
      */
     public SgConstructor(final SgClass owner, final String modifiers) {
         super(owner, modifiers);
-        body = new ArrayList<String>();
+        body = new ArrayList<>();
         // TODO Check if the class not already contains a constructor with the
         // same name and arguments!
         owner.addConstructor(this);

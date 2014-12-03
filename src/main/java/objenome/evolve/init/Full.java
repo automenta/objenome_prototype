@@ -136,8 +136,8 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      * Splits the syntax in to terminals and nonTerminals
      */
     private void updateSyntax() {
-        terminals = new ArrayList<Node>();
-        nonTerminals = new ArrayList<Node>();
+        terminals = new ArrayList<>();
+        nonTerminals = new ArrayList<>();
 
         if (syntax != null) {
             for (Node n : syntax) {
@@ -285,7 +285,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
             // Construct list of arg sets that produce the right return type
             // TODO Surely we can cut down the number of calls to this?!
             Class<?>[][] argTypeSets = dataTypeCombinations(arity, dataTypesTable[depth - currentDepth - 1]);
-            List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
+            List<Class<?>[]> validArgTypeSets = new ArrayList<>();
             for (Class<?>[] argTypes : argTypeSets) {
                 Class<?> type = root.dataType(argTypes);
                 if ((type != null) && requiredType.isAssignableFrom(type)) {
@@ -317,7 +317,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      * overridden too.
      */
     private List<Node> listValidNodes(int remainingDepth, Class<?> requiredType) {
-        List<Node> validNodes = new ArrayList<Node>();
+        List<Node> validNodes = new ArrayList<>();
         if (remainingDepth > 0) {
             for (Node n : nonTerminals) {
                 Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
@@ -348,7 +348,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         dataTypesTable = new Class<?>[depth + 1][];
 
         // Trees of depth 0 must be single terminal element
-        Set<Class<?>> types = new HashSet<Class<?>>();
+        Set<Class<?>> types = new HashSet<>();
         for (Node n : terminals) {
             types.add(n.dataType());
         }
@@ -356,7 +356,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
 
         // Handle depths above 1
         for (int i = 1; i <= depth; i++) {
-            types = new HashSet<Class<?>>();
+            types = new HashSet<>();
             for (Node n : nonTerminals) {
                 Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[i - 1]);
 

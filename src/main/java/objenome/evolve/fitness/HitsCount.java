@@ -56,12 +56,12 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
      * The key for setting the expected output values from the programs being
      * evaluated
      */
-    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<Double[]>();
+    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<>();
 
     /**
      * The key for setting the acceptable error for each point to count as a hit
      */
-    public static final GPKey<Double> POINT_ERROR = new GPKey<Double>();
+    public static final GPKey<Double> POINT_ERROR = new GPKey<>();
 
     // Configuration settings
     private Object[] expectedOutputs;

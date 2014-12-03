@@ -31,7 +31,7 @@ public class Reproduction extends AbstractOperator {
     /**
      * The property key under which the reproduction probability is stored.
      */
-    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<>();
 
     /**
      * The default reproduction probability.

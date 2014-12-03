@@ -43,7 +43,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
     /**
      * An empty list of dependencies.
      */
-    public static final List<Class<? extends AbstractStat<?>>> NO_DEPENDENCIES = new ArrayList<Class<? extends AbstractStat<?>>>(
+    public static final List<Class<? extends AbstractStat<?>>> NO_DEPENDENCIES = new ArrayList<>(
             0);
 
     @Override

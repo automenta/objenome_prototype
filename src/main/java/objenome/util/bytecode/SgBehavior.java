@@ -57,9 +57,9 @@ public abstract class SgBehavior {
         }
         this.modifiers = modifiers;
 
-        this.arguments = new ArrayList<SgArgument>();
-        this.exceptions = new ArrayList<SgClass>();
-        annotations = new ArrayList<SgAnnotation>();
+        this.arguments = new ArrayList<>();
+        this.exceptions = new ArrayList<>();
+        annotations = new ArrayList<>();
     }
 
     /**
@@ -143,7 +143,7 @@ public abstract class SgBehavior {
             throw new IllegalArgumentException("There are only " + arguments.size()
                     + " arguments! Subtracting '" + less + "' would be below zero!");
         }
-        final List<SgArgument> list = new ArrayList<SgArgument>();
+        final List<SgArgument> list = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             list.add(arguments.get(i));
         }

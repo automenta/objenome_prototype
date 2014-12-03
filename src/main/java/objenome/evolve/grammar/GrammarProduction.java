@@ -51,7 +51,7 @@ public class GrammarProduction implements Cloneable {
     public GrammarProduction(List<GrammarNode> grammarNodes) {
         this.grammarNodes = grammarNodes;
 
-        attributes = new HashMap<String, Object>();
+        attributes = new HashMap<>();
     }
 
     /**
@@ -62,7 +62,7 @@ public class GrammarProduction implements Cloneable {
      * @see GrammarProduction#addGrammarNode(GrammarNode)
      */
     public GrammarProduction() {
-        this(new ArrayList<GrammarNode>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -262,7 +262,7 @@ public class GrammarProduction implements Cloneable {
 
         for (GrammarNode s : grammarNodes) {
             if (s instanceof GrammarLiteral) {
-                buffer.append(((GrammarLiteral) s).toString());
+                buffer.append(s.toString());
             }
             if (s instanceof GrammarRule) {
                 buffer.append('<');

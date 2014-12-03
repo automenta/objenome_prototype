@@ -32,7 +32,7 @@ public interface SourceGenerator<T extends Individual> {
     /**
      * The key for setting the source generator
      */
-    public static final GPKey<SourceGenerator<?>> SOURCE_GENERATOR = new GPKey<SourceGenerator<?>>();
+    public static final GPKey<SourceGenerator<?>> SOURCE_GENERATOR = new GPKey<>();
 
     public String getSource(T individual);
 

@@ -44,7 +44,7 @@ final class ImplementedMethod {
         }
         this.method = method;
 
-        interfaces = new ArrayList<Class<?>>();
+        interfaces = new ArrayList<>();
     }
 
     /**

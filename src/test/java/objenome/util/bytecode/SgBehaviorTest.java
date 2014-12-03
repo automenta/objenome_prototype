@@ -91,7 +91,7 @@ public abstract class SgBehaviorTest {
         Assert.assertEquals(getTestee().getAnnotations().size(), 0);
         final SgAnnotation ann1 = new SgAnnotation("org.fuin.onthefly", "TestAnno1");
         final SgAnnotation ann2 = new SgAnnotation("org.fuin.onthefly", "TestAnno2");
-        final List<SgAnnotation> annotations = new ArrayList<SgAnnotation>();
+        final List<SgAnnotation> annotations = new ArrayList<>();
         annotations.add(ann1);
         annotations.add(ann2);
         getTestee().addAnnotations(annotations);

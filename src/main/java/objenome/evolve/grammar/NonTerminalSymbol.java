@@ -51,7 +51,7 @@ public class NonTerminalSymbol implements Symbol {
      * representing an instance of.
      */
     public NonTerminalSymbol(GrammarRule grammarRule) {
-        this(grammarRule, new ArrayList<Symbol>());
+        this(grammarRule, new ArrayList<>());
     }
 
     /**
@@ -490,7 +490,7 @@ public class NonTerminalSymbol implements Symbol {
      * from the parse tree rooted at this symbol.
      */
     public List<NonTerminalSymbol> getNonTerminalSymbols() {
-        List<NonTerminalSymbol> nonTerminals = new ArrayList<NonTerminalSymbol>();
+        List<NonTerminalSymbol> nonTerminals = new ArrayList<>();
 
         // Start by adding self.
         nonTerminals.add(this);
@@ -522,7 +522,7 @@ public class NonTerminalSymbol implements Symbol {
      * Recursive helper method for the getNonTerminalIndexes method.
      */
     private List<Integer> getNonTerminalIndexes(int index) {
-        List<Integer> nonTerminals = new ArrayList<Integer>();
+        List<Integer> nonTerminals = new ArrayList<>();
 
         // Start by adding self.
         nonTerminals.add(index);
@@ -549,7 +549,7 @@ public class NonTerminalSymbol implements Symbol {
      * the parse tree rooted at this symbol.
      */
     public List<TerminalSymbol> getTerminalSymbols() {
-        List<TerminalSymbol> terminals = new ArrayList<TerminalSymbol>();
+        List<TerminalSymbol> terminals = new ArrayList<>();
 
         // Add all terminal children and terminals below a non-terminal child.
         for (Symbol child : children) {
@@ -571,7 +571,7 @@ public class NonTerminalSymbol implements Symbol {
      * parse tree rooted at this symbol.
      */
     public List<Symbol> getAllSymbols() {
-        List<Symbol> symbols = new ArrayList<Symbol>();
+        List<Symbol> symbols = new ArrayList<>();
 
         symbols.add(this);
 
@@ -659,7 +659,7 @@ public class NonTerminalSymbol implements Symbol {
         }
 
         // Copy cloned child symbols.
-        clone.children = new ArrayList<Symbol>();
+        clone.children = new ArrayList<>();
         for (Symbol c : children) {
             clone.children.add(c.clone());
         }

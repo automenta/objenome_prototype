@@ -124,7 +124,7 @@ public class ImplementationFactory {
         }
         listener.afterClassCreated(clasz);
 
-        final Map<String, ImplementedMethod> implMethods = new HashMap<String, ImplementedMethod>();
+        final Map<String, ImplementedMethod> implMethods = new HashMap<>();
 
         // Iterate through interfaces and add methods
         for (int i = 0; i < intf.length; i++) {

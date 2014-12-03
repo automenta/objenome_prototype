@@ -36,11 +36,11 @@ public abstract class STGPFitnessFunction extends AbstractFitnessFunction implem
     /**
      * The key for setting the program's input variables
      */
-    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<Variable[]>();
+    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<>();
 
     /**
      * The key for setting the sets of values to use as inputs
      */
-    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<Object[][]>();
+    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<>();
 
 }

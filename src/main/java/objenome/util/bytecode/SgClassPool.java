@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public final class SgClassPool {
 
-    private final Map<String, SgClass> cache = new HashMap<String, SgClass>();
+    private final Map<String, SgClass> cache = new HashMap<>();
 
     /**
      * Default constructor.

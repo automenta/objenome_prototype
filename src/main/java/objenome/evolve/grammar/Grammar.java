@@ -83,7 +83,7 @@ public class Grammar {
     /**
      * The key for setting and retrieving a language grammar
      */
-    public static final GPKey<Grammar> GRAMMAR = new GPKey<Grammar>();
+    public static final GPKey<Grammar> GRAMMAR = new GPKey<>();
 
     // Index into the rulesets.
     private final Map<String, GrammarLiteral> literals;
@@ -102,8 +102,8 @@ public class Grammar {
      * valid format.
      */
     public Grammar(String grammarStr) {
-        literals = new HashMap<String, GrammarLiteral>();
-        rules = new HashMap<String, GrammarRule>();
+        literals = new HashMap<>();
+        rules = new HashMap<>();
 
         parseGrammar(grammarStr);
     }
@@ -121,8 +121,8 @@ public class Grammar {
     public Grammar(File grammarFile) throws IOException {
         String grammar = readGrammarFile(grammarFile);
 
-        literals = new HashMap<String, GrammarLiteral>();
-        rules = new HashMap<String, GrammarRule>();
+        literals = new HashMap<>();
+        rules = new HashMap<>();
 
         parseGrammar(grammar);
     }
@@ -476,7 +476,7 @@ public class Grammar {
         Collection<GrammarRule> ruleList = rules.values();
         for (GrammarRule rule : ruleList) {
             // Calculate and set the minimum depths of all rules.
-            rule.setMinDepth(getMinDepth(new ArrayList<GrammarRule>(), rule));
+            rule.setMinDepth(getMinDepth(new ArrayList<>(), rule));
 
             // Test that all rules have at least one valid production.
             if (rule.getNoProductions() == 0) {
@@ -501,7 +501,7 @@ public class Grammar {
      * otherwise.
      */
     protected boolean isInfinitelyRecursive(GrammarRule rule) {
-        return rule.isRecursive() && isInfinitelyRecursive(rule, rule, new ArrayList<GrammarRule>());
+        return rule.isRecursive() && isInfinitelyRecursive(rule, rule, new ArrayList<>());
     }
 
     /*
@@ -548,7 +548,7 @@ public class Grammar {
      */
     private void setRecursiveness() {
         if (start instanceof GrammarRule) {
-            setRecursiveness(new ArrayList<GrammarRule>(), start);
+            setRecursiveness(new ArrayList<>(), start);
         }
     }
 
@@ -575,7 +575,7 @@ public class Grammar {
 
                     GrammarRule nt = (GrammarRule) p.getGrammarNode(j);
 
-                    setRecursiveness(new ArrayList<GrammarRule>(path), nt);
+                    setRecursiveness(new ArrayList<>(path), nt);
                 }
             }
         }
@@ -621,7 +621,7 @@ public class Grammar {
                 for (int j = 0; j < p.getNoGrammarNodes(); j++) {
                     // The largest of production's symbols min depths, is
                     // productions min depth.
-                    int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getGrammarNode(j));
+                    int d = getMinDepth(new ArrayList<>(path), p.getGrammarNode(j));
 
                     if (d > productionsMinDepth) {
                         productionsMinDepth = d;
@@ -653,7 +653,7 @@ public class Grammar {
      * @return a complete list of the literals in this grammar.
      */
     public List<GrammarLiteral> getGrammarLiterals() {
-        return new ArrayList<GrammarLiteral>(literals.values());
+        return new ArrayList<>(literals.values());
     }
 
     /**
@@ -675,7 +675,7 @@ public class Grammar {
      * @return a complete list of the non-literals in this grammar.
      */
     public List<GrammarRule> getGrammarRules() {
-        return new ArrayList<GrammarRule>(rules.values());
+        return new ArrayList<>(rules.values());
     }
 
     /**

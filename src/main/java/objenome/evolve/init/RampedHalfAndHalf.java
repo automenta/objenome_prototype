@@ -65,7 +65,7 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
      * The key for setting and retrieving the smallest maximum depth setting
      * from which the ramping will begin
      */
-    public static final GPKey<Integer> RAMPING_START_DEPTH = new GPKey<Integer>();
+    public static final GPKey<Integer> RAMPING_START_DEPTH = new GPKey<>();
 
     // Configuration settings
     private Node[] syntax; // TODO We don't really need to store this

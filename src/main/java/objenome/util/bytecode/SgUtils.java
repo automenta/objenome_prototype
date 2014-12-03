@@ -567,7 +567,7 @@ public final class SgUtils {
      * @return List of annotations.
      */
     public static List<SgAnnotation> createAnnotations(final Annotation[] ann) {
-        final List<SgAnnotation> list = new ArrayList<SgAnnotation>();
+        final List<SgAnnotation> list = new ArrayList<>();
         if ((ann != null) && (ann.length > 0)) {
             for (int i = 0; i < ann.length; i++) {
                 final SgAnnotation annotation = new SgAnnotation(ann[i].annotationType()

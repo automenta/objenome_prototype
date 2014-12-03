@@ -56,7 +56,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
     /**
      * The key for setting the program's input variables
      */
-    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<Variable[]>();
+    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<>();
 
     /**
      * The key for setting the sets of values to use as inputs. The length of
@@ -64,13 +64,13 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
      * number of values in each set should match the length of the
      * INPUT_VARIABLES array.
      */
-    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<Object[][]>();
+    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<>();
 
     /**
      * The key for setting the expected output values from the programs being
      * evaluated
      */
-    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<Double[]>();
+    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<>();
 
     // Configuration settings
     private Variable[] inputVariables;

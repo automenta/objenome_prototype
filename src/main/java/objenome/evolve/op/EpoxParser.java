@@ -101,7 +101,7 @@ public class EpoxParser {
      * @param load whether to load the built-in Epox nodes or not
      */
     public EpoxParser(boolean load) {
-        nodes = new HashMap<String, Node>();
+        nodes = new HashMap<>();
 
         if (load) {
             load();
@@ -136,7 +136,7 @@ public class EpoxParser {
         // If there is no bracket then it must be a terminal
         if (openingBracket == -1) {
             identifier = source;
-            args = new ArrayList<String>();
+            args = new ArrayList<>();
         } else {
             // Get the name of the function
             identifier = source.substring(0, openingBracket).trim();
@@ -213,7 +213,7 @@ public class EpoxParser {
     private List<String> splitArguments(String argStr) {
         int depth = 0;
 
-        List<String> args = new ArrayList<String>(5);
+        List<String> args = new ArrayList<>(5);
         StringBuilder buffer = new StringBuilder();
 
         argStr = argStr.trim();

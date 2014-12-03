@@ -143,7 +143,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
                     } else {
 
-                        t = new ThreadLocal<Object>();
+                        t = new ThreadLocal<>();
 
                         needsToCreate = true;
 
@@ -239,7 +239,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     public <T> T the(Object key, Builder builder) {        
         if (builder!=null)
             usable(key, Scope.SINGLETON, builder);
-        return get((Object)key);
+        return get(key);
     }    
     public <T> T the(final Class<? extends T> c) {        
         T existing = get((Object)c);
@@ -325,7 +325,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     @Override
     public void remove(Scope scope) {
         if (scope == Scope.SINGLETON) {
-            List<ClearableHolder> listToClear = new LinkedList<ClearableHolder>();
+            List<ClearableHolder> listToClear = new LinkedList<>();
             synchronized (this) {
                 for (String key : singletonsCache.keySet()) {
                     Builder factory = builders.get(key);                    
@@ -342,7 +342,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
                 cp.clear();
             }
         } else if (scope == Scope.THREAD) {
-            List<ClearableHolder> listToClear = new LinkedList<ClearableHolder>();
+            List<ClearableHolder> listToClear = new LinkedList<>();
             synchronized (this) {
                 for (String key : threadLocalsCache.keySet()) {
                     Builder factory = builders.get(key);                    

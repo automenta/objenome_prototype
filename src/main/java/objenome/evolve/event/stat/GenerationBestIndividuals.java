@@ -53,7 +53,7 @@ public class GenerationBestIndividuals extends AbstractStat<EndGeneration> {
     public void refresh(EndGeneration event) {
         Population<?> population = event.getPopulation();
 
-        best = new ArrayList<Individual>();
+        best = new ArrayList<>();
 
         for (Individual individual : population) {
 

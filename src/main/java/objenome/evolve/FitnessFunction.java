@@ -29,13 +29,13 @@ package objenome.evolve;
  *
  * @see Fitness
  */
-public interface FitnessFunction {
+public interface FitnessFunction<I extends Individual> {
 
     /**
      * Evaluates the individuals in the specified population.
      *
      * @param population the population to be evaluated.
      */
-    public void evaluate(Population population);
+    public void evaluate(Population<I> population);
 
 }

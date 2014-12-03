@@ -41,7 +41,7 @@ public class Pipeline implements Component {
      * Constructs an empty <code>Pipeline</code>.
      */
     public Pipeline() {
-        pipeline = new ArrayList<Component>();
+        pipeline = new ArrayList<>();
     }
 
     /**

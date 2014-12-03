@@ -65,10 +65,10 @@ public class Implies extends Node {
      */
     @Override
     public Boolean evaluate() {
-        boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
+        boolean result = ((Boolean) getChild(0).evaluate());
 
         if (result) {
-            result = !((Boolean) getChild(1).evaluate()).booleanValue();
+            result = !((Boolean) getChild(1).evaluate());
         }
 
         return !result;

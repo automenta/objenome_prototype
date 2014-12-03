@@ -40,7 +40,7 @@ public class ConfigTest extends TestCase {
 	 * Test for the {@link Config#get(ConfigKey)} method.
 	 */
 	public void testGet() {
-		GPKey<Double> key = new GPKey<Double>();
+		GPKey<Double> key = new GPKey<>();
 		assertNull(config.get(key));
 		config.set(key, 1.0);
 		assertNotNull(config.get(key));
@@ -50,7 +50,7 @@ public class ConfigTest extends TestCase {
 	 * Test for the {@link Config#set(ConfigKey, Object)} method.
 	 */
 	public void testSet() {
-		GPKey<Double> key = new GPKey<Double>();
+		GPKey<Double> key = new GPKey<>();
 		config.set(key, 0.2);
 		assertEquals(0.2, config.get(key));
 

@@ -42,7 +42,7 @@ public class EventManager {
     /**
      * The mapping of listeners per event.
      */
-    private final HashMap<Class<?>, List<Listener<?>>> mapping = new HashMap<Class<?>, List<Listener<?>>>();
+    private final HashMap<Class<?>, List<Listener<?>>> mapping = new HashMap<>();
 
     /**
      * Constructs a <code>EventManager</code>.
@@ -59,7 +59,7 @@ public class EventManager {
     public <T extends Event> void add(Class<? extends T> key, Listener<T> listener) {
 
         if (!mapping.containsKey(key)) {
-            mapping.put(key, new ArrayList<Listener<?>>());
+            mapping.put(key, new ArrayList<>());
         }
 
         mapping.get(key).add(listener);

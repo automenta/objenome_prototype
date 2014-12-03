@@ -62,7 +62,7 @@ public final class SgMethod extends SgBehavior {
         }
         this.name = name;
 
-        body = new ArrayList<String>();
+        body = new ArrayList<>();
 
         // TODO Check if the class not already contains a method with the same
         // name and arguments!

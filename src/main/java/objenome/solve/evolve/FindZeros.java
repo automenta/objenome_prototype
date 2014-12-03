@@ -31,7 +31,7 @@ public class FindZeros<C> extends NumericSolver<C> {
             //bind variables values to objenome
             
             SetNumericValue var = variables.get(0);
-            Solution sol = (Solution)var;
+            Solution sol = var;
             
             double best = solver.solve(1000, new UnivariateFunction() {
                 @Override

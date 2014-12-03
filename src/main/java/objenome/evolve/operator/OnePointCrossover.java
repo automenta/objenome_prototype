@@ -65,13 +65,13 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
      * The key for setting and retrieving whether the strict form of one-point
      * crossover should be used
      */
-    public static final GPKey<Boolean> STRICT = new GPKey<Boolean>();
+    public static final GPKey<Boolean> STRICT = new GPKey<>();
 
     /**
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<>();
 
     // Configuration settings
     private RandomSequence random;
@@ -162,8 +162,8 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
         STGPIndividual program2 = (STGPIndividual) parents[1];
 
         // List the points that align
-        List<Integer> points1 = new ArrayList<Integer>();
-        List<Integer> points2 = new ArrayList<Integer>();
+        List<Integer> points1 = new ArrayList<>();
+        List<Integer> points2 = new ArrayList<>();
         alignedPoints(program1.getRoot(), program2.getRoot(), points1, points2, 0, 0);
 
         int randomIndex = random.nextInt(points1.size());

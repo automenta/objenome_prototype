@@ -39,11 +39,11 @@ public interface Breeder extends Component {
     /**
      * The key for setting and retrieving the genetic operators.
      */
-    public static final GPKey<List<Operator>> OPERATORS = new GPKey<List<Operator>>();
+    public static final GPKey<List<Operator>> OPERATORS = new GPKey<>();
 
     /**
      * The key for setting and retrieving the <code>IndividualSelector</code>.
      */
-    public static final GPKey<IndividualSelector> SELECTOR = new GPKey<IndividualSelector>();
+    public static final GPKey<IndividualSelector> SELECTOR = new GPKey<>();
 
 }

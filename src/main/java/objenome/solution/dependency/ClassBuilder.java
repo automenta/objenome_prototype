@@ -67,9 +67,9 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         if (props == null) {
 
-            props = new HashMap<String, Object>();
+            props = new HashMap<>();
 
-            cache = new HashMap<String, Method>();
+            cache = new HashMap<>();
         }
 
         props.put(name, value);
@@ -126,9 +126,9 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         if (initValues == null) {
 
-            initValues = new LinkedList<Object>();
+            initValues = new LinkedList<>();
 
-            initTypes = new LinkedList<Class<?>>();
+            initTypes = new LinkedList<>();
         }
 
         initValues.add(value);
@@ -164,7 +164,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         Iterator<Class<?>> iter = list.iterator();
 
-        List<Class<?>> results = new LinkedList<Class<?>>();
+        List<Class<?>> results = new LinkedList<>();
 
         while (iter.hasNext()) {
 
@@ -474,22 +474,22 @@ public class ClassBuilder implements ConfigurableBuilder {
 
             if (initTypes != null) {
 
-                providedInitTypes = new LinkedList<Class<?>>(initTypes);
+                providedInitTypes = new LinkedList<>(initTypes);
 
             } else {
 
-                providedInitTypes = new LinkedList<Class<?>>();
+                providedInitTypes = new LinkedList<>();
             }
 
             LinkedList<Object> providedInitValues = null;
 
             if (initValues != null) {
 
-                providedInitValues = new LinkedList<Object>(initValues);
+                providedInitValues = new LinkedList<>(initValues);
 
             } else {
 
-                providedInitValues = new LinkedList<Object>();
+                providedInitValues = new LinkedList<>();
             }
 
             List<Class<?>> newInitTypes = new LinkedList();
@@ -498,7 +498,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
             Set<ConstructorDependency> constructorDependencies = this.constructorDependencies != null ? this.constructorDependencies : container.getConstructorDependencies();
 
-            Set<ConstructorDependency> dependencies = new HashSet<ConstructorDependency>(constructorDependencies);
+            Set<ConstructorDependency> dependencies = new HashSet<>(constructorDependencies);
 
                         
             Parameter[] constructorParams = c.getParameters();

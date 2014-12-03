@@ -47,19 +47,19 @@ public class STGPIndividual extends AbstractIndividual {
      * The key for setting and retrieving the set of nodes that individuals are
      * constructed from
      */
-    public static final GPKey<Node[]> SYNTAX = new GPKey<Node[]>();
+    public static final GPKey<Node[]> SYNTAX = new GPKey<>();
 
     /**
      * The key for setting and retrieving the required data-type for the root
      * node
      */
-    public static final GPKey<Class<?>> RETURN_TYPE = new GPKey<Class<?>>();
+    public static final GPKey<Class<?>> RETURN_TYPE = new GPKey<>();
 
     /**
      * The key for setting and retrieving the maximum depth setting for program
      * trees
      */
-    public static final GPKey<Integer> MAXIMUM_DEPTH = new GPKey<Integer>();
+    public static final GPKey<Integer> MAXIMUM_DEPTH = new GPKey<>();
 
     // The root node of the program tree
     private Node root;

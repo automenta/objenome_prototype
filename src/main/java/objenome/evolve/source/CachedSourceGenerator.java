@@ -38,7 +38,7 @@ public class CachedSourceGenerator<T extends Individual> implements SourceGenera
     public CachedSourceGenerator(SourceGenerator<T> delegate) {
         this.delegate = delegate;
 
-        cache = new HashMap<Object, String>();
+        cache = new HashMap<>();
     }
 
     @Override

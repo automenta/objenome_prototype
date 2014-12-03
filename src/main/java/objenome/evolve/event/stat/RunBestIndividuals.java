@@ -42,7 +42,7 @@ public class RunBestIndividuals extends AbstractStat<EndGeneration> {
      */
     public RunBestIndividuals() {
         super(GenerationBestIndividuals.class);
-        best = new ArrayList<Individual>();
+        best = new ArrayList<>();
     }
 
     /**

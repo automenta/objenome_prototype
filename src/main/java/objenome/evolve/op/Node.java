@@ -106,7 +106,7 @@ public abstract class Node implements Cloneable {
      * @return an array of this node's children
      */
     public Node[] getChildren() {
-        return (Node[]) ArrayUtils.clone(children);
+        return ArrayUtils.clone(children);
     }
 
     /**
@@ -331,7 +331,7 @@ public abstract class Node implements Cloneable {
      * @return a <code>List</code> of all the nodes at the specified depth
      */
     public List<Node> nodesAtDepth(int depth) {
-        List<Node> nodes = new ArrayList<Node>((depth + 1) * 3);
+        List<Node> nodes = new ArrayList<>((depth + 1) * 3);
         if (depth >= 0) {
             nodesAtDepth(nodes, depth, 0);
         } else {
@@ -413,7 +413,7 @@ public abstract class Node implements Cloneable {
         List<Node> terminals = listTerminals();
 
         // Remove duplicates.
-        Set<Node> terminalHash = new HashSet<Node>(terminals);
+        Set<Node> terminalHash = new HashSet<>(terminals);
 
         return terminalHash.size();
     }
@@ -424,7 +424,7 @@ public abstract class Node implements Cloneable {
      * @return a <code>List</code> of all the terminal nodes in this node tree
      */
     public List<Node> listTerminals() {
-        List<Node> terminals = new ArrayList<Node>();
+        List<Node> terminals = new ArrayList<>();
 
         int arity = getArity();
         if (isTerminal()) {
@@ -463,7 +463,7 @@ public abstract class Node implements Cloneable {
         List<Node> nonTerminals = listNonTerminals();
 
         // Remove duplicates. Cannot use equals because that compares children
-        List<String> identifiers = new ArrayList<String>();
+        List<String> identifiers = new ArrayList<>();
         for (Node f : nonTerminals) {
             String name = f.getIdentifier();
             if (!identifiers.contains(name)) {
@@ -481,7 +481,7 @@ public abstract class Node implements Cloneable {
      * tree
      */
     public List<Node> listNonTerminals() {
-        List<Node> nonTerminals = new ArrayList<Node>();
+        List<Node> nonTerminals = new ArrayList<>();
 
         if (isNonTerminal()) {
             // Add this node as a function and search its child nodes.

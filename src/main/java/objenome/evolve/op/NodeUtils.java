@@ -51,7 +51,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("syntax must not be null");
         }
 
-        List<Node> terminals = new ArrayList<Node>(syntax.size());
+        List<Node> terminals = new ArrayList<>(syntax.size());
         for (Node n : syntax) {
             if (n.isTerminal()) {
                 terminals.add(n);
@@ -75,7 +75,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("syntax must not be null");
         }
 
-        List<Node> functions = new ArrayList<Node>(syntax.size());
+        List<Node> functions = new ArrayList<>(syntax.size());
         for (Node n : syntax) {
             if (n.isNonTerminal()) {
                 functions.add(n);
@@ -105,7 +105,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("quantity must be 0 or greater");
         }
 
-        List<Literal> range = new ArrayList<Literal>(quantity);
+        List<Literal> range = new ArrayList<>(quantity);
 
         for (int i = 0; i < quantity; i++) {
             int value = (i * interval) + start;
@@ -135,7 +135,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("quantity must be 0 or greater");
         }
 
-        List<Literal> range = new ArrayList<Literal>(quantity);
+        List<Literal> range = new ArrayList<>(quantity);
 
         for (int i = 0; i < quantity; i++) {
             long value = (i * interval) + start;
@@ -165,7 +165,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("quantity must be 0 or greater");
         }
 
-        List<Literal> range = new ArrayList<Literal>(quantity);
+        List<Literal> range = new ArrayList<>(quantity);
 
         for (int i = 0; i < quantity; i++) {
             double value = (i * interval) + start;
@@ -195,7 +195,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("quantity must be 0 or greater");
         }
 
-        final List<Literal> range = new ArrayList<Literal>(quantity);
+        final List<Literal> range = new ArrayList<>(quantity);
 
         for (int i = 0; i < quantity; i++) {
             float value = (i * interval) + start;
@@ -222,7 +222,7 @@ public final class NodeUtils {
             throw new IllegalArgumentException("variableNames must not be null");
         }
 
-        List<Variable> variables = new ArrayList<Variable>();
+        List<Variable> variables = new ArrayList<>();
 
         for (String name : variableNames) {
             variables.add(new Variable(name, datatype));

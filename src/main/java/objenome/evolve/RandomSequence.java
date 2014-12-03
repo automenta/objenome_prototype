@@ -32,7 +32,7 @@ public interface RandomSequence {
     /**
      * The key for setting and retrieving the random number generator.
      */
-    public static final GPKey<RandomSequence> RANDOM_SEQUENCE = new GPKey<RandomSequence>();
+    public static final GPKey<RandomSequence> RANDOM_SEQUENCE = new GPKey<>();
 
     /**
      * Gets the next <code>int</code> between <code>0</code> (inclusive) and

@@ -57,13 +57,13 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
      * The key for setting and retrieving the probability with which a terminal
      * will be selected as the crossover point
      */
-    public static final GPKey<Double> TERMINAL_PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> TERMINAL_PROBABILITY = new GPKey<>();
 
     /**
      * The key for setting and retrieving the probability of this operator being
      * applied
      */
-    public static final GPKey<Double> PROBABILITY = new GPKey<Double>();
+    public static final GPKey<Double> PROBABILITY = new GPKey<>();
 
     // Configuration settings
     private RandomSequence random;
@@ -156,8 +156,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 
         // Find which nodes in program2 have a matching return type to subtree1
         Class<?> subtree1Type = subtree1.dataType();
-        List<Node> matchingNodes = new ArrayList<Node>();
-        List<Integer> matchingIndexes = new ArrayList<Integer>();
+        List<Node> matchingNodes = new ArrayList<>();
+        List<Integer> matchingIndexes = new ArrayList<>();
         nodesOfType(program2.getRoot(), subtree1Type, 0, matchingNodes, matchingIndexes);
 
         STGPIndividual[] children = new STGPIndividual[0];
@@ -273,8 +273,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
         if (terminalProbability == -1.0) {
             return random.nextInt(nodes.size());
         } else {
-            List<Integer> terminalIndexes = new ArrayList<Integer>();
-            List<Integer> nonTerminalIndexes = new ArrayList<Integer>();
+            List<Integer> terminalIndexes = new ArrayList<>();
+            List<Integer> nonTerminalIndexes = new ArrayList<>();
 
             for (int i = 0; i < nodes.size(); i++) {
                 if (nodes.get(i).getArity() == 0) {

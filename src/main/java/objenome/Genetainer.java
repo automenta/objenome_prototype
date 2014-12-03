@@ -73,7 +73,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     public Builder any(Object key, Class<?>[] klasses) {
         Builder b = getBuilder(key);
         if (b instanceof ClassBuilder) {
-            return any( ((ClassBuilder)b).type(), klasses );
+            return any( b.type(), klasses );
         }
         return null;
     }
@@ -227,7 +227,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
      */
     public Objenome genome(Object... keys) {
         try {
-            return genome((Solver)new RandomSolver(), keys);
+            return genome(new RandomSolver(), keys);
         } catch (IncompleteSolutionException ex) {
             throw new RuntimeException(ex.toString(), ex);
         }
@@ -240,7 +240,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     
     
     public Objenome genome(Solver solver, Object... keys) throws IncompleteSolutionException {
-        return genome( (Iterable)Lists.newArrayList(solver), keys);
+        return genome(Lists.newArrayList(solver), keys);
     }
     
     public Objenome genome(Iterable<Solver> solvers, Object... targets) throws IncompleteSolutionException {

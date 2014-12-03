@@ -21,7 +21,7 @@
  */
 package objenome.evolve;
 
-public abstract class AbstractFitnessFunction implements FitnessFunction {
+public abstract class AbstractFitnessFunction<I extends Individual> implements FitnessFunction<I> {
 
     /**
      * Evaluates all individuals in the given population by calling the
@@ -32,8 +32,8 @@ public abstract class AbstractFitnessFunction implements FitnessFunction {
      * @param
      */
     @Override
-    public void evaluate(Population population) {
-        for (Individual individual : (Iterable<Individual>)population) {
+    public void evaluate(Population<I> population) {
+        for (I individual : population) {
             Fitness fitness = evaluate(population, individual);
             assignFitness(fitness, individual);
         }

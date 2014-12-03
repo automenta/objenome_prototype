@@ -140,8 +140,8 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      * Splits the syntax in to terminals and nonTerminals
      */
     private void updateSyntax() {
-        terminals = new ArrayList<Node>();
-        nonTerminals = new ArrayList<Node>();
+        terminals = new ArrayList<>();
+        nonTerminals = new ArrayList<>();
 
         if (syntax != null) {
             for (Node n : syntax) {
@@ -272,7 +272,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
             // Construct list of arg sets that produce the right return type
             // TODO Surely we can cut down the number of calls to this?!
             Class<?>[][] argTypeSets = dataTypeCombinations(arity, dataTypesTable[maxDepth - currentDepth]);
-            List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
+            List<Class<?>[]> validArgTypeSets = new ArrayList<>();
             for (Class<?>[] argTypes : argTypeSets) {
                 Class<?> type = root.dataType(argTypes);
                 if ((type != null) && requiredType.isAssignableFrom(type)) {
@@ -304,7 +304,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      * overridden too.
      */
     private List<Node> listValidNodes(int remainingDepth, Class<?> requiredType) {
-        List<Node> validNodes = new ArrayList<Node>();
+        List<Node> validNodes = new ArrayList<>();
         for (Node n : terminals) {
             if (n.dataType().isAssignableFrom(requiredType)) {
                 validNodes.add(n);
@@ -336,7 +336,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
         dataTypesTable = new Class<?>[maxDepth + 1][];
 
         for (int i = 0; i <= maxDepth; i++) {
-            final Set<Class<?>> types = new HashSet<Class<?>>();
+            final Set<Class<?>> types = new HashSet<>();
             for (final Node n : terminals) {
                 types.add(n.dataType());
             }
@@ -400,7 +400,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
             updateDataTypesTable();
         }
 
-        List<Class<?>> returnTypes = new ArrayList<Class<?>>();
+        List<Class<?>> returnTypes = new ArrayList<>();
         returnTypes.add(returnType);
 
         return varieties(remainingDepth, returnTypes);
@@ -431,7 +431,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                 Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
 
                 // Construct a list of valid sets of argument types
-                List<Class<?>[]> valid = new ArrayList<Class<?>[]>();
+                List<Class<?>[]> valid = new ArrayList<>();
                 for (Class<?>[] argTypes : argTypeSets) {
                     Class<?> type = n.dataType(argTypes);
 
@@ -449,7 +449,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                     BigInteger totalChildVarieties = BigInteger.ONE;
                     for (int i = 0; i < n.getArity(); i++) {
                         // Build list of the valid arg types for this child
-                        returnTypes = new ArrayList<Class<?>>();
+                        returnTypes = new ArrayList<>();
                         for (int j = 0; j < valid.size(); j++) {
                             returnTypes.add(valid.get(j)[i]);
                         }
@@ -486,7 +486,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
             updateDataTypesTable();
         }
 
-        List<Class<?>> returnTypes = new ArrayList<Class<?>>();
+        List<Class<?>> returnTypes = new ArrayList<>();
         returnTypes.add(returnType);
         return (varieties(remainingDepth, returnTypes, target) == null);
     }
@@ -520,7 +520,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                 Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
 
                 // Construct a list of valid sets of argument types
-                List<Class<?>[]> valid = new ArrayList<Class<?>[]>();
+                List<Class<?>[]> valid = new ArrayList<>();
                 for (Class<?>[] argTypes : argTypeSets) {
                     Class<?> type = n.dataType(argTypes);
 
@@ -538,7 +538,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                     BigInteger totalChildVarieties = BigInteger.ONE;
                     for (int i = 0; i < n.getArity(); i++) {
                         // Build list of the valid arg types for this child
-                        returnTypes = new ArrayList<Class<?>>();
+                        returnTypes = new ArrayList<>();
                         for (int j = 0; j < valid.size(); j++) {
                             returnTypes.add(valid.get(j)[i]);
                         }

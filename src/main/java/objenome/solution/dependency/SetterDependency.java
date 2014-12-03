@@ -18,7 +18,7 @@ public class SetterDependency {
 
     private final Class<?> sourceType;
 
-    private final Map<String, Method> cache = new HashMap<String, Method>();
+    private final Map<String, Method> cache = new HashMap<>();
 
     public SetterDependency(String targetProperty, String sourceFromContainer, Class<?> sourceType) {
 

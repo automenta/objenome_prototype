@@ -40,7 +40,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
     /**
      * The key for setting and retrieving the size of the elite.
      */
-    public static final GPKey<Integer> ELITISM = new GPKey<Integer>();
+    public static final GPKey<Integer> ELITISM = new GPKey<>();
 
     /**
      * The list of operators to be used to generate new individuals.

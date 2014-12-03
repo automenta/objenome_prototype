@@ -35,7 +35,7 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
     /**
      * The key for setting and retrieving the maximum number of generations.
      */
-    public static final GPKey<Integer> MAXIMUM_GENERATIONS = new GPKey<Integer>();
+    public static final GPKey<Integer> MAXIMUM_GENERATIONS = new GPKey<>();
 
     /**
      * The generation counter.

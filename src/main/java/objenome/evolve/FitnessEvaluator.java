@@ -35,7 +35,7 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
      * The key for setting and retrieving the <code>FitnessFunction</code> used
      * by this component.
      */
-    public static final GPKey<FitnessFunction> FUNCTION = new GPKey<FitnessFunction>();
+    public static final GPKey<FitnessFunction> FUNCTION = new GPKey<>();
 
     /**
      * Constructs a <code>FitnessEvaluator</code>.

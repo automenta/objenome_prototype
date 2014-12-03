@@ -33,7 +33,7 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
      * The key for setting and retrieving the <code>InitialisationMethod</code>
      * used by this component.
      */
-    public static final GPKey<InitialisationMethod> METHOD = new GPKey<InitialisationMethod>();
+    public static final GPKey<InitialisationMethod> METHOD = new GPKey<>();
 
     /**
      * Constructs a <code>Initialiser</code>.

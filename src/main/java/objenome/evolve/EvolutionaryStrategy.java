@@ -39,6 +39,6 @@ public interface EvolutionaryStrategy extends Component {
      * The key for setting and retrieving a list of
      * <code>TerminationCriteria</code>.
      */
-    public static final GPKey<List<TerminationCriteria>> TERMINATION_CRITERIA = new GPKey<List<TerminationCriteria>>();
+    public static final GPKey<List<TerminationCriteria>> TERMINATION_CRITERIA = new GPKey<>();
 
 }

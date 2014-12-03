@@ -150,13 +150,13 @@ public final class SgClass {
                             + "Use 'addInterface(SgClass)' instead!");
         }
 
-        this.constructors = new ArrayList<SgConstructor>();
-        this.methods = new ArrayList<SgMethod>();
-        this.interfaces = new ArrayList<SgClass>();
-        this.fields = new ArrayList<SgField>();
+        this.constructors = new ArrayList<>();
+        this.methods = new ArrayList<>();
+        this.interfaces = new ArrayList<>();
+        this.fields = new ArrayList<>();
         this.isinterface = isinterface;
-        this.classes = new ArrayList<SgClass>();
-        this.annotations = new ArrayList<SgAnnotation>();
+        this.classes = new ArrayList<>();
+        this.annotations = new ArrayList<>();
 
         this.enclosingClass = enclosingClass;
         if (enclosingClass != null) {

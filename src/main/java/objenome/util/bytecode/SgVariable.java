@@ -62,7 +62,7 @@ public abstract class SgVariable {
         }
         this.name = name;
 
-        annotations = new ArrayList<SgAnnotation>();
+        annotations = new ArrayList<>();
 
     }
 

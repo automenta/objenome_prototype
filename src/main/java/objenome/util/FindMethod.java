@@ -54,7 +54,7 @@ public class FindMethod {
         int l = parameterTypes.length;
 
         // First find the applicable methods 
-        List<Method> applicableMethods = new LinkedList<Method>();
+        List<Method> applicableMethods = new LinkedList<>();
 
         for (int i = 0; i < toTest.length; i++) {
             // Check the name matches 

@@ -38,7 +38,7 @@ public class TournamentSelector implements IndividualSelector {
     /**
      * The key for setting and retrieving the tournament size.
      */
-    public static final GPKey<Integer> TOURNAMENT_SIZE = new GPKey<Integer>();
+    public static final GPKey<Integer> TOURNAMENT_SIZE = new GPKey<>();
 
     /**
      * The random selector used to select the individuals participating in the

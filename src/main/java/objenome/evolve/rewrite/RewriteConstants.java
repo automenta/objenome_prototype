@@ -67,7 +67,7 @@ public class RewriteConstants implements RewriteRule {
         // if we could not rewrite the entire node, rewrite as many children as
         // we can
         for (int i = 0; i < node.getChildren().length; i++) {
-            Node childNode = (Node) node.getChildren()[i];
+            Node childNode = node.getChildren()[i];
             rewrite = rewriteNode(childNode);
             if (rewrite != null) {
                 node.setChild(i, rewrite);

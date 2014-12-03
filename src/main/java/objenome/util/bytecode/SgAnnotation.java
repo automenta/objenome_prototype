@@ -61,7 +61,7 @@ public final class SgAnnotation {
         }
         this.simpleName = trimmed;
 
-        this.arguments = new HashMap<String, Object>();
+        this.arguments = new HashMap<>();
     }
 
     /**

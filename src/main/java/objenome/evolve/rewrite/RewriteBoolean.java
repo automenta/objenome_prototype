@@ -46,7 +46,7 @@ public class RewriteBoolean implements RewriteRule {
     private boolean isTrue(Node node) {
         Object v = node.evaluate();
         if (v instanceof Boolean) {
-            return ((Boolean) v).booleanValue();
+            return ((Boolean) v);
         } else if (v instanceof Number) {
             return ((Number) v).doubleValue() != 0;
         }
@@ -102,7 +102,7 @@ public class RewriteBoolean implements RewriteRule {
 
         // try children
         for (int i = 0; i < rewrittenParent.getChildren().length; i++) {
-            final Node childNode = (Node) rewrittenParent.getChildren()[i];
+            final Node childNode = rewrittenParent.getChildren()[i];
             final Node rewriteChild = internalRewrite(childNode);
             if (childNode != rewriteChild) {
                 rewrittenParent.setChild(i, rewriteChild);

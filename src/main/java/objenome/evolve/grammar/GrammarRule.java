@@ -64,7 +64,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
      * @param name the label that identifies this non-terminal rule.
      */
     public GrammarRule(String name) {
-        this(name, new ArrayList<GrammarProduction>());
+        this(name, new ArrayList<>());
     }
 
     /**

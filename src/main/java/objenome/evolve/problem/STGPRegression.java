@@ -101,7 +101,7 @@ public class STGPRegression extends ProblemSTGP {
         super();
         
         the(Population.SIZE, 100);
-        List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
+        List<TerminationCriteria> criteria = new ArrayList<>();
         criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
         criteria.add(new MaximumGenerations());
         the(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
@@ -110,7 +110,7 @@ public class STGPRegression extends ProblemSTGP {
 
         the(Breeder.SELECTOR, new TournamentSelector());
         the(TournamentSelector.TOURNAMENT_SIZE, 7);
-        List<Operator> operators = new ArrayList<Operator>();
+        List<Operator> operators = new ArrayList<>();
         operators.add(new SubtreeCrossover());
         operators.add(new SubtreeMutation());
         the(Breeder.OPERATORS, operators);
