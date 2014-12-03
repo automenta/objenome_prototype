@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import objenome.solve.IncompleteSolutionException;
 import objenome.solve.Solution;
 import objenome.solve.RandomSolver;
 import objenome.solve.Solver;
@@ -238,13 +239,6 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     
     
     
-    public static class IncompleteSolutionException extends Exception {
-
-        public IncompleteSolutionException(Iterable<Problem> p, Object[] keys, Genetainer g) {
-            super("Missing solution(s) for " + p + " to build " + Arrays.toString(keys) + " in " + g + ": " + g);
-        }    
-        
-    }
     
     public Objenome genome(Solver solver, Object... keys) throws IncompleteSolutionException {
         return genome( (Iterable)Lists.newArrayList(solver), keys);

@@ -5,18 +5,24 @@
  */
 package objenome;
 
+import objenome.solve.IncompleteSolutionException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
+import objenome.solve.Solver;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 /**
  * Object Genome
  */
 public class Objenome {
+
+    public static Objenome build(Solver s, Object... targets) throws IncompleteSolutionException {
+        return new Genetainer().genome(s, targets);
+    }
     
     Map<String, Objene> genes = new TreeMap();
     

@@ -69,7 +69,7 @@ public abstract class NumericSolver<C> implements Solver  {
         try {
             o = g.genome(targets, p);
             solve(o, variables);
-        } catch (Genetainer.IncompleteSolutionException ex) {
+        } catch (IncompleteSolutionException ex) {
             p.clear();
             p.putAll(originalProblems);
         }

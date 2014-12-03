@@ -5,8 +5,8 @@
  */
 package objenome.solve;
 
+import java.util.List;
 import java.util.function.Function;
-import objenome.Genetainer;
 import objenome.Objenome;
 import objenome.solution.SetNumericValue;
 import org.apache.commons.math3.analysis.MultivariateFunction;
@@ -39,21 +39,19 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
     private Double bestValue;
     int evaluations = 200;
     GoalType goal = MAXIMIZE;
-    
-    public OptimizeMultivariate(Genetainer g, Class<? extends C> model, Function<C, Double> function) {  
-        this(g.genome(model), model, function);        
-    }
-    
+    private List<SetNumericValue> variables;
+    private Objenome objenome;
+
     public OptimizeMultivariate(Class<? extends C> model, Function<C, Double> function) {
-        this(new Genetainer().genome(model), model, function);
-    }
-    
-    public OptimizeMultivariate(Objenome o, Class<? extends C> model, Function<C, Double> function) {
-        super(o, model, function);
+        super(model, function);
     }
 
-    
-    public Objenome run() {
+    @Override
+    public synchronized void solve(Objenome o, List<SetNumericValue> variables) {
+        
+        this.variables = variables;
+        this.objenome = o;
+        
         if (numStarts==-1)
             numStarts = variables.size() * 2;
         
@@ -89,7 +87,6 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
         apply(result.getPointRef());
                 
         this.bestValue = result.getValue();
-        return objenome;
     }
 
     /** the resulting scalar evaluation of the sought maxima/minima */
@@ -109,7 +106,6 @@ public class OptimizeMultivariate<C> extends NumericSolver<C> implements Multiva
         apply(v);
         
         C instance = objenome.get(model);
-
         
         return function.apply( instance );
     }

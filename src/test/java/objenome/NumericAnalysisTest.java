@@ -5,6 +5,7 @@
  */
 package objenome;
 
+import objenome.solve.IncompleteSolutionException;
 import objenome.problem.Between;
 import objenome.solve.FindZeros;
 import java.util.function.Function;
@@ -65,46 +66,35 @@ public class NumericAnalysisTest {
 
     }    
 
-    @Test public void testFindZeros() throws Genetainer.IncompleteSolutionException {
-        Genetainer g = new Genetainer();
-        
-        Objenome o = g.genome(new FindZeros(ExampleScalarFunction.class, new Function<ExampleScalarFunction, Double>() {            
-            public Double apply(ExampleScalarFunction s) {                
-                return s.output(0.0) + s.output(0.5) + s.output(1.0);
-            }
+    @Test public void testFindZeros() throws IncompleteSolutionException {
+
+        Objenome o = Objenome.build(new FindZeros(ExampleScalarFunction.class, 
+                
+                new Function<ExampleScalarFunction, Double>() {            
+                    public Double apply(ExampleScalarFunction s) {                
+                        return s.output(0.0) + s.output(0.5) + s.output(1.0);
+                    }
+                    
         }), ExampleScalarFunction.class);
         
-        System.err.println(o.getGeneList());
-             
         double bestParam = ((SetDoubleValue)o.getGeneList().get(0)).doubleValue();
         assertEquals(-3.97454, bestParam, 0.001);
     }
 
-    @Test public void testMultivariate() {
-        
-        Objenome o = new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
-            
-            
-                    
+    @Test public void testMultivariate() throws IncompleteSolutionException {
+
+        Objenome o = Objenome.build(new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
+
             public Double apply(ExampleMultivariateFunction s) {      
                 double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
                 return v;
             }
-
-
             
         }) {
-
-            @Override
-            protected RandomGenerator getRandomGenerator() {
-                JDKRandomGenerator j = new JDKRandomGenerator();
-                j.setSeed(0);
-                return j;
-            }
-        
-        }.minimize().run();
-        
-        
+            @Override protected RandomGenerator getRandomGenerator() {
+                JDKRandomGenerator j = new JDKRandomGenerator();  j.setSeed(0); return j;
+            }        
+        } .minimize(), ExampleMultivariateFunction.class);
         
         double bestParam = ((SetDoubleValue)o.getGeneList().get(1)).doubleValue();
         assertEquals(-2.5919, bestParam, 0.001);

@@ -81,34 +81,37 @@ public class OptimizeRuntimeSpeedExample {
         }        
     }
 
+
+    //TODO update to the new API
     
-    public static void main(String[] args) {
-        Genetainer g = new Genetainer();
-        g.any(Mapper.class, of(TreeMapper.class, HashMapper.class, ConcurrentHashMapper.class));
-                
-        Objenome o = new OptimizeMultivariate(g, MapActivity.class, new Function<MapActivity, Double>() {
-            public Double apply(MapActivity s) {
-                  
-                Microbenchmark w = new Microbenchmark(100, 10) {
-                    
-                    @Override public void init() {                     
-                    }
-                    
-                    
-                    @Override
-                    public void run(boolean warmup) {
-                        s.act();
-                    }                    
-                };
-                double t = w.getTotalTime()/1e6;
-                double m = w.getTotalMemory()/1e6;
-                System.out.println(s + " " + t + " " + m);
-                return t + m/10f;
-            }
-        }).minimize().run();
-        
-        
-        System.out.println("best: " + o.getGeneList());
-        
-    }
+//    public static void main(String[] args) {
+//        Genetainer g = new Genetainer();
+//        g.any(Mapper.class, of(TreeMapper.class, HashMapper.class, ConcurrentHashMapper.class));
+//                
+//        Objenome o = new OptimizeMultivariate(g, MapActivity.class, new Function<MapActivity, Double>() {
+//            public Double apply(MapActivity s) {
+//                  
+//                Microbenchmark w = new Microbenchmark(100, 10) {
+//                    
+//                    @Override public void init() {                     
+//                    }
+//                    
+//                    
+//                    @Override
+//                    public void run(boolean warmup) {
+//                        s.act();
+//                    }                    
+//                };
+//                double t = w.getTotalTime()/1e6;
+//                double m = w.getTotalMemory()/1e6;
+//                System.out.println(s + " " + t + " " + m);
+//                return t + m/10f;
+//            }
+//        }).minimize().run();
+//        
+//        
+//        System.out.println("best: " + o.getGeneList());
+//        
+//    }
+    
 }
