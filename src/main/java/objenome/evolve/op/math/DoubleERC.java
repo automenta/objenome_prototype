@@ -21,8 +21,8 @@
  */
 package objenome.evolve.op.math;
 
-import java.math.*;
-
+import java.math.BigDecimal;
+import java.math.MathContext;
 import objenome.evolve.RandomSequence;
 import objenome.evolve.op.Literal;
 import objenome.evolve.op.bool.BooleanERC;

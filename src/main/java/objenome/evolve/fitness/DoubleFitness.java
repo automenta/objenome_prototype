@@ -22,7 +22,6 @@
 package objenome.evolve.fitness;
 
 import java.util.Comparator;
-
 import objenome.evolve.Fitness;
 
 /**

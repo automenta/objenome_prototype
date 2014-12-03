@@ -21,7 +21,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.ProtectionDomain;
 import java.util.List;
-
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;

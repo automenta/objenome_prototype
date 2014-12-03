@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.solve;
+package objenome.solve.evolve;
 
 import java.util.List;
 import java.util.function.Function;
 import objenome.Objenome;
 import objenome.solution.SetNumericValue;
+import objenome.solve.NumericSolver;
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;
@@ -20,7 +21,6 @@ import org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOpt
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
-
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.random.UncorrelatedRandomVectorGenerator;

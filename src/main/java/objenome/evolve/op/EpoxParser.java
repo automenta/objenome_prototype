@@ -21,8 +21,11 @@
  */
 package objenome.evolve.op;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import objenome.evolve.interpret.MalformedProgramException;
 import objenome.evolve.op.bool.And;
 import objenome.evolve.op.bool.IfAndOnlyIf;
 import objenome.evolve.op.bool.Nand;
@@ -44,8 +47,8 @@ import objenome.evolve.op.math.Factorial;
 import objenome.evolve.op.math.GreaterThan;
 import objenome.evolve.op.math.InvertProtected;
 import objenome.evolve.op.math.LessThan;
-import objenome.evolve.op.math.LogNatural;
 import objenome.evolve.op.math.Log10;
+import objenome.evolve.op.math.LogNatural;
 import objenome.evolve.op.math.Max2;
 import objenome.evolve.op.math.Max3;
 import objenome.evolve.op.math.Min2;
@@ -54,8 +57,8 @@ import objenome.evolve.op.math.ModuloProtected;
 import objenome.evolve.op.math.Multiply;
 import objenome.evolve.op.math.Power;
 import objenome.evolve.op.math.Signum;
-import objenome.evolve.op.math.Square;
 import objenome.evolve.op.math.Sqrt;
+import objenome.evolve.op.math.Square;
 import objenome.evolve.op.math.Subtract;
 import objenome.evolve.op.trig.ArcCosecant;
 import objenome.evolve.op.trig.ArcCosine;
@@ -75,7 +78,6 @@ import objenome.evolve.op.trig.HyperbolicTangent;
 import objenome.evolve.op.trig.Secant;
 import objenome.evolve.op.trig.Sine;
 import objenome.evolve.op.trig.Tangent;
-import objenome.evolve.interpret.MalformedProgramException;
 
 /**
  * This parser is for parsing valid Epox programs into a node tree. It is only

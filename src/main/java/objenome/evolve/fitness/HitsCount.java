@@ -23,14 +23,14 @@ package objenome.evolve.fitness;
 
 
 import objenome.evolve.GPContainer;
+import objenome.evolve.GPContainer.GPContainerAware;
 import objenome.evolve.GPContainer.GPKey;
 import objenome.evolve.Individual;
-import objenome.evolve.op.Variable;
+import objenome.evolve.Population;
+import objenome.evolve.STGPIndividual;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Listener;
-import objenome.evolve.STGPIndividual;
-import objenome.evolve.GPContainer.GPContainerAware;
-import objenome.evolve.Population;
+import objenome.evolve.op.Variable;
 
 /**
  * A fitness function for <code>STGPIndividual</code>s that calculates and

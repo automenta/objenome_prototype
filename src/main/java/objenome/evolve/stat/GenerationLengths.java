@@ -22,12 +22,11 @@
 package objenome.evolve.stat;
 
 import java.util.Arrays;
-
 import objenome.evolve.Individual;
 import objenome.evolve.Population;
+import objenome.evolve.STGPIndividual;
 import objenome.evolve.event.GenerationEvent.EndGeneration;
 import objenome.evolve.event.stat.AbstractStat;
-import objenome.evolve.STGPIndividual;
 
 /**
  * A stat that returns the length of all program trees in the population from

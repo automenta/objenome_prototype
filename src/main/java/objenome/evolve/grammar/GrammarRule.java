@@ -21,7 +21,8 @@
  */
 package objenome.evolve.grammar;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A GrammarRule is a component of a grammar parse tree that matches a rule of a

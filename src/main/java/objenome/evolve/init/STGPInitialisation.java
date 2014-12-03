@@ -21,8 +21,8 @@
  */
 package objenome.evolve.init;
 
-import objenome.evolve.InitialisationMethod;
 import objenome.evolve.GPContainer.GPKey;
+import objenome.evolve.InitialisationMethod;
 import objenome.evolve.STGPIndividual;
 
 /**

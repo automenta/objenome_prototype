@@ -23,7 +23,6 @@ package objenome.evolve;
 
 import objenome.evolve.GPContainer.GPContainerAware;
 import objenome.evolve.GPContainer.GPKey;
-import objenome.evolve.ProblemSTGP;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Listener;
 

@@ -21,7 +21,6 @@
  */
 package objenome.evolve;
 
-import objenome.evolve.GPContainer.GPContainerAware;
 import objenome.evolve.event.Event;
 import objenome.evolve.event.EventManager;
 import objenome.evolve.event.Listener;

@@ -5,13 +5,14 @@
  */
 package objenome;
 
-import objenome.problem.Between;
 import java.util.List;
+import objenome.problem.Between;
+import objenome.solution.SetConstantValue;
+import objenome.solution.SetImplementationClass;
+import objenome.solution.SetIntegerValue;
 import static objenome.solution.dependency.Builder.of;
 import static objenome.solution.dependency.Builder.the;
-import objenome.solution.SetImplementationClass;
-import objenome.solution.SetConstantValue;
-import objenome.solution.SetIntegerValue;
+import objenome.solve.Solution;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -102,21 +103,21 @@ public class GenetainerTest {
     
     
     /** one gene to select between two interfaces with non-parametric constructors */
-    @Test public void testSimpleObjeneGeneration() {
+    @Test public void testSimpleSolutionGeneration() {
         Genetainer c = new Genetainer();
         c.any(Part.class, of(Part0.class, Part1.class));
                         
         Objenome o = c.genome(Machine.class);
         assertEquals("obgenome contains one gene to select betwen the implementations of interface Part", 1, o.size());
         
-        List<Objene> genes = o.getGeneList();
+        List<Solution> genes = o.getGeneList();
         
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
         
     }
     
     
-    @Test public void testSimpleObjeneGeneration1() {
+    @Test public void testSimpleSolutionGeneration1() {
         Genetainer c = new Genetainer();
         c.any(Part.class, of(Part0.class, Part1.class));
                         
@@ -124,18 +125,18 @@ public class GenetainerTest {
         
         assertEquals(1, o.size());        
         
-        List<Objene> genes = o.getGeneList();
+        List<Solution> genes = o.getGeneList();
         
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());        
     }
     
     //18553247676
-    @Test public void testSimpleObjeneGeneration11() {
+    @Test public void testSimpleSolutionGeneration11() {
         Genetainer c = new Genetainer();
         c.any(Part.class, the(PartN.class));
                         
         Objenome o = c.genome(Part.class);
-        List<Objene> genes = o.getGeneList();
+        List<Solution> genes = o.getGeneList();
         
         assertEquals(1, o.size());        
         assertEquals(SetIntegerValue.class, genes.get(0).getClass());
@@ -144,7 +145,7 @@ public class GenetainerTest {
     
     
     /** one gene to select between two interfaces with parametric constructor in one of of dependencies */
-    @Test public void testSimpleObjeneGeneration2() {
+    @Test public void testSimpleSolutionGeneration2() {
         
         Genetainer c = new Genetainer();
         c.any(Part.class, of(Part0.class, Part1.class, PartN.class));
@@ -152,7 +153,7 @@ public class GenetainerTest {
         
         assertEquals("obgenome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.size());
         
-        List<Objene> genes = o.getGeneList();
+        List<Solution> genes = o.getGeneList();
         
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
                          
@@ -168,7 +169,7 @@ public class GenetainerTest {
         c.any(SubPart.class, of(SubPart0.class, SubPart1.class));
         Objenome o = c.genome(Machine.class);
         
-        List<Objene> genes = o.getGeneList();
+        List<Solution> genes = o.getGeneList();
         
         assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
@@ -183,7 +184,7 @@ public class GenetainerTest {
                     of(SubPart0.class, SubPart1.class));
         Objenome o = c.genome(Machine.class);
                        
-        List<Objene> genes = o.getGeneList();
+        List<Solution> genes = o.getGeneList();
         
         System.out.println(genes);
         assertEquals(3, o.size());

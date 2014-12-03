@@ -23,7 +23,6 @@ package objenome.evolve.fitness;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import objenome.evolve.AbstractFitnessFunction;
 import objenome.evolve.Fitness;
 import objenome.evolve.Individual;

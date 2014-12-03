@@ -6,16 +6,17 @@
 package objenome.solution;
 
 import com.google.common.collect.Sets;
-import objenome.problem.DevelopMethod;
 import java.util.Set;
-import objenome.Objene;
 import objenome.Phenotainer;
+import objenome.problem.DevelopMethod;
+import objenome.solve.Solution;
 
 /**
  * Uses a dynamically generated expression to complete an abstract or interface method
  * TODO
  */
-public class GPEvolveMethods implements Objene {
+public class GPEvolveMethods implements Solution {
+    
     public static String DYNAMIC_SUFFIX = "$$D";
     private final Set<DevelopMethod> methods;
     
@@ -26,21 +27,20 @@ public class GPEvolveMethods implements Objene {
         this.methods = Sets.newHashSet(m);
     }
 
-    
     @Override
-    public void apply(Phenotainer c) {
+    public void apply(Phenotainer p) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    
+    
 
     @Override
     public String key() {
         return "implement(" + methods.toString() + ")";
     }
 
-    @Override
-    public void mutate() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    
 
     @Override
     public String toString() {

@@ -6,7 +6,6 @@
 package objenome.problem;
 
 import java.lang.reflect.Method;
-import objenome.problem.Problem;
 
 /**
  *

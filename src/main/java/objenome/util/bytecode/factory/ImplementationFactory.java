@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import objenome.util.bytecode.SgArgument;
 import objenome.util.bytecode.SgClass;
 import objenome.util.bytecode.SgClassPool;

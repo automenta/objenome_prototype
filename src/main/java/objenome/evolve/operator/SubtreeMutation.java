@@ -21,21 +21,22 @@
  */
 package objenome.evolve.operator;
 
-import objenome.evolve.Individual;
-import objenome.evolve.RandomSequence;
-import objenome.evolve.event.Listener;
-import objenome.evolve.event.OperatorEvent;
-import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.AbstractOperator;
 import objenome.evolve.GPContainer;
-import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
-import static objenome.evolve.STGPIndividual.*;
 import objenome.evolve.GPContainer.GPKey;
+import objenome.evolve.Individual;
 import objenome.evolve.ProblemSTGP;
-import objenome.evolve.op.Node;
-import objenome.evolve.event.OperatorEvent.EndOperator;
+import objenome.evolve.RandomSequence;
+import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
 import objenome.evolve.STGPIndividual;
+import static objenome.evolve.STGPIndividual.MAXIMUM_DEPTH;
+import static objenome.evolve.STGPIndividual.SYNTAX;
+import objenome.evolve.event.ConfigEvent;
+import objenome.evolve.event.Listener;
+import objenome.evolve.event.OperatorEvent;
+import objenome.evolve.event.OperatorEvent.EndOperator;
 import objenome.evolve.init.Grow;
+import objenome.evolve.op.Node;
 
 /**
  * A mutation operator for <code>STGPIndividual</code>s that replaces a subtree

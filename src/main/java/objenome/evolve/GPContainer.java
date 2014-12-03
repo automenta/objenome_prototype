@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import objenome.Container;
-
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Event;
 import objenome.evolve.event.EventManager;

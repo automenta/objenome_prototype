@@ -23,7 +23,6 @@ package objenome.evolve.source;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import objenome.evolve.Individual;
 
 /**

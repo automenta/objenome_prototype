@@ -22,7 +22,6 @@
 package objenome.evolve.event.stat;
 
 import java.util.HashSet;
-
 import objenome.evolve.Fitness;
 import objenome.evolve.event.GenerationEvent.EndGeneration;
 

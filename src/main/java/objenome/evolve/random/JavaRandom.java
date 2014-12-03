@@ -22,7 +22,6 @@
 package objenome.evolve.random;
 
 import java.util.Random;
-
 import objenome.evolve.RandomSequence;
 
 /**

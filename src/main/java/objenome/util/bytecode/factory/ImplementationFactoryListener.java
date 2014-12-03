@@ -18,7 +18,6 @@
 package objenome.util.bytecode.factory;
 
 import java.util.List;
-
 import objenome.util.bytecode.SgClass;
 import objenome.util.bytecode.SgMethod;
 

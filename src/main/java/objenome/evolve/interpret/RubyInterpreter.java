@@ -21,8 +21,8 @@
  */
 package objenome.evolve.interpret;
 
-import javax.script.*;
-
+import javax.script.Invocable;
+import javax.script.ScriptException;
 import objenome.evolve.Individual;
 import objenome.evolve.source.SourceGenerator;
 

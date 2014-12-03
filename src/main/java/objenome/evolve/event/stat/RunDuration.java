@@ -22,7 +22,6 @@
 package objenome.evolve.event.stat;
 
 import java.util.concurrent.TimeUnit;
-
 import objenome.evolve.event.RunEvent.EndRun;
 
 /**

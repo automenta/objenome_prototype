@@ -7,13 +7,11 @@ package objenome.solution;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import java.util.List;
-import objenome.Objene;
 import objenome.Phenotainer;
 import objenome.problem.DecideNumericValue;
-import objenome.problem.Problem;
 import objenome.solve.Solution;
 
-abstract public class SetConstantValue<X> extends AtomicDouble implements Objene, Solution {
+abstract public class SetConstantValue<X> extends AtomicDouble implements Solution {
     
     public final DecideNumericValue problem;
     
@@ -21,12 +19,6 @@ abstract public class SetConstantValue<X> extends AtomicDouble implements Objene
         super();
         this.problem = p;
     }
-
-    @Override
-    public Objene apply(Problem p) {
-        return this;
-    }
-
     
     
     @Override public void apply(Phenotainer c) { 

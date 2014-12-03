@@ -21,8 +21,8 @@
  */
 package objenome.evolve.source;
 
-import objenome.evolve.Individual;
 import objenome.evolve.GPContainer.GPKey;
+import objenome.evolve.Individual;
 
 /**
  * Source generators take a candidate program and produce source code from it.

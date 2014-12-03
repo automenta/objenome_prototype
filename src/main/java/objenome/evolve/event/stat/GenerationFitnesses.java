@@ -22,7 +22,6 @@
 package objenome.evolve.event.stat;
 
 import java.util.Arrays;
-
 import objenome.evolve.Fitness;
 import objenome.evolve.Individual;
 import objenome.evolve.Population;

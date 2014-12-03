@@ -21,8 +21,8 @@
  */
 package objenome.evolve.stat;
 
-import objenome.evolve.event.stat.AbstractStat;
 import objenome.evolve.event.GenerationEvent.EndGeneration;
+import objenome.evolve.event.stat.AbstractStat;
 
 /**
  * A stat that returns the standard deviation of the mean number of

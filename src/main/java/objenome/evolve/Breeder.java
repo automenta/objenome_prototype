@@ -22,7 +22,6 @@
 package objenome.evolve;
 
 import java.util.List;
-
 import objenome.evolve.GPContainer.GPKey;
 
 /**

@@ -8,6 +8,7 @@ package objenome;
 import java.util.List;
 import objenome.solution.GPEvolveMethods;
 import objenome.solution.SetDoubleValue;
+import objenome.solve.Solution;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -48,7 +49,7 @@ public class AbstractGPMethodTest {
         
         Objenome genome = a.genome(ExampleUnknownMethod.class);
         
-        List<Objene> genes = genome.getGeneList();
+        List<Solution> genes = genome.getGeneList();
         
         System.out.println(genes);
         
@@ -73,7 +74,7 @@ public class AbstractGPMethodTest {
         
         Objenome genome = a.genome(ExampleUnknownMethodWithConstructor.class);
         
-        List<Objene> genes = genome.getGeneList();                
+        List<Solution> genes = genome.getGeneList();                
         
         assertEquals(2, genes.size());
         assertEquals("first gene is for the double constant parameter", SetDoubleValue.class, genes.get(0).getClass());

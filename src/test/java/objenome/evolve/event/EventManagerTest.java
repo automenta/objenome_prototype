@@ -22,9 +22,6 @@
 package objenome.evolve.event;
 
 import junit.framework.TestCase;
-import objenome.evolve.event.EventManager;
-import objenome.evolve.event.Listener;
-import objenome.evolve.event.RunEvent;
 
 /**
  * The <code>EventManagerTest</code> class provides unit tests for methods of

@@ -22,9 +22,9 @@
 package objenome.evolve.op.trig;
 
 import objenome.evolve.op.Node;
-import objenome.evolve.tools.TypeUtil;
 import objenome.evolve.tools.MathUtils;
 import objenome.evolve.tools.NumericUtils;
+import objenome.evolve.tools.TypeUtil;
 
 /**
  * A node which performs the inverse trigonometric function of arc-secant,

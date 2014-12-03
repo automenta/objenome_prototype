@@ -22,7 +22,6 @@
 package objenome.evolve;
 
 import java.util.List;
-
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.GenerationEvent.EndGeneration;
 import objenome.evolve.event.GenerationEvent.StartGeneration;

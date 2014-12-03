@@ -22,8 +22,8 @@
 package objenome.evolve.op.math;
 
 import objenome.evolve.op.Node;
-import objenome.evolve.tools.TypeUtil;
 import objenome.evolve.tools.NumericUtils;
+import objenome.evolve.tools.TypeUtil;
 
 /**
  * A node which performs the numerical less than comparison of two numeric

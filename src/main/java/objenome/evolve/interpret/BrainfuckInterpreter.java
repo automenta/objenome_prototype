@@ -22,7 +22,6 @@
 package objenome.evolve.interpret;
 
 import java.util.Arrays;
-
 import objenome.evolve.Individual;
 import objenome.evolve.source.SourceGenerator;
 

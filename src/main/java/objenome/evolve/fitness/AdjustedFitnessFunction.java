@@ -22,11 +22,11 @@
 package objenome.evolve.fitness;
 
 import objenome.evolve.AbstractFitnessFunction;
+import objenome.evolve.Fitness;
 import objenome.evolve.GPContainer;
 import objenome.evolve.GPContainer.GPContainerAware;
-import objenome.evolve.Fitness;
-import objenome.evolve.Individual;
 import objenome.evolve.GPContainer.GPKey;
+import objenome.evolve.Individual;
 import objenome.evolve.Population;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Listener;

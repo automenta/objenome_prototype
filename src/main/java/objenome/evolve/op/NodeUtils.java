@@ -21,7 +21,8 @@
  */
 package objenome.evolve.op;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class provides static utility methods for working with Epox nodes

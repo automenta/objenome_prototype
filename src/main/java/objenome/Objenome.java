@@ -5,13 +5,14 @@
  */
 package objenome;
 
-import objenome.solve.IncompleteSolutionException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
+import objenome.solve.IncompleteSolutionException;
+import objenome.solve.Solution;
 import objenome.solve.Solver;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
@@ -24,7 +25,7 @@ public class Objenome {
         return new Genetainer().genome(s, targets);
     }
     
-    Map<String, Objene> genes = new TreeMap();
+    Map<String, Solution> genes = new TreeMap();
     
     public final Genetainer parentContext;
     
@@ -34,10 +35,10 @@ public class Objenome {
         */
     private Phenotainer pheno = null;
 
-    public Objenome(Genetainer context, Collection<Objene> parameters) throws InvalidRepresentationException {
+    public Objenome(Genetainer context, Collection<Solution> parameters) throws InvalidRepresentationException {
         super();
                 
-        for (Objene o : parameters)
+        for (Solution o : parameters)
             genes.put(o.key(), o);
         
         this.parentContext = context;
@@ -66,10 +67,10 @@ public class Objenome {
     }
     
     /** list of genes, sorted by key */
-    public List<Objene> getGeneList() {
-        List<Objene> l = new ArrayList(genes.size());
+    public List<Solution> getGeneList() {
+        List<Solution> l = new ArrayList(genes.size());
         for (String s : genes.keySet()) {
-            Objene g = genes.get(s);
+            Solution g = genes.get(s);
             l.add(g);
         }
         return l;
@@ -78,7 +79,7 @@ public class Objenome {
 
     /** mutates this genome's genes, and commits changes to apply to next generated object */
     void mutate(/* .... mutation opcodes ... */) {
-        for ( Objene g : genes.values()) {
+        for ( Solution g : genes.values()) {
             g.mutate();                
         }
         //commit();

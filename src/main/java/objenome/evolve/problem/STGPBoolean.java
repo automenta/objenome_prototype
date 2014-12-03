@@ -24,9 +24,8 @@ package objenome.evolve.problem;
 import static com.google.common.collect.Lists.newArrayList;
 import java.util.ArrayList;
 import java.util.List;
-
-import objenome.evolve.Breeder;
 import objenome.evolve.BranchedBreeder;
+import objenome.evolve.Breeder;
 import objenome.evolve.EvolutionaryStrategy;
 import objenome.evolve.FitnessEvaluator;
 import objenome.evolve.GenerationalStrategy;
@@ -34,9 +33,14 @@ import objenome.evolve.Initialiser;
 import objenome.evolve.MaximumGenerations;
 import objenome.evolve.Operator;
 import objenome.evolve.Population;
+import objenome.evolve.ProblemSTGP;
 import objenome.evolve.RandomSequence;
+import objenome.evolve.STGPIndividual;
 import objenome.evolve.TerminationCriteria;
 import objenome.evolve.TerminationFitness;
+import objenome.evolve.fitness.DoubleFitness;
+import objenome.evolve.fitness.HitsCount;
+import objenome.evolve.init.Full;
 import objenome.evolve.op.Node;
 import objenome.evolve.op.Variable;
 import objenome.evolve.op.VariableNode;
@@ -44,15 +48,10 @@ import objenome.evolve.op.bool.And;
 import objenome.evolve.op.bool.Not;
 import objenome.evolve.op.bool.Or;
 import objenome.evolve.op.lang.If;
-import objenome.evolve.fitness.DoubleFitness;
-import objenome.evolve.random.MersenneTwisterFast;
-import objenome.evolve.selection.TournamentSelector;
-import objenome.evolve.STGPIndividual;
-import objenome.evolve.ProblemSTGP;
-import objenome.evolve.fitness.HitsCount;
-import objenome.evolve.init.Full;
 import objenome.evolve.operator.SubtreeCrossover;
 import objenome.evolve.operator.SubtreeMutation;
+import objenome.evolve.random.MersenneTwisterFast;
+import objenome.evolve.selection.TournamentSelector;
 
 /**
  * This template sets up EpochX to run the 6-bit multiplexer benchmark with the

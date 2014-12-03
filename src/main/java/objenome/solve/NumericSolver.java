@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import objenome.Genetainer;
-import objenome.Objene;
 import objenome.Objenome;
 import objenome.problem.DecideNumericValue;
 import objenome.problem.Problem;
@@ -83,12 +82,12 @@ public abstract class NumericSolver<C> implements Solver  {
     
     
     /** var = gene, from different casts */
-    public double getMin(SetNumericValue var, Objene gene) {
+    public double getMin(SetNumericValue var, Solution gene) {
         return var.getMin().doubleValue();
     }
     
     /** var = gene, from different casts */
-    public double getMax(SetNumericValue var, Objene gene) {
+    public double getMax(SetNumericValue var, Solution gene) {
         return var.getMax().doubleValue();
     }    
 }

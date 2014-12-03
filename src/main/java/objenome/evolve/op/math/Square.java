@@ -21,8 +21,6 @@
  */
 package objenome.evolve.op.math;
 
-import objenome.evolve.tools.NumericUtils;
-
 /**
  * A node which performs the arithmetic function of squaring, that is - raising
  * to the second power. It is equivalent to the <code>PowerFunction</code> where

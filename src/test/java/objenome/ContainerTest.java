@@ -1,9 +1,9 @@
 package objenome;
 
-import objenome.solution.dependency.Scope;
 import java.util.Date;
 import objenome.GenetainerTest.Part;
 import objenome.GenetainerTest.Part0;
+import objenome.solution.dependency.Scope;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

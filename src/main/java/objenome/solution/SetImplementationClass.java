@@ -5,7 +5,6 @@
  */
 package objenome.solution;
 
-import objenome.Objene;
 import objenome.Phenotainer;
 import objenome.problem.Between;
 import objenome.solution.dependency.DecideImplementationClass;
@@ -13,7 +12,7 @@ import objenome.solution.dependency.DecideImplementationClass;
 /** stores a double value between 0...N which is used to select equally
  *  from the list of N classes in its creator Multiclass
  */
-public class SetImplementationClass implements Objene, SetNumericValue {
+public class SetImplementationClass implements SetNumericValue {
     public final DecideImplementationClass multiclass;
     double value;
 
@@ -32,6 +31,7 @@ public class SetImplementationClass implements Objene, SetNumericValue {
         return multiclass.implementors.get(which);
     }
 
+    
     @Override public void apply(Phenotainer c) { 
         c.remove(multiclass.abstractClass);
         c.use(multiclass.abstractClass, getValue());

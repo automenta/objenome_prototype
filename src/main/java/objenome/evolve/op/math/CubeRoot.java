@@ -21,10 +21,6 @@
  */
 package objenome.evolve.op.math;
 
-import objenome.evolve.op.Node;
-import objenome.evolve.tools.TypeUtil;
-import objenome.evolve.tools.NumericUtils;
-
 /**
  * A node which performs the mathematical function of cube root, called CBRT
  *

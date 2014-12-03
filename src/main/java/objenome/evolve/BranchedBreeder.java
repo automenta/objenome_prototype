@@ -21,11 +21,9 @@
  */
 package objenome.evolve;
 
-import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
-
 import java.util.List;
-
 import objenome.evolve.GPContainer.GPKey;
+import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Listener;
 

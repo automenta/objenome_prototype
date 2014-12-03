@@ -24,17 +24,6 @@ package objenome.evolve.problem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
-import objenome.evolve.op.Variable;
-import objenome.evolve.op.VariableNode;
-import objenome.evolve.op.math.Add;
-import objenome.evolve.op.math.DivisionProtected;
-import objenome.evolve.op.math.Multiply;
-import objenome.evolve.op.math.Subtract;
-import objenome.evolve.fitness.DoubleFitness;
-import objenome.evolve.random.MersenneTwisterFast;
-import objenome.evolve.selection.TournamentSelector;
-import objenome.evolve.STGPIndividual;
 import objenome.evolve.BranchedBreeder;
 import objenome.evolve.Breeder;
 import objenome.evolve.EvolutionaryStrategy;
@@ -46,13 +35,23 @@ import objenome.evolve.Operator;
 import objenome.evolve.Population;
 import objenome.evolve.ProblemSTGP;
 import objenome.evolve.RandomSequence;
+import objenome.evolve.STGPIndividual;
 import objenome.evolve.TerminationCriteria;
 import objenome.evolve.TerminationFitness;
+import objenome.evolve.fitness.DoubleFitness;
 import objenome.evolve.fitness.HitsCount;
 import objenome.evolve.init.Full;
 import objenome.evolve.op.Node;
+import objenome.evolve.op.Variable;
+import objenome.evolve.op.VariableNode;
+import objenome.evolve.op.math.Add;
+import objenome.evolve.op.math.DivisionProtected;
+import objenome.evolve.op.math.Multiply;
+import objenome.evolve.op.math.Subtract;
 import objenome.evolve.operator.SubtreeCrossover;
 import objenome.evolve.operator.SubtreeMutation;
+import objenome.evolve.random.MersenneTwisterFast;
+import objenome.evolve.selection.TournamentSelector;
 
 /**
  * This template sets up EpochX to run the cubic regression benchmark with the

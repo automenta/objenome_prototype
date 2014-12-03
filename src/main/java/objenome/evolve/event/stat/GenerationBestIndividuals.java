@@ -23,7 +23,6 @@ package objenome.evolve.event.stat;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import objenome.evolve.Individual;
 import objenome.evolve.Population;
 import objenome.evolve.event.GenerationEvent.EndGeneration;

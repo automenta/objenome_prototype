@@ -5,13 +5,12 @@
  */
 package objenome;
 
-import objenome.solution.dependency.Builder;
-import objenome.solution.dependency.Scope;
 import com.google.common.collect.Sets;
-import com.sun.javafx.runtime.VersionInfo;
 import java.util.List;
 import java.util.Set;
+import objenome.solution.dependency.Builder;
 import objenome.solution.dependency.DecideImplementationClass;
+import objenome.solution.dependency.Scope;
 
 /**
  * Non-determinate "Multi" Container

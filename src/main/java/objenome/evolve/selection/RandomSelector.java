@@ -21,7 +21,6 @@
  */
 package objenome.evolve.selection;
 
-import java.util.Random;
 import objenome.evolve.AbstractSelector;
 import objenome.evolve.Individual;
 import objenome.evolve.IndividualSelector;

@@ -21,8 +21,9 @@
  */
 package objenome.evolve.interpret;
 
-import javax.script.*;
-
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import objenome.evolve.Individual;
 import objenome.evolve.source.SourceGenerator;
 

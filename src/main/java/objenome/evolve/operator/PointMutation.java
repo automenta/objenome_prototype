@@ -22,24 +22,22 @@
 package objenome.evolve.operator;
 
 
-import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
-import static objenome.evolve.STGPIndividual.SYNTAX;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import objenome.evolve.AbstractOperator;
 import objenome.evolve.GPContainer;
 import objenome.evolve.GPContainer.GPKey;
 import objenome.evolve.Individual;
 import static objenome.evolve.ProblemSTGP.PROBLEM;
 import objenome.evolve.RandomSequence;
-import objenome.evolve.op.Node;
+import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
+import objenome.evolve.STGPIndividual;
+import static objenome.evolve.STGPIndividual.SYNTAX;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Listener;
 import objenome.evolve.event.OperatorEvent;
 import objenome.evolve.event.OperatorEvent.EndOperator;
-import objenome.evolve.STGPIndividual;
+import objenome.evolve.op.Node;
 
 /**
  * A mutation operator for <code>STGPIndividual</code>s that replaces nodes at

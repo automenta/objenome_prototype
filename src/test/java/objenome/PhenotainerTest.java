@@ -5,10 +5,8 @@
  */
 package objenome;
 
-import objenome.solution.dependency.Builder;
 import java.util.HashSet;
 import java.util.Set;
-import static objenome.solution.dependency.Builder.of;
 import objenome.GenetainerTest.Machine;
 import objenome.GenetainerTest.Part;
 import objenome.GenetainerTest.Part0;
@@ -19,6 +17,8 @@ import objenome.GenetainerTest.SubPart0;
 import objenome.GenetainerTest.SubPart1;
 import objenome.solution.SetImplementationClass;
 import objenome.solution.SetIntegerValue;
+import objenome.solution.dependency.Builder;
+import static objenome.solution.dependency.Builder.of;
 import objenome.solution.dependency.ClassBuilder;
 import objenome.solution.dependency.DecideImplementationClass;
 import static org.junit.Assert.assertEquals;

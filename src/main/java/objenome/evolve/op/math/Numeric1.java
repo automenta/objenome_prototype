@@ -7,8 +7,8 @@ package objenome.evolve.op.math;
 
 import java.util.function.Function;
 import objenome.evolve.op.Node;
-import objenome.evolve.tools.TypeUtil;
 import objenome.evolve.tools.NumericUtils;
+import objenome.evolve.tools.TypeUtil;
 
 /**
  * 1-input numeric function.

@@ -5,12 +5,12 @@
  */
 package objenome;
 
-import objenome.solve.IncompleteSolutionException;
-import objenome.problem.Between;
-import objenome.solve.FindZeros;
 import java.util.function.Function;
+import objenome.problem.Between;
 import objenome.solution.SetDoubleValue;
-import objenome.solve.OptimizeMultivariate;
+import objenome.solve.IncompleteSolutionException;
+import objenome.solve.evolve.FindZeros;
+import objenome.solve.evolve.OptimizeMultivariate;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 import static org.junit.Assert.assertEquals;

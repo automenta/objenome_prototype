@@ -22,8 +22,6 @@
 
 package objenome.evolve;
 
-import objenome.evolve.Population;
-import objenome.evolve.GPContainer;
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import junit.framework.TestCase;
 import objenome.evolve.GPContainer.GPKey;

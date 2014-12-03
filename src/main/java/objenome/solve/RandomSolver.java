@@ -7,8 +7,15 @@ package objenome.solve;
 
 import java.util.Map;
 import objenome.Genetainer;
+import objenome.problem.DecideNumericValue;
+import objenome.problem.DevelopMethod;
 import objenome.problem.Problem;
-import objenome.solve.Solver;
+import objenome.solution.GPEvolveMethods;
+import objenome.solution.SetBooleanValue;
+import objenome.solution.SetDoubleValue;
+import objenome.solution.SetImplementationClass;
+import objenome.solution.SetIntegerValue;
+import objenome.solution.dependency.DecideImplementationClass;
 
 /**
  *
@@ -16,14 +23,39 @@ import objenome.solve.Solver;
  */
 public class RandomSolver implements Solver {
 
+    private GPEvolveMethods gpEvolveMethods;
+
     @Override
     public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets) {
         for (Map.Entry<Problem, Solution> e : p.entrySet()) {
             Solution existingSolution = e.getValue();
             if (existingSolution == null) {
-                e.setValue(new RandomSolution());
+                e.setValue(getSolution(e.getKey()));
             }
         }
     }
+
+    public Solution getSolution(Problem p) {
+        if (p instanceof DecideNumericValue) {
+            if (p instanceof DecideNumericValue.DecideBooleanValue) {
+                return new SetBooleanValue((DecideNumericValue.DecideBooleanValue) p, Math.random() < 0.5);
+            } else if (p instanceof DecideNumericValue.DecideIntegerValue) {
+                return new SetIntegerValue((DecideNumericValue.DecideIntegerValue) p, Math.random());
+            } else if (p instanceof DecideNumericValue.DecideDoubleValue) {
+                return new SetDoubleValue((DecideNumericValue.DecideDoubleValue) p, Math.random());
+            }
+        } else if (p instanceof DecideImplementationClass) {
+            return new SetImplementationClass((DecideImplementationClass) p, Math.random());
+        } else if (p instanceof DevelopMethod) {
+            if (gpEvolveMethods == null) {
+                gpEvolveMethods = new GPEvolveMethods();
+            }
+            gpEvolveMethods.addMethodToDevelop((DevelopMethod) p);
+            return gpEvolveMethods;
+        }
+        return null;
+    }
+    
+    
     
 }

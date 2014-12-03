@@ -21,13 +21,13 @@
  */
 package objenome.evolve.selection;
 
-import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
 import objenome.evolve.AbstractSelector;
 import objenome.evolve.Fitness;
 import objenome.evolve.Individual;
 import objenome.evolve.IndividualSelector;
 import objenome.evolve.Population;
 import objenome.evolve.RandomSequence;
+import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
 import objenome.evolve.fitness.DoubleFitness;
 
 /**

@@ -21,21 +21,25 @@
  */
 package objenome.evolve.init;
 
-import objenome.evolve.event.InitialisationEvent;
-import objenome.evolve.RandomSequence;
-import objenome.evolve.event.Listener;
-import objenome.evolve.Population;
-import objenome.evolve.event.ConfigEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import objenome.evolve.GPContainer;
-import static objenome.evolve.Population.SIZE;
-import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
-import static objenome.evolve.STGPIndividual.*;
-
-import java.util.*;
-
-import objenome.evolve.op.Node;
-import objenome.evolve.STGPIndividual;
 import objenome.evolve.InitialisationMethod;
+import objenome.evolve.Population;
+import static objenome.evolve.Population.SIZE;
+import objenome.evolve.RandomSequence;
+import static objenome.evolve.RandomSequence.RANDOM_SEQUENCE;
+import objenome.evolve.STGPIndividual;
+import static objenome.evolve.STGPIndividual.MAXIMUM_DEPTH;
+import static objenome.evolve.STGPIndividual.RETURN_TYPE;
+import static objenome.evolve.STGPIndividual.SYNTAX;
+import objenome.evolve.event.ConfigEvent;
+import objenome.evolve.event.InitialisationEvent;
+import objenome.evolve.event.Listener;
+import objenome.evolve.op.Node;
 import objenome.evolve.tools.TypeUtil;
 
 /**

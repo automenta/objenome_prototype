@@ -21,8 +21,6 @@
  */
 package objenome.evolve.event.stat;
 
-import objenome.evolve.event.stat.AbstractStat;
-import objenome.evolve.event.stat.RunBestFitness;
 import junit.framework.TestCase;
 import objenome.evolve.GPContainer;
 import objenome.evolve.event.GenerationEvent;

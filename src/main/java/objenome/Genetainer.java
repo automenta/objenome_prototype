@@ -5,19 +5,11 @@
  */
 package objenome;
 
-import objenome.solve.IncompleteSolutionException;
-import objenome.solve.Solution;
-import objenome.solve.RandomSolver;
-import objenome.solve.Solver;
-import objenome.problem.Problem;
-import objenome.solution.dependency.Builder;
-import objenome.solution.dependency.Scope;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,9 +20,16 @@ import objenome.problem.DecideNumericValue.DecideBooleanValue;
 import objenome.problem.DecideNumericValue.DecideDoubleValue;
 import objenome.problem.DecideNumericValue.DecideIntegerValue;
 import objenome.problem.DevelopMethod;
+import objenome.problem.Problem;
+import objenome.solution.dependency.Builder;
 import objenome.solution.dependency.ClassBuilder;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
 import objenome.solution.dependency.DecideImplementationClass;
+import objenome.solution.dependency.Scope;
+import objenome.solve.IncompleteSolutionException;
+import objenome.solve.RandomSolver;
+import objenome.solve.Solution;
+import objenome.solve.Solver;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
@@ -296,14 +295,14 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         if (!missing.isEmpty())
             throw new IncompleteSolutionException(missing, targets, this);
         
-        Set<Objene> g = new HashSet();
-        for (Map.Entry<Problem, Solution> e : problemSolutions.entrySet()) {            
-            Objene gene = e.getValue().apply(e.getKey());
-            if (gene == null) {
+        Set<Solution> g = new HashSet();
+        for (Map.Entry<Problem, Solution> e : problemSolutions.entrySet()) {                        
+            Solution s = e.getValue();
+            if (s == null) {
                 missing.add(e.getKey());
                 throw new IncompleteSolutionException(missing, targets, this);
             }
-            g.add(gene);
+            g.add(s);
         }
         
         return new Objenome(this, g);        
@@ -343,7 +342,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
 
     /** returns an error string summarizing why a list of genes would be invalid
  with respect to this container; or null if there is no error     */
-    public String getChromosomeError(List<Objene> genes) {
+    public String getChromosomeError(List<Solution> genes) {
         return null;
     }
 
