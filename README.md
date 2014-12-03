@@ -1,7 +1,7 @@
 Evolutionary Dependency Injection
 ------------------------------
 
-A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container that **automatically assembles software** from combinations of components.  Ambiguities in the choice of particular dependencies form a set of combinatorial parameters that can be optimized to maximize supplied design goals.  And at its core, a **deterministic**, **minimal**, **fluent**, **pure Java**, **no-nonsense** **dependency-injection container**.
+A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container that **automatically assembles software** from combinations of components.  Ambiguities in the choice of particular dependencies and parameter constants forms a non-deterministic set of parameters that can be mutated, combined, and optimized to maximize supplied design goals.  And at its core, a **deterministic**, **minimal**, **fluent**, **pure Java**, **no-nonsense** **dependency-injection container**.
 
 
 ![base](https://raw.githubusercontent.com/automenta/objenome/master/objenome.jpg)
