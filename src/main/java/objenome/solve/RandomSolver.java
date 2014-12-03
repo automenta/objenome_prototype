@@ -10,7 +10,7 @@ import objenome.Genetainer;
 import objenome.problem.DecideNumericValue;
 import objenome.problem.DevelopMethod;
 import objenome.problem.Problem;
-import objenome.solution.GPEvolveMethods;
+import objenome.solution.SetMethodsGPEvolved;
 import objenome.solution.SetBooleanValue;
 import objenome.solution.SetDoubleValue;
 import objenome.solution.SetImplementationClass;
@@ -23,7 +23,7 @@ import objenome.solution.dependency.DecideImplementationClass;
  */
 public class RandomSolver implements Solver {
 
-    private GPEvolveMethods gpEvolveMethods;
+    private SetMethodsGPEvolved gpEvolveMethods;
 
     @Override
     public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets) {
@@ -48,7 +48,7 @@ public class RandomSolver implements Solver {
             return new SetImplementationClass((DecideImplementationClass) p, Math.random());
         } else if (p instanceof DevelopMethod) {
             if (gpEvolveMethods == null) {
-                gpEvolveMethods = new GPEvolveMethods();
+                gpEvolveMethods = new SetMethodsGPEvolved();
             }
             gpEvolveMethods.addMethodToDevelop((DevelopMethod) p);
             return gpEvolveMethods;

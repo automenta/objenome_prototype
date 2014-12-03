@@ -18,7 +18,7 @@ import objenome.util.bytecode.SgMethod;
  * Uses another class's static method (with same return type) to implement an abstract or interface method
  * TODO
  */
-public class ImplementAbstractMethodWithStaticMethod {
+public class SetAbstractMethodWithExistingStaticMethod {
     
     //TODO harvest static methods from certain classes like Math. , Double., Character, etc..
     

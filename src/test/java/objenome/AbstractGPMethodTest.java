@@ -6,7 +6,7 @@
 package objenome;
 
 import java.util.List;
-import objenome.solution.GPEvolveMethods;
+import objenome.solution.SetMethodsGPEvolved;
 import objenome.solution.SetDoubleValue;
 import objenome.solve.Solution;
 import static org.junit.Assert.assertEquals;
@@ -47,15 +47,15 @@ public class AbstractGPMethodTest {
 
         Genetainer a = new Genetainer();
         
-        Objenome genome = a.genome(ExampleUnknownMethod.class);
+        Objenome genome = a.solve(ExampleUnknownMethod.class);
         
-        List<Solution> genes = genome.getGeneList();
+        List<Solution> genes = genome.getSolutions();
         
         System.out.println(genes);
         
         assertEquals(1, genes.size());
         //assertEquals("first gene is for the double constant parameter", SetDoubleValue.class, genes.get(0).getClass());
-        assertEquals("gene is for the abstract method", GPEvolveMethods.class, genes.get(0).getClass());
+        assertEquals("gene is for the abstract method", SetMethodsGPEvolved.class, genes.get(0).getClass());
         
         Container c = genome.container();
         Object result = c.get(ExampleUnknownMethod.class);
@@ -72,13 +72,13 @@ public class AbstractGPMethodTest {
     public void testAbstractClass2() {
         Genetainer a = new Genetainer();
         
-        Objenome genome = a.genome(ExampleUnknownMethodWithConstructor.class);
+        Objenome genome = a.solve(ExampleUnknownMethodWithConstructor.class);
         
-        List<Solution> genes = genome.getGeneList();                
+        List<Solution> genes = genome.getSolutions();                
         
         assertEquals(2, genes.size());
         assertEquals("first gene is for the double constant parameter", SetDoubleValue.class, genes.get(0).getClass());
-        assertEquals("second gene is for the abstract method", GPEvolveMethods.class, genes.get(1).getClass());
+        assertEquals("second gene is for the abstract method", SetMethodsGPEvolved.class, genes.get(1).getClass());
         
         
         Object result = genome.get(ExampleUnknownMethodWithConstructor.class);

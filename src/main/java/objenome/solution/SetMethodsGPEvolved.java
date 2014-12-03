@@ -15,7 +15,7 @@ import objenome.solve.Solution;
  * Uses a dynamically generated expression to complete an abstract or interface method
  * TODO
  */
-public class GPEvolveMethods implements Solution {
+public class SetMethodsGPEvolved implements Solution {
     
     public static String DYNAMIC_SUFFIX = "$$D";
     private final Set<DevelopMethod> methods;
@@ -23,7 +23,7 @@ public class GPEvolveMethods implements Solution {
     
 
     
-    public GPEvolveMethods(DevelopMethod... m) {
+    public SetMethodsGPEvolved(DevelopMethod... m) {
         this.methods = Sets.newHashSet(m);
     }
 

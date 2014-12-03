@@ -16,7 +16,7 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.NotFoundException;
 import objenome.problem.Problem;
-import objenome.solution.GPEvolveMethods;
+import objenome.solution.SetMethodsGPEvolved;
 import objenome.solution.dependency.Builder;
 import objenome.solve.Solution;
 
@@ -37,13 +37,6 @@ public class Phenotainer extends Container {
         
         
         
-        //remove all builders with ambiguosity
-        List<String> toRemove = new ArrayList();
-        for (Map.Entry<String, Builder> e : this.builders.entrySet()) {
-            if (e.getValue() instanceof Problem)
-                toRemove.add(e.getKey());
-        }
-        for (String s : toRemove) this.builders.remove(s);
         
         commit();
     }
@@ -51,6 +44,14 @@ public class Phenotainer extends Container {
     /** applies (current values of) the genes to the container for use by the next 
      *  instanced objects */
     public Phenotainer commit() {
+        //remove all builders with ambiguosity
+        List<String> toRemove = new ArrayList();
+        for (Map.Entry<String, Builder> e : this.builders.entrySet()) {
+            if (e.getValue() instanceof Problem)
+                toRemove.add(e.getKey());
+        }
+        for (String s : toRemove) this.builders.remove(s);
+
         for (Solution g : objenome.genes.values()) {
             g.apply(this);
         }
@@ -100,7 +101,7 @@ public class Phenotainer extends Container {
         
         CtClass parent = ClassPool.getDefault().get(c.getName()); 
         
-        String newClassName = c.getName() + "_" + (classSerial++) + GPEvolveMethods.DYNAMIC_SUFFIX;
+        String newClassName = c.getName() + "_" + (classSerial++) + SetMethodsGPEvolved.DYNAMIC_SUFFIX;
         CtClass newImp = ClassPool.getDefault().makeClass(newClassName);
         
 

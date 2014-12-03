@@ -33,10 +33,10 @@ public class DynamicJarExample {
         g.any(j.getClass("nars.core.Build"), 
                 of(j.getClass("nars.core.build.Default"), j.getClass("nars.core.build.Neuromorphic")));
         
-        Objenome objenome = g.genome(j.getClass("nars.core.Build"));        
+        Objenome objenome = g.solve(j.getClass("nars.core.Build"));        
         
         System.out.println(objenome);
-        System.out.println(objenome.getGeneList());
+        System.out.println(objenome.getSolutions());
         
         Object b = objenome.get(j.getClass("nars.core.Build"));
         System.out.println(b);

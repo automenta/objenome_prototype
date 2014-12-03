@@ -10,6 +10,6 @@ package objenome.solution;
  * For dynamically decided values, use a constant node in ImplementAbstractMethodWithExpression
  * TODO
  */
-public class ImplementAbstractMethodWithFieldValue {
+public class SetAbstractMethodToReturnExistingStaticFinalField {
     
 }

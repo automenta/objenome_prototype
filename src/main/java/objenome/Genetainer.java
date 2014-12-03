@@ -225,9 +225,9 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
   analogous to AbstractContainer.genome(Object key) except this represents of set of desired
   keys for which to evolve a set of Objosomes can be evolved to generate
      */
-    public Objenome genome(Object... keys) {
+    public Objenome solve(Object... keys) {
         try {
-            return genome(new RandomSolver(), keys);
+            return Genetainer.this.solve(new RandomSolver(), keys);
         } catch (IncompleteSolutionException ex) {
             throw new RuntimeException(ex.toString(), ex);
         }
@@ -239,11 +239,11 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     
     
     
-    public Objenome genome(Solver solver, Object... keys) throws IncompleteSolutionException {
-        return genome(Lists.newArrayList(solver), keys);
+    public Objenome solve(Solver solver, Object... keys) throws IncompleteSolutionException {
+        return Genetainer.this.solve(Lists.newArrayList(solver), keys);
     }
     
-    public Objenome genome(Iterable<Solver> solvers, Object... targets) throws IncompleteSolutionException {
+    public Objenome solve(Iterable<Solver> solvers, Object... targets) throws IncompleteSolutionException {
         List<? extends Object> k;
         if (targets.length == 0) {
             //default: use all autowired dependents
@@ -282,10 +282,10 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             problemSolutions.putAll(remainingProblems);
         }
        
-        return genome(targets, problemSolutions);
+        return solve(targets, problemSolutions);
     }
 
-    public Objenome genome(Object[] targets, Map<Problem,Solution> problemSolutions) throws IncompleteSolutionException {
+    public Objenome solve(Object[] targets, Map<Problem,Solution> problemSolutions) throws IncompleteSolutionException {
         List<Problem> missing = new ArrayList();
         for (Map.Entry<Problem, Solution> e : problemSolutions.entrySet()) {
             if (e.getValue() == null)
@@ -340,11 +340,11 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         this.doubleMinDefault = doubleMinDefault;
     }
 
-    /** returns an error string summarizing why a list of genes would be invalid
- with respect to this container; or null if there is no error     */
-    public String getChromosomeError(List<Solution> genes) {
-        return null;
-    }
+//    /** returns an error string summarizing why a list of genes would be invalid
+// with respect to this container; or null if there is no error     */
+//    public String getChromosomeError(List<Solution> genes) {
+//        return null;
+//    }
 
 
 }

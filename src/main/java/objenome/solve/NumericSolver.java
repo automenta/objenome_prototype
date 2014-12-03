@@ -66,8 +66,9 @@ public abstract class NumericSolver<C> implements Solver  {
         
         Objenome o;
         try {
-            o = g.genome(targets, p);
+            o = g.solve(targets, p);
             solve(o, variables);
+            
         } catch (IncompleteSolutionException ex) {
             p.clear();
             p.putAll(originalProblems);
@@ -77,6 +78,7 @@ public abstract class NumericSolver<C> implements Solver  {
 
     
     protected double eval(Objenome o) {
+        o.commit();        
         return function.apply(o.get(model));
     }
     

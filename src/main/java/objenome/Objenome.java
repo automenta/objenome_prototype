@@ -17,12 +17,12 @@ import objenome.solve.Solver;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 /**
- * Object Genome
+ * Object Genome; represents a solved plan for being able to construct instances from a Genetainer
  */
 public class Objenome {
 
     public static Objenome build(Solver s, Object... targets) throws IncompleteSolutionException {
-        return new Genetainer().genome(s, targets);
+        return new Genetainer().solve(s, targets);
     }
     
     Map<String, Solution> genes = new TreeMap();
@@ -50,24 +50,25 @@ public class Objenome {
         Parent is a Genetainer but the generated container is a Container
         which functions as an ordinary deterministic dependency injection container.     */
     public Phenotainer container() {
-       /* if (pheno!=null)
-            return pheno;*/
-        //return pheno;
+        if (pheno!=null)
+            return pheno;
+        pheno = new Phenotainer(this);        
+        return pheno;
         
-        return new Phenotainer(this);        
+        //return new Phenotainer(this);        
     }
 
     /** call after genes have changed to update the container */
-    //public Phenotainer commit() {
-        //return container().commit();
-    //}
+    public Phenotainer commit() {
+        return container().commit();
+    }
     
     public <T> T get(Object key) {
         return container().get(key);
     }
     
-    /** list of genes, sorted by key */
-    public List<Solution> getGeneList() {
+    /** list of applied solutions, sorted by key */
+    public List<Solution> getSolutions() {
         List<Solution> l = new ArrayList(genes.size());
         for (String s : genes.keySet()) {
             Solution g = genes.get(s);
@@ -82,7 +83,10 @@ public class Objenome {
         for ( Solution g : genes.values()) {
             g.mutate();                
         }
-        //commit();
+        
+        //invalidate the phenotainer so next time it will be reconstructed
+        //TODO find why commit() wasnt sufficient to reset it after a mutate
+        pheno = null;
     }
 
     /** fitness function */

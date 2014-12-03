@@ -77,7 +77,7 @@ public class NumericAnalysisTest {
                     
         }), ExampleScalarFunction.class);
         
-        double bestParam = ((Number)o.getGeneList().get(0)).doubleValue();
+        double bestParam = ((Number)o.getSolutions().get(0)).doubleValue();
         assertEquals(-3.97454, bestParam, 0.001);
     }
 
@@ -96,7 +96,7 @@ public class NumericAnalysisTest {
             }        
         } .minimize(), ExampleMultivariateFunction.class);
         
-        double bestParam = ((Number)o.getGeneList().get(1)).doubleValue();
+        double bestParam = ((Number)o.getSolutions().get(1)).doubleValue();
         assertEquals(-2.5919, bestParam, 0.001);
     }
     

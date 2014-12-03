@@ -39,13 +39,11 @@ public class PhenotainerTest {
         Builder builder = g.any(Part.class, of(PartN.class));
         assertTrue("an any expression of one element is reduced to an autowired 'use()'", (builder instanceof ClassBuilder) && (!(builder instanceof DecideImplementationClass)));
                         
-        Objenome o = g.genome(Part.class);
+        Objenome o = g.solve(Part.class);
 
-        SetIntegerValue partSelect = (SetIntegerValue)o.getGeneList().get(0);
+        SetIntegerValue partSelect = (SetIntegerValue)o.getSolutions().get(0);
         
-        Container c = o.container();
-        
-        Part m = c.get(Part.class);
+        Part m = o.get(Part.class);
         assertNotNull(m);
         
         int expectedResult = partSelect.getValue();
@@ -60,13 +58,11 @@ public class PhenotainerTest {
 
         g.any(Part.class, of(Part0.class, Part1.class));
                         
-        Objenome o = g.genome(Machine.class);
+        Objenome o = g.solve(Machine.class);
 
-        SetImplementationClass partSelect = (SetImplementationClass)o.getGeneList().get(0);
+        SetImplementationClass partSelect = (SetImplementationClass)o.getSolutions().get(0);
         
-        Container c = o.container();
-        
-        Machine m = c.get(Machine.class);
+        Machine m = o.get(Machine.class);
         
         int expectedResult = partSelect.getValue() == Part0.class ? 0 : 1;
         
@@ -79,14 +75,13 @@ public class PhenotainerTest {
 
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
                         
-        Objenome o = g.genome(Machine.class);
+        Objenome o = g.solve(Machine.class);
         
         assertTrue(o.size() > 1);                
 
         
-        
-        Container c = o.container();        
-        Machine m = c.get(Machine.class);
+                
+        Machine m = o.get(Machine.class);
         assertNotNull(m);
         
 
@@ -104,7 +99,7 @@ public class PhenotainerTest {
         g.any(PartWithSubPart.class, of(SubPart0.class, SubPart1.class));
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class)); //, PartWithSubPart.class));        
                         
-        Objenome o = g.genome(Machine.class, Part.class/*, PartWithSubPart.class*/);        
+        Objenome o = g.solve(Machine.class, Part.class/*, PartWithSubPart.class*/);        
 
         
         assertTrue(o.size() > 1);
@@ -116,7 +111,7 @@ public class PhenotainerTest {
         }
 
         
-        Machine m = c.get(Machine.class);
+        Machine m = o.get(Machine.class);
                 
         assertTrue(m.function() > -1);
     }
@@ -126,7 +121,7 @@ public class PhenotainerTest {
 
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
                         
-        Objenome o = g.genome(Machine.class);
+        Objenome o = g.solve(Machine.class);
 
         Set<Class> uniqueClasses = new HashSet();
         for (int i = 0; i < 55; i++) {  
@@ -135,7 +130,7 @@ public class PhenotainerTest {
             Machine m = c.get(Machine.class);
             
             
-            assertEquals("iteration " + i,  ((SetImplementationClass)o.getGeneList().get(0)).getValue(), m.part.getClass() );
+            assertEquals("iteration " + i,  ((SetImplementationClass)o.getSolutions().get(0)).getValue(), m.part.getClass() );
             uniqueClasses.add(m.part.getClass());
             
             o.mutate();            

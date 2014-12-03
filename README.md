@@ -18,3 +18,5 @@ Powered By..
 At its core, Objenome contains a refactored and generalized version of [MentaContainer](http://mentacontainer.soliveirajr.com/mtw/Page/Intro/en/mentacontainer-overview), which provided a minimal and straightforward DI container.
 
 [Apache Commons Math - Genetic](http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/genetics/package-summary.html) package.
+
+An adapted version of the Genetic Programming library [EpochX 2.0](https://github.com/tc33/) is included in the 'evolve' packages.  There are significant architectural differences including the elimination of all static classes and refactoring.  Currently it does not include EpochX's Context-free-grammar (CFG) packages, though these can be integrated later.
