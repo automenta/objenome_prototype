@@ -259,17 +259,18 @@ public class ContainerTest {
         public ParameterX() { }        
     }
     
-    public static class ExampleService2 {
+    public static class ServiceNeedingDAOandParameter {
 
         private final UserDAO userDAO;
         private final ParameterX x;
 
-        public ExampleService2(UserDAO userDAO, ParameterX x) {
+        public ServiceNeedingDAOandParameter(UserDAO userDAO, ParameterX x) {
             this.userDAO = userDAO;
             this.x = x;
         }
 
         public ParameterX function() {
+            userDAO.getUsername(11);
             //System.out.println(userDAO.getUsername(11) + " " + x);
             return x;
         }
@@ -290,14 +291,14 @@ public class ContainerTest {
 
     @Test public void case11() {
 
-        AbstractContainer c = new Container();
+        Container c = new Container();
 
         c.usable(JdbcUserDAO.class);        
         c.usable(ParameterX.class);
         
-        c.use("connection", Connection.class); //wires to setter
+        c.use( Connection.class); //wires to setter
 
-        ExampleService2 service = c.get(ExampleService2.class);
+        ServiceNeedingDAOandParameter service = c.get(ServiceNeedingDAOandParameter.class);
 
         Assert.assertNotNull(service.function());
     }
@@ -306,9 +307,9 @@ public class ContainerTest {
     @Test public void testAmbiguity() {
         
         Container c = new Container();
-        c.usable(ExampleService2.class, GenetainerTest.Part0.class);
+        c.usable(ServiceNeedingDAOandParameter.class, GenetainerTest.Part0.class);
         assertEquals(0, c.get(GenetainerTest.Machine.class).function());
-        c.usable(ExampleService2.class, GenetainerTest.Part1.class);
+        c.usable(ServiceNeedingDAOandParameter.class, GenetainerTest.Part1.class);
         assertEquals("overrides the first builder", 1, c.get(GenetainerTest.Machine.class).function());
         
     }
