@@ -83,7 +83,7 @@ public class PhenotainerTest {
                         
         Objenome o = g.random(Machine.class);
         
-        assertTrue(o.getSolutionSize() > 1);                
+        assertEquals(2, o.getSolutionSize());
 
         
                 

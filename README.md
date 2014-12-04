@@ -87,7 +87,26 @@ Machine m = o.get(Machine.class);
 Machine maybeDifferent = o.mutate().get(Machine.class); 
 ```
 
-**Ambiguous class with unknown constant parameter**
+**Ambiguous choice of implementation, and an unknown constant constructor parameter**
+
+``` java
+Multitainer g = new Multitainer();
+
+g.any(Part.class, 
+    of(Part0.class, Part1.class, PartN.class));
+                
+Objenome o = g.random(Machine.class);
+
+//assertEquals(2, o.getSolutionSize());
+//  1st solution chooses one of three Part implementations
+//  2nd solution chooses the 'int' parameter of PartN. (Part0 and Part1 take no parameters as their names suggest)
+
+Machine m = o.get(Machine.class);
+```
+
+
+
+**Recursive discovery of differently-typed dependencies**
 
 If PartN is chosen, its constructor parameter must be provided.  This creates another "gene" that can be randomized.  The @Before annotation specifies a method parameter's acceptable range.
 
