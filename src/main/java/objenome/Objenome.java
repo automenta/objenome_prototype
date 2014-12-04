@@ -79,7 +79,7 @@ public class Objenome {
     
 
     /** mutates this genome's genes, and commits changes to apply to next generated object */
-    void mutate(/* .... mutation opcodes ... */) {
+    public Objenome mutate(/* .... mutation opcodes ... */) {
         for ( Solution g : genes.values()) {
             g.mutate();                
         }
@@ -87,6 +87,7 @@ public class Objenome {
         //invalidate the phenotainer so next time it will be reconstructed
         //TODO find why commit() wasnt sufficient to reset it after a mutate
         pheno = null;
+        return this;
     }
 
     /** fitness function */

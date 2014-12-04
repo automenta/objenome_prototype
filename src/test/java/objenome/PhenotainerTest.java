@@ -68,6 +68,10 @@ public class PhenotainerTest {
         
         assertEquals(expectedResult, m.function());        
         
+        Machine possiblyDifferent = o.mutate().get(Machine.class);
+        assertTrue(possiblyDifferent!=null);
+        
+        
     }
 
     @Test public void testMultiGene() {

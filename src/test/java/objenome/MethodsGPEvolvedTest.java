@@ -18,7 +18,7 @@ import org.junit.Test;
  *
  * @author me
  */
-public class AbstractGPMethodTest {
+public class MethodsGPEvolvedTest {
 
     abstract public static class ExampleUnknownMethod {
         
