@@ -108,7 +108,9 @@ public class PhenotainerTest {
         //find Part dependency of Machine recursively without being specified
         Objenome o = g.random(Machine.class/*, Part.class*/);        
         
-        assertEquals("one solution for subpart impl choice, and another for part impl choice", 2, o.getSolutionSize());
+        System.out.println(o.getSolutions());
+        
+        assertEquals("one solution for subpart impl choice, one for part impl choice, and 3rd for PartN parameter", 3, o.getSolutionSize());
 
         Container c = o.container();
         

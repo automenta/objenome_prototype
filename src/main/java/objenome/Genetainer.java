@@ -78,80 +78,101 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
         return null;
     }
     
+    
+    /**
+     * TODO call cb.updateConstructorDependencies(..) fewer times, once should be enough with the right design
+     */
     protected List<Problem> getProblems(ClassBuilder cb, List<Object> path, List<Problem> problems) {
-        cb.updateConstructorDependencies(false);
-
-//        if (cb.getInitValues() == null) {
-//            /*System.out.println(cb.getInitTypes());
-//            System.out.println(cb.getInitValues());*/
-//            throw new RuntimeException(this + " unknown how to Build component: " + path);
-//        }
-
-        
-        Class c = cb.type();
-        for (Method m : c.getMethods()) {
-            if (Modifier.isAbstract( m.getModifiers() )) {
-                problems.add(new DevelopMethod(m) );
-            }
-        }
-        
-        
-        Set<DependencyKey> possibleConstructorDependencies = new HashSet(cb.getInitValues());
-        
-        //simultate instancing to find all possible constructor dependencies
-        cb.instance(this, possibleConstructorDependencies);
-
-        for (Object v : possibleConstructorDependencies) {
-            //System.out.println("  Class Builder Init Value: "+ cb + " " + v);           
-            
-            
-            if (!(v instanceof DependencyKey)) {
-                throw new RuntimeException("Unknown init value type: " + v);
-            }
-            
-            List nextPath = new ArrayList(path);
-            nextPath.add(v);
-            
-            Builder bv = getBuilder(((DependencyKey)v).key);
-            
-            if (bv instanceof DecideImplementationClass) {
-                
-                problems.add((Problem)bv);
-                
-                //recurse for each choice
-                getProblems(((DecideImplementationClass)bv).implementors, nextPath, problems);
-            }
-            else if (bv!=null) {
-                //System.out.println("  Class Builder Init Value Builder: "+ cb + " " + bv);
-                getProblems(bv, nextPath, problems);
-            }
-            else {
-                System.err.println("null builder for " + v);
-            }
-        }
         
         //handle primitive value parameters
-        for (Parameter p : cb.getInitPrimitives()) {
-            List nextPath = new ArrayList(path);
-            nextPath.add(p);
-            
-            if (p.getType() == int.class) {
-                problems.add(new DecideIntegerValue(p, nextPath, 
-                        getIntMinDefault(), getIntMaxDefault()));
-            }
-            else if (p.getType() == double.class) {
-                problems.add(new DecideDoubleValue(p, nextPath, 
-                        getDoubleMinDefault(), getDoubleMaxDefault()) );
-            }
-            else if (p.getType() == boolean.class) {
-                problems.add(new DecideBooleanValue(p, nextPath) );    
-            }
-            else {
-                throw new RuntimeException("primitive Parameter " + nextPath + " " + p + " not yet supported");
+        {
+            cb.updateConstructorDependencies(false);
+
+            if (cb.getInitPrimitives()!=null) {
+                for (Parameter p : cb.getInitPrimitives()) {
+                    List nextPath = new ArrayList(path);
+                    nextPath.add(p);
+
+                    if (p.getType() == int.class) {
+                        problems.add(new DecideIntegerValue(p, nextPath, 
+                                getIntMinDefault(), getIntMaxDefault()));
+                    }
+                    else if (p.getType() == double.class) {
+                        problems.add(new DecideDoubleValue(p, nextPath, 
+                                getDoubleMinDefault(), getDoubleMaxDefault()) );
+                    }
+                    else if (p.getType() == boolean.class) {
+                        problems.add(new DecideBooleanValue(p, nextPath) );    
+                    }
+                    else {
+                        throw new RuntimeException("primitive Parameter " + nextPath + " " + p + " not yet supported");
+                    }
+                }
             }
         }
 
+        
+        //Handle Abstract Methods
+        {
+            Class c = cb.type();
+            for (Method m : c.getMethods()) {
+                if (Modifier.isAbstract( m.getModifiers() )) {
+                    problems.add(new DevelopMethod(m) );
+                }
+            }
+        }
+        
+        //Handle Constructor Dependencies
+        {
+            Set<DependencyKey> possibleConstructorDependencies = new HashSet();
+            if (cb.getInitValues()!=null) {
+                for (Object o : cb.getInitValues()) {
+                    if (o instanceof DependencyKey)
+                        possibleConstructorDependencies.add((DependencyKey)o);
+                }
+            }
+
+            //simultate instancing to find all possible constructor dependencies
+            cb.instance(this, possibleConstructorDependencies);
+
+            for (DependencyKey dk : possibleConstructorDependencies) {
+
+                List nextPath = new ArrayList(path);
+                nextPath.add(dk);
+
+                Builder bv = getBuilder(dk.key);
+
+                if (bv instanceof DecideImplementationClass) {
+
+                    problems.add((Problem)bv);
+
+                    //recurse for each choice
+                    getProblems(((DecideImplementationClass)bv).implementors, nextPath, problems);
+                }
+                else if (bv!=null) {
+                    //System.out.println("  Class Builder Init Value Builder: "+ cb + " " + bv);
+                    getProblems(bv, nextPath, problems);
+                }
+                else if (dk.param!=null) {
+                    
+                    //this was likely a newly discovered dependency, 
+                    //from possibleConstructorDependencies,
+                    //so recursively discover its problems:
+                    
+                    Class paramClass = dk.param.getType();                    
+                    getProblems(paramClass, nextPath, problems);
+                    
+                }
+            }
+        }
+       
+
         //TODO handle setters, etc
+        {
+    
+        }
+        
+        
         //System.out.println("Class Builder: "+ path + " " + cb);
 
         return problems;
