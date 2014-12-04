@@ -44,7 +44,7 @@ public class PackatainerTest {
         for (Class ci : rg.getImplementable()) {
             Genetainer g = new Genetainer(rg);
             try {
-                System.out.println(ci + ": " + g.solve(ci).getSolutions());
+                System.out.println(ci + ": " + g.random(ci).getSolutions());
             }
             catch (Exception e) {
                 System.out.println("  unable: " + ci + ": " + e.toString());

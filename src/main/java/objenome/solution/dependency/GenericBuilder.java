@@ -1,7 +1,9 @@
 package objenome.solution.dependency;
 
 import java.lang.reflect.Method;
-import objenome.AbstractContainer;
+import java.util.Collection;
+import objenome.Prototainer;
+import objenome.solution.dependency.ClassBuilder.DependencyKey;
 import objenome.util.FindMethod;
 
 public class GenericBuilder<E> implements Builder, Interceptor<E> {
@@ -52,17 +54,21 @@ public class GenericBuilder<E> implements Builder, Interceptor<E> {
     }
 
     @Override
-    public <T> T instance(AbstractContainer context) {
+    public <T> T instance(Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere) {
 
-        try {
+        if (simulateAndAddExtraProblemsHere==null) {
+            try {
 
-            return (T) method.invoke(factory, (Object[]) null);
+                return (T) method.invoke(factory, (Object[]) null);
 
-        } catch (Exception e) {
+            } catch (Exception e) {
 
-            throw new RuntimeException("Cannot invoke method: " + method, e);
+                throw new RuntimeException("Cannot invoke method: " + method, e);
 
+            }
         }
+        
+        return null;
     }
 
     @Override

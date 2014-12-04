@@ -3,7 +3,9 @@ package objenome.solution.dependency;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import objenome.AbstractContainer;
 import objenome.Phenotainer;
 import objenome.Prototainer;
 import objenome.util.FindConstructor;
+import objenome.util.FindConstructor.NoDeterministicConstruction;
 import objenome.util.FindMethod;
 import objenome.util.InjectionUtils;
 
@@ -46,6 +49,7 @@ public class ClassBuilder implements ConfigurableBuilder {
     public final Set<ConstructorDependency> constructorDependencies;
     private List<Parameter> initPrimitives;
     private boolean specificInitValue;
+    private List<Constructor<?>> possibleConstructors;
 
     public ClassBuilder(Prototainer container, Class<?> klass) {
 
@@ -196,7 +200,7 @@ public class ClassBuilder implements ConfigurableBuilder {
         return values.toArray(types);
     }
 
-    private static Object[] getValues(AbstractContainer container, Constructor c, List<Object> values, Map<Parameter,Object> specific) throws InstantiationException {
+    private static Object[] getValues(Prototainer container, Constructor c, List<Object> values, Map<Parameter,Object> specific, Collection<DependencyKey> missingDependencies)  {
 
         if (values == null) {
             return null;
@@ -215,19 +219,26 @@ public class ClassBuilder implements ConfigurableBuilder {
             if (specified != null)
                 array[index] = specified;
             else {
-                Object obj = values.get(v++);
-                if (obj instanceof DependencyKey) {
 
-                    DependencyKey dk = (DependencyKey) obj;
-                    Object dependency = container.get(dk.getKey());
-                    if (dependency == null) {
-                        throw new RuntimeException("Unknown dependency:" + dk);
+                if (missingDependencies!=null) {
+                    missingDependencies.add(new DependencyKey(p, c.toString() + p.toString() ));
+                }
+                else {
+                    Object obj = values.get(v++);
+                    if (obj instanceof DependencyKey) {
+
+                        DependencyKey dk = (DependencyKey) obj;
+
+                        Object dependency = null;
+                        if (container instanceof AbstractContainer)
+                            dependency = ((AbstractContainer)container).get(dk.getKey());
+                        array[index] = dependency;
+
+
+                    } else {
+
+                        array[index] = obj;
                     }
-                    array[index] = dependency;
-
-                } else {
-
-                    array[index] = obj;
                 }
             }
             
@@ -347,7 +358,7 @@ public class ClassBuilder implements ConfigurableBuilder {
         return null;
     }
 
-    public static Map<Parameter,Object> getParameters(AbstractContainer container) {
+    public static Map<Parameter,Object> getParameters(Prototainer container) {
         if (container instanceof Phenotainer) {
             return ((Phenotainer)container).parameterValues;
         }
@@ -355,7 +366,7 @@ public class ClassBuilder implements ConfigurableBuilder {
     }
     
     @Override
-    public <T> T instance(AbstractContainer context) {
+    public <T> T instance(objenome.Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere) {
 
         Object obj = null;
 
@@ -369,6 +380,12 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                 if (!useZeroArgumentsConstructor) {
 
+                    if (simulateAndAddExtraProblemsHere != null) {
+                        //reset
+                        this.initTypes = null;                        
+                        this.initValues = null;
+                    }
+                    
                     updateConstructorDependencies();
 
                 } else {
@@ -394,25 +411,58 @@ public class ClassBuilder implements ConfigurableBuilder {
                         
                        constructor = FindConstructor.getConstructor(klass, getClasses(convertToPrimitives(initTypes)), specificParameters);
 
-                    } catch (Exception ee) {
+                    } 
+                    catch (NoDeterministicConstruction ndc) {
+                        
+                        if (simulateAndAddExtraProblemsHere!=null)
+                            possibleConstructors = ndc.possibleConstructors;
+                        else
+                            throw new RuntimeException("Missing constructor for class: " + klass, ndc);
+                    }
+                    catch (Exception ee) {
+                        throw new RuntimeException("Missing constructor for class: " + klass, ee);
+                    }
+                    
+                }
+            }
+            
+            if (initValues == null)  {
+                initValues = new ArrayList();                    
+            }
 
-                        throw new RuntimeException("Cannot find a constructor for class: " + klass + ": " + ee);
+            if (simulateAndAddExtraProblemsHere==null) {
+
+                if (constructor == null) {
+                    throw new RuntimeException("No constructors");
+                }
+                
+                //throws a detailed RuntimeException if it fails:
+                values = getValues(context, constructor, initValues, specificParameters, null);
+                
+            }
+            else {
+                //try all potential constructors, getting all missnig dependencies which are added as problems to simulateAndAddExtraProblemsHere collection
+                if ((possibleConstructors!=null) || (constructor!=null)) {
+                    Set<DependencyKey> missingDependencies = new HashSet();
+                    
+                    if (constructor!=null)
+                        getValues(context, constructor, initValues, specificParameters, missingDependencies);
+                    
+                    if (possibleConstructors!=null) 
+                        for (Constructor c : possibleConstructors) {
+                            getValues(context, c, initValues, specificParameters, missingDependencies);
+                        }
+                    
+                    for (DependencyKey md : missingDependencies) {
+                        simulateAndAddExtraProblemsHere.add(md);
                     }
                 }
             }
-
-            try {
-
-                if (initValues == null)  {
-                    initValues = new LinkedList();                    
-                }
-                
-                values = getValues(context, constructor, initValues, specificParameters);
-
-            } catch (Exception e) {
-
-                new RuntimeException("Cannot instantiate values for constructor: " + e.toString(), e);
-            }
+        }
+        
+        if (simulateAndAddExtraProblemsHere!=null) {            
+            //finished
+            return null;
         }
 
         try {
@@ -433,7 +483,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                 if (value instanceof DependencyKey) {
                     DependencyKey dk = (DependencyKey) value;
-                    value = context.get(dk.getKey());
+                    value = ((AbstractContainer)context).get(dk.getKey());
                 }
 
                 setValue(obj, name, value);
@@ -521,6 +571,8 @@ public class ClassBuilder implements ConfigurableBuilder {
                 if (provided != null && pc.isAssignableFrom(provided)) {
 
                     // matched this one, so remove...
+                    System.out.println(c);
+                    System.out.println(pc + " " + provided + " " + providedInitTypes + " " + providedInitValues);
                     
                     newInitTypes.add(providedInitTypes.removeFirst()); 
                     newInitValues.add(providedInitValues.removeFirst());
@@ -570,7 +622,7 @@ public class ClassBuilder implements ConfigurableBuilder {
                                     pheno.use(p, subinstance);           
                                     newInitValues.add(subinstance);
                                 }
-                                catch (Exception e) {
+                                catch (RuntimeException e) {
                                     //not instantiable, try next dependency
                                     continue;
                                 

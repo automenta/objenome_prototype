@@ -81,12 +81,13 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     protected List<Problem> getProblems(ClassBuilder cb, List<Object> path, List<Problem> problems) {
         cb.updateConstructorDependencies(false);
 
-        if (cb.getInitValues() == null) {
-            /*System.out.println(cb.getInitTypes());
-            System.out.println(cb.getInitValues());*/
-            throw new RuntimeException(this + " unknown how to Build component: " + path);
-        }
+//        if (cb.getInitValues() == null) {
+//            /*System.out.println(cb.getInitTypes());
+//            System.out.println(cb.getInitValues());*/
+//            throw new RuntimeException(this + " unknown how to Build component: " + path);
+//        }
 
+        
         Class c = cb.type();
         for (Method m : c.getMethods()) {
             if (Modifier.isAbstract( m.getModifiers() )) {
@@ -94,7 +95,13 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             }
         }
         
-        for (Object v : cb.getInitValues()) {
+        
+        Set<DependencyKey> possibleConstructorDependencies = new HashSet(cb.getInitValues());
+        
+        //simultate instancing to find all possible constructor dependencies
+        cb.instance(this, possibleConstructorDependencies);
+
+        for (Object v : possibleConstructorDependencies) {
             //System.out.println("  Class Builder Init Value: "+ cb + " " + v);           
             
             
@@ -114,11 +121,16 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
                 //recurse for each choice
                 getProblems(((DecideImplementationClass)bv).implementors, nextPath, problems);
             }
-            else {
+            else if (bv!=null) {
                 //System.out.println("  Class Builder Init Value Builder: "+ cb + " " + bv);
                 getProblems(bv, nextPath, problems);
             }
+            else {
+                System.err.println("null builder for " + v);
+            }
         }
+        
+        //handle primitive value parameters
         for (Parameter p : cb.getInitPrimitives()) {
             List nextPath = new ArrayList(path);
             nextPath.add(p);
@@ -164,7 +176,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
 
         Builder b = (k instanceof Builder) ? (Builder)k : getBuilder(k);
 
-        //System.out.println(k + " --> " + b);
+        //System.err.println(k + " --> " + b);
         //System.out.println(parentPath);
         
         if (b == null) {
@@ -172,10 +184,13 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
             if (cb.equals(previousPathElement))
                 throw new RuntimeException("Cyclic dependency: " + path + " -> " + cb);
 
-            //System.out.println(k + "=" + cb);
+            //System.out.println(k + ">" + cb + " " + problems);
                     
             path.add(cb);                
             getProblems(cb, path, problems);
+            
+            //System.out.println(k + "<" + cb + " " + problems);
+            
         }
         else {
             
@@ -225,9 +240,9 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
   analogous to AbstractContainer.genome(Object key) except this represents of set of desired
   keys for which to evolve a set of Objosomes can be evolved to generate
      */
-    public Objenome solve(Object... keys) {
+    public Objenome random(Object... keys) {
         try {
-            return Genetainer.this.solve(new RandomSolver(), keys);
+            return solve(new RandomSolver(), keys);
         } catch (IncompleteSolutionException ex) {
             throw new RuntimeException(ex.toString(), ex);
         }

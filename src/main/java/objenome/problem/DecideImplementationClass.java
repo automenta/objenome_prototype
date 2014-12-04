@@ -5,9 +5,12 @@
  */
 package objenome.solution.dependency;
 
+import java.util.Collection;
 import java.util.List;
 import objenome.AbstractContainer;
+import objenome.Prototainer;
 import objenome.problem.Problem;
+import objenome.solution.dependency.ClassBuilder.DependencyKey;
 
 /**
  *
@@ -32,11 +35,14 @@ public class DecideImplementationClass implements Problem, Builder {
     
     
     @Override
-    public <T> T instance(AbstractContainer context) {
-        if (implementors.size() == 1) {
-            return (T) context.get(implementors.get(0) );
+    public <T> T instance(Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere) {
+        if (simulateAndAddExtraProblemsHere == null) {
+            if (implementors.size() == 1) {
+                return (T) ((AbstractContainer)context).get(implementors.get(0) );
+            }
+            throw new RuntimeException(this + " must be disambiguated");
         }
-        throw new RuntimeException(this + " must be disambiguated");
+        return null;
     }
 
     @Override

@@ -47,7 +47,7 @@ public class MethodsGPEvolvedTest {
 
         Genetainer a = new Genetainer();
         
-        Objenome genome = a.solve(ExampleUnknownMethod.class);
+        Objenome genome = a.random(ExampleUnknownMethod.class);
         
         List<Solution> genes = genome.getSolutions();
         
@@ -72,7 +72,7 @@ public class MethodsGPEvolvedTest {
     public void testAbstractClass2() {
         Genetainer a = new Genetainer();
         
-        Objenome genome = a.solve(ExampleUnknownMethodWithConstructor.class);
+        Objenome genome = a.random(ExampleUnknownMethodWithConstructor.class);
         
         List<Solution> genes = genome.getSolutions();                
         

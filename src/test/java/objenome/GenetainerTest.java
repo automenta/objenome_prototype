@@ -108,8 +108,8 @@ public class GenetainerTest {
         Genetainer c = new Genetainer();
         c.any(Part.class, of(Part0.class, Part1.class));
                         
-        Objenome o = c.solve(Machine.class);
-        assertEquals("obgenome contains one gene to select betwen the implementations of interface Part", 1, o.size());
+        Objenome o = c.random(Machine.class);
+        assertEquals("obgenome contains one gene to select betwen the implementations of interface Part", 1, o.getSolutionSize());
         
         List<Solution> genes = o.getSolutions();
         
@@ -122,9 +122,9 @@ public class GenetainerTest {
         Genetainer c = new Genetainer();
         c.any(Part.class, of(Part0.class, Part1.class));
                         
-        Objenome o = c.solve(Part.class);
+        Objenome o = c.random(Part.class);
         
-        assertEquals(1, o.size());        
+        assertEquals(1, o.getSolutionSize());        
         
         List<Solution> genes = o.getSolutions();
         
@@ -136,10 +136,10 @@ public class GenetainerTest {
         Genetainer c = new Genetainer();
         c.any(Part.class, the(PartN.class));
                         
-        Objenome o = c.solve(Part.class);
+        Objenome o = c.random(Part.class);
         List<Solution> genes = o.getSolutions();
         
-        assertEquals(1, o.size());        
+        assertEquals(1, o.getSolutionSize());        
         assertEquals(SetIntegerValue.class, genes.get(0).getClass());
                 
     }
@@ -150,9 +150,9 @@ public class GenetainerTest {
         
         Genetainer c = new Genetainer();
         c.any(Part.class, of(Part0.class, Part1.class, PartN.class));
-        Objenome o = c.solve(Machine.class);
+        Objenome o = c.random(Machine.class);
         
-        assertEquals("obgenome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.size());
+        assertEquals("obgenome contains 2 genes: a) to select betwen the implementations of interface Part, and b) to set the int parameter for PartN if that needs instantiated", 2, o.getSolutionSize());
         
         List<Solution> genes = o.getSolutions();
         
@@ -168,11 +168,11 @@ public class GenetainerTest {
         Genetainer c = new Genetainer();
         c.usable(Part.class, PartWithSubPart.class);
         c.any(SubPart.class, of(SubPart0.class, SubPart1.class));
-        Objenome o = c.solve(Machine.class);
+        Objenome o = c.random(Machine.class);
         
         List<Solution> genes = o.getSolutions();
         
-        assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.size());
+        assertEquals("obgenome contains 1 gene: to select between subcomponents of the part component", 1, o.getSolutionSize());
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
     }
     
@@ -183,12 +183,12 @@ public class GenetainerTest {
                     of(Part0.class, Part1.class, PartN.class, PartWithSubPart.class));
         c.any(SubPart.class, 
                     of(SubPart0.class, SubPart1.class));
-        Objenome o = c.solve(Machine.class);
+        Objenome o = c.random(Machine.class);
                        
         List<Solution> genes = o.getSolutions();
         
         System.out.println(genes);
-        assertEquals(3, o.size());
+        assertEquals(3, o.getSolutionSize());
         assertEquals(SetImplementationClass.class, genes.get(0).getClass());
         assertEquals(SetImplementationClass.class, genes.get(1).getClass());
         assertEquals(SetIntegerValue.class, genes.get(2).getClass());

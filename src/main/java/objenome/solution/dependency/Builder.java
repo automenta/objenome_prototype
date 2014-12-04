@@ -1,6 +1,8 @@
 package objenome.solution.dependency;
 
+import java.util.Collection;
 import objenome.AbstractContainer;
+import objenome.solution.dependency.ClassBuilder.DependencyKey;
 
 /**
  * An IoC factory that knows how to create instances.
@@ -20,10 +22,18 @@ public interface Builder {
     /**
      * Returns an instance. Creates one if necessary.
      *
-     * @return an instance
+     * @return an instance, unless simulateAndAddExtraProperty is not null in which
+     * case null should be returned and any discovered problems added to the 
+     * supplied collection
+     * 
      */
-    public <T> T instance(AbstractContainer context);
+    public <T> T instance(objenome.Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere);
 
+    public default <T> T instance(AbstractContainer context) {
+        return instance(context, null);
+    }
+    
+    
     /**
      * Return of type of objects that this factory disposes.
      *

@@ -39,7 +39,7 @@ public class PhenotainerTest {
         Builder builder = g.any(Part.class, of(PartN.class));
         assertTrue("an any expression of one element is reduced to an autowired 'use()'", (builder instanceof ClassBuilder) && (!(builder instanceof DecideImplementationClass)));
                         
-        Objenome o = g.solve(Part.class);
+        Objenome o = g.random(Part.class);
 
         SetIntegerValue partSelect = (SetIntegerValue)o.getSolutions().get(0);
         
@@ -58,8 +58,10 @@ public class PhenotainerTest {
 
         g.any(Part.class, of(Part0.class, Part1.class));
                         
-        Objenome o = g.solve(Machine.class);
+        Objenome o = g.random(Machine.class);
 
+        assertEquals(1, o.getSolutionSize());
+        
         SetImplementationClass partSelect = (SetImplementationClass)o.getSolutions().get(0);
         
         Machine m = o.get(Machine.class);
@@ -79,9 +81,9 @@ public class PhenotainerTest {
 
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
                         
-        Objenome o = g.solve(Machine.class);
+        Objenome o = g.random(Machine.class);
         
-        assertTrue(o.size() > 1);                
+        assertTrue(o.getSolutionSize() > 1);                
 
         
                 
@@ -103,17 +105,16 @@ public class PhenotainerTest {
         g.any(PartWithSubPart.class, of(SubPart0.class, SubPart1.class));
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
 
-        Objenome o = g.solve(Machine.class, Part.class);
-
+        //find Part dependency of Machine recursively without being specified
+        Objenome o = g.random(Machine.class/*, Part.class*/);        
         
-        assertTrue(o.size() > 1);
+        assertEquals("one solution for subpart impl choice, and another for part impl choice", 2, o.getSolutionSize());
 
         Container c = o.container();
         
         for (Builder b : c.getBuilders().values()) {
             assertTrue(!(b instanceof DecideImplementationClass));                
         }
-
         
         Machine m = o.get(Machine.class);
                 
@@ -125,7 +126,7 @@ public class PhenotainerTest {
 
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
                         
-        Objenome o = g.solve(Machine.class);
+        Objenome o = g.random(Machine.class);
 
         Set<Class> uniqueClasses = new HashSet();
         for (int i = 0; i < 55; i++) {  

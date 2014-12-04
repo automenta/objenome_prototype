@@ -1,6 +1,8 @@
 package objenome.solution.dependency;
 
-import objenome.AbstractContainer;
+import java.util.Collection;
+import objenome.Prototainer;
+import objenome.solution.dependency.ClassBuilder.DependencyKey;
 
 public class SingletonBuilder implements Builder {
 
@@ -16,9 +18,13 @@ public class SingletonBuilder implements Builder {
     }
 
     @Override
-    public <T> T instance(AbstractContainer context) {
+    public <T> T instance(Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere) {
  
-        return (T) instance;
+        if (simulateAndAddExtraProblemsHere==null) {
+            return (T) instance;
+        }
+        
+        return null;
     }
 
     @Override

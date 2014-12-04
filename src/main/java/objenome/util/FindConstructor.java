@@ -2,9 +2,9 @@ package objenome.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import objenome.solution.SetMethodsGPEvolved;
@@ -46,6 +46,18 @@ public class FindConstructor {
                 Collections.EMPTY_MAP);
     }
 
+    
+    public static class NoDeterministicConstruction extends NoSuchMethodException {
+        
+        public final List<Constructor<?>> possibleConstructors;
+
+        public NoDeterministicConstruction(List<Constructor<?>> partiallyApplicableMethods, String s) {
+            super(s);
+            this.possibleConstructors = partiallyApplicableMethods;
+        }
+        
+    }
+    
     /**
      * Internal method to find the most specific applicable method
      * TODO handle dynamic classes with >1 constructor (in the 2nd half of this function)
@@ -57,7 +69,8 @@ public class FindConstructor {
         
         
         // First find the applicable methods 
-        List<Constructor<?>> applicableMethods = new LinkedList<>();
+        List<Constructor<?>> applicableMethods = new ArrayList<>();
+        List<Constructor<?>> partiallyApplicableMethods = new ArrayList<>();
 
         int assigned = 0;
         for (int i = 0; i < toTest.length; i++) {
@@ -106,6 +119,9 @@ public class FindConstructor {
             if (assigned == params.length) {
                 applicableMethods.add(actual);
             }
+            else {
+                partiallyApplicableMethods.add(actual);
+            }
         }
 
         /* 
@@ -115,7 +131,7 @@ public class FindConstructor {
         int size = applicableMethods.size();
 
         if (size == 0) {
-            throw new NoSuchMethodException("No valid constructor exists for " + Arrays.toString(parameterTypes) + ", " + specific);
+            throw new NoDeterministicConstruction(partiallyApplicableMethods, "No valid constructor exists for " + Arrays.toString(parameterTypes) + ", " + specific);
             
         }
         if (size == 1) {

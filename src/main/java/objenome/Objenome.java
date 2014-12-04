@@ -44,7 +44,7 @@ public class Objenome {
         this.parentContext = context;
     }
     
-    public int size() { return genes.size(); }
+    public int getSolutionSize() { return genes.size(); }
     
     /** gets the generated container of this Objenome with respect to the parent container.
         Parent is a Genetainer but the generated container is a Container

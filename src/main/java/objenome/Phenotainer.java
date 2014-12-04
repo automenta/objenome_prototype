@@ -82,7 +82,7 @@ public class Phenotainer extends Container {
             }
             
             try {
-                Class<? extends T> implementation = implement(c);
+                Class<? extends T> implementation = instance(c);
                 //TODO cache the implementation?
                 use(c, implementation);
                 return super.get(c);
@@ -97,7 +97,7 @@ public class Phenotainer extends Container {
         return super.get(c);
     }    
     
-    protected <T> Class<? extends T> implement(final Class<? extends T> c) throws CannotCompileException, NotFoundException, IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    protected <T> Class<? extends T> instance(final Class<? extends T> c) throws CannotCompileException, NotFoundException, IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         
         CtClass parent = ClassPool.getDefault().get(c.getName()); 
         
@@ -109,7 +109,10 @@ public class Phenotainer extends Container {
         
         CtConstructor[] parentConstructors = parent.getConstructors();
         if (parentConstructors.length > 1) {
-            throw new RuntimeException(">1 constructors in abstract class not implemented yet");
+            throw new RuntimeException("Phenotainer.instance() unable to decide >1 constructors in abstract class " + c);
+        }
+        else if (parentConstructors.length == 0) {
+            throw new RuntimeException("Phenotainer.instance() found no available constructors in abstract class " + c);
         }
         
         CtConstructor parentcon = parentConstructors[0];
