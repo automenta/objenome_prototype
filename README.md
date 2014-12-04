@@ -24,17 +24,20 @@ Objenome is built on a refactored and generalized version of [MentaContainer](ht
 An adapted version of the Genetic Programming library [EpochX 2.0](https://github.com/tc33/) is included in the 'evolve' packages.  There are significant architectural differences, including the elimination of all EpochX's need for static classes, and further refactoring to simplify the API. (Currently, this fork does not include EpochX's Context-free-grammar (CFG) packages, though these can be integrated later.)  GP evolution configuration has been modified to use an Objenome dependency-injection container __internally__.  Javassist dynamic bytecode is available to automatically replace unimplemented abstract methods of constructed instances with procedures and expressions evolved to maximize a provided fitness function.
 
 
-Basic '*Container*' Dependency Injection
+*Container* Dependency Injection
 ======================
 
-**Basic Autowiring with use() & Instantiation**
+**Basic use() autowiring & get() instantiation**
 ``` java
 Container c = new Container();
 c.use(Part.class, Part0.class);
 Part p = c.get(Part.class);
 ```
 
-**Singleton Scope**
+**Singleton scope: the()**
+
+the() is similar to get() but involves the Singleton scope.
+
 ``` java
 Part x = c.the("part", new Part0());
 Part y = c.the("part", new Part0());
@@ -50,7 +53,8 @@ Part v = c.the(Part0.class);
 //assertTrue(v==w);
 ```
 
-**Multiple Levels of Dependencies, Mixing use() & usable()**
+**Multiple dependency levels, mixing use() & usable()**
+
 ``` java
 Container c = new Container();    
     
@@ -64,8 +68,13 @@ c.use(Connection.class); //wires to setter
 service = c.get(ServiceNeedingDAOandParameter.class);
 ```
 
-Basic '*Multitainer*' Dependency Injection
-====
+*Multitainer* injection
+=====
+
+**Introduction to Objenome with any() & mutate()**
+
+any( AbstractClass.class, of( Impl1.class, Impl2.class) ) defines an ambiguity that must be resolved in the objenome prior to realization.
+
 ``` java
 Genetainer g = new Genetainer();
 
@@ -79,13 +88,46 @@ Machine maybeDifferent = o.mutate().get(Machine.class);
 ```
 
 
-***More documentation coming soon: additional Unit Test examples EXPLAINED***
------------------------------------------------------------------
+
 
 Numeric Optimization
 ==================
 
-**See NumericAnalysisTest**
+**Find Constant parameters to fit function zeros (roots)**
+``` java
+/* public ExampleScalarFunction(@Between(min=-4.0, max=4.0) double constParameter) */
+Objenome o = Objenome.build(new FindZeros(ExampleScalarFunction.class,
+        new Function<ExampleScalarFunction, Double>() {            
+            public Double apply(ExampleScalarFunction s) {                
+                return s.output(0.0) + s.output(0.5) + s.output(1.0);
+            }            
+}), ExampleScalarFunction.class);
+
+double bestParam = ((Number)o.getSolutions().get(0)).doubleValue();
+```
+        
+**Find constant parameters to maximize a heuristic goal**
+``` java        
+/* public ExampleMultivariateFunction(@Between(min=-4.0, max=4.0) double a, boolean b)  */
+Objenome o = Objenome.build(new OptimizeMultivariate(ExampleMultivariateFunction.class, 
+    new Function<ExampleMultivariateFunction, Double>() {
+        public Double apply(ExampleMultivariateFunction s) {      
+            double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
+            return v;
+        }    
+}).minimize(), ExampleMultivariateFunction.class);
+
+double bestParam = ((Number)o.getSolutions().get(1)).doubleValue();
+```
+        
+
+
+
+
+***More documentation coming soon: additional Unit Test examples EXPLAINED***
+-----------------------------------------------------------------
+
+
 
 
 Code Evolution
