@@ -7,14 +7,14 @@ package objenome;
 
 import java.util.HashSet;
 import java.util.Set;
-import objenome.GenetainerTest.Machine;
-import objenome.GenetainerTest.Part;
-import objenome.GenetainerTest.Part0;
-import objenome.GenetainerTest.Part1;
-import objenome.GenetainerTest.PartN;
-import objenome.GenetainerTest.PartWithSubPart;
-import objenome.GenetainerTest.SubPart0;
-import objenome.GenetainerTest.SubPart1;
+import objenome.MultitainerTest.Machine;
+import objenome.MultitainerTest.Part;
+import objenome.MultitainerTest.Part0;
+import objenome.MultitainerTest.Part1;
+import objenome.MultitainerTest.PartN;
+import objenome.MultitainerTest.PartWithSubPart;
+import objenome.MultitainerTest.SubPart0;
+import objenome.MultitainerTest.SubPart1;
 import objenome.solution.SetImplementationClass;
 import objenome.solution.SetIntegerValue;
 import objenome.solution.dependency.Builder;
@@ -34,7 +34,7 @@ public class PhenotainerTest {
 
     
     @Test public void testIntegerParameterObjosome() {
-        Genetainer g = new Genetainer();
+        Multitainer g = new Multitainer();
 
         Builder builder = g.any(Part.class, of(PartN.class));
         assertTrue("an any expression of one element is reduced to an autowired 'use()'", (builder instanceof ClassBuilder) && (!(builder instanceof DecideImplementationClass)));
@@ -54,7 +54,7 @@ public class PhenotainerTest {
     
     
     @Test public void testSimpleObjosome() {
-        Genetainer g = new Genetainer();
+        Multitainer g = new Multitainer();
 
         g.any(Part.class, of(Part0.class, Part1.class));
                         
@@ -77,7 +77,7 @@ public class PhenotainerTest {
     }
 
     @Test public void testMultiGene() {
-        Genetainer g = new Genetainer();
+        Multitainer g = new Multitainer();
 
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
                         
@@ -98,15 +98,22 @@ public class PhenotainerTest {
         
     }
 
-    @Test public void testMultiGene2() {
+    @Test public void testRecursiveAuto() { testMultiGeneRecursive(false);     }
+    @Test public void testRecursiveManual() { testMultiGeneRecursive(true);    }
+            
+    protected void testMultiGeneRecursive(boolean includeUnnecessaryTargetWhichCouldBeDiscoveredAutomagically) {
         
-        Genetainer g = new Genetainer();
+        Multitainer g = new Multitainer();
 
         g.any(PartWithSubPart.class, of(SubPart0.class, SubPart1.class));
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
 
         //find Part dependency of Machine recursively without being specified
-        Objenome o = g.random(Machine.class/*, Part.class*/);        
+        
+        Objenome o = 
+                includeUnnecessaryTargetWhichCouldBeDiscoveredAutomagically ?
+                    g.random(Machine.class, Part.class) :
+                    g.random(Machine.class);
         
         System.out.println(o.getSolutions());
         
@@ -124,7 +131,7 @@ public class PhenotainerTest {
     }
     
     @Test public void testReuse() {
-        Genetainer g = new Genetainer();
+        Multitainer g = new Multitainer();
 
         g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
                         

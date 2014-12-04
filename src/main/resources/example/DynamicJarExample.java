@@ -5,7 +5,7 @@
  */
 package example;
 
-import objenome.Genetainer;
+import objenome.Multitainer;
 import objenome.Jartainer;
 import objenome.Objenome;
 import static objenome.solution.dependency.Builder.of;
@@ -29,7 +29,7 @@ public class DynamicJarExample {
         
         System.out.println(j.getClasses());
 
-        Genetainer g = new Genetainer(j);
+        Multitainer g = new Multitainer(j);
         g.any(j.getClass("nars.core.Build"), 
                 of(j.getClass("nars.core.build.Default"), j.getClass("nars.core.build.Neuromorphic")));
         

@@ -15,13 +15,10 @@ import objenome.solution.dependency.Scope;
 /**
  * Non-determinate "Multi" Container
  */
-public interface Multainer extends Prototainer {
+public interface AbstractMultitainer extends Prototainer {
     
     public DecideImplementationClass any(Class abstractClass, Scope scope, Class<?>... klasses);
     
-    
-    
-        
     default public Builder any(Class<?> abstractClass, Class<?>[] klasses) {
         if (klasses.length == 0)
             usable(abstractClass, abstractClass);

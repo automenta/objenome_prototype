@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import objenome.Genetainer;
+import objenome.Multitainer;
 import objenome.Objenome;
 import objenome.problem.DecideNumericValue;
 import objenome.problem.Problem;
@@ -34,7 +34,7 @@ public abstract class NumericSolver<C> implements Solver  {
     abstract public void solve(Objenome o, List<SetNumericValue> variables);
 
     @Override
-    public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets) {
+    public void solve(Multitainer g, Map<Problem, Solution> p, Object[] targets) {
         final List<SetNumericValue> variables = new ArrayList();
         
         //store backup in case it needs restored

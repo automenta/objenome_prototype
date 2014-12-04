@@ -6,7 +6,7 @@
 package objenome.solve;
 
 import java.util.Map;
-import objenome.Genetainer;
+import objenome.Multitainer;
 import objenome.problem.DecideNumericValue;
 import objenome.problem.DevelopMethod;
 import objenome.problem.Problem;
@@ -26,7 +26,7 @@ public class RandomSolver implements Solver {
     private SetMethodsGPEvolved gpEvolveMethods;
 
     @Override
-    public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets) {
+    public void solve(Multitainer g, Map<Problem, Solution> p, Object[] targets) {
         for (Map.Entry<Problem, Solution> e : p.entrySet()) {
             Solution existingSolution = e.getValue();
             if (existingSolution == null) {

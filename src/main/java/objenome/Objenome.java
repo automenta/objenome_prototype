@@ -22,12 +22,12 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 public class Objenome {
 
     public static Objenome build(Solver s, Object... targets) throws IncompleteSolutionException {
-        return new Genetainer().solve(s, targets);
+        return new Multitainer().solve(s, targets);
     }
     
     Map<String, Solution> genes = new TreeMap();
     
-    public final Genetainer parentContext;
+    public final Multitainer parentContext;
     
     /** generated container, constructed lazily
         TODO different construction policies other than caching a single Phenotainer
@@ -35,7 +35,7 @@ public class Objenome {
         */
     private Phenotainer pheno = null;
 
-    public Objenome(Genetainer context, Collection<Solution> parameters) throws InvalidRepresentationException {
+    public Objenome(Multitainer context, Collection<Solution> parameters) throws InvalidRepresentationException {
         super();
                 
         for (Solution o : parameters)

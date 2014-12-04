@@ -45,7 +45,7 @@ public class MethodsGPEvolvedTest {
     @Test
     public void testAbstractClass1() throws Exception {
 
-        Genetainer a = new Genetainer();
+        Multitainer a = new Multitainer();
         
         Objenome genome = a.random(ExampleUnknownMethod.class);
         
@@ -70,7 +70,7 @@ public class MethodsGPEvolvedTest {
 
     @Test
     public void testAbstractClass2() {
-        Genetainer a = new Genetainer();
+        Multitainer a = new Multitainer();
         
         Objenome genome = a.random(ExampleUnknownMethodWithConstructor.class);
         

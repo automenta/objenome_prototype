@@ -6,7 +6,7 @@
 package objenome.solve;
 
 import java.util.Arrays;
-import objenome.Genetainer;
+import objenome.Multitainer;
 import objenome.problem.Problem;
 
 /**
@@ -15,7 +15,7 @@ import objenome.problem.Problem;
  */
 public class IncompleteSolutionException extends Exception {
 
-    public IncompleteSolutionException(Iterable<Problem> p, Object[] keys, Genetainer g) {
+    public IncompleteSolutionException(Iterable<Problem> p, Object[] keys, Multitainer g) {
         super("Missing solution(s) for " + p + " to build " + Arrays.toString(keys) + " in " + g + ": " + g);
     }
     

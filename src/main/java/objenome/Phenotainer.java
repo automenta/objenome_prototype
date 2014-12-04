@@ -28,7 +28,7 @@ public class Phenotainer extends Container {
     
     public final Map<Parameter, Object> parameterValues = new HashMap();
     public final Objenome objenome;
-    public final Genetainer parent;
+    public final Multitainer parent;
 
     public Phenotainer(Objenome o) {
         super(o.parentContext);        

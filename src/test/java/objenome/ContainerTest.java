@@ -1,8 +1,8 @@
 package objenome;
 
 import java.util.Date;
-import objenome.GenetainerTest.Part;
-import objenome.GenetainerTest.Part0;
+import objenome.MultitainerTest.Part;
+import objenome.MultitainerTest.Part0;
 import objenome.solution.dependency.Scope;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -307,10 +307,10 @@ public class ContainerTest {
     @Test public void testAmbiguity() {
         
         Container c = new Container();
-        c.usable(ServiceNeedingDAOandParameter.class, GenetainerTest.Part0.class);
-        assertEquals(0, c.get(GenetainerTest.Machine.class).function());
-        c.usable(ServiceNeedingDAOandParameter.class, GenetainerTest.Part1.class);
-        assertEquals("overrides the first builder", 1, c.get(GenetainerTest.Machine.class).function());
+        c.usable(ServiceNeedingDAOandParameter.class, MultitainerTest.Part0.class);
+        assertEquals(0, c.get(MultitainerTest.Machine.class).function());
+        c.usable(ServiceNeedingDAOandParameter.class, MultitainerTest.Part1.class);
+        assertEquals("overrides the first builder", 1, c.get(MultitainerTest.Machine.class).function());
         
     }
     

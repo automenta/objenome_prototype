@@ -25,7 +25,7 @@ public class PackatainerTest {
         
     
         Packatainer rg = new Packatainer(/*new String[] { "objenome" },*/
-                Genetainer.class, Container.class, Builder.class);
+                Multitainer.class, Container.class, Builder.class);
                 
         SetMultimap<Class, Class> anc = rg.includeAncestorImplementations();
 
@@ -42,7 +42,7 @@ public class PackatainerTest {
         //System.out.println(c);
         
         for (Class ci : rg.getImplementable()) {
-            Genetainer g = new Genetainer(rg);
+            Multitainer g = new Multitainer(rg);
             try {
                 System.out.println(ci + ": " + g.random(ci).getSolutions());
             }

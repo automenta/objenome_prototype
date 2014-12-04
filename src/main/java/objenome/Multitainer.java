@@ -37,27 +37,27 @@ import objenome.solve.Solver;
  
  early 20th century: of German Gen, of Pangen, a supposed ultimate unit of heredity (of Greek pan * ‘all’ + genos ‘race, kind, offspring’) + of Latin tenere 'to hold.’"
  */
-public class Genetainer extends AbstractPrototainer implements Multainer {       
+public class Multitainer extends AbstractPrototainer implements AbstractMultitainer {       
     private int intMinDefault = 0;
     private int intMaxDefault = 1;
     private int doubleMinDefault = 0;
     private int doubleMaxDefault = 1;
     
-    public Genetainer(Class... useClasses) {
+    public Multitainer(Class... useClasses) {
         this();
         for (Class c : useClasses)
             use(c);
     }
     
-    public Genetainer() {
+    public Multitainer() {
         this(false);        
     }
     
-    public Genetainer(boolean concurrent) {
+    public Multitainer(boolean concurrent) {
         super(concurrent);
     }
     
-    public Genetainer(AbstractPrototainer p) {
+    public Multitainer(AbstractPrototainer p) {
         super(p.builders, p.scopes, p.setterDependencies, p.constructorDependencies, p.forConstructMethod);
     }
         
@@ -276,7 +276,7 @@ public class Genetainer extends AbstractPrototainer implements Multainer {
     
     
     public Objenome solve(Solver solver, Object... keys) throws IncompleteSolutionException {
-        return Genetainer.this.solve(Lists.newArrayList(solver), keys);
+        return Multitainer.this.solve(Lists.newArrayList(solver), keys);
     }
     
     public Objenome solve(Iterable<Solver> solvers, Object... targets) throws IncompleteSolutionException {

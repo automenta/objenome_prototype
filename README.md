@@ -76,7 +76,7 @@ service = c.get(ServiceNeedingDAOandParameter.class);
 any( AbstractClass.class, of( Impl1.class, Impl2.class) ) defines an ambiguity that must be resolved in the objenome prior to realization.  The default solver starts with random values, and mutate() randomizes them again.
 
 ``` java
-Genetainer g = new Genetainer();
+Multitainer g = new Multitainer();
 
 g.any(Part.class, of(Part0.class, Part1.class));
                 
@@ -92,15 +92,18 @@ Machine maybeDifferent = o.mutate().get(Machine.class);
 If PartN is chosen, its constructor parameter must be provided.  This creates another "gene" that can be randomized.  The @Before annotation specifies a method parameter's acceptable range.
 
 ``` java
-Genetainer g = new Genetainer();
+Multitainer g = new Multitainer();
 
 /* public PartN( @Between(min=1, max=3) int arg0) { */
 g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
 g.any(PartWithSubPart.class, of(SubPart0.class, SubPart1.class));
                 
-Objenome o = g.solve(Machine.class, Part.class);
+Objenome o = g.solve(Machine.class);
 
 ```
+Note that including Part.class as an additional target, ex: *g.solve(Machine.class, Part.class)* was **NOT** necessary; the Part.class dependency was recursively discovered through reflection.
+
+
 
 
 Numeric Optimization

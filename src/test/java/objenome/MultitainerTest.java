@@ -21,7 +21,7 @@ import org.junit.Test;
  *
  * @author me
  */
-public class GenetainerTest {
+public class MultitainerTest {
 
     public static interface Part { 
         public int function();    
@@ -105,7 +105,7 @@ public class GenetainerTest {
     
     /** one gene to select between two interfaces with non-parametric constructors */
     @Test public void testSimpleSolutionGeneration() {
-        Genetainer c = new Genetainer();
+        Multitainer c = new Multitainer();
         c.any(Part.class, of(Part0.class, Part1.class));
                         
         Objenome o = c.random(Machine.class);
@@ -119,7 +119,7 @@ public class GenetainerTest {
     
     
     @Test public void testSimpleSolutionGeneration1() {
-        Genetainer c = new Genetainer();
+        Multitainer c = new Multitainer();
         c.any(Part.class, of(Part0.class, Part1.class));
                         
         Objenome o = c.random(Part.class);
@@ -133,7 +133,7 @@ public class GenetainerTest {
     
     //18553247676
     @Test public void testSimpleSolutionGeneration11() {
-        Genetainer c = new Genetainer();
+        Multitainer c = new Multitainer();
         c.any(Part.class, the(PartN.class));
                         
         Objenome o = c.random(Part.class);
@@ -148,7 +148,7 @@ public class GenetainerTest {
     /** one gene to select between two interfaces with parametric constructor in one of of dependencies */
     @Test public void testSimpleSolutionGeneration2() {
         
-        Genetainer c = new Genetainer();
+        Multitainer c = new Multitainer();
         c.any(Part.class, of(Part0.class, Part1.class, PartN.class));
         Objenome o = c.random(Machine.class);
         
@@ -165,7 +165,7 @@ public class GenetainerTest {
     
     @Test public void testRecurse2LevelsGeneration() {
         
-        Genetainer c = new Genetainer();
+        Multitainer c = new Multitainer();
         c.usable(Part.class, PartWithSubPart.class);
         c.any(SubPart.class, of(SubPart0.class, SubPart1.class));
         Objenome o = c.random(Machine.class);
@@ -178,7 +178,7 @@ public class GenetainerTest {
     
     @Test public void testMultitypeRecurse() {
         
-        Genetainer c = new Genetainer();
+        Multitainer c = new Multitainer();
         c.any(Part.class, 
                     of(Part0.class, Part1.class, PartN.class, PartWithSubPart.class));
         c.any(SubPart.class, 

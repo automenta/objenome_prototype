@@ -6,7 +6,7 @@
 package objenome.solve;
 
 import java.util.Map;
-import objenome.Genetainer;
+import objenome.Multitainer;
 import objenome.problem.Problem;
 
 /**
@@ -15,6 +15,6 @@ import objenome.problem.Problem;
  */
 public interface Solver {
 
-    public void solve(Genetainer g, Map<Problem, Solution> p, Object[] targets);
+    public void solve(Multitainer g, Map<Problem, Solution> p, Object[] targets);
     
 }
