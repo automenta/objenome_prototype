@@ -101,9 +101,9 @@ public class PhenotainerTest {
         Genetainer g = new Genetainer();
 
         g.any(PartWithSubPart.class, of(SubPart0.class, SubPart1.class));
-        g.any(Part.class, of(Part0.class, Part1.class, PartN.class)); //, PartWithSubPart.class));        
-                        
-        Objenome o = g.solve(Machine.class, Part.class/*, PartWithSubPart.class*/);        
+        g.any(Part.class, of(Part0.class, Part1.class, PartN.class));
+
+        Objenome o = g.solve(Machine.class, Part.class);
 
         
         assertTrue(o.size() > 1);
