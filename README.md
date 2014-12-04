@@ -62,8 +62,10 @@ Part v = c.the(Part0.class);
 
 **Multiple dependency levels, mixing use() & usable()**
 
+usable() is similar to use(), but does not involve auto-wiring.  it is like a non-automatic dependency declaration which suggests the availability of an implementation in case a dependent target requires it.
+
 ``` java
-Container c = new Container();    
+Container c = new Container();
     
 /* public static class JdbcUserDAO implements UserDAO 
       public void setConnection(Connection conn)*/
