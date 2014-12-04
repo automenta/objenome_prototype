@@ -28,9 +28,12 @@ An adapted version of the Genetic Programming library [EpochX 2.0](https://githu
 ======================
 
 **Basic use() autowiring & get() instantiation**
+
 ``` java
 Container c = new Container();
+
 c.use(Part.class, Part0.class);
+
 Part p = c.get(Part.class);
 ```
 
@@ -39,16 +42,20 @@ Part p = c.get(Part.class);
 the() is similar to get() but involves the Singleton scope.
 
 ``` java
+//1. Using a java literal as a key.  all the(..) lookups with keys equal to it will return the same singleton instance
 Part x = c.the("part", new Part0());
 Part y = c.the("part", new Part0());
 //assertTrue(x==y);
 
+//2. Providing a different key produces a different singleton
 Part z = c.the("part2", new Part0());
 //assertTrue(x!=z);
 
+//3. Providing no key uses provided instance's class (Part0.class) by default; a different singleton
 Part w = c.the(new Part0());
 //assertTrue(w!=z);
 
+//4. Accessing by the class gets the default singleton (same as 3).
 Part v = c.the(Part0.class);
 //assertTrue(v==w);
 ```
@@ -165,12 +172,12 @@ double bestParam = ((Number)o.getSolutions().get(1)).doubleValue();
 
 
 
-Code Evolution
-============
+Code Evolution with Genetic Programming
+=======
 
 **See MethodsGPEvolvedTest and STGP***Test's**
 
-ClassLoader Combinatorics
-====
+ClassLoader and .JAR Combinatorics
+=======
 
 **See PackatainerTest and JartainerTest**
