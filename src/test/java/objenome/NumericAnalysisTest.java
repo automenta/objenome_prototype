@@ -68,7 +68,7 @@ public class NumericAnalysisTest {
 
     @Test public void testFindZeros() throws IncompleteSolutionException {
 
-        Objenome o = Objenome.build(new FindZeros(ExampleScalarFunction.class, 
+        Objenome o = Objenome.solve(new FindZeros(ExampleScalarFunction.class, 
                 
                 new Function<ExampleScalarFunction, Double>() {            
                     public Double apply(ExampleScalarFunction s) {                
@@ -83,7 +83,7 @@ public class NumericAnalysisTest {
 
     @Test public void testMultivariate() throws IncompleteSolutionException {
 
-        Objenome o = Objenome.build(new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
+        Objenome o = Objenome.solve(new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
 
             public Double apply(ExampleMultivariateFunction s) {      
                 double v = s.output(0.0) + s.output(0.5) + s.output(1.0);

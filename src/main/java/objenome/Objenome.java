@@ -21,7 +21,7 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
  */
 public class Objenome {
 
-    public static Objenome build(Solver s, Object... targets) throws IncompleteSolutionException {
+    public static Objenome solve(Solver s, Object... targets) throws IncompleteSolutionException {
         return new Multitainer().solve(s, targets);
     }
     

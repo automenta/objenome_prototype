@@ -140,7 +140,7 @@ Numeric Optimization
 **Find Constant parameters to fit function zeros (roots)**
 ``` java
 /* public ExampleScalarFunction(@Between(min=-4.0, max=4.0) double constParameter) */
-Objenome o = Objenome.build(new FindZeros(ExampleScalarFunction.class,
+Objenome o = Objenome.solve(new FindZeros(ExampleScalarFunction.class,
         new Function<ExampleScalarFunction, Double>() {            
             public Double apply(ExampleScalarFunction s) {                
                 return s.output(0.0) + s.output(0.5) + s.output(1.0);
@@ -151,9 +151,17 @@ double bestParam = ((Number)o.getSolutions().get(0)).doubleValue();
 ```
         
 **Find constant parameters to maximize a heuristic goal**
-``` java        
+
+*Multivariate optimization* can iteratively search for more optimal sets of 1 or more variables.
+Apache Commons Math provides several solvers, with defaults configured for the most general case: non-continuous with no assumption of curve derivatives.
+
+These features be used to optimize a numeric result, a runtime performance metric, an intelligence heuristic, etc.
+
+Once a set of parameters are discovered, they can be saved and re-used.  If after further development the target component has changed, or new features become available, numeric search can be attempted again to find perhaps even better values.
+
+``` java
 /* public ExampleMultivariateFunction(@Between(min=-4.0, max=4.0) double a, boolean b)  */
-Objenome o = Objenome.build(new OptimizeMultivariate(ExampleMultivariateFunction.class, 
+Objenome o = Objenome.solve(new OptimizeMultivariate(ExampleMultivariateFunction.class, 
     new Function<ExampleMultivariateFunction, Double>() {
         public Double apply(ExampleMultivariateFunction s) {      
             double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
@@ -179,7 +187,14 @@ Code Evolution with Genetic Programming
 
 **See MethodsGPEvolvedTest and STGP***Test's**
 
+
 ClassLoader and .JAR Combinatorics
 =======
 
 **See PackatainerTest and JartainerTest**
+
+
+Mutation Testing
+=======
+
+**(Possibly planned feature.)**
