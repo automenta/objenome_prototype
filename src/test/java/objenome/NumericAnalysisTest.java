@@ -7,7 +7,6 @@ package objenome;
 
 import java.util.function.Function;
 import objenome.problem.Between;
-import objenome.solution.SetDoubleValue;
 import objenome.solve.IncompleteSolutionException;
 import objenome.problem.numeric.FindZeros;
 import objenome.problem.numeric.OptimizeMultivariate;
