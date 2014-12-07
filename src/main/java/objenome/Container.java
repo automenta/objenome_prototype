@@ -15,6 +15,7 @@ import objenome.solution.dependency.SetterDependency;
 import objenome.solution.dependency.SingletonBuilder;
 import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
+import objenome.util.bean.BeanProxyBuilder;
 
 /**
  * The deterministic implementation of of IoC container.
@@ -457,6 +458,11 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         } else {
             throw new UnsupportedOperationException("This scope is not supported: " + scope);
         }
+    }
+
+    public <X> X bean(Class<? extends X> intrface) {
+        //TODO see if caching the builder's (result of on()) performs best
+        return BeanProxyBuilder.on(intrface).build();
     }
         
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.solve.evolve;
+package objenome.problem.numeric;
 
 import java.util.List;
 import java.util.function.Function;
