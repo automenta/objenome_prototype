@@ -25,16 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A <code>Pipeline</code> provides an ordered collection of
- * <code>Component</code> objects. Pipelines are themselves components, which
- * when processed will process each of its components in sequence.
+ * A <code>Pipeline</code> applies a sequence of population processes
+ * Pipelines are themselves population processes.
  */
-public class Pipeline implements Component {
+public class Pipeline implements PopulationProcess {
 
     /**
      * The list of components in this pipeline.
      */
-    private final List<Component> pipeline;
+    private final List<PopulationProcess> pipeline;
     private GPContainer container;
 
     /**
@@ -60,7 +59,7 @@ public class Pipeline implements Component {
     @Override
     public <I extends Individual> Population<I> process(Population<I> population) {
         this.container = population.getConfig();
-        for (Component component : pipeline) {            
+        for (PopulationProcess component : pipeline) {            
             population = component.process(population);
         }
 
@@ -72,7 +71,7 @@ public class Pipeline implements Component {
      *
      * @param component the <code>Component</code> to add to this pipeline
      */
-    public void add(Component component) {
+    public void add(PopulationProcess component) {
         pipeline.add(component);
     }
 
@@ -82,7 +81,7 @@ public class Pipeline implements Component {
      *
      * @param components a list of components to be added to this pipeline
      */
-    public void addAll(List<Component> components) {
+    public void addAll(List<PopulationProcess> components) {
         pipeline.addAll(components);
     }
 
@@ -97,7 +96,7 @@ public class Pipeline implements Component {
      * @throws IndexOutOfBoundsException if the index is out of range
 	 *         <code>(index < 0 || index > size())</code>
      */
-    public void add(int index, Component component) {
+    public void add(int index, PopulationProcess component) {
         pipeline.add(index, component);
     }
 
@@ -111,7 +110,7 @@ public class Pipeline implements Component {
      * @return <code>true</code> if the component was in this pipeline, and
      * <code>false</code> otherwise
      */
-    public boolean remove(Component component) {
+    public boolean remove(PopulationProcess component) {
         return pipeline.remove(component);
     }
 
@@ -125,7 +124,7 @@ public class Pipeline implements Component {
      * @throws IndexOutOfBoundsException if the index is out of range
 	 *         <code>(index < 0 || index > size())</code>
      */
-    public Component remove(int index) {
+    public PopulationProcess remove(int index) {
         return pipeline.remove(index);
     }
 

@@ -30,7 +30,7 @@ import objenome.evolve.Population;
 import objenome.evolve.STGPIndividual;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.Listener;
-import objenome.evolve.op.Variable;
+import objenome.op.Variable;
 
 /**
  * A fitness function for <code>STGPIndividual</code>s that calculates and

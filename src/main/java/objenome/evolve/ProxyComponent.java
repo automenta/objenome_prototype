@@ -28,10 +28,10 @@ import objenome.evolve.event.Listener;
 
 /**
  * <code>ProxyComponent</code> provides a mechanism to wrap objects and view
- * them as {@link Component}s. The wrapped object is specified by a
+ * them as {@link PopulationProcess}s. The wrapped object is specified by a
  * <code>ConfigKey</code> and changes in the configuration are monitored.
  */
-public abstract class ProxyComponent<T> implements Component, Listener<ConfigEvent>, GPContainerAware {
+public abstract class ProxyComponent<T> implements PopulationProcess, Listener<ConfigEvent>, GPContainerAware {
 
     /**
      * The <code>ConfigKey</code> of the proxied object.

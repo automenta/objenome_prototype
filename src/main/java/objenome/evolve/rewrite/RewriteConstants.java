@@ -24,7 +24,7 @@
 package objenome.evolve.rewrite;
 
 import objenome.evolve.STGPIndividual;
-import objenome.evolve.op.Node;
+import objenome.op.Node;
 
 /**
  * Rewrite any parts of the tree that are constant with a simple constant value.

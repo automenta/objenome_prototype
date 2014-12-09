@@ -33,7 +33,7 @@ import objenome.evolve.GPContainer.GPKey;
  * The strategy must progress the population, normally with the use of genetic
  * operators, and provide a stopping condition if appropriate.
  */
-public interface EvolutionaryStrategy extends Component {
+public interface EvolutionaryStrategy extends PopulationProcess {
 
     /**
      * The key for setting and retrieving a list of

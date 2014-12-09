@@ -22,7 +22,7 @@
 package objenome.evolve;
 
 import objenome.evolve.GPContainer.GPKey;
-import objenome.evolve.op.Node;
+import objenome.op.Node;
 import org.apache.commons.lang3.ObjectUtils;
 
 /**

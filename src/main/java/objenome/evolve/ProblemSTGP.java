@@ -28,7 +28,7 @@ public abstract class ProblemSTGP extends GPContainer<STGPIndividual> {
     public ProblemSTGP() {
         super();
         
-        the(COMPONENTS, Lists.newArrayList(new Component[] {
+        the(COMPONENTS, Lists.newArrayList(new PopulationProcess[] {
             new Initialiser(),
             new FitnessEvaluator(),
             new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator())            

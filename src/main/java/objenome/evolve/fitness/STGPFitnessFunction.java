@@ -24,7 +24,7 @@ package objenome.evolve.fitness;
 import objenome.evolve.AbstractFitnessFunction;
 import objenome.evolve.GPContainer.GPContainerAware;
 import objenome.evolve.GPContainer.GPKey;
-import objenome.evolve.op.Variable;
+import objenome.op.Variable;
 
 /**
  * A fitness function for evaluating STGP individuals.

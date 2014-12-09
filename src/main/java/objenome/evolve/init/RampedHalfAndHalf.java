@@ -41,7 +41,7 @@ import objenome.evolve.event.InitialisationEvent;
 import objenome.evolve.event.Listener;
 import static objenome.evolve.init.RampedHalfAndHalf.Method.FULL;
 import static objenome.evolve.init.RampedHalfAndHalf.Method.GROW;
-import objenome.evolve.op.Node;
+import objenome.op.Node;
 
 /**
  * Initialisation method which produces <code>STGPIndividual</code>s with

@@ -39,7 +39,7 @@ import static objenome.evolve.STGPIndividual.SYNTAX;
 import objenome.evolve.event.ConfigEvent;
 import objenome.evolve.event.InitialisationEvent;
 import objenome.evolve.event.Listener;
-import objenome.evolve.op.Node;
+import objenome.op.Node;
 import objenome.evolve.tools.TypeUtil;
 
 /**

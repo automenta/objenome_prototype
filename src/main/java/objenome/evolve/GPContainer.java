@@ -30,9 +30,9 @@ import objenome.evolve.event.Event;
 import objenome.evolve.event.EventManager;
 import objenome.evolve.event.Listener;
 import objenome.evolve.event.stat.AbstractStat;
-import objenome.evolve.op.Node;
-import objenome.evolve.op.Variable;
-import objenome.evolve.op.VariableNode;
+import objenome.op.Node;
+import objenome.op.Variable;
+import objenome.op.VariableNode;
 
 /**
  * Provides a centralised store for configuration
@@ -51,7 +51,7 @@ public class GPContainer<I extends Individual> extends Container {
     /**
      * The key for setting and retrieving the list of components.
      */
-    public static final GPKey<ArrayList<Component>> COMPONENTS = new GPKey<>();
+    public static final GPKey<ArrayList<PopulationProcess>> COMPONENTS = new GPKey<>();
 
     public final EventManager events = new EventManager();
 
@@ -90,7 +90,7 @@ public class GPContainer<I extends Individual> extends Container {
         /* Initialises the supplied <code>Pipeline</code> with the components that
          * an evolutionary run is composed of. The specific list of components used
          * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
-        for (Component component : (Iterable<Component>)the(COMPONENTS)) {
+        for (PopulationProcess component : (Iterable<PopulationProcess>)the(COMPONENTS)) {
             GPContainer.setContainerAware(this, component);
             pipeline.add(component);
         }

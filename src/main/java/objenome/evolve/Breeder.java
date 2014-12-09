@@ -34,7 +34,7 @@ import objenome.evolve.GPContainer.GPKey;
  * between the operators and their order of application are implementation
  * specific details.
  */
-public interface Breeder extends Component {
+public interface Breeder extends PopulationProcess {
 
     /**
      * The key for setting and retrieving the genetic operators.

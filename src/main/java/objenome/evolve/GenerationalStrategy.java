@@ -64,8 +64,8 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
      *
      * @param components
      */
-    public GenerationalStrategy(Component... components) {
-        for (Component component : components) {
+    public GenerationalStrategy(PopulationProcess... components) {
+        for (PopulationProcess component : components) {
             add(component);
         }
 

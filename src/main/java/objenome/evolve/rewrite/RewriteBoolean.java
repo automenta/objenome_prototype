@@ -24,7 +24,7 @@
 package objenome.evolve.rewrite;
 
 import objenome.evolve.STGPIndividual;
-import objenome.evolve.op.Node;
+import objenome.op.Node;
 
 /**
  * Basic rewrite rules for boolean expressions.
