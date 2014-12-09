@@ -9,7 +9,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import objenome.op.DiffableFunction;
 import objenome.op.Scalar;
-import objenome.jurls.approximation.DiffableFunctionMarshaller;
+import objenome.solution.approximation.DiffableFunctionMarshaller;
 import org.apache.commons.math3.linear.ArrayRealVector;
 
 /**

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls.reinforcementlearning;
+package objenome.solution.reinforcementlearning;
 
-import objenome.jurls.approximation.ApproxParameters;
-import objenome.jurls.approximation.DiffableFunctionGenerator;
-import objenome.jurls.approximation.DiffableFunctionMarshaller;
+import objenome.solution.approximation.ApproxParameters;
+import objenome.solution.approximation.DiffableFunctionGenerator;
+import objenome.solution.approximation.DiffableFunctionMarshaller;
 
 /**
  *

@@ -42,7 +42,7 @@ import objenome.op.math.CoefficientPower;
 import objenome.op.math.Cube;
 import objenome.op.math.CubeRoot;
 import objenome.op.math.DivisionProtected;
-import objenome.op.math.Exponential;
+import objenome.op.math.Exp;
 import objenome.op.math.Factorial;
 import objenome.op.math.GreaterThan;
 import objenome.op.math.InvertProtected;
@@ -280,7 +280,7 @@ public class EpoxParser {
             new CoefficientPower(),
             new Cube(),
             new CubeRoot(),
-            new Exponential(),
+            new Exp(),
             new Factorial(),
             new GreaterThan(),
             new InvertProtected(),

@@ -41,7 +41,7 @@ import objenome.evolve.tools.TypeUtil;
  *
  * @since 2.0
  */
-public class Multiply extends Node {
+public class Multiply<X extends Node> extends Node {
 
     public static final String IDENTIFIER = "MUL";
 
@@ -59,9 +59,11 @@ public class Multiply extends Node {
      * @param child1 The first child node.
      * @param child2 The second child node.
      */
-    public Multiply(Node child1, Node child2) {
+    public Multiply(X child1, X child2) {
         super(child1, child2);
     }
+    
+    
 
     /**
      * Evaluates this function. Both child nodes are evaluated, the result of
@@ -73,7 +75,7 @@ public class Multiply extends Node {
      * children
      */
     @Override
-    public Object evaluate() {
+    public Number evaluate() {
         Object c1 = getChild(0).evaluate();
         Object c2 = getChild(1).evaluate();
 

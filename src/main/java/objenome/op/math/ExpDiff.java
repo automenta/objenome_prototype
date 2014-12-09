@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls;
+package objenome.op.math;
 
 import objenome.op.Scalar;
 import objenome.op.DiffableFunction;
@@ -13,31 +13,23 @@ import objenome.op.ScalarFunction;
  *
  * @author thorsten
  */
-public class Sum extends ScalarFunction {
+public class ExpDiff extends Exp<ScalarFunction> implements DiffableFunction{
 
-    private final DiffableFunction[] xs;
+    private final DiffableFunction x;
 
-    public Sum(DiffableFunction... xs) {
-        this.xs = xs;
+    public ExpDiff(ScalarFunction x) {
+        super(x);
+        this.x = x;
     }
-
+    
     @Override
     public double value() {
-        double s = 0;
-        for (DiffableFunction x : xs) {
-            s += x.value();
-        }
-        return s;
+        return Math.exp(x.value());
     }
 
     @Override
     public double partialDerive(Scalar parameter) {
-        double s = 0;
-        for (DiffableFunction x : xs) {
-            s += x.partialDerive(parameter);
-        }
-        return s;
+        return x.partialDerive(parameter) * Math.exp(x.value());
     }
-
-
+    
 }

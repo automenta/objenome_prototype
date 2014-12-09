@@ -24,6 +24,7 @@ package objenome.op.math;
 import objenome.op.Node;
 import objenome.evolve.tools.NumericUtils;
 import objenome.evolve.tools.TypeUtil;
+import objenome.op.Numeric1d;
 
 /**
  * A node which performs the mathematical exponential function <code>e^x</code>
@@ -31,14 +32,14 @@ import objenome.evolve.tools.TypeUtil;
  *
  * @since 2.0
  */
-public class Exponential extends Node {
+public class Exp<X extends Node> extends Numeric1d<X,Number>  {
 
     public static final String IDENTIFIER = "EXP";
 
     /**
      * Constructs an ExponentialFunction with one <code>null</code> child.
      */
-    public Exponential() {
+    public Exp() {
         this(null);
     }
 
@@ -47,7 +48,7 @@ public class Exponential extends Node {
      *
      * @param exponent the child node.
      */
-    public Exponential(Node exponent) {
+    public Exp(X exponent) {
         super(exponent);
     }
 
@@ -64,9 +65,15 @@ public class Exponential extends Node {
     public Double evaluate() {
         Object c = getChild(0).evaluate();
 
-        return Math.exp(NumericUtils.asDouble(c));
+        return value(NumericUtils.asDouble(c));
     }
 
+    @Override
+    public double value(double x) {
+        return Math.exp(x);        
+    }
+
+    
     /**
      * Returns the identifier of this function which is EXP
      *

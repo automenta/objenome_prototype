@@ -3,21 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls;
+package objenome.op.math;
 
-import objenome.op.Scalar;
 import objenome.op.DiffableFunction;
+import objenome.op.Scalar;
+import objenome.op.ScalarFunction;
 
 /**
  *
  * @author thorsten
  */
-public class Product implements DiffableFunction {
+public class MultiplyDiff extends ScalarFunction /*extends Multiply<ScalarFunction>*/ implements DiffableFunction {
 
     private DiffableFunction a;
     private DiffableFunction b;
 
-    public Product(DiffableFunction a, DiffableFunction b) {
+    public MultiplyDiff(DiffableFunction a, DiffableFunction b) {
         this.a = a;
         this.b = b;
     }

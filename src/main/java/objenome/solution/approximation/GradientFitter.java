@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls.approximation;
+package objenome.solution.approximation;
 
 import objenome.op.Scalar;
 import objenome.util.Utils;

@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls.approximation;
+package objenome.solution.reinforcementlearning;
 
 /**
  *
  * @author thorsten
  */
-public interface ParameterizedFunction {
-
-    public double compute(double[] xs);
-
-    public void oneStepTowards(double[] xs, double y);
-
-    public int getNumberOfParameters();
+public interface ActionSelector {
+    public double[][] fromQValuesToProbabilities(double[][] actionValuePairs);
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls;
+package objenome.op.activate;
 
 import objenome.op.Scalar;
 import objenome.op.DiffableFunction;
@@ -12,23 +12,23 @@ import objenome.op.DiffableFunction;
  *
  * @author thorsten
  */
-public class ATanhSigmoid implements DiffableFunction {
+public class TanhSigmoid implements DiffableFunction {
 
     private final DiffableFunction x;
 
-    public ATanhSigmoid(DiffableFunction x) {
+    public TanhSigmoid(DiffableFunction x) {
         this.x = x;
     }
 
     @Override
     public double value() {
-        return Math.atan(x.value());
+        return Math.tanh(x.value());
     }
 
     @Override
     public double partialDerive(Scalar parameter) {
-        double y = x.value();
-        return x.partialDerive(parameter) * 1.0 / (1 + y * y);
+        double y = value();
+        return x.partialDerive(parameter) * (1 - y) * (1 + y);
     }
 
 }

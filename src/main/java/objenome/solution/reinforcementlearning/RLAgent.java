@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls.reinforcementlearning;
+package objenome.solution.reinforcementlearning;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
-import objenome.jurls.approximation.ApproxParameters;
-import objenome.jurls.approximation.DiffableFunctionMarshaller;
+import objenome.solution.approximation.ApproxParameters;
+import objenome.solution.approximation.DiffableFunctionMarshaller;
 import objenome.util.Utils;
 
 /**

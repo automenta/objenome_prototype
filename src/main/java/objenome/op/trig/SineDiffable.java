@@ -7,13 +7,13 @@ package objenome.op.trig;
 
 import objenome.op.DiffableFunction;
 import objenome.op.Scalar;
-import objenome.op.Numeric1dDiff;
+import objenome.op.ScalarFunction;
 
 /**
  *
  * @author me
  */
-public class SineDiffable extends Sine<Numeric1dDiff> implements DiffableFunction {
+public class SineDiffable extends Sine<ScalarFunction> implements DiffableFunction {
 
     @Override
     public double partialDerive(Scalar parameter) {

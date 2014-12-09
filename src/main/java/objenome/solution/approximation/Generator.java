@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package objenome.jurls.approximation;
+package objenome.solution.approximation;
 
 import objenome.op.Scalar;
-import objenome.jurls.Sum;
-import objenome.jurls.Product;
-import objenome.jurls.TanhSigmoid;
+import objenome.op.math.AddNDiff;
+import objenome.op.math.MultiplyDiff;
+import objenome.op.activate.TanhSigmoid;
 import objenome.op.DiffableFunction;
-import objenome.jurls.ATanhSigmoid;
-import objenome.jurls.Exp;
+import objenome.op.activate.ATanhSigmoid;
+import objenome.op.math.ExpDiff;
 import java.util.ArrayList;
 import java.util.List;
 import objenome.op.trig.CosineDiffable;
@@ -37,29 +37,27 @@ public class Generator {
                 List<DiffableFunction> ys = new ArrayList<>();
 
                 for (final Scalar input : inputs) {
-                    ys.add(
-                            new Product(newParameter(-1, 1, pi++, parameterList), input)
+                    ys.add(new MultiplyDiff(newParameter(-1, 1, pi++, parameterList), input)
                     );
                 }
                 ys.add(newParameter(-1, 1, pi++, parameterList));
 
-                xs.add(
-                        new Product(
+                xs.add(new MultiplyDiff(
                                 newParameter(-1, 1, pi++, parameterList),
                                 new TanhSigmoid(
-                                        new Sum(ys.toArray(new DiffableFunction[ys.size()]))
+                                        new AddNDiff(ys.toArray(new DiffableFunction[ys.size()]))
                                 )
                         )
                 );
             }
             xs.add(newParameter(-1, 1, pi++, parameterList));
 
-            return new Sum(
+            return new AddNDiff(
                     newParameter(-1, 1, pi++, parameterList),
-                    new Product(
+                    new MultiplyDiff(
                             newParameter(-1, 1, pi++, parameterList),
                             new TanhSigmoid(
-                                    new Sum(xs.toArray(new DiffableFunction[xs.size()]))
+                                    new AddNDiff(xs.toArray(new DiffableFunction[xs.size()]))
                             )
                     )
             );
@@ -75,29 +73,27 @@ public class Generator {
                 List<DiffableFunction> ys = new ArrayList<>();
 
                 for (final Scalar input : inputs) {
-                    ys.add(
-                            new Product(newParameter(-0.01, 0.01, pi++, parameterList), input)
+                    ys.add(new MultiplyDiff(newParameter(-0.01, 0.01, pi++, parameterList), input)
                     );
                 }
                 ys.add(newParameter(-1, 1, pi++, parameterList));
 
-                xs.add(
-                        new Product(
+                xs.add(new MultiplyDiff(
                                 newParameter(-1, 1, pi++, parameterList),
                                 new ATanhSigmoid(
-                                        new Sum(ys.toArray(new DiffableFunction[ys.size()]))
+                                        new AddNDiff(ys.toArray(new DiffableFunction[ys.size()]))
                                 )
                         )
                 );
             }
             xs.add(newParameter(-1, 1, pi++, parameterList));
 
-            return new Sum(
+            return new AddNDiff(
                     newParameter(-1, 1, pi++, parameterList),
-                    new Product(
+                    new MultiplyDiff(
                             newParameter(-1, 1, pi++, parameterList),
                             new ATanhSigmoid(
-                                    new Sum(xs.toArray(new DiffableFunction[xs.size()]))
+                                    new AddNDiff(xs.toArray(new DiffableFunction[xs.size()]))
                             )
                     )
             );
@@ -115,21 +111,21 @@ public class Generator {
 
                 for (final Scalar input : inputs) {
                     DiffableFunction f = input;
-                    f = new Sum(newParameter(-1, 0, pi++, parameterList), f);
-                    f = new Product(newParameter(fact, fact, pi++, parameterList), f);
+                    f = new AddNDiff(newParameter(-1, 0, pi++, parameterList), f);
+                    f = new MultiplyDiff(newParameter(fact, fact, pi++, parameterList), f);
                     ys.add(f);
                 }
 
                 ys.add(newParameter(0, 0, pi++, parameterList));
-                DiffableFunction sum = new Sum(ys.toArray(new DiffableFunction[ys.size()]));
-                DiffableFunction sqr = new Product(sum, sum);
+                DiffableFunction sum = new AddNDiff(ys.toArray(new DiffableFunction[ys.size()]));
+                DiffableFunction sqr = new MultiplyDiff(sum, sum);
 
                 Scalar p = newParameter(-1, -1, pi++, parameterList);
                 p.setUpperBound(0);
 
-                DiffableFunction product = new Product(p, sqr);
-                DiffableFunction exp = new Exp(product);
-                DiffableFunction product2 = new Product(
+                MultiplyDiff product = new MultiplyDiff(p, sqr);
+                ExpDiff exp = new ExpDiff(product);
+                DiffableFunction product2 = new MultiplyDiff(
                         newParameter(1, 1, pi++, parameterList),
                         exp
                 );
@@ -138,9 +134,9 @@ public class Generator {
 
             xs.add(newParameter(0, 0, pi++, parameterList));
 
-            return new Product(
+            return new MultiplyDiff(
                     newParameter(1, 1, pi++, parameterList),
-                    new Sum(xs.toArray(new DiffableFunction[xs.size()]))
+                    new AddNDiff(xs.toArray(new DiffableFunction[xs.size()]))
             );
         };
     }
@@ -155,10 +151,9 @@ public class Generator {
                 final double f = Math.PI * (i + 1);
 
                 for (final Scalar input : inputs) {
-                    ys.add(
-                            new Product(
+                    ys.add(new MultiplyDiff(
                                     newParameter(f, f, pi++, parameterList),
-                                    new Sum(
+                                    new AddNDiff(
                                             input,
                                             newParameter(-1, 0, pi++, parameterList)
                                     )
@@ -166,19 +161,19 @@ public class Generator {
                     );
                 }
                 ys.add(newParameter(0, 0, pi++, parameterList));
-                xs.add(new Product(
+                xs.add(new MultiplyDiff(
                         newParameter(1, 1, pi++, parameterList),
                         new CosineDiffable(
-                                new Sum(ys.toArray(new DiffableFunction[ys.size()]))))
+                                new AddNDiff(ys.toArray(new DiffableFunction[ys.size()]))))
                 );
             }
 
             xs.add(newParameter(0, 0, pi++, parameterList));
-            return new Sum(
+            return new AddNDiff(
                     newParameter(0, 0, pi++, parameterList),
-                    new Product(
+                    new MultiplyDiff(
                             newParameter(1, 1, pi++, parameterList),
-                            new Sum(xs.toArray(new DiffableFunction[xs.size()]))
+                            new AddNDiff(xs.toArray(new DiffableFunction[xs.size()]))
                     )
             );
         };
