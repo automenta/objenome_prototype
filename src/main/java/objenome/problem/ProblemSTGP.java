@@ -8,6 +8,7 @@ package objenome.problem;
 import com.google.common.collect.Lists;
 import objenome.solver.evolve.BranchedBreeder;
 import objenome.solver.evolve.FitnessEvaluator;
+import objenome.solver.evolve.FitnessFunction;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.GenerationalStrategy;
 import objenome.solver.evolve.Initialiser;
@@ -42,6 +43,16 @@ public abstract class ProblemSTGP extends GPContainer<STGPIndividual> {
         }));
         
     }
-
+   public ProblemSTGP(FitnessFunction f) {
+        super();
+        
+        the(COMPONENTS, Lists.newArrayList(new PopulationProcess[] {
+            new Initialiser(),
+            new GenerationalStrategy(
+                    new BranchedBreeder(), 
+                    new FitnessEvaluator(f))            
+        }));
+        
+    }
 
 }

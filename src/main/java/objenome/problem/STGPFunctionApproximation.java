@@ -22,24 +22,20 @@
 package objenome.problem;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.function.Function;
-import objenome.solver.evolve.BranchedBreeder;
 import objenome.solver.evolve.Breeder;
 import objenome.solver.evolve.EvolutionaryStrategy;
 import objenome.solver.evolve.FitnessEvaluator;
-import objenome.solver.evolve.GenerationalStrategy;
 import objenome.solver.evolve.Initialiser;
 import objenome.solver.evolve.MaximumGenerations;
 import objenome.solver.evolve.Operator;
 import objenome.solver.evolve.Population;
-import objenome.problem.ProblemSTGP;
 import objenome.solver.evolve.RandomSequence;
 import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.TerminationCriteria;
 import objenome.solver.evolve.TerminationFitness;
 import objenome.solver.evolve.fitness.DoubleFitness;
-import objenome.solver.evolve.fitness.HitsCount;
 import objenome.solver.evolve.init.Full;
 import objenome.op.Node;
 import objenome.op.Variable;
@@ -48,62 +44,29 @@ import objenome.op.math.Add;
 import objenome.op.math.DivisionProtected;
 import objenome.op.math.Multiply;
 import objenome.op.math.Subtract;
+import objenome.solver.evolve.fitness.SumOfError;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
 import objenome.solver.evolve.mutate.SubtreeMutation;
 import objenome.util.random.MersenneTwisterFast;
 import objenome.solver.evolve.selection.TournamentSelector;
 
 /**
- * This template sets up EpochX to run the cubic regression benchmark with the
- * STGP representation. Cubic regression involves evolving an equivalent
- * function to the formula: x + x^2 + x^3
- *
- * The following configuration is used:
- *
- * <li>{@link Population#SIZE}: <code>100</code>
- * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}:
- * <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
- * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
- * <li>{@link STGPIndividual#MAXIMUM_DEPTH}: <code>6</code>
- * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
- * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
- * <li>{@link Breeder#OPERATORS}: <code>SubtreeCrossover</code>,
- * <code>SubtreeMutation</code>
- * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
- * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
- * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
- * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
- * <li>{@link STGPIndividual#SYNTAX}: <code>AddFunction</code>,
- * <code>SubtractFunction</code>, <code>MultiplyFunction<code>,
- * <code>DivisionProtectedFunction<code>, <code>VariableNode("X", Double)<code>
- * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Double</code>
- * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
- * <li>{@link HitsCount#POINT_ERROR}: <code>0.01</code>
- * <li>{@link HitsCount#INPUT_VARIABLES}: <code>X</code>
- * <li>{@link HitsCount#INPUT_VALUE_SETS}: [20 random values between -1.0 and
- * +1.0]
- * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
- *
+ * Evolves a function that minimizes the total error of an expression
+ * evaluated according to a set of sampled points.
  * @since 2.0
  */
-public class STGPRegression extends ProblemSTGP {
+public class STGPFunctionApproximation extends ProblemSTGP {
 
     int functionPoints;
     
     public final Variable x;
+    public final Deque<Observation<Double[], Double>> samples;
     
-    /**
-     * Sets up the given template with the benchmark config settings
-     *
-     * Function is evaluated at N points of func on -1..+1
-     * 
-     * @param template a map to be filled with the template config
-     */    
-    public STGPRegression(int functionPoints, Function<Double,Double> func) {        
+ 
+    public STGPFunctionApproximation(int populationSize) {        
         super();
-        this.functionPoints = functionPoints;
         
-        the(Population.SIZE, 100);
+        the(Population.SIZE, populationSize);
         List<TerminationCriteria> criteria = new ArrayList<>();
         criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
         criteria.add(new MaximumGenerations());
@@ -126,27 +89,25 @@ public class STGPRegression extends ProblemSTGP {
 
         // Setup syntax        
         the(STGPIndividual.SYNTAX, new Node[]{
+            
             new Add(),
             new Subtract(),
             new Multiply(),
             new DivisionProtected(),
+            
+            //...
+            
             new VariableNode( x = new Variable("X", Double.class) )
         });
         the(STGPIndividual.RETURN_TYPE, Double.class);
+        
+        SumOfError<Double,Double> fitness;
 
-        // Generate inputs and expected outputs        
-        Double[][] inputsGiven = new Double[functionPoints][1];
-        Double[] expectedOutputs = new Double[functionPoints];
-        for (int i = 0; i < functionPoints; i++) {
-            // Inputs values between -1.0 and +1.0
-            inputsGiven[i][0] = (randomSequence.nextDouble() * 2) - 1;
-            expectedOutputs[i] = func.apply(inputsGiven[i][0]);
-        }
 
         // Setup fitness function
-        the(FitnessEvaluator.FUNCTION, new HitsCount());
-        the(HitsCount.POINT_ERROR, 0.01);
-        the(HitsCount.INPUT_VALUE_SETS, inputsGiven);
-        the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
+        the(FitnessEvaluator.FUNCTION, fitness = new SumOfError<Double,Double>());
+
+        samples = fitness.obs;
     }
+    
 }

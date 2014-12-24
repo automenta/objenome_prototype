@@ -36,6 +36,7 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
      * by this component.
      */
     public static final GPKey<FitnessFunction> FUNCTION = new GPKey<>();
+    private FitnessFunction function;
 
     /**
      * Constructs a <code>FitnessEvaluator</code>.
@@ -43,7 +44,13 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
     public FitnessEvaluator() {
         super(FUNCTION);
     }
-
+    
+    /** constructs an evaluator with a specific fitness function */
+    public FitnessEvaluator(FitnessFunction f) {
+        super(FUNCTION);
+        this.function = f;
+    }
+    
     /**
      * Delegates the evaluation of the population to the
      * <code>FitnessFunction</code> object.
@@ -53,12 +60,17 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
         if (this.config == null)
             setConfig(population.getConfig());
         
-        FitnessFunction handler = getHandler();
-        if (handler == null) {
-            throw new IllegalStateException("The fitness function has not been set.");
+        if (this.function!=null) {
+            this.function.evaluate(population);
+        }
+        else {
+            FitnessFunction handler = getHandler();
+            if (handler == null) {
+                throw new IllegalStateException("The fitness function has not been set.");
+            }
+            handler.evaluate(population);
         }
 
-        handler.evaluate(population);
         return population;
     }
 

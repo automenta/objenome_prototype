@@ -21,6 +21,8 @@
  */
 package objenome.solver.evolve.fitness;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.GPContainer.GPKey;
 import objenome.solver.evolve.Individual;
@@ -29,6 +31,8 @@ import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
 import objenome.op.Variable;
+import objenome.problem.Observation;
+import static objenome.solver.evolve.fitness.HitsCount.EXPECTED_OUTPUTS;
 
 /**
  * A fitness function for <code>STGPIndividual</code>s that calculates and
@@ -51,31 +55,18 @@ import objenome.op.Variable;
  *
  * @since 2.0
  */
-public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEvent> {
+public class SumOfError<I,O> extends STGPFitnessFunction implements Listener<ConfigEvent> {
 
     /**
      * The key for setting the program's input variables
      */
     public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<>();
 
-    /**
-     * The key for setting the sets of values to use as inputs. The length of
-     * the array should match the length of the EXPECTED_OUTPUTS array and the
-     * number of values in each set should match the length of the
-     * INPUT_VARIABLES array.
-     */
-    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<>();
 
-    /**
-     * The key for setting the expected output values from the programs being
-     * evaluated
-     */
-    public static final GPKey<Double[]> EXPECTED_OUTPUTS = new GPKey<>();
+    public final Deque<Observation<I[],O>> obs = new ArrayDeque();
 
     // Configuration settings
     private Variable[] inputVariables;
-    private Object[][] inputValueSets;
-    private Double[] expectedOutputs;
     private final boolean autoConfig;
 
     /**
@@ -114,9 +105,8 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
             config.on(ConfigEvent.class, this);
         }
 
-        inputVariables = config.get(INPUT_VARIABLES);
-        inputValueSets = config.get(INPUT_VALUE_SETS);
-        expectedOutputs = config.get(EXPECTED_OUTPUTS);
+        //inputVariables = config.get(INPUT_VARIABLES);
+        inputVariables = config.get(INPUT_VARIABLES, config.getVariables());
     }
 
     /**
@@ -161,32 +151,35 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
             throw new IllegalArgumentException("Unsupported data-type");
         }
 
-        Object[] outputs = new Object[expectedOutputs.length];
-        for (int i = 0; i < inputValueSets.length; i++) {
+        
+        int i = 0;
+        Double errorSum = 0.0;
+        for (Observation<I[], O> o : obs) {
+            I[] input = o.input;
             // Update the variable values
-            for (int j = 0; j < inputVariables.length; j++) {
-                inputVariables[j].setValue(inputValueSets[i][j]);
+            for (int j = 0; j < input.length; j++) {
+                inputVariables[j].setValue(input[j]);
             }
 
             // Run the program
-            outputs[i] = program.evaluate();
-        }
+            Object result = program.evaluate();
 
-        // Sum the difference between expected and actual
-        Double errorSum = 0.0;
-        for (int i = 0; i < outputs.length; i++) {
-            Object result = outputs[i];
+            if (o.output instanceof Double) {
+                if (result instanceof Double) {
+                    double d = (Double) result;
 
-            if (result instanceof Double) {
-                double d = (Double) result;
-
-                if (!Double.isNaN(d)) {
-                    double error = Math.abs(d - expectedOutputs[i]);
-                    errorSum += error;
-                } else {
-                    errorSum = nanFitnessScore();
-                    break;
+                    if (!Double.isNaN(d)) {
+                        double error = Math.abs(d - ((Double)o.output));
+                        errorSum += error;
+                    } else {
+                        errorSum = nanFitnessScore();
+                        break;
+                    }
                 }
+                
+            }
+            else {
+                throw new RuntimeException("Unimplemented error evaluation for non-numeric values");
             }
         }
 
@@ -226,52 +219,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
         this.inputVariables = inputVariables;
     }
 
-    /**
-     * Returns the sets of input values.
-     *
-     * @return the sets of input values
-     */
-    public Object[][] getInputValueSets() {
-        return inputValueSets;
-    }
 
-    /**
-     * Sets the sets of input values. The length of the array should match the
-     * length of the expected outputs array. Each set of values should have the
-     * same number of values, equal to the length of the input variables array.
-     *
-     * If automatic configuration is enabled then any value set here will be
-     * overwritten by the {@link #INPUT_VALUE_SETS} configuration setting on the
-     * next config event.
-     *
-     * @param inputValueSets the sets of input values
-     */
-    public void setInputValueSets(Object[][] inputValueSets) {
-        this.inputValueSets = inputValueSets;
-    }
 
-    /**
-     * Returns the expected outputs that the actual outputs will be compared
-     * against
-     *
-     * @return the expected outputs for the input sets
-     */
-    public Double[] getExpectedOutputs() {
-        return expectedOutputs;
-    }
-
-    /**
-     * Sets the expected outputs to compare against. The length of the array
-     * should match the length of the input values array.
-     *
-     * If automatic configuration is enabled then any value set here will be
-     * overwritten by the {@link #EXPECTED_OUTPUTS} configuration setting on the
-     * next config event.
-     *
-     * @param expectedOutputs the expected outputs to compare against
-     */
-    public void setExpectedOutputs(Double[] expectedOutputs) {
-        this.expectedOutputs = expectedOutputs;
-    }
 
 }
