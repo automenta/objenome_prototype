@@ -40,6 +40,7 @@ import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.InitialisationEvent;
 import objenome.solver.evolve.event.Listener;
 import objenome.op.Node;
+import objenome.solver.evolve.Individual;
 import objenome.util.TypeUtil;
 
 /**
@@ -190,7 +191,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      * @return a population of <code>STGPIndividual</code> objects
      */
     @Override
-    public Population createPopulation(GPContainer config) {
+    public Population<STGPIndividual> createPopulation(Population<STGPIndividual> survivors, GPContainer config) {
         setup(config);
         updateSyntax();
 
@@ -200,9 +201,15 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
 
         config.fire(new InitialisationEvent.StartInitialisation());
 
-        Population population = new Population(config);
+        Population<STGPIndividual> population = new Population<>(config);
+        
+        //is it necessary to create a new population?
+        for (STGPIndividual s : survivors) {
+            population.add(s);
+        }
+        
 
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < (populationSize - survivors.size()); i++) {
             STGPIndividual individual;
 
             do {

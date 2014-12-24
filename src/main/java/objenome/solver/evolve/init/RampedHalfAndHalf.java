@@ -209,7 +209,12 @@ public class RampedHalfAndHalf implements STGPInitialisation, Listener<ConfigEve
      * @return a population of <code>STGPIndividual</code> objects
      */
     @Override
-    public Population createPopulation(GPContainer config) {
+    public Population createPopulation(Population survivors, GPContainer config) {
+        if (survivors!=null) {
+            //this can be implemented at some point
+            throw new RuntimeException("Unimplemented support for non-null survivors");
+        }
+        
         setConfig(config);
 
         config.fire(new InitialisationEvent.StartInitialisation());

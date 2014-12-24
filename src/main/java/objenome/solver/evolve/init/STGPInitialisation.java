@@ -38,7 +38,7 @@ import objenome.solver.evolve.STGPIndividual;
  *
  * @since 2.0
  */
-public interface STGPInitialisation extends InitialisationMethod {
+public interface STGPInitialisation extends InitialisationMethod<STGPIndividual> {
 
     /**
      * The key for setting and retrieving the maximum initial depth setting for

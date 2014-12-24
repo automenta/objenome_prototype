@@ -27,7 +27,7 @@ import objenome.solver.evolve.GPContainer.GPKey;
  * An instance of <code>Initialiser</code> is responsible for creating the
  * individuals.
  */
-public interface InitialisationMethod {
+public interface InitialisationMethod<I extends Individual> {
 
     /**
      * The key for setting and retrieving whether the initialisation method
@@ -40,13 +40,13 @@ public interface InitialisationMethod {
      *
      * @return a newly created individual.
      */
-    public Individual createIndividual();
+    public I createIndividual();
 
     /**
      * Returns a population of new individuals.
      *
      * @return a population of new individuals.
      */
-    public Population createPopulation(GPContainer config);
+    public Population<I> createPopulation(Population<I> survivors, GPContainer config);
 
 }

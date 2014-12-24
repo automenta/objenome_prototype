@@ -108,6 +108,38 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
         return fittest;
     }
 
+    public Individual[] elites(float percent) {
+        return elites((int)(percent * size()));
+    }
+    
+    public void clear() {
+        individuals.clear();
+    }
+    
+   public Population<I> cullThis(float percent) {
+        return cullThis((int)(percent * size()));
+    }    
+    
+    /** modifies this population */
+    public Population<I> cullThis(int numToRemove) {
+        int existing = size();
+        if (existing <= numToRemove) {
+            clear();
+            return this;
+        }
+            
+        
+        Population<I> copy = this.clone();
+        copy.sort();
+
+        for (int i = existing - numToRemove; i < existing; i++) {
+            individuals.remove( copy.get(i) );
+        }
+
+        return this;        
+    }
+
+        
     /**
      * Returns the group of best individuals of the population.
      *
@@ -116,7 +148,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      * @return the group of best individuals of the population.
      */
     public Individual[] elites(int size) {
-        Population copy = this.clone();
+        Population<I> copy = this.clone();
         copy.sort();
 
         Individual[] fittest = new Individual[size];

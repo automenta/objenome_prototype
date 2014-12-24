@@ -36,7 +36,7 @@ public abstract class ProxyComponent<T> implements PopulationProcess, Listener<C
     /**
      * The <code>ConfigKey</code> of the proxied object.
      */
-    protected GPKey<T> key;
+    protected GPKey key;
     protected GPContainer config;
 
     /**
@@ -48,7 +48,7 @@ public abstract class ProxyComponent<T> implements PopulationProcess, Listener<C
      *
      * @param key the <code>ConfigKey</code> of the proxied object.
      */
-    public ProxyComponent(GPKey<T> key) {
+    public ProxyComponent(GPKey key) {
         this.key = key;
     }
 

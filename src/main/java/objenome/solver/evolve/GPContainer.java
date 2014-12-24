@@ -35,12 +35,11 @@ import objenome.op.Variable;
 import objenome.op.VariableNode;
 
 /**
- * Provides a centralised store for configuration
- * parameters. It uses a singleton which is obtainable with the
- * <code>getInstance</code> method. Each parameter is referenced with a
- * {@link GPKey} which is used to both set new parameters and retrieve
- * existing parameter values. the key also constrains the data-type of the
- * parameter value with its generic type.
+ * Provides a centralised store for configuration parameters. It uses a
+ * singleton which is obtainable with the <code>getInstance</code> method. Each
+ * parameter is referenced with a {@link GPKey} which is used to both set new
+ * parameters and retrieve existing parameter values. the key also constrains
+ * the data-type of the parameter value with its generic type.
  *
  * @see GPKey
  *
@@ -48,6 +47,7 @@ import objenome.op.VariableNode;
  * SINGLETON scope
  */
 public class GPContainer<I extends Individual> extends Container {
+
     /**
      * The key for setting and retrieving the list of components.
      */
@@ -59,18 +59,25 @@ public class GPContainer<I extends Individual> extends Container {
      * stats repository, TODO rename
      */
     public final HashMap<Class<?>, Object> stat = new HashMap<>();
+    private Pipeline pipeline;
+    private Population<I> population = null;
 
     /**
      * The key -&gt; value mapping.
      */
     //public final HashMap<GPKey<?>, Object> prop = new HashMap<GPKey<?>, Object>();
-
     /**
      * No instance are allowed, appart from the singleton.
      *
      */
     public GPContainer() {
         super();
+
+    }
+
+    public void reset() {
+        pipeline = null;
+        population = null;
     }
 
     /**
@@ -85,18 +92,29 @@ public class GPContainer<I extends Individual> extends Container {
      * pipeline
      */
     public Population<I> run() {
-        
-        Pipeline pipeline = new Pipeline();
-        /* Initialises the supplied <code>Pipeline</code> with the components that
-         * an evolutionary run is composed of. The specific list of components used
-         * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
-        for (PopulationProcess component : (Iterable<PopulationProcess>)the(COMPONENTS)) {
-            GPContainer.setContainerAware(this, component);
-            pipeline.add(component);
+        if (pipeline == null) {
+            pipeline = new Pipeline();
+            /* Initialises the supplied <code>Pipeline</code> with the components that
+             * an evolutionary run is composed of. The specific list of components used
+             * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
+            for (PopulationProcess component : (Iterable<PopulationProcess>) the(COMPONENTS)) {
+                GPContainer.setContainerAware(this, component);
+                pipeline.add(component);
+            }
+            
+            population = new Population<I>(this);
         }
+
         //config.fire(new StartRun(0));
-        Population<I> population = pipeline.process(new Population<I>(this));
+        
+        population = pipeline.process(population);
+        
         //config.fire(new EndRun(0, population));
+        
+        return population;
+    }
+
+    public Population<I> getPopulation() {
         return population;
     }
 
@@ -105,22 +123,27 @@ public class GPContainer<I extends Individual> extends Container {
         public void setConfig(GPContainer c);
     }
 
-    /** the involved syntax elements */
+    /**
+     * the involved syntax elements
+     */
     public Node[] getSyntax() {
         return get(STGPIndividual.SYNTAX);
     }
-    
-    /** the involved variables, which are obtained by iterating syntax elements. */
-    public Variable[] getVariables(){
-        
+
+    /**
+     * the involved variables, which are obtained by iterating syntax elements.
+     */
+    public Variable[] getVariables() {
+
         List<Variable> variables = new ArrayList();
-        
+
         for (Node n : getSyntax()) {
-            if (n instanceof VariableNode)
-                variables.add( ((VariableNode)n).getVariable() );
+            if (n instanceof VariableNode) {
+                variables.add(((VariableNode) n).getVariable());
+            }
         }
-        
-        return variables.toArray(new Variable[ variables.size() ]);
+
+        return variables.toArray(new Variable[variables.size()]);
     }
 
 //    /**
@@ -136,7 +159,6 @@ public class GPContainer<I extends Individual> extends Container {
 //            off(stat.getClearEvent(), stat.getListener());
 //        }
 //    }
-
 //    /** define a statistic to collect, creating a singleton component keyed by its class */
 //    public <X extends Object & Event> AbstractStat<X> stat(Class<? extends AbstractStat<X>> type) {
 //
@@ -160,26 +182,25 @@ public class GPContainer<I extends Individual> extends Container {
     /**
      * Removes all registered <code>AbstractStat</code> objects from the
      * repository.
-     */    
+     */
     public <E extends Event> void resetStats() {
         List<Class<?>> registered = new ArrayList<>(stat.keySet());
 
         for (Class<?> type : registered) {
             remove(type);
         }
-        
+
         stat.clear();
-    }    
+    }
 
     public <X extends Object & Event> AbstractStat<X> stat(AbstractStat<X> a) {
-        if (!stat.containsKey(a.getClass())) {            
+        if (!stat.containsKey(a.getClass())) {
             stat.put(a.getClass(), a);
-            return the(a.getClass(), a);            
+            return the(a.getClass(), a);
         }
         return super.the(a.getClass());
     }
 
-    
     /**
      * Sets the value of the specified configuration key. If the given key
      * already has a value associated with it, then it will be overwritten. The
@@ -198,26 +219,28 @@ public class GPContainer<I extends Individual> extends Container {
         fire(new ConfigEvent(this, key));
         return this;
     }
-    
+
     public static void setContainerAware(GPContainer config, Object value) {
         if (value instanceof GPContainerAware) {
             ((GPContainerAware) value).setConfig(config);
         }
-        if (value instanceof Iterable)  {
-            Iterable ii = (Iterable)value;
-            for (Object i : ii)
-                if (i instanceof GPContainerAware)
-                    ((GPContainerAware)i).setConfig(config);
-        }        
+        if (value instanceof Iterable) {
+            Iterable ii = (Iterable) value;
+            for (Object i : ii) {
+                if (i instanceof GPContainerAware) {
+                    ((GPContainerAware) i).setConfig(config);
+                }
+            }
+        }
     }
-    
-    /** convenience method  */
+
+    /**
+     * convenience method
+     */
     public <T> GPContainer with(GPKey<T> key, T value) {
         return set(key, value);
     }
 
- 
-    
 //    /**
 //     * Retrieves the value of the configuration parameter associated with the
 //     * specified key. If no value has been set for the given key then
@@ -232,7 +255,6 @@ public class GPContainer<I extends Individual> extends Container {
 //    public <T> T get(GPKey<T> key) {
 //        return get(key, null);
 //    }
-
 //    /**
 //     * Retrieves the value of the configuration parameter associated with the
 //     * specified key. If the parameter has not been set, the value will be
@@ -257,7 +279,6 @@ public class GPContainer<I extends Individual> extends Container {
 //
 //        return value;
 //    }
-
     /**
      * Removes all configuration parameter mapping. The configuration will be
      * empty this call returns.

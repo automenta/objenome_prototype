@@ -36,7 +36,6 @@ import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.TerminationCriteria;
 import objenome.solver.evolve.TerminationFitness;
 import objenome.solver.evolve.fitness.DoubleFitness;
-import objenome.solver.evolve.init.Full;
 import objenome.op.Node;
 import objenome.op.Variable;
 import objenome.op.VariableNode;
@@ -45,6 +44,7 @@ import objenome.op.math.DivisionProtected;
 import objenome.op.math.Multiply;
 import objenome.op.math.Subtract;
 import objenome.solver.evolve.fitness.SumOfError;
+import objenome.solver.evolve.init.Full;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
 import objenome.solver.evolve.mutate.SubtreeMutation;
 import objenome.util.random.MersenneTwisterFast;
@@ -57,7 +57,6 @@ import objenome.solver.evolve.selection.TournamentSelector;
  */
 public class STGPFunctionApproximation extends ProblemSTGP {
 
-    int functionPoints;
     
     public final Variable x;
     public final Deque<Observation<Double[], Double>> samples;
@@ -83,6 +82,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         the(SubtreeCrossover.PROBABILITY, 1.0);
         the(SubtreeMutation.PROBABILITY, 0.0);
         the(Initialiser.METHOD, new Full());
+        //the(Initialiser.METHOD, new RampedHalfAndHalf());
 
         RandomSequence randomSequence = new MersenneTwisterFast();
         the(RandomSequence.RANDOM_SEQUENCE, randomSequence);

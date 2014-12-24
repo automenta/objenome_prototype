@@ -27,7 +27,7 @@ import objenome.solver.evolve.GPContainer.GPKey;
  * <code>Initialiser</code> components are responsible for creating individuals,
  * delegating the creation to an {@link InitialisationMethod} instance.
  */
-public class Initialiser extends ProxyComponent<InitialisationMethod> {
+public class Initialiser<I extends Individual> extends ProxyComponent<InitialisationMethod<I>> {
 
     /**
      * The key for setting and retrieving the <code>InitialisationMethod</code>
@@ -38,7 +38,7 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
     /**
      * Constructs a <code>Initialiser</code>.
      */
-    public Initialiser() {
+    public Initialiser() {        
         super(METHOD);
     }
 
@@ -47,8 +47,7 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
      * <code>InitialisationMethod</code> object.
      */
     @Override
-    public Population process(final Population population) {
-        
+    public <I extends Individual> Population<I> process(Population<I> population) {
         if (getConfig()==null)
             setConfig(population.getConfig());
         
@@ -57,7 +56,7 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
             throw new IllegalStateException("The initialisation method has not been set.");
         }
 
-        return handler.createPopulation(population.getConfig());
+        return handler.createPopulation(population, population.getConfig());
     }
 
 }
