@@ -379,6 +379,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * @return the number of children required by this node
      */
     public int getArity() {
+        
         return children.length;
     }
 

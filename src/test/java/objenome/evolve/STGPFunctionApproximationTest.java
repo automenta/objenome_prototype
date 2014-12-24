@@ -17,14 +17,16 @@ public class STGPFunctionApproximationTest extends TestCase {
             
             int individuals = 50;
             
-            STGPFunctionApproximation e = new STGPFunctionApproximation(individuals, 6, true, false, false, false);
+            STGPFunctionApproximation e = new STGPFunctionApproximation(individuals, 6, true, true, true, true);
             
             //setup function
+            int j =0;
             for (double x = 0; x < 4.0; x+=0.1) {
                 e.samples.add(new Observation<Double[], Double>( 
                         new Double[] { x },
-                        1.0 / (1.0 + Math.sin(x))
+                        (j ^ (j+1000)) * ( Math.sin(x))
                 ));
+                j++;
             }
             
             Population<STGPIndividual> p = e.run();
@@ -59,8 +61,8 @@ public class STGPFunctionApproximationTest extends TestCase {
             
             List<Individual> nextBest = Lists.newArrayList(p.elites(0.5f));
             
-            /*System.out.println(firstBest);
-            System.out.println(nextBest);*/
+            System.out.println(firstBest);
+            System.out.println(nextBest);
             
             //show some evolution in change of elites
             assertTrue(!firstBest.equals(nextBest));

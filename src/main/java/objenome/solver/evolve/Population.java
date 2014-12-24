@@ -148,6 +148,9 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      * @return the group of best individuals of the population.
      */
     public Individual[] elites(int size) {
+        if (size() <= size)
+            size = size()-1;
+        
         Population<I> copy = this.clone();
         copy.sort();
 

@@ -31,6 +31,16 @@ import objenome.op.Numeric1d;
  */
 public class Sine<X extends Node> extends Numeric1d<X,Number>  {
 
+    public Sine(X child) {
+        super(child);
+    }
+
+    public Sine() {
+        this(null);
+    }
+
+    
+    
 
     @Override
     public double value(double x) {

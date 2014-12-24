@@ -41,6 +41,7 @@ import objenome.op.Variable;
 import objenome.op.VariableNode;
 import objenome.op.math.Add;
 import objenome.op.math.DivisionProtected;
+import objenome.op.math.DoubleERC;
 import objenome.op.math.Max2;
 import objenome.op.math.Min2;
 import objenome.op.math.Multiply;
@@ -48,6 +49,7 @@ import objenome.op.math.Power;
 import objenome.op.math.Subtract;
 import objenome.op.trig.Sine;
 import objenome.op.trig.Tangent;
+import objenome.solver.evolve.BranchedBreeder;
 import objenome.solver.evolve.fitness.SumOfError;
 import objenome.solver.evolve.init.Full;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
@@ -70,6 +72,9 @@ public class STGPFunctionApproximation extends ProblemSTGP {
     public STGPFunctionApproximation(int populationSize, int expressionDepth, boolean arith, boolean trig, boolean exp, boolean piecewise) {        
         super();
         
+        
+        double elitismRate = 0.5 * populationSize;
+        
         the(Population.SIZE, populationSize);
         List<TerminationCriteria> criteria = new ArrayList<>();
         criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
@@ -84,6 +89,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         operators.add(new SubtreeCrossover());
         operators.add(new SubtreeMutation());
         the(Breeder.OPERATORS, operators);
+        the(BranchedBreeder.ELITISM, (int)(populationSize * elitismRate));
         the(SubtreeCrossover.PROBABILITY, 1.0);
         the(SubtreeMutation.PROBABILITY, 0.0);
         the(Initialiser.METHOD, new Full());
@@ -93,6 +99,8 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         the(RandomSequence.RANDOM_SEQUENCE, randomSequence);
 
         List<Node> syntax = new ArrayList();
+        
+        syntax.add( new DoubleERC(randomSequence, -1.0, 1.0, 3));
         
         if (arith) {
             syntax.add(new Add());
