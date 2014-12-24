@@ -169,8 +169,8 @@ public class SumOfError<I,O> extends STGPFitnessFunction implements Listener<Con
                     double d = (Double) result;
 
                     if (!Double.isNaN(d)) {
-                        double error = Math.abs(d - ((Double)o.output));
-                        errorSum += error;
+                        double error = Math.abs(d - ((Double)o.output)); 
+                        errorSum += error * o.weight;
                     } else {
                         errorSum = nanFitnessScore();
                         break;

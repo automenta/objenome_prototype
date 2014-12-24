@@ -100,7 +100,8 @@ public class STGPFunctionApproximation extends ProblemSTGP {
 
         List<Node> syntax = new ArrayList();
         
-        syntax.add( new DoubleERC(randomSequence, -1.0, 1.0, 3));
+        //+2.0 allows it to grow
+        syntax.add( new DoubleERC(randomSequence, -1.0, 2.0, 4));
         
         if (arith) {
             syntax.add(new Add());
