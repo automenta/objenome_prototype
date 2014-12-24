@@ -63,6 +63,8 @@ public class STGPIndividual extends AbstractIndividual {
 
     // The root node of the program tree
     private Node root;
+    
+    transient private Class dataType; //caches data type
 
     /**
      * Constructs an individual represented by a strongly typed tree, with a
@@ -109,6 +111,7 @@ public class STGPIndividual extends AbstractIndividual {
      * @param root the <code>Node</code> to set as the root
      */
     public void setRoot(Node root) {
+        dataType = null;        
         this.root = root;
     }
 
@@ -141,6 +144,7 @@ public class STGPIndividual extends AbstractIndividual {
      *         || index >= getLength())
      */
     public Node setNode(int index, Node node) {
+        dataType = null;
         if (index > 0) {
             return root.setNode(index, node);
         } else if (index == 0) {
@@ -180,7 +184,9 @@ public class STGPIndividual extends AbstractIndividual {
      * @return the object <code>Class</code> of the values returned
      */
     public Class<?> dataType() {
-        return getRoot().dataType();
+        if (dataType==null)
+            dataType = getRoot().dataType();
+        return dataType;
     }
 
     /**

@@ -79,7 +79,8 @@ public class Multiply<X extends Node> extends Node {
         Object c1 = getChild(0).evaluate();
         Object c2 = getChild(1).evaluate();
 
-        Class<?> returnType = TypeUtil.widestNumberType(c1.getClass(), c2.getClass());
+        Class<?> returnType =                
+                TypeUtil.widestNumberType(c1.getClass(), c2.getClass());
 
         if (returnType == Double.class) {
             // Multiply as doubles.

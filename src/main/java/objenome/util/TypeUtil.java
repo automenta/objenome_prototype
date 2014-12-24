@@ -213,6 +213,7 @@ public final class TypeUtil {
         return true;
     }
 
+    
     /**
      * Returns the widest compatible numeric type for two primitive numeric
      * class types. Any of <code>Byte</code>, <code>Short</code>,
@@ -224,6 +225,21 @@ public final class TypeUtil {
      * types, or <code>null</code> if there is no compatible numeric type
      */
     public static Class<?> widestNumberType(Class<?>... classes) {
+        
+        //check common cases first to avoid the iterative ones at the end
+        if (classes.length == 1) {
+            return classes[0];
+        }
+        else if (classes.length == 2) {
+            Class c = classes[0];
+            if (c == classes[1]) {
+                if (c == Double.class) return Double.class;
+                if (c == Float.class) return Float.class;
+                if (c == Long.class) return Long.class;
+                if (c == Integer.class) return Integer.class;
+            }
+        }
+        
         if (!isAllNumericType(classes)) {
             return null;
         }

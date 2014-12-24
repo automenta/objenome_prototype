@@ -566,7 +566,8 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      */
     public final Class<?> dataType() {
         Class<?>[] argTypes = new Class<?>[getArity()];
-        for (int i = 0; i < getArity(); i++) {
+        final int arity = getArity();
+        for (int i = 0; i < arity; i++) {
             Node child = getChild(i);
             if (child != null) {
                 argTypes[i] = child.dataType();
