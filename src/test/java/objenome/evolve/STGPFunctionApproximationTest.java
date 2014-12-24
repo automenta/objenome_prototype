@@ -17,7 +17,7 @@ public class STGPFunctionApproximationTest extends TestCase {
             
             int individuals = 50;
             
-            STGPFunctionApproximation e = new STGPFunctionApproximation(individuals);
+            STGPFunctionApproximation e = new STGPFunctionApproximation(individuals, 6, true, false, false, false);
             
             //setup function
             for (double x = 0; x < 4.0; x+=0.1) {

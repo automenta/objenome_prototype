@@ -41,8 +41,13 @@ import objenome.op.Variable;
 import objenome.op.VariableNode;
 import objenome.op.math.Add;
 import objenome.op.math.DivisionProtected;
+import objenome.op.math.Max2;
+import objenome.op.math.Min2;
 import objenome.op.math.Multiply;
+import objenome.op.math.Power;
 import objenome.op.math.Subtract;
+import objenome.op.trig.Sine;
+import objenome.op.trig.Tangent;
 import objenome.solver.evolve.fitness.SumOfError;
 import objenome.solver.evolve.init.Full;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
@@ -62,7 +67,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
     public final Deque<Observation<Double[], Double>> samples;
     
  
-    public STGPFunctionApproximation(int populationSize) {        
+    public STGPFunctionApproximation(int populationSize, int expressionDepth, boolean arith, boolean trig, boolean exp, boolean piecewise) {        
         super();
         
         the(Population.SIZE, populationSize);
@@ -71,7 +76,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         criteria.add(new MaximumGenerations());
         the(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         the(MaximumGenerations.MAXIMUM_GENERATIONS, 150);
-        the(STGPIndividual.MAXIMUM_DEPTH, 6);
+        the(STGPIndividual.MAXIMUM_DEPTH, expressionDepth);
 
         the(Breeder.SELECTOR, new TournamentSelector());
         the(TournamentSelector.TOURNAMENT_SIZE, 7);
@@ -87,18 +92,34 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         RandomSequence randomSequence = new MersenneTwisterFast();
         the(RandomSequence.RANDOM_SEQUENCE, randomSequence);
 
+        List<Node> syntax = new ArrayList();
+        
+        if (arith) {
+            syntax.add(new Add());
+            syntax.add(new Subtract());
+            syntax.add(new Multiply());
+            syntax.add(new DivisionProtected());            
+        }
+        if (trig) {
+            syntax.add(new Sine());
+            syntax.add(new Tangent());
+        }
+        if (exp) {
+            //syntax.add(new LogNatural());
+            //syntax.add(new Exp());
+            syntax.add(new Power());
+        }
+        if (piecewise) {
+            syntax.add(new Max2());
+            syntax.add(new Min2());
+        }
+        
+        syntax.add( new VariableNode( x = new Variable("X", Double.class) ) );
+                
         // Setup syntax        
-        the(STGPIndividual.SYNTAX, new Node[]{
+        the(STGPIndividual.SYNTAX, syntax.toArray(new Node[syntax.size()]));
             
-            new Add(),
-            new Subtract(),
-            new Multiply(),
-            new DivisionProtected(),
-            
-            //...
-            
-            new VariableNode( x = new Variable("X", Double.class) )
-        });
+        
         the(STGPIndividual.RETURN_TYPE, Double.class);
         
         SumOfError<Double,Double> fitness;
