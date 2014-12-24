@@ -21,11 +21,14 @@
  */
 package objenome.solver.evolve.init;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.InitialisationMethod;
 import objenome.solver.evolve.Population;
@@ -40,7 +43,6 @@ import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.InitialisationEvent;
 import objenome.solver.evolve.event.Listener;
 import objenome.op.Node;
-import objenome.solver.evolve.Individual;
 import objenome.util.TypeUtil;
 
 /**
@@ -73,7 +75,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
     private List<Node> nonTerminals;
 
     // Lookup table of the return types valid at each depth level
-    private Class<?>[][] dataTypesTable;
+    private List<Class<?>>[] dataTypesTable;
     private final boolean autoConfig;
 
     /**
@@ -347,23 +349,33 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         return validNodes;
     }
 
+    public final Comparator<Class<?>> classNameComparator = new Comparator<Class<?>>() {
+
+        @Override
+        public int compare(Class<?> o1, Class<?> o2) {
+            return Integer.compare(o1.hashCode(), o2.hashCode());
+            //return String.compare(o1.getName(), o2.getName());
+        }
+        
+    };
+    
     /*
      * Generates the "type possibilities table" from the syntax and return
      * type, as described by Montana
      */
     private void updateDataTypesTable() {
-        dataTypesTable = new Class<?>[depth + 1][];
+        dataTypesTable = new List[depth+1];//new Class<?>[depth + 1][];
 
         // Trees of depth 0 must be single terminal element
-        Set<Class<?>> types = new HashSet<>();
+        Set<Class<?>> types = new TreeSet<>(classNameComparator);
         for (Node n : terminals) {
             types.add(n.dataType());
         }
-        dataTypesTable[0] = types.toArray(new Class<?>[types.size()]);
+        dataTypesTable[0] = new ArrayList(types);
 
         // Handle depths above 1
         for (int i = 1; i <= depth; i++) {
-            types = new HashSet<>();
+            types = new TreeSet<>(classNameComparator); //sorted
             for (Node n : nonTerminals) {
                 Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[i - 1]);
 
@@ -375,9 +387,11 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
                     }
                 }
             }
-            dataTypesTable[i] = types.toArray(new Class<?>[types.size()]);
+            dataTypesTable[i] = new ArrayList(types);
         }
     }
+    
+    final public Table<Integer, List<Class<?>>, Class<?>[][]> combinations = HashBasedTable.create();
 
     /*
      * Generates all possible combinations of the given data-types, with arity
@@ -385,19 +399,27 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
      * 
      * TODO We should only do this once at each depth for a particular arity
      */
-    private Class<?>[][] dataTypeCombinations(int arity, Class<?>[] dataTypes) {
-        int noTypes = dataTypes.length;
+    private Class<?>[][] dataTypeCombinations(int arity, List<Class<?>>dataTypes) {
+        
+        Class<?>[][] possibleTypes = combinations.get(arity, dataTypes);
+        if (possibleTypes!=null) {
+            return possibleTypes;
+        }
+        
+        int noTypes = dataTypes.size();
         int noCombinations = (int) Math.pow(noTypes, arity);
-        Class<?>[][] possibleTypes = new Class<?>[noCombinations][arity];
+        possibleTypes = new Class<?>[noCombinations][arity];
 
         for (int i = 0; i < arity; i++) {
             int period = (int) Math.pow(noTypes, i);
 
             for (int j = 0; j < noCombinations; j++) {
                 int group = j / period;
-                possibleTypes[j][i] = dataTypes[group % noTypes];
+                possibleTypes[j][i] = dataTypes.get(group % noTypes);
             }
         }
+        
+        combinations.put(arity, dataTypes, possibleTypes);
 
         return possibleTypes;
     }

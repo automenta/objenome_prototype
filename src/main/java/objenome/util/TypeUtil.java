@@ -121,6 +121,12 @@ public final class TypeUtil {
 
         return false;
     }
+    public static boolean containsSub(Iterable<Class<?>> collection, Class<?> cls) {
+        for (Class<?> c : collection)
+            if (ClassUtils.isAssignable(c, cls))
+                return true;
+        return false;
+    }    
 
     /**
      * Returns <code>true</code> if the given collection contains an element
