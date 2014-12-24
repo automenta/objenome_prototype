@@ -21,7 +21,7 @@
  */
 package objenome.op.bool;
 
-import objenome.evolve.RandomSequence;
+import objenome.solver.evolve.RandomSequence;
 import objenome.op.Literal;
 import objenome.op.math.DoubleERC;
 import objenome.op.math.IntegerERC;

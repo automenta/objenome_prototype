@@ -26,10 +26,10 @@ import objenome.solution.dependency.ClassBuilder;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
 import objenome.solution.dependency.DecideImplementationClass;
 import objenome.solution.dependency.Scope;
-import objenome.solve.IncompleteSolutionException;
-import objenome.solve.RandomSolver;
-import objenome.solve.Solution;
-import objenome.solve.Solver;
+import objenome.solver.IncompleteSolutionException;
+import objenome.solver.RandomSolver;
+import objenome.solver.Solution;
+import objenome.solver.Solver;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 

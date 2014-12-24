@@ -22,8 +22,8 @@
 package objenome.op.math;
 
 import objenome.op.Node;
-import objenome.evolve.tools.NumericUtils;
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.NumericUtils;
+import objenome.util.TypeUtil;
 
 /**
  * A node which performs the modulo operation, that is it finds the remainder of

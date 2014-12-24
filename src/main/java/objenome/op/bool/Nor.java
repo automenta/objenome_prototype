@@ -22,7 +22,7 @@
 package objenome.op.bool;
 
 import objenome.op.Node;
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.TypeUtil;
 
 /**
  * A node which performs the logical operation of <code>NOR</code> which is

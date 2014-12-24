@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.function.Function;
 import objenome.Objenome;
 import objenome.solution.SetNumericValue;
-import objenome.solve.NumericSolver;
-import objenome.solve.Solution;
+import objenome.solver.NumericSolver;
+import objenome.solver.Solution;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.BisectionSolver;
 

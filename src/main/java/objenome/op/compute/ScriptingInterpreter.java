@@ -26,8 +26,8 @@ import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import objenome.evolve.Individual;
-import objenome.evolve.source.SourceGenerator;
+import objenome.solver.evolve.Individual;
+import objenome.solver.evolve.source.SourceGenerator;
 import objenome.util.Utils;
 
 /**

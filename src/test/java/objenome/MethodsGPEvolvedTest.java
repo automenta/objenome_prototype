@@ -8,7 +8,7 @@ package objenome;
 import java.util.List;
 import objenome.solution.SetMethodsGPEvolved;
 import objenome.solution.SetDoubleValue;
-import objenome.solve.Solution;
+import objenome.solver.Solution;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

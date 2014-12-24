@@ -5,7 +5,7 @@
  */
 package objenome.solution;
 
-import objenome.solve.Solution;
+import objenome.solver.Solution;
 
 /**
  * Indicates the gene produces a Number result (Ex: Integer, Double)

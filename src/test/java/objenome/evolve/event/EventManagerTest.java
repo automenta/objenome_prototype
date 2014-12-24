@@ -21,6 +21,9 @@
  */
 package objenome.evolve.event;
 
+import objenome.solver.evolve.event.EventManager;
+import objenome.solver.evolve.event.Listener;
+import objenome.solver.evolve.event.RunEvent;
 import junit.framework.TestCase;
 
 /**

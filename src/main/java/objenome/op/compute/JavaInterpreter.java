@@ -21,8 +21,8 @@
  */
 package objenome.op.compute;
 
-import objenome.evolve.Individual;
-import objenome.evolve.source.SourceGenerator;
+import objenome.solver.evolve.Individual;
+import objenome.solver.evolve.source.SourceGenerator;
 
 /**
  * A <code>JavaInterpreter</code> provides the facility to evaluate individuals

@@ -1,8 +1,10 @@
 package objenome.evolve;
 
+import objenome.solver.evolve.STGPIndividual;
+import objenome.solver.evolve.Population;
 import junit.framework.TestCase;
-import objenome.evolve.problem.STGPBoolean;
-import objenome.evolve.tools.BenchmarkSolutions;
+import objenome.problem.STGPBoolean;
+import objenome.util.BenchmarkSolutions;
 import org.junit.Test;
 
 public class STGPMultiplexerTest extends TestCase {

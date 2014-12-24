@@ -12,7 +12,7 @@ import objenome.solution.SetIntegerValue;
 import objenome.solution.SetNumericValue;
 import static objenome.solution.dependency.Builder.of;
 import static objenome.solution.dependency.Builder.the;
-import objenome.solve.Solution;
+import objenome.solver.Solution;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 

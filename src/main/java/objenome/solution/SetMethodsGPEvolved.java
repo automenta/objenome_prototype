@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import java.util.Set;
 import objenome.Phenotainer;
 import objenome.problem.DevelopMethod;
-import objenome.solve.Solution;
+import objenome.solver.Solution;
 
 /**
  * Uses a dynamically generated expression to complete an abstract or interface method

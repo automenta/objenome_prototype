@@ -22,9 +22,9 @@
 package objenome.op.trig;
 
 import objenome.op.Node;
-import objenome.evolve.tools.MathUtils;
-import objenome.evolve.tools.NumericUtils;
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.MathUtils;
+import objenome.util.NumericUtils;
+import objenome.util.TypeUtil;
 
 /**
  * A node which performs the inverse hyperbolic trigonometric function of area

@@ -9,7 +9,6 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import objenome.op.DiffableFunction;
 import objenome.op.Scalar;
-import objenome.solution.approximation.DiffableFunctionMarshaller;
 import org.apache.commons.math3.linear.ArrayRealVector;
 
 /**
@@ -31,31 +30,6 @@ public class Utils {
         return xs;
     }
 
-    public static double q(DiffableFunctionMarshaller fm, double[] state, double action) {
-        fm.setInputs(join(state, action));
-        return fm.getF().value();
-    }
-
-    public static double[] v(DiffableFunctionMarshaller fm, double[] state, double lower, double upper, int num) {
-        double max = -Double.MAX_VALUE;
-        double maxa = 0;
-
-        for (int i = 0; i < num; ++i) {
-            double a = (double) i * (upper - lower) / (double) (num - 1) + lower;
-            double _q = q(fm, state, a);
-            if (_q > max) {
-                max = _q;
-                maxa = a;
-            }
-        }
-
-        return new double[]{maxa, max};
-    }
-
-    public static ArrayRealVector gradient(DiffableFunctionMarshaller fm, double[] state, double action, ArrayRealVector result) {
-        fm.setInputs(join(state, action));
-        return gradient(fm.getF(), fm.getParameters(), result);
-    }
 
     public static ArrayRealVector gradient(DiffableFunction f, Scalar[] parameters, ArrayRealVector result) {
         if (result == null)

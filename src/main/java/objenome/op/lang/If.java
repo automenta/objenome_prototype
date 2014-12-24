@@ -22,7 +22,7 @@
 package objenome.op.lang;
 
 import objenome.op.Node;
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.TypeUtil;
 
 /**
  * A node which represents the conditional if-then-else statement

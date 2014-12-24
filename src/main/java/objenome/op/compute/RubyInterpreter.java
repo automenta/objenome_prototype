@@ -23,8 +23,8 @@ package objenome.op.compute;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
-import objenome.evolve.Individual;
-import objenome.evolve.source.SourceGenerator;
+import objenome.solver.evolve.Individual;
+import objenome.solver.evolve.source.SourceGenerator;
 
 /**
  * A <code>RubyInterpreter</code> provides the facility to evaluate individual

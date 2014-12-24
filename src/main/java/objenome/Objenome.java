@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
-import objenome.solve.IncompleteSolutionException;
-import objenome.solve.Solution;
-import objenome.solve.Solver;
+import objenome.solver.IncompleteSolutionException;
+import objenome.solver.Solution;
+import objenome.solver.Solver;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 /**

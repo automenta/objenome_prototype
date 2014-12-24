@@ -1,8 +1,11 @@
 package objenome.evolve;
 
+import objenome.solver.evolve.STGPIndividual;
+import objenome.problem.ProblemSTGP;
+import objenome.solver.evolve.Population;
 import junit.framework.TestCase;
-import objenome.evolve.problem.STGPRegression;
-import objenome.evolve.tools.BenchmarkSolutions;
+import objenome.problem.STGPRegression;
+import objenome.util.BenchmarkSolutions;
 import org.junit.Test;
 
 public class STGPRegressionTest extends TestCase {

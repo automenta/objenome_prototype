@@ -7,7 +7,7 @@ package objenome;
 
 import java.util.function.Function;
 import objenome.problem.Between;
-import objenome.solve.IncompleteSolutionException;
+import objenome.solver.IncompleteSolutionException;
 import objenome.problem.numeric.FindZeros;
 import objenome.problem.numeric.OptimizeMultivariate;
 import org.apache.commons.math3.random.JDKRandomGenerator;

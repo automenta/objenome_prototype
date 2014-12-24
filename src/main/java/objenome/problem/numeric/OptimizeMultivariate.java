@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 import objenome.Objenome;
 import objenome.solution.SetNumericValue;
-import objenome.solve.NumericSolver;
+import objenome.solver.NumericSolver;
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;

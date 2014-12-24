@@ -5,9 +5,9 @@
  */
 package objenome;
 
-import objenome.solve.Behaviors;
-import static objenome.solve.Behaviors.Behavior.DO;
-import static objenome.solve.Behaviors.Behavior.DONT;
+import objenome.solver.Behaviors;
+import static objenome.solver.Behaviors.Behavior.DO;
+import static objenome.solver.Behaviors.Behavior.DONT;
 import org.apache.commons.math3.genetics.GeneticAlgorithm;
 
 /**

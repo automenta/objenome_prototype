@@ -23,7 +23,7 @@ package objenome.op.math;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import objenome.evolve.RandomSequence;
+import objenome.solver.evolve.RandomSequence;
 import objenome.op.Literal;
 import objenome.op.bool.BooleanERC;
 

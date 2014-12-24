@@ -7,8 +7,8 @@ package objenome.op;
 
 import java.util.function.Function;
 import objenome.op.Node;
-import objenome.evolve.tools.NumericUtils;
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.NumericUtils;
+import objenome.util.TypeUtil;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 
 /**

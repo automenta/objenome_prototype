@@ -21,12 +21,12 @@
  */
 package objenome.op.compute;
 
-import objenome.evolve.Individual;
+import objenome.solver.evolve.Individual;
 import objenome.op.EpoxParser;
 import objenome.op.Node;
 import objenome.op.Variable;
 import objenome.op.VariableNode;
-import objenome.evolve.source.SourceGenerator;
+import objenome.solver.evolve.source.SourceGenerator;
 
 /**
  * An <code>EpoxInterpreter</code> provides the facility to evaluate individual

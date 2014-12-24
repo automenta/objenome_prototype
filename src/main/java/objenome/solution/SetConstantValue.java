@@ -9,7 +9,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import java.util.List;
 import objenome.Phenotainer;
 import objenome.problem.DecideNumericValue;
-import objenome.solve.Solution;
+import objenome.solver.Solution;
 
 abstract public class SetConstantValue<X> extends AtomicDouble implements Solution {
     

@@ -22,7 +22,7 @@
 package objenome.op.lang;
 
 import objenome.op.Node;
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.TypeUtil;
 
 /**
  * A node which provides the facility to sequence a specific number of

@@ -5,7 +5,7 @@
  */
 package objenome.op;
 
-import objenome.evolve.tools.TypeUtil;
+import objenome.util.TypeUtil;
 
 /**
  * Returns Double, specifically

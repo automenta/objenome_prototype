@@ -22,7 +22,7 @@
 package objenome.op.compute;
 
 import java.util.function.Function;
-import objenome.evolve.Individual;
+import objenome.solver.evolve.Individual;
 import objenome.op.compute.Computer.ComputerInput;
 
 /**

@@ -21,9 +21,11 @@
  */
 package objenome.evolve.event.stat;
 
+import objenome.solver.evolve.event.stat.AbstractStat;
+import objenome.solver.evolve.event.stat.RunBestFitness;
 import junit.framework.TestCase;
-import objenome.evolve.GPContainer;
-import objenome.evolve.event.GenerationEvent;
+import objenome.solver.evolve.GPContainer;
+import objenome.solver.evolve.event.GenerationEvent;
 
 /**
  * The <code>AbstractStatTest</code> class provides unit tests for methods of

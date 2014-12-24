@@ -23,6 +23,7 @@ package objenome.op;
 
 import org.apache.commons.lang3.ObjectUtils;
 
+
 /**
  * Literal values are terminal nodes with a specific value. Typically the value
  * of a literal will not change.
