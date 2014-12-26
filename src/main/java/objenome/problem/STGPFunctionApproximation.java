@@ -52,6 +52,7 @@ import objenome.op.trig.Tangent;
 import objenome.solver.evolve.BranchedBreeder;
 import objenome.solver.evolve.fitness.SumOfError;
 import objenome.solver.evolve.init.Full;
+import objenome.solver.evolve.mutate.PointMutation;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
 import objenome.solver.evolve.mutate.SubtreeMutation;
 import objenome.util.random.MersenneTwisterFast;
@@ -86,12 +87,14 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         the(Breeder.SELECTOR, new TournamentSelector());
         the(TournamentSelector.TOURNAMENT_SIZE, 7);
         List<Operator> operators = new ArrayList<>();
+        operators.add(new PointMutation());
         operators.add(new SubtreeCrossover());
         operators.add(new SubtreeMutation());
         the(Breeder.OPERATORS, operators);
         the(BranchedBreeder.ELITISM, (int)(populationSize * elitismRate));
-        the(SubtreeCrossover.PROBABILITY, 1.0);
-        the(SubtreeMutation.PROBABILITY, 0.0);
+        the(PointMutation.PROBABILITY, 0.3);
+        the(SubtreeCrossover.PROBABILITY, 0.3);
+        the(SubtreeMutation.PROBABILITY, 0.3);
         the(Initialiser.METHOD, new Full());
         //the(Initialiser.METHOD, new RampedHalfAndHalf());
 

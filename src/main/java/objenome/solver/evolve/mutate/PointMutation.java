@@ -24,6 +24,7 @@ package objenome.solver.evolve.mutate;
 
 import java.util.ArrayList;
 import java.util.List;
+import objenome.op.Literal;
 import objenome.solver.evolve.AbstractOperator;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.GPContainer.GPKey;
@@ -38,6 +39,7 @@ import objenome.solver.evolve.event.Listener;
 import objenome.solver.evolve.event.OperatorEvent;
 import objenome.solver.evolve.event.OperatorEvent.EndOperator;
 import objenome.op.Node;
+import objenome.op.math.DoubleERC;
 
 /**
  * A mutation operator for <code>STGPIndividual</code>s that replaces nodes at
@@ -153,7 +155,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
         STGPIndividual child = program.clone();
 
         List<Integer> points = new ArrayList<>();
-
+        
         //TODO It would be more efficient to traverse the tree than use getNode
         int length = program.length();
         for (int i = 0; i < length; i++) {
@@ -162,6 +164,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
                 int arity = node.getArity();
 
                 List<Node> replacements = validReplacements(node);
+                
                 if (!replacements.isEmpty()) {
                     // Randomly choose a replacement.
                     Node replacement = replacements.get(random.nextInt(replacements.size()));
@@ -219,9 +222,17 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
             if ((replacement.getArity() == arity) && !nodesEqual(replacement, n)) {
                 Class<?> replacementReturn = replacement.dataType(argTypes);
                 if ((replacementReturn != null) && requiredType.isAssignableFrom(replacementReturn)) {
+                    
+                    if (replacement instanceof Literal) {
+                        if (replacement instanceof DoubleERC) {
+                            ((DoubleERC)replacement).random();
+                        }
+                    }
+                    
                     replacements.add(replacement);
                 }
             }
+            
         }
 
         return replacements;

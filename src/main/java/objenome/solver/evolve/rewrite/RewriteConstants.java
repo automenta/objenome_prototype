@@ -28,6 +28,7 @@ import objenome.op.Node;
 
 /**
  * Rewrite any parts of the tree that are constant with a simple constant value.
+ * TODO Max2, Min2
  */
 public class RewriteConstants implements RewriteRule {
 

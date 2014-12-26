@@ -103,6 +103,16 @@ public class DoubleERC extends Literal {
 
         return erc;
     }
+    
+    public DoubleERC mutated(double percentChange) {
+        DoubleERC erc = (DoubleERC) super.newInstance();
+
+        double existingValue = (Double)getValue();
+        double newValue = existingValue + (random.nextDouble() - 0.5) * percentChange * existingValue;
+        erc.setValue(newValue);
+
+        return erc;
+    }    
 
     /**
      * Generates and returns a new double value for use in a new
@@ -204,4 +214,10 @@ public class DoubleERC extends Literal {
     public void setPrecision(int precision) {
         this.precision = precision;
     }
+
+    /** randomizes the value of this instance */
+    public void random() {
+        setValue(generateValue());
+    }
+    
 }
