@@ -1,4 +1,5 @@
 target
 /.sonar/.sonartmp/preview1416440654456-0.lock.db
 /.sonar/.sonartmp/preview1416440654456-0.h2.db
-/.sonar/sonar-report.json
+/.sonar/sonar-report.json.idea/
+.idea/
