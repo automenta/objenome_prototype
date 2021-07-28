@@ -59,7 +59,7 @@ public class Not extends Node {
      */
     @Override
     public Boolean evaluate() {
-        return !((Boolean) getChild(0).evaluate());
+        return !((Boolean) node(0).evaluate());
     }
 
     /**
@@ -68,7 +68,7 @@ public class Not extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

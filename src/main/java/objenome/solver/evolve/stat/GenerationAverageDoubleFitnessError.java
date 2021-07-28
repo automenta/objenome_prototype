@@ -24,13 +24,13 @@ package objenome.solver.evolve.stat;
 import objenome.solver.evolve.Population;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 import objenome.solver.evolve.event.stat.AbstractStat;
-import objenome.solver.evolve.fitness.DoubleFitness;
+import objenome.solver.evolve.score.DoubleScore;
 
 /**
  * Stat that provides the average fitness error of the population at the end of
  * a generation. This stat can only be used with <code>DoubleFitness</code>.
  *
- * @see DoubleFitness
+ * @see DoubleScore
  */
 public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGeneration> {
 
@@ -54,7 +54,7 @@ public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGenerat
     @Override
     public void refresh(EndGeneration event) {
         double stdev = getConfig().the(GenerationStandardDeviationDoubleFitness.class).getStandardDeviation();
-        Population population = event.getPopulation();
+        Population<?> population = event.getPopulation();
 
         error = stdev / Math.sqrt(population.size());
     }

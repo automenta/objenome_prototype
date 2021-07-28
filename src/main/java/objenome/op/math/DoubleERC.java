@@ -21,11 +21,12 @@
  */
 package objenome.op.math;
 
+import objenome.op.MutableLiteral;
+import objenome.op.bool.BooleanERC;
+import objenome.solver.evolve.RandomSequence;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
-import objenome.solver.evolve.RandomSequence;
-import objenome.op.Literal;
-import objenome.op.bool.BooleanERC;
 
 /**
  * Defines a double ephemeral random constant (ERC). An ERC is a literal with a
@@ -48,7 +49,7 @@ import objenome.op.bool.BooleanERC;
  *
  * @since 2.0
  */
-public class DoubleERC extends Literal {
+public class DoubleERC extends MutableLiteral<Double> {
 
     private RandomSequence random;
 

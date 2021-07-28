@@ -21,10 +21,11 @@
  */
 package objenome.op.compute;
 
-import javax.script.Invocable;
-import javax.script.ScriptException;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.source.SourceGenerator;
+
+import javax.script.Invocable;
+import javax.script.ScriptException;
 
 /**
  * A <code>RubyInterpreter</code> provides the facility to evaluate individual
@@ -85,9 +86,7 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
             for (int i = 0; i < noParamSets; i++) {
                 result[i] = invocableEngine.invokeFunction("expr", argValues[i]);
             }
-        } catch (final ScriptException ex) {
-            throw new MalformedProgramException();
-        } catch (final NoSuchMethodException ex) {
+        } catch (final ScriptException | NoSuchMethodException ex) {
             throw new MalformedProgramException();
         }
 
@@ -117,12 +116,10 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
         try {
             getEngine().eval(code);
 
-            for (int i = 0; i < noParamSets; i++) {
-                invocableEngine.invokeFunction("expr", argValues[i]);
+            for (Object[] argValue : argValues) {
+                invocableEngine.invokeFunction("expr", argValue);
             }
-        } catch (ScriptException ex) {
-            throw new MalformedProgramException();
-        } catch (NoSuchMethodException ex) {
+        } catch (ScriptException | NoSuchMethodException ex) {
             throw new MalformedProgramException();
         }
     }
@@ -133,7 +130,7 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
      * the given expression.
      */
     private String getEvalCode(String expression, String[] argNames) {
-        StringBuffer code = new StringBuffer();
+        StringBuilder code = new StringBuilder();
 
         code.append("def expr(");
         for (int i = 0; i < argNames.length; i++) {
@@ -157,7 +154,7 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
      * method containing the given program.
      */
     private String getExecCode(String program, String[] argNames) {
-        final StringBuffer code = new StringBuffer();
+        final StringBuilder code = new StringBuilder();
 
         // code.append("class Evaluation\n");
         code.append("def expr(");

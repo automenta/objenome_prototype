@@ -17,16 +17,12 @@
  */
 package objenome.util.bytecode.factory;
 
+import objenome.util.bytecode.*;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import objenome.util.bytecode.SgArgument;
-import objenome.util.bytecode.SgClass;
-import objenome.util.bytecode.SgClassPool;
-import objenome.util.bytecode.SgMethod;
-import objenome.util.bytecode.SgUtils;
 
 /**
  * Creates an implementation of an interface.
@@ -119,27 +115,25 @@ public class ImplementationFactory {
         // Create class with all interfaces
         final SgClass clasz = new SgClass("public", implPackageName, implClassName, superClass,
                 false, enclosingClass);
-        for (int i = 0; i < intf.length; i++) {
-            clasz.addInterface(SgClass.create(pool, intf[i]));
+        for (Class<?> value : intf) {
+            clasz.addInterface(SgClass.create(pool, value));
         }
         listener.afterClassCreated(clasz);
 
         final Map<String, ImplementedMethod> implMethods = new HashMap<>();
 
         // Iterate through interfaces and add methods
-        for (int i = 0; i < intf.length; i++) {
-            addInterfaceMethods(implMethods, clasz, intf[i], listener);
+        for (Class<?> aClass : intf) {
+            addInterfaceMethods(implMethods, clasz, aClass, listener);
         }
 
         // Iterate through methods and create body
-        final Iterator<String> it = implMethods.keySet().iterator();
-        while (it.hasNext()) {
-            final ImplementedMethod implMethod = implMethods.get(it.next());
+        for (ImplementedMethod implMethod : implMethods.values()) {
             final SgMethod method = implMethod.getMethod();
             final Class<?>[] interfaces = implMethod.getInterfaces();
             final List<String> lines = listener.createBody(method, interfaces);
-            for (int k = 0; k < lines.size(); k++) {
-                implMethod.getMethod().addBodyLine(lines.get(k));
+            for (String line : lines) {
+                implMethod.getMethod().addBodyLine(line);
             }
         }
 
@@ -155,19 +149,19 @@ public class ImplementationFactory {
         } else {
             methods = intf.getMethods();
         }
-        for (int j = 0; j < methods.length; j++) {
+        for (Method value : methods) {
 
             // Create method signature
-            final String name = methods[j].getName();
-            final String typeSignature = SgUtils.createTypeSignature(name, methods[j]
+            final String name = value.getName();
+            final String typeSignature = SgUtils.createTypeSignature(name, value
                     .getParameterTypes());
 
             // Get return type
             final SgClass returnType;
-            if (methods[j].getReturnType() == null) {
+            if (value.getReturnType() == null) {
                 returnType = SgClass.VOID;
             } else {
-                returnType = SgClass.create(pool, methods[j].getReturnType());
+                returnType = SgClass.create(pool, value.getReturnType());
             }
 
             // Check if we already implemented this method
@@ -175,19 +169,19 @@ public class ImplementationFactory {
             if (implMethod == null) {
                 final SgMethod method = new SgMethod(clasz, "public", returnType, name);
                 // Add arguments
-                final Class<?>[] paramTypes = methods[j].getParameterTypes();
+                final Class<?>[] paramTypes = value.getParameterTypes();
                 for (int k = 0; k < paramTypes.length; k++) {
                     final SgClass paramType = SgClass.create(pool, paramTypes[k]);
                     method.addArgument(new SgArgument(method, paramType, ("arg" + k)));
                 }
-                method.addAnnotations(SgUtils.createAnnotations(methods[j].getAnnotations()));
+                method.addAnnotations(SgUtils.createAnnotations(value.getAnnotations()));
                 implMethod = new ImplementedMethod(method);
                 implMethod.addInterface(intf);
                 implMethods.put(typeSignature, implMethod);
             } else {
                 implMethod.addInterface(intf);
                 if (!returnType.getName().equals(implMethod.getReturnType().getName())) {
-                    final StringBuffer sb = new StringBuffer();
+                    final StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < implMethod.getInterfaces().length; i++) {
                         if (i > 0) {
                             sb.append("' or '");
@@ -202,10 +196,10 @@ public class ImplementationFactory {
 
             // Add exceptions if missing
             final SgMethod method = implMethod.getMethod();
-            final Class<?>[] exceptionTypes = methods[j].getExceptionTypes();
-            for (int k = 0; k < exceptionTypes.length; k++) {
-                final SgClass ex = SgClass.create(pool, exceptionTypes[k]);
-                if (method.getExceptions().indexOf(ex) == -1) {
+            final Class<?>[] exceptionTypes = value.getExceptionTypes();
+            for (Class<?> exceptionType : exceptionTypes) {
+                final SgClass ex = SgClass.create(pool, exceptionType);
+                if (!method.getExceptions().contains(ex)) {
                     method.addException(ex);
                 }
             }
@@ -214,20 +208,20 @@ public class ImplementationFactory {
 
     }
 
-    private void assureNotNull(final String name, final Object value) {
+    private static void assureNotNull(final String name, final Object value) {
         if (value == null) {
             throw new IllegalArgumentException("The argument '" + name + "' cannot be null!");
         }
     }
 
-    private void assureNotEmpty(final String name, final Object[] value) {
+    private static void assureNotEmpty(final String name, final Object[] value) {
         if (value.length == 0) {
             throw new IllegalArgumentException("The argument '" + name
                     + "' cannot be an empty array!");
         }
     }
 
-    private void assureAllInterfaces(final Class<?>... intf) {
+    private static void assureAllInterfaces(final Class<?>... intf) {
         for (int i = 0; i < intf.length; i++) {
             if (!intf[i].isInterface()) {
                 throw new IllegalArgumentException("Expected an interface: " + intf[i].getName()

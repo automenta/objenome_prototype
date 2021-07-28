@@ -21,9 +21,6 @@
  */
 package objenome.op.compute;
 
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.source.SourceGenerator;
-
 /**
  * A <code>JavaInterpreter</code> provides the facility to evaluate individuals
  * that represent Java expressions and execute multi-line Java statements. Java
@@ -31,7 +28,7 @@ import objenome.solver.evolve.source.SourceGenerator;
  * are converted into source code using a <code>SourceGenerator</code> whose
  * responsibility it is that valid Java source is produced from the individual.
  *
- * @see SourceGenerator
+ * @see objenome.solver.evolve.source.SourceGenerator
  * 
  * TODO not implemented since we will not continue to support BeanShell
  *

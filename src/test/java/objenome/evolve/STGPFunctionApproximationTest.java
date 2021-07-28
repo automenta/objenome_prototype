@@ -1,15 +1,16 @@
 package objenome.evolve;
 
 import com.google.common.collect.Lists;
-import java.util.Arrays;
-import java.util.List;
-import objenome.solver.evolve.STGPIndividual;
-import objenome.solver.evolve.Population;
 import junit.framework.TestCase;
 import objenome.problem.Observation;
 import objenome.problem.STGPFunctionApproximation;
 import objenome.solver.evolve.Individual;
+import objenome.solver.evolve.Population;
+import objenome.solver.evolve.STGPIndividual;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.List;
 
 public class STGPFunctionApproximationTest extends TestCase {
 
@@ -22,9 +23,9 @@ public class STGPFunctionApproximationTest extends TestCase {
             //setup function
             int j =0;
             for (double x = 0; x < 4.0; x+=0.1) {
-                e.samples.add(new Observation<Double[], Double>( 
-                        new Double[] { x },
-                        (j ^ (j+1000)) * ( Math.sin(x))
+                e.samples.add(new Observation<>(
+                        new Double[]{x},
+                        (j ^ (j + 1000)) * (Math.sin(x))
                 ));
                 j++;
             }
@@ -34,8 +35,8 @@ public class STGPFunctionApproximationTest extends TestCase {
             STGPIndividual best = p.fittest();
             
             //assertTrue(best.depth() > 1);            
-            assertEquals(individuals, p.size());
-            assertNotNull(p.fittest());
+            Assert.assertEquals(individuals, p.size());
+            Assert.assertNotNull(p.fittest());
 
             List<Individual>  firstBest = Lists.newArrayList(p.elites(0.5f));
             
@@ -48,11 +49,11 @@ public class STGPFunctionApproximationTest extends TestCase {
             
             //System.out.println(p.size());
             
-            assertTrue(p.size() < (individuals * 0.8));
+            Assert.assertTrue(p.size() < (individuals * 0.8));
             
             p = e.run();
             
-            assertEquals(individuals, p.size());
+            Assert.assertEquals(individuals, p.size());
             
             for (int i = 0; i < 3; i++) {
                 p.cullThis(0.8f);
@@ -65,7 +66,7 @@ public class STGPFunctionApproximationTest extends TestCase {
             System.out.println(nextBest);
             
             //show some evolution in change of elites
-            assertTrue(!firstBest.equals(nextBest));
+        Assert.assertNotEquals(firstBest, nextBest);
             
 	}
 }

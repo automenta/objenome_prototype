@@ -17,12 +17,9 @@
  */
 package objenome.util.bytecode;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.LineNumberReader;
 import org.junit.Assert;
+
+import java.io.*;
 
 
 /**
@@ -41,11 +38,8 @@ public final class SgAssert {
     private static void writeToFile(final File file, final String src) {
         try {
             // Write to file
-            final FileWriter writer = new FileWriter(file);
-            try {
+            try (FileWriter writer = new FileWriter(file)) {
                 writer.write(src);
-            } finally {
-                writer.close();
             }
 //            // Format with Jalopy
 //            final Jalopy jalopy = new Jalopy();
@@ -60,17 +54,14 @@ public final class SgAssert {
 
     private static String readFromFile(final File file) {
         try {
-            final LineNumberReader lnr = new LineNumberReader(new FileReader(file));
-            try {
-                final StringBuffer sb = new StringBuffer();
+            try (LineNumberReader lnr = new LineNumberReader(new FileReader(file))) {
+                final StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = lnr.readLine()) != null) {
                     sb.append(line);
                     sb.append("\n");
                 }
                 return sb.toString();
-            } finally {
-                lnr.close();
             }
         } catch (final IOException ex) {
             throw new RuntimeException(ex);

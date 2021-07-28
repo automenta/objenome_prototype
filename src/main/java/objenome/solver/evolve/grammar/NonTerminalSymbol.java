@@ -23,7 +23,7 @@ package objenome.solver.evolve.grammar;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 /**
  * A non-terminal node of a parse tree, that was constructed to satisfy a
@@ -294,10 +294,7 @@ public class NonTerminalSymbol implements Symbol {
             if (child instanceof NonTerminalSymbol) {
                 NonTerminalSymbol nt = (NonTerminalSymbol) child;
 
-                boolean valid = false;
-                if ((rule == null) || rule.equals(nt.getGrammarRule())) {
-                    valid = true;
-                }
+                boolean valid = (rule == null) || rule.equals(nt.getGrammarRule());
 
                 if (valid && (n == current + 1)) {
                     // It is this child.
@@ -686,7 +683,7 @@ public class NonTerminalSymbol implements Symbol {
     public boolean equals(Object obj) {
         boolean equal = true;
 
-        if ((obj != null) && (obj instanceof NonTerminalSymbol)) {
+        if ((obj instanceof NonTerminalSymbol)) {
             NonTerminalSymbol otherSymbol = (NonTerminalSymbol) obj;
 
             if (getGrammarRule() == otherSymbol.getGrammarRule()) {
@@ -694,7 +691,7 @@ public class NonTerminalSymbol implements Symbol {
                     Symbol thatChild = otherSymbol.getChild(i);
                     Symbol thisChild = getChild(i);
 
-                    if (!ObjectUtils.equals(thisChild, thatChild)) {
+                    if (!Objects.equals(thisChild, thatChild)) {
                         equal = false;
                         break;
                     }

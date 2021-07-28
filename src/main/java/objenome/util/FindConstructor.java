@@ -1,13 +1,10 @@
 package objenome.util;
 
+import objenome.solution.SetMethodsGPEvolved;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import objenome.solution.SetMethodsGPEvolved;
+import java.util.*;
 
 /**
  * Find constructor with polymorphism! Class.getConstructor only finds an exact
@@ -73,20 +70,20 @@ public class FindConstructor {
         List<Constructor<?>> partiallyApplicableMethods = new ArrayList<>();
 
         int assigned = 0;
-        for (int i = 0; i < toTest.length; i++) {
-            Constructor c = toTest[i];
+        for (Constructor constructor : toTest) {
+            Constructor c = constructor;
             Constructor actual = c;
-            
+
             //if dynamic, Find a matching shadow constructor in the parent class to which gene 
             //Parameters will be mapped against
             Class x = c.getDeclaringClass();
             if (x.getName().endsWith(SetMethodsGPEvolved.DYNAMIC_SUFFIX)) {
                 Class parent = x.getSuperclass();
                 c = parent.getConstructor(c.getParameterTypes());
-                if (c == null)
-                    continue;
+//                if (c == null)
+//                    continue;
             }
-            
+
             // Check the parameters match 
             Parameter[] params = c.getParameters();
             Parameter[] paramsActual = actual.getParameters();
@@ -95,31 +92,30 @@ public class FindConstructor {
 
             int k = 0;
             for (j = 0; j < params.length; j++) {
-                Object specificValue = specific.get(params[j] );
-                
-                if (specificValue!=null) {                    
-                    
-                    if (c!=actual) {
+                Object specificValue = specific.get(params[j]);
+
+                if (specificValue != null) {
+
+                    if (c != actual) {
                         //add a duplicated parameters for the actual (dynamic class's) constructor, 
                         //because a parameter was specified for the shadow class's
                         specific.put(paramsActual[j], specificValue);
                     }
-                    
+
                     assigned++;
-                }                
+                }
                 //TODO parameterTypes may be out of order or missing holes, so allow that
                 else if ((k < parameterTypes.length) && (params[k].getType().isAssignableFrom(parameterTypes[k++]))) {
                     assigned++;
                 }
-                
-                
+
+
             }
-            
+
             // If so, add it to the list 
             if (assigned == params.length) {
                 applicableMethods.add(actual);
-            }
-            else {
+            } else {
                 partiallyApplicableMethods.add(actual);
             }
         }

@@ -51,7 +51,7 @@ public class Sine<X extends Node> extends Numeric1d<X,Number>  {
     public static final String IDENTIFIER = "SIN";
 
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

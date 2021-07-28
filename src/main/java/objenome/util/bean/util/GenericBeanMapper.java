@@ -1,14 +1,14 @@
 package objenome.util.bean.util;
 
-import java.lang.reflect.Method;
-
 import objenome.util.bean.anno.GenericBeanMethod;
 import objenome.util.bean.anno.GenericBeanMethod.Type;
 
+import java.lang.reflect.Method;
+
 public final class GenericBeanMapper {
 
-    private static enum OnNull {
-        THROW_EXCEPTION, RETURN_NULL;
+    private enum OnNull {
+        THROW_EXCEPTION, RETURN_NULL
     }
 
     private GenericBeanMapper() {
@@ -35,7 +35,7 @@ public final class GenericBeanMapper {
         try {
             for (final Object key : (Iterable<Object>) findMethod(src.getClass(), Type.KEYS,
                     OnNull.THROW_EXCEPTION).invoke(src)) {
-                if (isSet == null || ((Boolean) isSet.invoke(src, key)).booleanValue()) {
+                if (isSet == null || (Boolean) isSet.invoke(src, key)) {
                     set.invoke(target, key, get.invoke(src, key));
                 }
             }
@@ -49,7 +49,7 @@ public final class GenericBeanMapper {
         for (final Class<?> iface : clazz.getInterfaces()) {
             for (final Method method : iface.getMethods()) {
                 final GenericBeanMethod anno = method.getAnnotation(GenericBeanMethod.class);
-                if (anno != null && anno.value().equals(type)) {
+                if (anno != null && anno.value() == type) {
                     return method;
                 }
             }

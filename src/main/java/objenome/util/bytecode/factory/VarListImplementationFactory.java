@@ -17,14 +17,9 @@
  */
 package objenome.util.bytecode.factory;
 
+import objenome.util.bytecode.*;
+
 import java.util.List;
-import objenome.util.bytecode.SgArgument;
-import objenome.util.bytecode.SgClass;
-import objenome.util.bytecode.SgClassPool;
-import objenome.util.bytecode.SgConstructor;
-import objenome.util.bytecode.SgField;
-import objenome.util.bytecode.SgMethod;
-import objenome.util.bytecode.SgVariable;
 
 /**
  * Creates an implementation of one ore more interfaces with a predefined number
@@ -118,8 +113,7 @@ public final class VarListImplementationFactory {
 
             // Add all arguments as fields and to the constructor
             final SgConstructor constructor = new SgConstructor(clasz);
-            for (int i = 0; i < vars.size(); i++) {
-                final SgVariable var = vars.get(i);
+            for (final SgVariable var : vars) {
                 clasz.addField(new SgField(clasz, "private", var.getType(), var.getName(), ""));
                 final SgArgument constructorArg = new SgArgument(constructor, var.getModifiers(),
                         var.getType(), var.getName());

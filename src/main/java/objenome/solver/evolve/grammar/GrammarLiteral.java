@@ -78,14 +78,12 @@ public class GrammarLiteral implements GrammarNode {
      * wrapped in quotes and returned. Otherwise the original string is
      * returned unmodified.
      */
-    private String escape(String input) {
+    private static String escape(String input) {
         char[] escapeChars = {'>', '<', '|'};
         if (StringUtils.containsAny(input, escapeChars)) {
-            StringBuilder buffer = new StringBuilder();
-            buffer.append('\"');
-            buffer.append(input);
-            buffer.append('\"');
-            input = buffer.toString();
+            input = '\"' +
+                    input +
+                    '\"';
         }
 
         return input;

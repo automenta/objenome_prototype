@@ -23,27 +23,18 @@ package objenome.solver.evolve.init;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import objenome.solver.evolve.GPContainer;
-import objenome.solver.evolve.InitialisationMethod;
-import objenome.solver.evolve.Population;
-import static objenome.solver.evolve.Population.SIZE;
-import objenome.solver.evolve.RandomSequence;
-import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
-import objenome.solver.evolve.STGPIndividual;
-import static objenome.solver.evolve.STGPIndividual.MAXIMUM_DEPTH;
-import static objenome.solver.evolve.STGPIndividual.RETURN_TYPE;
-import static objenome.solver.evolve.STGPIndividual.SYNTAX;
+import objenome.op.Node;
+import objenome.solver.evolve.*;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.InitialisationEvent;
 import objenome.solver.evolve.event.Listener;
-import objenome.op.Node;
 import objenome.util.TypeUtil;
+
+import java.util.*;
+
+import static objenome.solver.evolve.Population.SIZE;
+import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
+import static objenome.solver.evolve.STGPIndividual.*;
 
 /**
  * Initialisation method which produces <code>STGPIndividual</code>s with full
@@ -144,7 +135,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
 
         if (syntax != null) {
             for (Node n : syntax) {
-                if (n.getArity() == 0) {
+                if (n.arity() == 0) {
                     terminals.add(n);
                 } else {
                     nonTerminals.add(n);
@@ -288,7 +279,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
 
         int randomIndex = random.nextInt(validNodes.size());
         Node root = validNodes.get(randomIndex).newInstance();
-        int arity = root.getArity();
+        int arity = root.arity();
 
         if (arity > 0) {
             // Construct list of arg sets that produce the right return type
@@ -329,7 +320,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         List<Node> validNodes = new ArrayList<>();
         if (remainingDepth > 0) {
             for (Node n : nonTerminals) {
-                Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
+                Class<?>[][] argTypeSets = dataTypeCombinations(n.arity(), dataTypesTable[remainingDepth - 1]);
 
                 for (Class<?>[] argTypes : argTypeSets) {
                     Class<?> type = n.dataType(argTypes);
@@ -349,15 +340,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         return validNodes;
     }
 
-    public final Comparator<Class<?>> classNameComparator = new Comparator<Class<?>>() {
-
-        @Override
-        public int compare(Class<?> o1, Class<?> o2) {
-            return Integer.compare(o1.hashCode(), o2.hashCode());
-            //return String.compare(o1.getName(), o2.getName());
-        }
-        
-    };
+    public final Comparator<Class<?>> classNameComparator = Comparator.comparingInt(Object::hashCode);
     
     /*
      * Generates the "type possibilities table" from the syntax and return
@@ -377,7 +360,7 @@ public class Full implements STGPInitialisation, Listener<ConfigEvent> {
         for (int i = 1; i <= depth; i++) {
             types = new TreeSet<>(classNameComparator); //sorted
             for (Node n : nonTerminals) {
-                Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[i - 1]);
+                Class<?>[][] argTypeSets = dataTypeCombinations(n.arity(), dataTypesTable[i - 1]);
 
                 // Test each possible set of arguments
                 for (Class<?>[] argTypes : argTypeSets) {

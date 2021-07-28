@@ -65,7 +65,7 @@ public class Factorial extends Node {
      */
     @Override
     public Object evaluate() {
-        Object c = getChild(0).evaluate();
+        Object c = node(0).evaluate();
 
         long cint = Math.abs(NumericUtils.asLong(c));
 
@@ -87,7 +87,7 @@ public class Factorial extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

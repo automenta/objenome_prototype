@@ -1,10 +1,11 @@
 // CHECKSTYLE:OFF
 package objenome.util.bytecode;
 
-import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
 
 
 public class SgConstructorTest extends SgBehaviorTest {

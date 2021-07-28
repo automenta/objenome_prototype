@@ -5,16 +5,17 @@
  */
 package objenome.solver;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import objenome.Multitainer;
 import objenome.Objenome;
 import objenome.problem.DecideNumericValue;
 import objenome.problem.Problem;
 import objenome.solution.SetNumericValue;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  *

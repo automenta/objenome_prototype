@@ -31,15 +31,15 @@ public abstract class AbstractIndividual implements Individual {
 
     private static final long serialVersionUID = -4321760091640776785L;
 
-    private Fitness fitness;
+    private Score score;
 
     /**
      * Sets this individual's fitness value
      *
-     * @param fitness the fitness to set
+     * @param score the fitness to set
      */
-    public void setFitness(Fitness fitness) {
-        this.fitness = fitness;
+    public void setScore(Score score) {
+        this.score = score;
     }
 
     /**
@@ -48,8 +48,8 @@ public abstract class AbstractIndividual implements Individual {
      * @return a fitness value for this individual
      */
     @Override
-    public Fitness getFitness() {
-        return fitness;
+    public Score getScore() {
+        return score;
     }
 
     /**
@@ -61,8 +61,8 @@ public abstract class AbstractIndividual implements Individual {
     public AbstractIndividual clone() {
         try {
             AbstractIndividual clone = (AbstractIndividual) super.clone();
-            if (fitness != null) {
-                clone.fitness = fitness.clone();
+            if (score != null) {
+                clone.score = score.clone();
             }
 
             return clone;

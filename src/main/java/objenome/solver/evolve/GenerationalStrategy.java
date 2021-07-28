@@ -21,11 +21,12 @@
  */
 package objenome.solver.evolve;
 
-import java.util.List;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 import objenome.solver.evolve.event.GenerationEvent.StartGeneration;
 import objenome.solver.evolve.event.Listener;
+
+import java.util.List;
 
 /**
  * A <code>GenerationalStrategy</code> is an evolutionary strategy with clearly
@@ -44,10 +45,10 @@ import objenome.solver.evolve.event.Listener;
  * The {@link TerminationCriteria} is obtained from the {@link GPContainer}, using
  * the appropriate <code>ConfigKey</code>. A new population is generated using
  * the pipeline's components, which typically will include a {@link Breeder} and
- * {@link FitnessEvaluator} instances.
+ * {@link ScoreEvaluator} instances.
  *
  * @see Breeder
- * @see FitnessEvaluator
+ * @see ScoreEvaluator
  * @see TerminationCriteria
  */
 public class GenerationalStrategy extends Pipeline implements EvolutionaryStrategy, Listener<ConfigEvent> {
@@ -117,7 +118,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
     }
 
     /**
-     * Looks up the {@link TerminationCriteria} and the {@link FitnessEvaluator}
+     * Looks up the {@link TerminationCriteria} and the {@link ScoreEvaluator}
      * in the {@link GPContainer}.
      */
     protected void setup() {

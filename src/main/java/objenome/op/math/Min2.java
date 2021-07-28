@@ -56,7 +56,7 @@ public class Min2 extends Min {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

@@ -21,8 +21,9 @@
  */
 package objenome.util.random;
 
-import java.util.Random;
 import objenome.solver.evolve.RandomSequence;
+
+import java.util.Random;
 
 /**
  * Provides a mechanism for using Java's random number generation through

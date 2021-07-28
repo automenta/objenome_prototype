@@ -21,12 +21,13 @@
  */
 package objenome.solver.evolve.stat;
 
-import java.util.Arrays;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.Population;
 import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 import objenome.solver.evolve.event.stat.AbstractStat;
+
+import java.util.Arrays;
 
 /**
  * A stat that returns the number of terminals in all program trees in the
@@ -63,7 +64,7 @@ public class GenerationTerminals extends AbstractStat<EndGeneration> {
 
         for (Individual individual : population) {
             if (individual instanceof STGPIndividual) {
-                terminals[index++] = ((STGPIndividual) individual).getRoot().countTerminals();
+                terminals[index++] = ((STGPIndividual) individual).getRoot().terminalCount();
             }
         }
     }

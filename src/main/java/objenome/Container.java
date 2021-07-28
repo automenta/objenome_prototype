@@ -1,21 +1,13 @@
 package objenome;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import objenome.solution.dependency.Builder;
-import objenome.solution.dependency.ClassBuilder;
-import objenome.solution.dependency.Interceptor;
-import objenome.solution.dependency.Scope;
-import objenome.solution.dependency.SetterDependency;
-import objenome.solution.dependency.SingletonBuilder;
+import objenome.solution.dependency.*;
 import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
 import objenome.util.bean.BeanProxyBuilder;
+
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The deterministic implementation of of IoC container.
@@ -70,13 +62,13 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
         String name = InjectionUtils.getKeyName(key);
 
-        if (!builders.containsKey(name)) {
+        Builder c = builders.get(name);
+        if (c == null) {
             if (key instanceof Class)
                 return (T) get((Class)key);
             return null;
         }
 
-        Builder c = builders.get(name);
 
         Scope scope = scopes.get(name);
 
@@ -86,20 +78,13 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
             if (scope == Scope.SINGLETON) {
 
-                boolean needsToCreate = false;
+                boolean needsToCreate;
 
                 synchronized (this) {
 
-                    if (singletonsCache.containsKey(name)) {
-
-                        target = singletonsCache.get(name);
-
-                        return (T) target; // no need to wire again...
-
-                    } else {
-
-                        needsToCreate = true;
-                    }
+                    target = singletonsCache.get(name);
+                    if (target!=null) return (T) target; // no need to wire again...
+                    else needsToCreate = true;
                 }
 
                 if (needsToCreate) {
@@ -117,30 +102,23 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
             } else if (scope == Scope.THREAD) {
 
-                boolean needsToCreate = false;
+                boolean needsToCreate;
 
                 boolean needsToAddToCache = false;
 
-                ThreadLocal<Object> t = null;
+                ThreadLocal<Object> t;
 
                 synchronized (this) {
 
-                    if (threadLocalsCache.containsKey(name)) {
-
-                        t = threadLocalsCache.get(name);
+                    t = threadLocalsCache.get(name);
+                    if (t!=null) {
 
                         target = t.get();
 
-                        if (target == null) { // different thread...
-
-                            needsToCreate = true;
-
-                            // don't return... let it be wired...
-                        } else {
-
-                            return (T) target; // no need to wire again...
-
-                        }
+                        // different thread...
+                        // don't return... let it be wired...
+                        if (target == null) needsToCreate = true;
+                        else return (T) target; // no need to wire again...
 
                     } else {
 
@@ -164,12 +142,9 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
                     t.set(target);
                 }
 
-                if (needsToAddToCache) {
+                if (needsToAddToCache) synchronized (this) {
 
-                    synchronized (this) {
-
-                        threadLocalsCache.put(name, t);
-                    }
+                    threadLocalsCache.put(name, t);
                 }
 
             } else if (scope == Scope.NONE) {
@@ -178,62 +153,47 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
 
                 checkInterceptable(c, target);
 
-            } else {
+            } else throw new UnsupportedOperationException("Don't know how to handle scope: " + scope);
 
-                throw new UnsupportedOperationException("Don't know how to handle scope: " + scope);
-            }
+            if (target != null) for (SetterDependency d : setterDependencies) {
 
-            if (target != null) {
+                // has dependency ?
+                Method m = d.check(target.getClass());
 
-                for (SetterDependency d : setterDependencies) {
+                if (m != null) {
 
-                    // has dependency ?
-                    Method m = d.check(target.getClass());
+                    String sourceKey = d.getSource();
 
-                    if (m != null) {
+                    // cannot depend on itself... also avoid recursive StackOverflow...
+                    if (sourceKey.equals(name)) continue;
 
-                        String sourceKey = d.getSource();
+                    Object source = get(sourceKey);
 
-                        if (sourceKey.equals(name)) {
+                    try {
 
-                            // cannot depend on itself... also avoid recursive StackOverflow...
-                            continue;
+                        // apply
+                        m.invoke(target, source);
 
-                        }
+                    } catch (Exception e) {
 
-                        Object source = get(sourceKey);
+                        throw new RuntimeException("Cannot inject dependency: method = " + (m != null ? m.getName() : "NULL") + " / source = "
+                                + (source != null ? source : "NULL") + " / target = " + target, e);
 
-                        try {
-
-                            // apply
-                            m.invoke(target, source);
-
-                        } catch (Exception e) {
-
-                            throw new RuntimeException("Cannot inject dependency: method = " + (m != null ? m.getName() : "NULL") + " / source = "
-                                    + (source != null ? source : "NULL") + " / target = " + target, e);
-
-                        }
                     }
                 }
             }
 
             return (T) target; // return target nicely with all of dependencies
 
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
 
             throw new RuntimeException(e);
         }
     }
 
-    private final void checkInterceptable(Builder f, Object value) {
-
-        if (f instanceof Interceptor) {
-
-            Interceptor i = (Interceptor) f;
-
+    private void checkInterceptable(Builder f, Object value) {
+        if (f instanceof Interceptor)
             ((Interceptor) f).onCreated(value);
-        }
     }
 
     
@@ -244,20 +204,19 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     }    
     public <T> T the(final Class<? extends T> c) {        
         T existing = get((Object)c);
-        if (existing == null) {
-            return the(c, new ClassBuilder(this, c).instance(this));
-        }
-        return existing;        
+        return existing == null ? the(c, new ClassBuilder(this, c).instance(this)) : existing;
     }
     public <T> T the(Object key, Object value) {        
         return the(key, new SingletonBuilder(value));
     }
+
+//    public <T,X> T the(Object key, X... value) {
+//        return the(key, new SingletonBuilder(value));
+//    }
+
     public <T> T the(Object value) {    
-        T existing = get((Object)value);
-        if (existing == null) {
-            return the(value.getClass(), new SingletonBuilder(value));
-        }
-        return existing;
+        T existing = get(value);
+        return existing == null ? the(value.getClass(), new SingletonBuilder(value)) : existing;
     }
 
     public Map<String, Object> getSingletons() {
@@ -269,13 +228,8 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     @Override
     public <T> T get(final Class<? extends T> c) {
         //if c is actually a key and not an arbitrary class this container has never been told about:
-        String name = InjectionUtils.getKeyName(c);
-        if (builders.containsKey(name)) {
-            return get(name);
-        }
-        
-        ClassBuilder f = getClassBuilder(c);
-        return (T) f.instance(this);
+        T b = get(InjectionUtils.getKeyName(c));
+        return b != null ? b : getClassBuilder(c).instance(this);
     }
 
     @Override
@@ -313,12 +267,10 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     public Builder usable(Object key, Scope scope, Builder factory) {
         Builder b = super.usable(key, scope, factory);
 
-        String keyString = InjectionUtils.getKeyName(key);
         //singletonsCache.remove(keyString); // just in case we are overriding a previous singleton bean...
-        ThreadLocal<Object> threadLocal = threadLocalsCache.remove(keyString); // just in case we are overriding a previous thread local...
-        if (threadLocal != null) {
-            threadLocal.remove();
-        }
+        ThreadLocal<Object> threadLocal = threadLocalsCache.remove(InjectionUtils.getKeyName(key)); // just in case we are overriding a previous thread local...
+        if (threadLocal != null) threadLocal.remove();
+
         return b;
     }
 
@@ -328,46 +280,33 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         if (scope == Scope.SINGLETON) {
             List<ClearableHolder> listToClear = new LinkedList<>();
             synchronized (this) {
-                for (String key : singletonsCache.keySet()) {
-                    Builder factory = builders.get(key);                    
-                    if (factory instanceof Interceptor) {
-                        Interceptor c = (Interceptor) factory;
-                        Object value = singletonsCache.get(key);
-                        listToClear.add(new ClearableHolder(c, value));
-                    }                    
+                for (Map.Entry<String, Object> entry : singletonsCache.entrySet()) {
+                    Builder factory = builders.get(entry.getKey());
+                    if (factory instanceof Interceptor)
+                        listToClear.add(new ClearableHolder((Interceptor) factory, entry.getValue()));
                 }
                 singletonsCache.clear();
             }
             // remove everything inside a non-synchronized block...
-            for (ClearableHolder cp : listToClear) {
-                cp.clear();
-            }
+            for (ClearableHolder cp : listToClear) cp.clear();
         } else if (scope == Scope.THREAD) {
             List<ClearableHolder> listToClear = new LinkedList<>();
             synchronized (this) {
-                for (String key : threadLocalsCache.keySet()) {
-                    Builder factory = builders.get(key);                    
+                for (Map.Entry<String, ThreadLocal<Object>> entry : threadLocalsCache.entrySet()) {
+                    Builder factory = builders.get(entry.getKey());
                     if (factory instanceof Interceptor) {
-                        Interceptor c = (Interceptor) factory;
-                        ThreadLocal<Object> t = threadLocalsCache.get(key);
-                        Object value = t.get();
+                        Object value = entry.getValue().get();
                         // we are ONLY clearing if this thread has something in of threadlocal, in other words,
                         // if of thread has previously requested this key...
-                        if (value != null) {
-                            listToClear.add(new ClearableHolder(c, value));
-                        }
+                        if (value != null) listToClear.add(new ClearableHolder((Interceptor) factory, value));
                     }
                 }
                 // and now we remove all thread locals belonging to this thread...
                 // this will only remove of instances related to this thread...
-                for (ThreadLocal<Object> t : threadLocalsCache.values()) {
-                    t.remove();
-                }
+                for (ThreadLocal<Object> t : threadLocalsCache.values()) t.remove();
             }
             // remove everything inside a non-synchronized block...
-            for (ClearableHolder cp : listToClear) {
-                cp.clear();
-            }
+            for (ClearableHolder cp : listToClear) cp.clear();
         }
     }
 
@@ -386,27 +325,21 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     
     @Override
     public <T> T remove(Object k) {
-        String key = InjectionUtils.getKeyName(k);
-        if (!builders.containsKey(key)) {
+        final String key = InjectionUtils.getKeyName(k);
+        Builder factory = builders.get(key);
+        if (factory==null)
             return null;
-        }
+
         Scope scope = scopes.get(key);
         if (scope == Scope.SINGLETON) {
             ClearableHolder cp = null;
-            Object value = null;
+            Object value;
             synchronized (this) {
                 value = singletonsCache.remove(key);
-                if (value != null) {
-                    Builder factory = builders.get(key);                    
-                    if (factory instanceof Interceptor) {
-                        Interceptor c = (Interceptor) factory;
-                        cp = new ClearableHolder(c, value);
-                    }
-                }
+                if (value != null && factory instanceof Interceptor)
+                    cp = new ClearableHolder((Interceptor) factory, value);
             }
-            if (cp != null) {
-                cp.c.onRemoved(cp.value);
-            }
+            if (cp != null) cp.c.onRemoved(cp.value);
             return (T) value;
         } else if (scope == Scope.THREAD) {
             ClearableHolder cp = null;
@@ -416,51 +349,36 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
                 if (t != null) {
                     Object o = t.get();
                     if (o != null) {
-                        Builder factory = builders.get(key);                    
                         if (factory instanceof Interceptor) {
-                            Interceptor c = (Interceptor) factory;
-                            cp = new ClearableHolder(c, o);
+                            cp = new ClearableHolder((Interceptor) factory, o);
                         }
                         t.remove();
                         retVal = o;
                     }
                 }
             }
-            if (cp != null) {
-                cp.c.onRemoved(cp.value);
-            }
+            if (cp != null) cp.c.onRemoved(cp.value);
             return (T) retVal;
-        } else if (scope == Scope.NONE) {
-            return null; // always...
-        } else {
-            throw new UnsupportedOperationException("Scope not supported: " + scope);
-        }
+        } else if (scope == Scope.NONE) return null; // always...
+        else throw new UnsupportedOperationException("Scope not supported: " + scope);
     }
 
 
     @Override
     public synchronized boolean contains(Object obj) {
         String key = InjectionUtils.getKeyName(obj);
-        if (!builders.containsKey(key)) {
-            return false;
-        }
+        if (!builders.containsKey(key)) return false;
+
         Scope scope = scopes.get(key);
-        if (scope == Scope.NONE) {
-            return false; // always...
-        } else if (scope == Scope.SINGLETON) {
-            return singletonsCache.containsKey(key);
-        } else if (scope == Scope.THREAD) {
+        if (scope == Scope.NONE) return false; // always...
+        else if (scope == Scope.SINGLETON) return singletonsCache.containsKey(key);
+        else if (scope == Scope.THREAD) {
             ThreadLocal<Object> t = threadLocalsCache.get(key);
-            if (t != null) {
-                return t.get() != null;
-            }
-            return false;
-        } else {
-            throw new UnsupportedOperationException("This scope is not supported: " + scope);
-        }
+            return t != null && t.get() != null;
+        } else throw new UnsupportedOperationException("This scope is not supported: " + scope);
     }
 
-    public <X> X bean(Class<? extends X> intrface) {
+    public static <X> X bean(Class<? extends X> intrface) {
         //TODO see if caching the builder's (result of on()) performs best
         return BeanProxyBuilder.on(intrface).build();
     }

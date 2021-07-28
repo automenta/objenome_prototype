@@ -21,9 +21,10 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import java.util.HashSet;
-import objenome.solver.evolve.Fitness;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
+
+import java.util.HashSet;
 
 /**
  * Stats representing the number of different fitness values in a generation.
@@ -33,7 +34,7 @@ public class GenerationFitnessDiversity extends AbstractStat<EndGeneration> {
     /**
      * The number of different fitness values.
      */
-    private int diversity = 0;
+    private int diversity;
 
     /**
      * Constructs a <code>GenerationFitnessDiversity</code>.
@@ -49,10 +50,10 @@ public class GenerationFitnessDiversity extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
+        Score[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         HashSet<String> unique = new HashSet<>();
 
-        for (Fitness fitness : fitnesses) {
+        for (Score fitness : fitnesses) {
             unique.add(fitness.toString());
         }
 

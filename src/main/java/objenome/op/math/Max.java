@@ -45,7 +45,7 @@ public class Max extends Node {
     public Max(int n) {
         this((Node) null);
 
-        setChildren(new Node[n]);
+        setAll(new Node[n]);
     }
 
     /**
@@ -67,42 +67,37 @@ public class Max extends Node {
      */
     @Override
     public Object evaluate() {
-        int arity = getArity();
+        int arity = arity();
 
         Object[] childValues = new Object[arity];
         Class<?>[] types = new Class<?>[arity];
         for (int i = 0; i < arity; i++) {
-            childValues[i] = getChild(i).evaluate();
-            types[i] = childValues[i].getClass();
+            types[i] = (childValues[i] = node(i).evaluate()).getClass();
         }
         Class<?> returnType = TypeUtil.widestNumberType(types);
 
         if (returnType == Double.class) {
             double max = Double.NEGATIVE_INFINITY;
-            for (int i = 0; i < arity; i++) {
-                double value = NumericUtils.asDouble(childValues[i]);
-                max = Math.max(value, max);
-            }
+            for (int i = 0; i < arity; i++)
+                max = Math.max(NumericUtils.asDouble(childValues[i]), max);
+
             return max;
         } else if (returnType == Float.class) {
             float max = Float.NEGATIVE_INFINITY;
             for (int i = 0; i < arity; i++) {
-                float value = NumericUtils.asFloat(childValues[i]);
-                max = Math.max(value, max);
+                max = Math.max(NumericUtils.asFloat(childValues[i]), max);
             }
             return max;
         } else if (returnType == Long.class) {
             long max = Long.MIN_VALUE;
             for (int i = 0; i < arity; i++) {
-                long value = NumericUtils.asLong(childValues[i]);
-                max = Math.max(value, max);
+                max = Math.max(NumericUtils.asLong(childValues[i]), max);
             }
             return max;
         } else if (TypeUtil.isNumericType(returnType)) {
             int max = Integer.MIN_VALUE;
             for (int i = 0; i < arity; i++) {
-                int value = NumericUtils.asInteger(childValues[i]);
-                max = Math.max(value, max);
+                max = Math.max(NumericUtils.asInteger(childValues[i]), max);
             }
             return max;
         } else {
@@ -116,7 +111,7 @@ public class Max extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 
@@ -130,7 +125,7 @@ public class Max extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if (inputTypes.length == getArity()) {
+        if (inputTypes.length == arity()) {
             return TypeUtil.widestNumberType(inputTypes);
         }
         return null;

@@ -1,10 +1,12 @@
 package objenome.solution.dependency;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
 import objenome.Prototainer;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
 import objenome.util.FindMethod;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
 
 public class GenericBuilder<E> implements Builder, Interceptor<E> {
 
@@ -14,7 +16,7 @@ public class GenericBuilder<E> implements Builder, Interceptor<E> {
 
     private final Class<?> type;
 
-    private Interceptor<E> interceptor = null;
+    private Interceptor<E> interceptor;
 
     public GenericBuilder(Object factory, String methodName) {
 
@@ -22,7 +24,7 @@ public class GenericBuilder<E> implements Builder, Interceptor<E> {
 
         try {
 
-            this.method = FindMethod.getMethod(factory.getClass(), methodName, new Class[]{});
+            this.method = FindMethod.getMethod(factory.getClass(), methodName, ArrayUtils.EMPTY_CLASS_ARRAY);
 
             this.method.setAccessible(true);
 

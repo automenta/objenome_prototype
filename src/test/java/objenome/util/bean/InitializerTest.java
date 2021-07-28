@@ -2,17 +2,17 @@ package objenome.util.bean;
 
 import objenome.util.bean.anno.Initializer;
 import objenome.util.bean.anno.InitializerMethod;
+import org.junit.Test;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 public class InitializerTest {
 
     @Initializer(InitTestBean.Init.class)
-    public static interface InitTestBean {
+    public interface InitTestBean {
 
-        static class Init {
+        class Init {
 
             @InitializerMethod
             public static void initialize(InitTestBean bean) {

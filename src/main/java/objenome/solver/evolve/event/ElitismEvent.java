@@ -32,7 +32,7 @@ public abstract class ElitismEvent implements Event {
     /**
      * The current population.
      */
-    private Population population;
+    private final Population population;
 
     /**
      * Constructs a <code>ElitismEvent</code>.
@@ -75,7 +75,7 @@ public abstract class ElitismEvent implements Event {
         /**
          * The elitist individuals.
          */
-        private Individual[] elites;
+        private final Individual[] elites;
 
         /**
          * Constructs an <code>EndElitism</code>.

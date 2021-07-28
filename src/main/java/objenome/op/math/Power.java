@@ -72,12 +72,12 @@ public class Power extends Node {
      */
     @Override
     public Double evaluate() {
-        double c2 = NumericUtils.asDouble(getChild(1).evaluate());
+        double c2 = NumericUtils.asDouble(node(1).evaluate());
 
         if (c2 == 0.0) {
             return 1.0;
         } else {
-            double c1 = NumericUtils.asDouble(getChild(0).evaluate());
+            double c1 = NumericUtils.asDouble(node(0).evaluate());
 
             return Math.pow(c1, c2);
         }
@@ -89,7 +89,7 @@ public class Power extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

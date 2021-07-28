@@ -34,13 +34,13 @@ public interface IndividualSelector {
      *
      * @param population the current population.
      */
-    public void setup(Population population);
+    void setup(Population population);
 
     /**
      * Returns an individual.
      *
      * @return an individual.
      */
-    public Individual select();
+    Individual select();
 
 }

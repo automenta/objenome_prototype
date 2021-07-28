@@ -5,15 +5,17 @@
  */
 package objenome;
 
-import java.util.function.Function;
 import objenome.problem.Between;
-import objenome.solver.IncompleteSolutionException;
 import objenome.problem.numeric.FindZeros;
 import objenome.problem.numeric.OptimizeMultivariate;
+import objenome.solver.IncompleteSolutionException;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import java.util.function.Function;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -67,14 +69,9 @@ public class NumericAnalysisTest {
 
     @Test public void testFindZeros() throws IncompleteSolutionException {
 
-        Objenome o = Objenome.solve(new FindZeros(ExampleScalarFunction.class, 
-                
-                new Function<ExampleScalarFunction, Double>() {            
-                    public Double apply(ExampleScalarFunction s) {                
-                        return s.output(0.0) + s.output(0.5) + s.output(1.0);
-                    }
-                    
-        }), ExampleScalarFunction.class);
+        Objenome o = Objenome.solve(new FindZeros(ExampleScalarFunction.class,
+
+                (Function<ExampleScalarFunction, Double>) s -> s.output(0.0) + s.output(0.5) + s.output(1.0)), ExampleScalarFunction.class);
         
         double bestParam = ((Number)o.getSolutions().get(0)).doubleValue();
         assertEquals(-3.97454, bestParam, 0.001);
@@ -82,14 +79,7 @@ public class NumericAnalysisTest {
 
     @Test public void testMultivariate() throws IncompleteSolutionException {
 
-        Objenome o = Objenome.solve(new OptimizeMultivariate(ExampleMultivariateFunction.class, new Function<ExampleMultivariateFunction, Double>() {
-
-            public Double apply(ExampleMultivariateFunction s) {      
-                double v = s.output(0.0) + s.output(0.5) + s.output(1.0);
-                return v;
-            }
-            
-        }) {
+        Objenome o = Objenome.solve(new OptimizeMultivariate(ExampleMultivariateFunction.class, (Function<ExampleMultivariateFunction, Double>) s -> s.output(0.0) + s.output(0.5) + s.output(1.0)) {
             @Override protected RandomGenerator getRandomGenerator() {
                 JDKRandomGenerator j = new JDKRandomGenerator();  j.setSeed(0); return j;
             }        

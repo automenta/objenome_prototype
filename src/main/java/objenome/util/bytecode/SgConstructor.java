@@ -85,8 +85,8 @@ public final class SgConstructor extends SgBehavior {
      * @return Modifiers and arguments.
      */
     public final String getSignature() {
-        final StringBuffer sb = new StringBuffer();
-        if (getModifiers().length() > 0) {
+        final StringBuilder sb = new StringBuilder();
+        if (!getModifiers().isEmpty()) {
             sb.append(getModifiers());
             sb.append(" ");
         }
@@ -99,7 +99,7 @@ public final class SgConstructor extends SgBehavior {
             sb.append(getArguments().get(i));
         }
         sb.append(")");
-        if (getExceptions().size() > 0) {
+        if (!getExceptions().isEmpty()) {
             sb.append(" throws ");
             for (int i = 0; i < getExceptions().size(); i++) {
                 if (i > 0) {
@@ -116,8 +116,8 @@ public final class SgConstructor extends SgBehavior {
      */
     @Override
     public final String toString() {
-        final StringBuffer sb = new StringBuffer();
-        if (getAnnotations().size() > 0) {
+        final StringBuilder sb = new StringBuilder();
+        if (!getAnnotations().isEmpty()) {
             for (int i = 0; i < getAnnotations().size(); i++) {
                 if (i > 0) {
                     sb.append(" ");
@@ -131,11 +131,11 @@ public final class SgConstructor extends SgBehavior {
             sb.append(";");
         } else {
             sb.append("{\n");
-            if (body.size() == 0) {
+            if (body.isEmpty()) {
                 sb.append("// No method source available\n");
             } else {
-                for (int i = 0; i < body.size(); i++) {
-                    sb.append(body.get(i));
+                for (String s : body) {
+                    sb.append(s);
                     sb.append("\n");
                 }
             }

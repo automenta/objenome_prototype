@@ -21,11 +21,7 @@
  */
 package objenome.solver.evolve.grammar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * One of potentially multiple options that a <code>GrammarRule</code> can
@@ -262,7 +258,7 @@ public class GrammarProduction implements Cloneable {
 
         for (GrammarNode s : grammarNodes) {
             if (s instanceof GrammarLiteral) {
-                buffer.append(s.toString());
+                buffer.append(s);
             }
             if (s instanceof GrammarRule) {
                 buffer.append('<');
@@ -273,17 +269,16 @@ public class GrammarProduction implements Cloneable {
         }
 
         // Append any attributes.
-        if (attributes.size() > 0) {
+        if (!attributes.isEmpty()) {
             buffer.append("<?");
-            Set<String> keys = attributes.keySet();
             int i = 0;
-            for (String k : keys) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
                 if (i != 0) {
                     buffer.append(';');
                 }
-                buffer.append(k);
+                buffer.append(entry.getKey());
                 buffer.append('=');
-                buffer.append(attributes.get(k));
+                buffer.append(entry.getValue());
                 i++;
             }
             buffer.append("?>");

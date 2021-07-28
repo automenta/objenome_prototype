@@ -89,8 +89,8 @@ public abstract class SgBehavior {
         return Collections.unmodifiableList(arguments);
     }
 
-    private static final String commaSeparated(final List<SgArgument> args) {
-        final StringBuffer sb = new StringBuffer();
+    private static String commaSeparated(final List<SgArgument> args) {
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.size(); i++) {
             if (i > 0) {
                 sb.append(",");
@@ -258,8 +258,7 @@ public abstract class SgBehavior {
         if (name == null) {
             throw new IllegalArgumentException("The argument 'name' cannot be NULL!");
         }
-        for (int i = 0; i < annotations.size(); i++) {
-            final SgAnnotation annotation = annotations.get(i);
+        for (final SgAnnotation annotation : annotations) {
             if (annotation.getName().equals(name)) {
                 return true;
             }

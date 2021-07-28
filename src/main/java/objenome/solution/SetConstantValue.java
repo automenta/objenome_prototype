@@ -6,10 +6,11 @@
 package objenome.solution;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import java.util.List;
 import objenome.Phenotainer;
 import objenome.problem.DecideNumericValue;
 import objenome.solver.Solution;
+
+import java.util.List;
 
 abstract public class SetConstantValue<X> extends AtomicDouble implements Solution {
     
@@ -44,4 +45,3 @@ abstract public class SetConstantValue<X> extends AtomicDouble implements Soluti
     /** gets the data value */
     abstract public X getValue();
 }
-

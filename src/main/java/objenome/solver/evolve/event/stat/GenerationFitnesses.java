@@ -21,11 +21,12 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import java.util.Arrays;
-import objenome.solver.evolve.Fitness;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.Population;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
+
+import java.util.Arrays;
 
 /**
  * Stat that provides the fitness values of a generation.
@@ -35,7 +36,7 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
     /**
      * The fitness values.
      */
-    private Fitness[] fitnesses;
+    private Score[] fitnesses;
 
     /**
      * Constructs a <code>GenerationFitnesses</code>.
@@ -52,11 +53,11 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
     @Override
     public void refresh(EndGeneration event) {
         Population<?> population = event.getPopulation();
-        fitnesses = new Fitness[population.size()];
+        fitnesses = new Score[population.size()];
         int index = 0;
 
         for (Individual individual : population) {
-            fitnesses[index++] = individual.getFitness();
+            fitnesses[index++] = individual.getScore();
         }
     }
 
@@ -65,7 +66,7 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
      *
      * @return the fitness values.
      */
-    public Fitness[] getFitnesses() {
+    public Score[] getFitnesses() {
         return fitnesses;
     }
 

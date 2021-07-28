@@ -21,9 +21,10 @@
  */
 package objenome.op.compute;
 
-import java.util.Arrays;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.source.SourceGenerator;
+
+import java.util.Arrays;
 
 /**
  * A BrainfuckInterpreter provides the facility to execute programs in the
@@ -161,8 +162,8 @@ public class BrainfuckInterpreter<T extends Individual> implements Computer<Byte
             reset();
 
             // Set inputs as first x memory cells.
-            for (int j = 0; j < paramSet.length; j++) {
-                memory[i] = paramSet[j];
+            for (Byte aByte : paramSet) {
+                memory[i] = aByte;
             }
 
             // Get the program source code.

@@ -22,9 +22,9 @@
 package objenome.op.math;
 
 import objenome.op.Node;
+import objenome.op.Numeric1d;
 import objenome.util.NumericUtils;
 import objenome.util.TypeUtil;
-import objenome.op.Numeric1d;
 
 /**
  * A node which performs the mathematical exponential function <code>e^x</code>
@@ -63,7 +63,7 @@ public class Exp<X extends Node> extends Numeric1d<X,Number>  {
      */
     @Override
     public Double evaluate() {
-        Object c = getChild(0).evaluate();
+        Object c = node(0).evaluate();
 
         return value(NumericUtils.asDouble(c));
     }
@@ -80,7 +80,7 @@ public class Exp<X extends Node> extends Numeric1d<X,Number>  {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

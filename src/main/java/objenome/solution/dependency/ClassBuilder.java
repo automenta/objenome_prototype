@@ -1,19 +1,5 @@
 package objenome.solution.dependency;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import objenome.AbstractContainer;
 import objenome.Phenotainer;
 import objenome.Prototainer;
@@ -21,6 +7,12 @@ import objenome.util.FindConstructor;
 import objenome.util.FindConstructor.NoDeterministicConstruction;
 import objenome.util.FindMethod;
 import objenome.util.InjectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.*;
 
 
 /**
@@ -34,17 +26,17 @@ public class ClassBuilder implements ConfigurableBuilder {
 
     private final Class<?> klass;
 
-    private Map<String, Object> props = null;
+    private Map<String, Object> props;
 
-    private List<Object> initValues = null;
+    private List<Object> initValues;
 
-    private List<Class<?>> initTypes = null;
+    private List<Class<?>> initTypes;
 
-    private Constructor<?> constructor = null;
+    private Constructor<?> constructor;
 
-    private Map<String, Method> cache = null;
+    private Map<String, Method> cache;
 
-    private boolean useZeroArgumentsConstructor = false;
+    private boolean useZeroArgumentsConstructor;
 
     public final Set<ConstructorDependency> constructorDependencies;
     private List<Parameter> initPrimitives;
@@ -160,7 +152,7 @@ public class ClassBuilder implements ConfigurableBuilder {
         return addInitValue(value, primitive);
     }
 
-    private List<Class<?>> convertToPrimitives(List<Class<?>> list) {
+    private static List<Class<?>> convertToPrimitives(List<Class<?>> list) {
 
         if (list == null) {
             return null;
@@ -192,7 +184,7 @@ public class ClassBuilder implements ConfigurableBuilder {
     private static Class<?>[] getClasses(List<Class<?>> values) {
 
         if (values == null) {
-            return new Class[0];
+            return ArrayUtils.EMPTY_CLASS_ARRAY;
         }
 
         Class<?>[] types = new Class[values.size()];
@@ -221,7 +213,7 @@ public class ClassBuilder implements ConfigurableBuilder {
             else {
 
                 if (missingDependencies!=null) {
-                    missingDependencies.add(new DependencyKey(p, c.toString() + p.toString() ));
+                    missingDependencies.add(new DependencyKey(p, c + p.toString() ));
                 }
                 else {
                     Object obj = values.get(v++);
@@ -282,7 +274,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
                         try {
 
-                            m = klass.getMethod(methodName, new Class[]{primitive});
+                            m = klass.getMethod(methodName, primitive);
 
                         } catch (Exception ex) {
                             // not found!
@@ -307,7 +299,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
             if (m != null) {
 
-                m.invoke(bean, new Object[]{value});
+                m.invoke(bean, value);
             }
 
         } catch (Exception e) {
@@ -368,7 +360,7 @@ public class ClassBuilder implements ConfigurableBuilder {
     @Override
     public <T> T instance(objenome.Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere) {
 
-        Object obj = null;
+        Object obj;
 
         Object[] values = null;
 
@@ -452,10 +444,8 @@ public class ClassBuilder implements ConfigurableBuilder {
                         for (Constructor c : possibleConstructors) {
                             getValues(context, c, initValues, specificParameters, missingDependencies);
                         }
-                    
-                    for (DependencyKey md : missingDependencies) {
-                        simulateAndAddExtraProblemsHere.add(md);
-                    }
+
+                    simulateAndAddExtraProblemsHere.addAll(missingDependencies);
                 }
             }
         }
@@ -471,22 +461,22 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         } catch (Exception e) {
             
-            throw new RuntimeException("Cannot create instance of " + this + " with constructor: " + constructor + ": " + e.toString() + " with values=" + Arrays.toString(values), e);
+            throw new RuntimeException("Cannot create instance of " + this + " with constructor: " + constructor + ": " + e + " with values=" + Arrays.toString(values), e);
         }
 
         //set Bean properties
-        if (props != null && props.size() > 0) {
+        if (props != null && !props.isEmpty()) {
 
             //TODO use entrySet
-            for (String name : props.keySet()) {
-                Object value = props.get(name);
+            for (Map.Entry<String, Object> entry : props.entrySet()) {
+                Object value = entry.getValue();
 
                 if (value instanceof DependencyKey) {
                     DependencyKey dk = (DependencyKey) value;
                     value = ((AbstractContainer)context).get(dk.getKey());
                 }
 
-                setValue(obj, name, value);
+                setValue(obj, entry.getKey(), value);
             }
         }
 
@@ -520,7 +510,7 @@ public class ClassBuilder implements ConfigurableBuilder {
 
         for (Constructor<?> c : constructors) {
 
-            LinkedList<Class<?>> providedInitTypes = null;
+            LinkedList<Class<?>> providedInitTypes;
 
             if (initTypes != null) {
 
@@ -531,7 +521,7 @@ public class ClassBuilder implements ConfigurableBuilder {
                 providedInitTypes = new LinkedList<>();
             }
 
-            LinkedList<Object> providedInitValues = null;
+            LinkedList<Object> providedInitValues;
 
             if (initValues != null) {
 

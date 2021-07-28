@@ -137,8 +137,8 @@ public final class SgMethod extends SgBehavior {
      * @return Modifiers, return type, name and arguments - Always non-null.
      */
     public final String getSignature() {
-        final StringBuffer sb = new StringBuffer();
-        if (getModifiers().length() > 0) {
+        final StringBuilder sb = new StringBuilder();
+        if (!getModifiers().isEmpty()) {
             sb.append(getModifiers());
             sb.append(" ");
         }
@@ -153,7 +153,7 @@ public final class SgMethod extends SgBehavior {
             sb.append(getArguments().get(i));
         }
         sb.append(")");
-        if (getExceptions().size() > 0) {
+        if (!getExceptions().isEmpty()) {
             sb.append(" throws ");
             for (int i = 0; i < getExceptions().size(); i++) {
                 if (i > 0) {
@@ -171,7 +171,7 @@ public final class SgMethod extends SgBehavior {
      * @return Method name and argument names (like "methodXY(a, b, c)").
      */
     public final String getCallSignature() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(getName());
         sb.append("(");
         for (int i = 0; i < getArguments().size(); i++) {
@@ -192,7 +192,7 @@ public final class SgMethod extends SgBehavior {
      *         "methodXY(String, int, boolean)").
      */
     public final String getTypeSignature() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(getName());
         sb.append("(");
         for (int i = 0; i < getArguments().size(); i++) {
@@ -214,7 +214,7 @@ public final class SgMethod extends SgBehavior {
      *         "MethodXY_String_int_boolean").
      */
     public final String getUnderscoredNameAndTypes() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(SgUtils.firstCharUpper(getName()));
         sb.append("_");
         for (int i = 0; i < getArguments().size(); i++) {
@@ -246,8 +246,8 @@ public final class SgMethod extends SgBehavior {
      * @return Source code of the method.
      */
     public final String toString(final boolean showAnnotations) {
-        final StringBuffer sb = new StringBuffer();
-        if (showAnnotations && (getAnnotations().size() > 0)) {
+        final StringBuilder sb = new StringBuilder();
+        if (showAnnotations && (!getAnnotations().isEmpty())) {
             for (int i = 0; i < getAnnotations().size(); i++) {
                 if (i > 0) {
                     sb.append(" ");
@@ -261,11 +261,11 @@ public final class SgMethod extends SgBehavior {
             sb.append(";");
         } else {
             sb.append("{\n");
-            if (body.size() == 0) {
+            if (body.isEmpty()) {
                 sb.append("// No method source available\n");
             } else {
-                for (int i = 0; i < body.size(); i++) {
-                    sb.append(body.get(i));
+                for (String s : body) {
+                    sb.append(s);
                     sb.append("\n");
                 }
             }

@@ -1,23 +1,21 @@
 package objenome.util.bean;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import objenome.util.bean.anno.GenericBeanKeyMethod;
+import objenome.util.bean.anno.GenericBeanKeyProvider;
+import objenome.util.bean.anno.GenericBeanMethod;
+import objenome.util.bean.anno.GenericBeanMethod.Type;
+import org.junit.Test;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import objenome.util.bean.anno.GenericBeanKeyMethod;
-import objenome.util.bean.anno.GenericBeanKeyProvider;
-import objenome.util.bean.anno.GenericBeanMethod;
-import objenome.util.bean.anno.GenericBeanMethod.Type;
 
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class GetGenericTest {
 
@@ -39,7 +37,7 @@ public class GetGenericTest {
     }
 
     public enum MyKeyEnum {
-        NAME, PRENAME, YEAR_OF_BIRTH, ADDRESS, STREET, ZIP, CITY;
+        NAME, PRENAME, YEAR_OF_BIRTH, ADDRESS, STREET, ZIP, CITY
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -105,7 +103,7 @@ public class GetGenericTest {
 
     @Test
     public void testGeneric() {
-        User user = BeanProxyBuilder.<User> on(User.class).build();
+        User user = BeanProxyBuilder.on(User.class).build();
         // ----------------------------------------------------
         assertFalse(user.notNull(MyKeyEnum.NAME));
         assertFalse(user.notNull(MyKeyEnum.PRENAME));
@@ -116,7 +114,7 @@ public class GetGenericTest {
         user.set(MyKeyEnum.PRENAME, "Peter"); //$NON-NLS-1$
         user.setYearOfBirth(1974); // set it directly for fun :-)
 
-        Address address = BeanProxyBuilder.<Address> on(Address.class).build();
+        Address address = BeanProxyBuilder.on(Address.class).build();
         address.setZip((short) 12345);
         address.setCity("Musterstadt"); //$NON-NLS-1$
         user.setAddress(address);
@@ -128,7 +126,7 @@ public class GetGenericTest {
         assertTrue(user.notNull(MyKeyEnum.ADDRESS));
         // ----------------------------------------------------
 
-        Map<MyKeyEnum, Object> mapWithoutAddress = copyToMap(user, new HashMap<MyKeyEnum, Object>());
+        Map<MyKeyEnum, Object> mapWithoutAddress = copyToMap(user, new HashMap<>());
         // remove the address object (the bean Address) from the map
         mapWithoutAddress.remove(MyKeyEnum.ADDRESS);
 
@@ -150,10 +148,10 @@ public class GetGenericTest {
     }
 
     private Map<MyKeyEnum, Object> getExpected() {
-        Map<MyKeyEnum, Object> map = new HashMap<MyKeyEnum, Object>();
+        Map<MyKeyEnum, Object> map = new EnumMap<>(MyKeyEnum.class);
         map.put(MyKeyEnum.NAME, "Fichtner"); //$NON-NLS-1$
         map.put(MyKeyEnum.PRENAME, "Peter"); //$NON-NLS-1$
-        map.put(MyKeyEnum.YEAR_OF_BIRTH, Integer.valueOf(1974));
+        map.put(MyKeyEnum.YEAR_OF_BIRTH, 1974);
         return map;
     }
 

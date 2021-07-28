@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * 
  * @author Peter Fichtner
  */
-@Target(value = ElementType.METHOD)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Unbound {
     // marker, no attributes

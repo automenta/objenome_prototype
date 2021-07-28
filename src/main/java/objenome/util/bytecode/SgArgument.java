@@ -91,15 +91,15 @@ public final class SgArgument extends SgVariable {
      */
     @Override
     public final String toString() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < getAnnotations().size(); i++) {
             sb.append(getAnnotations().get(i));
             sb.append(" ");
         }
-        if (getModifiers().length() == 0) {
-            sb.append(getType().getSourceName() + " " + getName());
+        if (getModifiers().isEmpty()) {
+            sb.append(getType().getSourceName()).append(" ").append(getName());
         } else {
-            sb.append(getModifiers() + " " + getType().getSourceName() + " " + getName());
+            sb.append(getModifiers()).append(" ").append(getType().getSourceName()).append(" ").append(getName());
         }
         return sb.toString();
     }

@@ -1,11 +1,12 @@
 package objenome.evolve;
 
-import objenome.solver.evolve.STGPIndividual;
-import objenome.problem.ProblemSTGP;
-import objenome.solver.evolve.Population;
 import junit.framework.TestCase;
+import objenome.problem.ProblemSTGP;
 import objenome.problem.STGPRegression;
+import objenome.solver.evolve.Population;
+import objenome.solver.evolve.STGPIndividual;
 import objenome.util.BenchmarkSolutions;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class STGPRegressionTest extends TestCase {
@@ -19,8 +20,8 @@ public class STGPRegressionTest extends TestCase {
             STGPIndividual best = p.fittest();
             
             //assertTrue(best.depth() > 1);            
-            assertEquals(100, p.size());
-            assertNotNull(p.fittest());
+            Assert.assertEquals(100, p.size());
+            Assert.assertNotNull(p.fittest());
 
             
             System.out.println(p.fittest());

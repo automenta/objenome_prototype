@@ -37,12 +37,12 @@ public class NumericUtils {
      * @return a <code>Double</code> that is equivalent to the given object or
      * <code>null</code> if the object is not an instance of <code>Number</code>
      */
-    public static Double asDouble(Object o) {
+    public static double asDouble(Object o) {
         if (o instanceof Number) {
             return ((Number) o).doubleValue();
         }
 
-        return null;
+        return Double.NaN;
     }
 
     /**

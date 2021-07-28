@@ -21,11 +21,12 @@
  */
 package objenome.solver.evolve.event.stat;
 
+import objenome.solver.evolve.Individual;
+import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 
 /**
  * Stat that provides best individuals of a run.
@@ -35,7 +36,7 @@ public class RunBestIndividuals extends AbstractStat<EndGeneration> {
     /**
      * The list of best individuals.
      */
-    private List<Individual> best;
+    private final List<Individual> best;
 
     /**
      * Constructs a <code>RunBestIndividuals</code>.
@@ -69,7 +70,7 @@ public class RunBestIndividuals extends AbstractStat<EndGeneration> {
      * @return the best individuals of a run.
      */
     public Individual[] getBestIndividuals() {
-        return best.toArray(new Individual[best.size()]);
+        return best.toArray(new Individual[0]);
     }
 
     /**

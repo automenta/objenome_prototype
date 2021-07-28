@@ -29,24 +29,24 @@ import objenome.solver.evolve.GPContainer.GPKey;
  * this will be performed by evaluating the quality of each individual against
  * problem specific requirements.
  */
-public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
+public class ScoreEvaluator extends ProxyComponent<ScoreFunction> {
 
     /**
      * The key for setting and retrieving the <code>FitnessFunction</code> used
      * by this component.
      */
-    public static final GPKey<FitnessFunction> FUNCTION = new GPKey<>();
-    private FitnessFunction function;
+    public static final GPKey<ScoreFunction> FUNCTION = new GPKey<>();
+    private ScoreFunction function;
 
     /**
      * Constructs a <code>FitnessEvaluator</code>.
      */
-    public FitnessEvaluator() {
+    public ScoreEvaluator() {
         super(FUNCTION);
     }
     
     /** constructs an evaluator with a specific fitness function */
-    public FitnessEvaluator(FitnessFunction f) {
+    public ScoreEvaluator(ScoreFunction f) {
         super(FUNCTION);
         this.function = f;
     }
@@ -64,7 +64,7 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
             this.function.evaluate(population);
         }
         else {
-            FitnessFunction handler = getHandler();
+            ScoreFunction handler = getHandler();
             if (handler == null) {
                 throw new IllegalStateException("The fitness function has not been set.");
             }

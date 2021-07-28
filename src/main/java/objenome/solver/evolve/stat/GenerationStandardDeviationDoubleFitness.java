@@ -21,18 +21,18 @@
  */
 package objenome.solver.evolve.stat;
 
-import objenome.solver.evolve.Fitness;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 import objenome.solver.evolve.event.stat.AbstractStat;
 import objenome.solver.evolve.event.stat.GenerationFitnesses;
-import objenome.solver.evolve.fitness.DoubleFitness;
+import objenome.solver.evolve.score.DoubleScore;
 
 /**
  * Stat that provides the standard deviation fitness value of the population at
  * the end of a generation. This stat can only be used with
  * <code>DoubleFitness</code>.
  *
- * @see DoubleFitness
+ * @see DoubleScore
  */
 public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGeneration> {
 
@@ -56,13 +56,13 @@ public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGe
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
+        Score[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         double average = getConfig().the(GenerationAverageDoubleFitness.class).getAverage();
 
         // Sum the squared differences.
         double sqDiff = 0;
-        for (int i = 0; i < fitnesses.length; i++) {
-            sqDiff += Math.pow(((DoubleFitness) fitnesses[i]).getValue() - average, 2);
+        for (Score fitness : fitnesses) {
+            sqDiff += Math.pow(((DoubleScore) fitness).getValue() - average, 2);
         }
 
         // Take the square root of the average.

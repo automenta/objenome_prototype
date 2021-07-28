@@ -1,13 +1,13 @@
 package objenome;
 
-import java.util.Date;
 import objenome.MultitainerTest.Part;
 import objenome.MultitainerTest.Part0;
 import objenome.solution.dependency.Scope;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+
+import java.util.Date;
+
+import static org.junit.Assert.*;
 
 /** TODO convert this into unit tests */
 public class ContainerTest {
@@ -31,9 +31,9 @@ public class ContainerTest {
 
     }
 
-    public static interface UserDAO {
+    public interface UserDAO {
 
-        public String getUsername(int id);
+        String getUsername(int id);
     }
 
     public static class JdbcUserDAO implements UserDAO {
@@ -57,9 +57,9 @@ public class ContainerTest {
         }
     }
 
-    public static interface AccountDAO {
+    public interface AccountDAO {
 
-        public double getBalance(int id);
+        double getBalance(int id);
     }
 
     public static class JdbcAccountDAO implements AccountDAO {
@@ -186,7 +186,7 @@ public class ContainerTest {
 
         String s2 = c.get("myString");
 
-        assertTrue(s1 == s2); // ==> true ==> same instance
+        assertSame(s1, s2); // ==> true ==> same instance
 
         assertEquals(s1, s2); // ==> true => of course
     }
@@ -300,7 +300,7 @@ public class ContainerTest {
 
         ServiceNeedingDAOandParameter service = c.get(ServiceNeedingDAOandParameter.class);
 
-        Assert.assertNotNull(service.function());
+        assertNotNull(service.function());
     }
 
     /** tests what happens when a key is replaced */
@@ -327,13 +327,13 @@ public class ContainerTest {
         Container c = new Container();
         Part x = c.the("part", new Part0());
         Part y = c.the("part", new Part0());
-        assertTrue(x==y);
+        assertSame(x, y);
         Part z = c.the("part2", new Part0());
-        assertTrue(x!=z);
+        assertNotSame(x, z);
         Part w = c.the(new Part0());
-        assertTrue(w!=z);
+        assertNotSame(w, z);
         Part v = c.the(Part0.class);
-        assertTrue(v==w);
+        assertSame(v, w);
     }
     
     

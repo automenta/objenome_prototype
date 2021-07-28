@@ -21,7 +21,7 @@
  */
 package objenome.op;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 
 /**
@@ -32,7 +32,7 @@ import org.apache.commons.lang3.ObjectUtils;
  *
  * @since 2.0
  */
-public class Literal<X extends Object> extends Node<Void,X> {
+public class Literal<X> extends Node<Void,X> {
 
     protected X value;
 
@@ -65,7 +65,7 @@ public class Literal<X extends Object> extends Node<Void,X> {
      * @return a <code>String</code> representation
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return toString();
     }
 
@@ -93,15 +93,6 @@ public class Literal<X extends Object> extends Node<Void,X> {
         }
     }
 
-    /**
-     * Sets the value of this literal. Implementations of this class may wish to
-     * use this method to delay the setting of a literal's value.
-     *
-     * @param value the value to set for this literal
-     */
-    protected void setValue(X value) {
-        this.value = value;
-    }
 
     /**
      * Returns the current value of this literal
@@ -121,11 +112,7 @@ public class Literal<X extends Object> extends Node<Void,X> {
      */
     @Override
     public String toString() {
-        if (value != null) {
-            return value.toString();
-        } else {
-            return "";
-        }
+        return value != null ? value.toString() : "null";
     }
 
     /**
@@ -145,7 +132,7 @@ public class Literal<X extends Object> extends Node<Void,X> {
         Object objVal = ((Literal) obj).value;
         Object thisVal = value;
 
-        return ObjectUtils.equals(objVal, thisVal);
+        return Objects.equals(objVal, thisVal);
     }
 
     /**
@@ -160,6 +147,9 @@ public class Literal<X extends Object> extends Node<Void,X> {
      */
     @Override
     public Literal clone() {
+        if (!(this instanceof MutableLiteral))
+            return this;
+
         Literal clone = (Literal) super.clone();
 
         clone.value = value;

@@ -45,7 +45,7 @@ public class SeqN extends Node {
     public SeqN(int n) {
         this((Node) null);
 
-        setChildren(new Node[n]);
+        setAll(new Node[n]);
     }
 
     /**
@@ -67,10 +67,8 @@ public class SeqN extends Node {
      */
     @Override
     public Void evaluate() {
-        final int arity = getArity();
-        for (int i = 0; i < arity; i++) {
-            getChild(i).evaluate();
-        }
+        int arity = arity();
+        for (int i = 0; i < arity; i++) node(i).evaluate();
 
         return null;
     }
@@ -81,7 +79,7 @@ public class SeqN extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 
@@ -96,10 +94,6 @@ public class SeqN extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if ((inputTypes.length == getArity()) && TypeUtil.allEqual(inputTypes, Void.class)) {
-            return Void.class;
-        } else {
-            return null;
-        }
+        return (inputTypes.length == arity()) && TypeUtil.allEqual(inputTypes, Void.class) ? Void.class : null;
     }
 }

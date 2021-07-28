@@ -68,7 +68,7 @@ public class Absolute extends Node {
      */
     @Override
     public Object evaluate() {
-        Object c = getChild(0).evaluate();
+        Object c = node(0).evaluate();
 
         Class<?> returnType = TypeUtil.widestNumberType(c.getClass());
 
@@ -95,7 +95,7 @@ public class Absolute extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

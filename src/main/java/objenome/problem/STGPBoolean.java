@@ -21,26 +21,6 @@
  */
 package objenome.problem;
 
-import static com.google.common.collect.Lists.newArrayList;
-import java.util.ArrayList;
-import java.util.List;
-import objenome.solver.evolve.BranchedBreeder;
-import objenome.solver.evolve.Breeder;
-import objenome.solver.evolve.EvolutionaryStrategy;
-import objenome.solver.evolve.FitnessEvaluator;
-import objenome.solver.evolve.GenerationalStrategy;
-import objenome.solver.evolve.Initialiser;
-import objenome.solver.evolve.MaximumGenerations;
-import objenome.solver.evolve.Operator;
-import objenome.solver.evolve.Population;
-import objenome.problem.ProblemSTGP;
-import objenome.solver.evolve.RandomSequence;
-import objenome.solver.evolve.STGPIndividual;
-import objenome.solver.evolve.TerminationCriteria;
-import objenome.solver.evolve.TerminationFitness;
-import objenome.solver.evolve.fitness.DoubleFitness;
-import objenome.solver.evolve.fitness.HitsCount;
-import objenome.solver.evolve.init.Full;
 import objenome.op.Node;
 import objenome.op.Variable;
 import objenome.op.VariableNode;
@@ -48,10 +28,19 @@ import objenome.op.bool.And;
 import objenome.op.bool.Not;
 import objenome.op.bool.Or;
 import objenome.op.lang.If;
+import objenome.solver.evolve.*;
+import objenome.solver.evolve.init.Full;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
 import objenome.solver.evolve.mutate.SubtreeMutation;
-import objenome.util.random.MersenneTwisterFast;
+import objenome.solver.evolve.score.DoubleScore;
+import objenome.solver.evolve.score.HitsCount;
 import objenome.solver.evolve.selection.TournamentSelector;
+import objenome.util.random.MersenneTwisterFast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * This template sets up EpochX to run the 6-bit multiplexer benchmark with the
@@ -83,7 +72,7 @@ import objenome.solver.evolve.selection.TournamentSelector;
  * <code>SubtreeMutation</code>
  * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
  * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
- * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
+ * <li>{@link Initializer#METHOD}: <code>FullInitialisation</code>
  * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
  * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>,
  * <code>OrFunction</code>, <code>NotFunction<code>,
@@ -91,7 +80,7 @@ import objenome.solver.evolve.selection.TournamentSelector;
  * <code>VariableNode("D2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>,
  * <code>VariableNode("D5", Boolean)<code>
  * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
- * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link ScoreEvaluator#FUNCTION}: <code>HitsCount</code>
  * <li>{@link HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>,
  * <code>D2</code>, <code>D3</code>, <code>D4</code>, <code>D5</code>
  * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input
@@ -105,8 +94,8 @@ public class STGPBoolean extends ProblemSTGP {
    
     public static class BooleanCases {
         
-        public final Boolean[][] inputValues;
-        public final Boolean[] expectedOutputs;
+        final Boolean[][] inputValues;
+        final Boolean[] expectedOutputs;
 
         public BooleanCases(Boolean[][] inputValues, Boolean[] expectedOutputs) {
             this.inputValues = inputValues;
@@ -119,17 +108,15 @@ public class STGPBoolean extends ProblemSTGP {
         this(c.inputValues, c.expectedOutputs);        
     }
 
-    public STGPBoolean(Boolean[][] inputValues, Boolean[] expectedOutputs) {
+    private STGPBoolean(Boolean[][] inputValues, Boolean[] expectedOutputs) {
         super();
         
 
         the(Population.SIZE, 100);
         
         
-        the(EvolutionaryStrategy.TERMINATION_CRITERIA, newArrayList(new TerminationCriteria[] {
-            new TerminationFitness(new DoubleFitness.Minimise(0.0)),
-            new MaximumGenerations()
-        }));
+        the(EvolutionaryStrategy.TERMINATION_CRITERIA, newArrayList(new TerminationScore(new DoubleScore.Minimise(0.0)),
+                new MaximumGenerations()));
         
         the(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
         the(STGPIndividual.MAXIMUM_DEPTH, 6);
@@ -138,35 +125,29 @@ public class STGPBoolean extends ProblemSTGP {
         the(TournamentSelector.TOURNAMENT_SIZE, 7);
 
         the(SubtreeCrossover.PROBABILITY, 1.0);
-        the(SubtreeMutation.PROBABILITY, 0.0);
+        the(SubtreeMutation.PROBABILITY, 0.1);
         
-        the(Breeder.OPERATORS, newArrayList(new Operator[] {
-            new SubtreeCrossover(),
-            new SubtreeMutation()           
-        }));
+        the(Breeder.OPERATORS, newArrayList(new SubtreeCrossover(),
+                new SubtreeMutation()));
         
-        the(Initialiser.METHOD, new Full());        
+        the(Initializer.METHOD, new Full());
         the(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
 
         // Setup syntax
-        List<Node> syntaxList = new ArrayList<Node>() {{
+        List<Node> grammar = new ArrayList<>() {{
             add(new And());
             add(new Or());
             add(new Not());
             add(new If());
         }};
-        
-        for (int i = 0; i < inputValues[0].length; i++) {
-            syntaxList.add(new VariableNode(new Variable("b" + i, Boolean.class)));
-        }
+        for (int i = 0; i < inputValues[0].length; i++)
+            grammar.add(new VariableNode(new Variable("b" + i, Boolean.class)));
 
-
-        the(STGPIndividual.SYNTAX, syntaxList.toArray(new Node[syntaxList.size()]));
+        the(STGPIndividual.SYNTAX, grammar.toArray(new Node[0]));
         the(STGPIndividual.RETURN_TYPE, Boolean.class);
 
-
         // Setup fitness function
-        the(FitnessEvaluator.FUNCTION, new HitsCount());
+        the(ScoreEvaluator.FUNCTION, new HitsCount());
         the(HitsCount.INPUT_VALUE_SETS, inputValues);
         the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
     }
@@ -198,33 +179,33 @@ public class STGPBoolean extends ProblemSTGP {
  * The following configuration is used:
  *
  * <li>{@link Population#SIZE}: <code>100</code>
- * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}:
+ * <li>{@link objenome.solver.evolve.GenerationalStrategy#TERMINATION_CRITERIA}:
  * <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
- * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
- * <li>{@link STGPIndividual#MAXIMUM_DEPTH}: <code>6</code>
- * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
- * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
- * <li>{@link Breeder#OPERATORS}: <code>SubtreeCrossover</code>,
+ * <li>{@link objenome.solver.evolve.MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link objenome.solver.evolve.STGPIndividual#MAXIMUM_DEPTH}: <code>6</code>
+ * <li>{@link objenome.solver.evolve.BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link objenome.solver.evolve.selection.TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link objenome.solver.evolve.Breeder#OPERATORS}: <code>SubtreeCrossover</code>,
  * <code>SubtreeMutation</code>
- * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
- * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
+ * <li>{@link objenome.solver.evolve.mutate.SubtreeMutation#PROBABILITY}: <code>0.0</code>
+ * <li>{@link objenome.solver.evolve.mutate.SubtreeCrossover#PROBABILITY}: <code>1.0</code>
  * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
- * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
- * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>,
+ * <li>{@link objenome.solver.evolve.RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link objenome.solver.evolve.STGPIndividual#SYNTAX}: <code>AndFunction</code>,
  * <code>OrFunction</code>, <code>NotFunction<code>,
  * <code>IfFunction<code>, <code>VariableNode("A0", Boolean)<code>, <code>VariableNode("A1", Boolean)<code>,
  * <code>VariableNode("A2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>,
  * <code>VariableNode("D5", Boolean)<code>, <code>VariableNode("D6", Boolean)<code>, <code>VariableNode("D7", Boolean)<code>,
  * <code>VariableNode("D8", Boolean)<code>, <code>VariableNode("D9", Boolean)<code>, <code>VariableNode("D10", Boolean)<code>
- * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
+ * <li>{@link objenome.solver.evolve.STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
  * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
- * <li>{@link HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>,
+ * <li>{@link objenome.solver.evolve.score.HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>,
  * <code>A2</code>, <code>D3</code>, <code>D4</code>, <code>D5</code>,
  * <code>D6</code>, <code>D7</code>, <code>D8</code>, <code>D9</code>,
  * <code>D10</code>
- * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input
+ * <li>{@link objenome.solver.evolve.score.HitsCount#INPUT_VALUE_SETS}: [all possible binary input
  * combinations]
- * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * <li>{@link objenome.solver.evolve.score.HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
  *
  * @since 2.0
  */

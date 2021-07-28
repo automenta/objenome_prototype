@@ -21,8 +21,9 @@
  */
 package objenome.util;
 
-import java.util.function.Function;
 import objenome.problem.STGPBoolean.BooleanCases;
+
+import java.util.function.Function;
 
 /**
  * This class provides correct solutions to various benchmark problems that can
@@ -50,11 +51,7 @@ public final class BenchmarkSolutions {
         return x + x * x + x * x * x;
     }
 
-    public final static Function<Double,Double> XpXXpXXX = new Function<Double,Double>() {
-        @Override public Double apply(Double x) {
-            return cubicRegression(x);
-        }        
-    };
+    public final static Function<Double,Double> XpXXpXXX = BenchmarkSolutions::cubicRegression;
     
     
     /**
@@ -151,7 +148,7 @@ public final class BenchmarkSolutions {
      */
     public static int multiplexerAddressBits(int noBits) {
         int noAddressBits = 0;
-        int noDataBits = 0;
+        int noDataBits;
         do {
             noAddressBits++;
             noDataBits = (int) Math.pow(2, noAddressBits);
@@ -165,11 +162,11 @@ public final class BenchmarkSolutions {
     }
     
     public static BooleanCases multiplexerProblem(int bits) {
-        int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(bits);
+        int noAddressBits = multiplexerAddressBits(bits);
         Boolean[][] inputValues = BooleanUtils.generateBoolSequences(bits);
         Boolean[] expectedOutputs = new Boolean[inputValues.length];
         for (int i = 0; i < inputValues.length; i++) {
-            expectedOutputs[i] = BenchmarkSolutions.multiplexer(inputValues[i], noAddressBits);
+            expectedOutputs[i] = multiplexer(inputValues[i], noAddressBits);
         }
         return new BooleanCases(inputValues, expectedOutputs);
     }

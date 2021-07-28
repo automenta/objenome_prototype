@@ -1,24 +1,15 @@
 package objenome.util.bean;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.HashMap;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class FunctionalRangeTest {
 
-    public static interface FooBar extends Cloneable {
+    public interface FooBar extends Cloneable {
 
         void setFoo(int foo);
 
@@ -28,7 +19,7 @@ public class FunctionalRangeTest {
 
         String getBar();
 
-        Object clone() throws CloneNotSupportedException;
+        Object clone();
 
     }
 
@@ -46,28 +37,28 @@ public class FunctionalRangeTest {
         fooBar.setBar(testString);
         assertEquals("Wrong value of set type", testString, fooBar.getBar()); //$NON-NLS-1$ 
 
-        final int minLength = new HashMap<Object, Object>().toString().length();
+        final int minLength = new HashMap<>().toString().length();
         assertTrue("toString.length <= " + minLength, fooBar.toString().length() > minLength); //$NON-NLS-1$
-        assertFalse("hashCode returned 0", 0 == fooBar.hashCode()); //$NON-NLS-1$
+        assertNotEquals("hashCode returned 0", 0, fooBar.hashCode()); //$NON-NLS-1$
 
         assertEquals(fooBar, fooBar);
 
         // variable because PMD does not like equals(null) very much
         final Object nullObject = null;
-        assertFalse("fooBar equals null", fooBar.equals(nullObject)); //$NON-NLS-1$
-        assertFalse("fooBar equals java.lang.String", fooBar.equals("Classes are not compatible")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertNotEquals("fooBar equals null", nullObject, fooBar); //$NON-NLS-1$
+        assertNotEquals("fooBar equals java.lang.String", "Classes are not compatible", fooBar); //$NON-NLS-1$ //$NON-NLS-2$
 
         final FooBar secondInstance = BeanProxyBuilder.on(FooBar.class).build();
-        assertFalse("fooBar equals unfilled secondInstance", fooBar.equals(secondInstance)); //$NON-NLS-1$
+        assertNotEquals("fooBar equals unfilled secondInstance", fooBar, secondInstance); //$NON-NLS-1$
         secondInstance.setFoo(fooBar.getFoo());
         secondInstance.setBar(fooBar.getBar());
         assertEquals("fooBar equals filled secondInstance", fooBar, secondInstance); //$NON-NLS-1$
 
-        assertFalse("fooBar equals foo", fooBar.equals(BeanProxyBuilder.on(Foo.class).build())); //$NON-NLS-1$
+        assertNotEquals("fooBar equals foo", fooBar, BeanProxyBuilder.on(Foo.class).build()); //$NON-NLS-1$
     }
 
     @Test
-    public void testExternalize() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void testExternalize() throws IOException, ClassNotFoundException {
         final String testString = "Externalizable is working!"; //$NON-NLS-1$
 
         final FooBar ifaceOut = BeanProxyBuilder.on(FooBar.class).build();
@@ -87,7 +78,7 @@ public class FunctionalRangeTest {
     }
 
     @Test
-    public void testClone() throws CloneNotSupportedException {
+    public void testClone() {
         final FooBar ifaceOrig = BeanProxyBuilder.on(FooBar.class).build();
         final FooBar ifaceCloned = (FooBar) ifaceOrig.clone();
 
@@ -96,13 +87,13 @@ public class FunctionalRangeTest {
     }
 
     @Test
-    public void testCloneContent() throws CloneNotSupportedException {
+    public void testCloneContent() {
         final FooBar ifaceOrig = BeanProxyBuilder.on(FooBar.class).build();
         ifaceOrig.setFoo(4711);
 
         final FooBar ifaceCloned = (FooBar) ifaceOrig.clone();
         ifaceOrig.setFoo(ifaceOrig.getFoo() + 1);
-        assertFalse("clone content changed", ifaceOrig.getFoo() == ifaceCloned.getFoo()); //$NON-NLS-1$
+        assertNotEquals("clone content changed", ifaceOrig.getFoo(), ifaceCloned.getFoo()); //$NON-NLS-1$
     }
 
     private interface Foo {

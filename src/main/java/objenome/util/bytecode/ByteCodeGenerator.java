@@ -17,20 +17,13 @@
  */
 package objenome.util.bytecode;
 
+import javassist.*;
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.ProtectionDomain;
 import java.util.List;
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.CtNewConstructor;
-import javassist.CtNewMethod;
-import javassist.LoaderClassPath;
-import javassist.NotFoundException;
 
 /**
  * Creates the byte code for a model class and has some more helper methods.
@@ -142,9 +135,8 @@ public final class ByteCodeGenerator {
     private void addMethods(final SgClass modelClass, final CtClass clasz)
             throws CannotCompileException, NotFoundException {
         final List<SgMethod> methods = modelClass.getMethods();
-        for (int i = 0; i < methods.size(); i++) {
+        for (final SgMethod method : methods) {
 
-            final SgMethod method = methods.get(i);
             // TODO Javassist cannot handle annotations
             final String src = method.toString(false);
             final CtMethod ctMethod = CtNewMethod.make(src, clasz);
@@ -152,7 +144,7 @@ public final class ByteCodeGenerator {
 
             // Add exceptions
             final List<SgClass> exceptions = method.getExceptions();
-            if (exceptions.size() > 0) {
+            if (!exceptions.isEmpty()) {
                 final CtClass[] exceptionTypes = new CtClass[exceptions.size()];
                 for (int j = 0; j < exceptions.size(); j++) {
                     exceptionTypes[j] = pool.get(exceptions.get(j).getName());
@@ -166,18 +158,17 @@ public final class ByteCodeGenerator {
     private void addConstructors(final SgClass modelClass, final CtClass clasz)
             throws CannotCompileException, NotFoundException {
         final List<SgConstructor> constructors = modelClass.getConstructors();
-        for (int i = 0; i < constructors.size(); i++) {
+        for (final SgConstructor constructor : constructors) {
 
-            final SgConstructor constructor = constructors.get(i);
             final String src = constructor.toString();
             final CtConstructor ctConstructor = CtNewConstructor.make(src, clasz);
             clasz.addConstructor(ctConstructor);
 
             // Add exceptions
             final List<SgClass> exceptions = constructor.getExceptions();
-            if (exceptions.size() > 0) {
+            if (!exceptions.isEmpty()) {
                 final CtClass[] exceptionTypes = new CtClass[exceptions.size()];
-                for (int j = 0; j < exceptions.size(); j++) {                    
+                for (int j = 0; j < exceptions.size(); j++) {
                     exceptionTypes[j] = pool.get(exceptions.get(j).getName());
                 }
                 ctConstructor.setExceptionTypes(exceptionTypes);
@@ -186,11 +177,10 @@ public final class ByteCodeGenerator {
         }
     }
 
-    private void addFields(final SgClass modelClass, final CtClass clasz)
+    private static void addFields(final SgClass modelClass, final CtClass clasz)
             throws CannotCompileException {
         final List<SgField> fields = modelClass.getFields();
-        for (int i = 0; i < fields.size(); i++) {
-            final SgField field = fields.get(i);
+        for (final SgField field : fields) {
             final String src = field.toString();
             final CtField ctField = CtField.make(src, clasz);
             clasz.addField(ctField);
@@ -200,9 +190,8 @@ public final class ByteCodeGenerator {
     private void addInterfaces(final SgClass modelClass, final CtClass clasz)
             throws NotFoundException {
         final List<SgClass> interfaces = modelClass.getInterfaces();
-        if (interfaces.size() > 0) {
-            for (int i = 0; i < interfaces.size(); i++) {
-                final SgClass intf = interfaces.get(i);
+        if (!interfaces.isEmpty()) {
+            for (final SgClass intf : interfaces) {
                 clasz.addInterface(pool.get(intf.getName()));
             }
         }
@@ -228,9 +217,7 @@ public final class ByteCodeGenerator {
                 // Create class
                 final CtClass clasz = createCtClass(modelClass);
                 implClass = clasz.toClass(classLoader, domain);
-            } catch (final NotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (final CannotCompileException e) {
+            } catch (final NotFoundException | CannotCompileException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -246,7 +233,7 @@ public final class ByteCodeGenerator {
      * @return Class (if it already exists) or null if it's unknown.
      */
     @SuppressWarnings("unchecked")
-    public Class loadClass(final SgClass modelClass) {
+    public static Class loadClass(final SgClass modelClass) {
         Class implClass;
         try {
             implClass = Class.forName(modelClass.getName());
@@ -267,8 +254,8 @@ public final class ByteCodeGenerator {
      * @return New instance.
      */
     @SuppressWarnings("unchecked")
-    public final Object createInstance(final Class clasz) {
-        return createInstance(clasz, new Class[] {}, new Object[] {});
+    public static Object createInstance(final Class clasz) {
+        return createInstance(clasz, ArrayUtils.EMPTY_CLASS_ARRAY, ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
 
     /**
@@ -285,18 +272,12 @@ public final class ByteCodeGenerator {
      * @return New instance.
      */
     @SuppressWarnings("unchecked")
-    public final Object createInstance(final Class clasz, final Class[] argTypes,
-            final Object[] initArgs) {
+    public static Object createInstance(final Class clasz, final Class[] argTypes,
+                                        final Object[] initArgs) {
         try {
             final Constructor constructor = clasz.getConstructor(argTypes);
             return constructor.newInstance(initArgs);
-        } catch (final NoSuchMethodException ex) {
-            throw new RuntimeException(ex);
-        } catch (final InstantiationException ex) {
-            throw new RuntimeException(ex);
-        } catch (final IllegalAccessException ex) {
-            throw new RuntimeException(ex);
-        } catch (final InvocationTargetException ex) {
+        } catch (final NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException ex) {
             throw new RuntimeException(ex);
         }
 
@@ -337,7 +318,7 @@ public final class ByteCodeGenerator {
     public final Object createInstance(final SgClass clasz) {
 
         final Class newClass = createClass(clasz);
-        return createInstance(newClass, new Class[] {}, new Object[] {});
+        return createInstance(newClass, ArrayUtils.EMPTY_CLASS_ARRAY, ArrayUtils.EMPTY_OBJECT_ARRAY);
 
     }
 

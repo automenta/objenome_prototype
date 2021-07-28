@@ -21,7 +21,7 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import objenome.solver.evolve.Fitness;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 
 /**
@@ -34,7 +34,7 @@ public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
     /**
      * The median fitness value.
      */
-    private Fitness median;
+    private Score median;
 
     /**
      * Constructs a <code>GenerationMedianFitness</code>.
@@ -50,7 +50,7 @@ public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.Sorted.class).getFitnesses();
+        Score[] fitnesses = getConfig().the(GenerationFitnesses.Sorted.class).getFitnesses();
 
         int medianIndex = (int) Math.floor(fitnesses.length / 2);
         median = fitnesses[medianIndex - 1];
@@ -61,7 +61,7 @@ public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
      *
      * @return the median fitness value.
      */
-    public Fitness getMedian() {
+    public Score getMedian() {
         return median;
     }
 

@@ -5,16 +5,18 @@
  */
 package objenome;
 
-import java.util.List;
 import objenome.problem.Between;
 import objenome.solution.SetImplementationClass;
 import objenome.solution.SetIntegerValue;
 import objenome.solution.SetNumericValue;
+import objenome.solver.Solution;
+import org.junit.Test;
+
+import java.util.List;
+
 import static objenome.solution.dependency.Builder.of;
 import static objenome.solution.dependency.Builder.the;
-import objenome.solver.Solution;
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
 /**
  *
@@ -22,10 +24,10 @@ import org.junit.Test;
  */
 public class MultitainerTest {
 
-    public static interface Part { 
-        public int function();    
+    public interface Part {
+        int function();
     }
-    public static interface SubPart { public int function();    }
+    public interface SubPart { int function();    }
 
     public static class SubPart0 implements SubPart {
         @Override public int function() { return 0; }

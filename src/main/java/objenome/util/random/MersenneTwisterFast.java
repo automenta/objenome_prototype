@@ -21,11 +21,12 @@
  */
 package objenome.util.random;
 
+import objenome.solver.evolve.RandomSequence;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import objenome.solver.evolve.RandomSequence;
 
 /**
  * The Mersenne twister is a pseudorandom number generator developed in 1997 by
@@ -92,9 +93,9 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
     private static final int TEMPERING_MASK_B = 0x9d2c5680;
     private static final int TEMPERING_MASK_C = 0xefc60000;
 
-    private int mt[]; // the array for the state vector
+    private int[] mt; // the array for the state vector
     private int mti; // mti==N+1 means mt[N] is not initialized
-    private int mag01[];
+    private int[] mag01;
 
     // a good initial seed (of int size, though stored in a long)
     // private static final long GOOD_SEED = 4357;
@@ -117,7 +118,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
         if (o == this) {
             return true;
         }
-        if ((o == null) || !(o instanceof MersenneTwisterFast)) {
+        if (!(o instanceof MersenneTwisterFast)) {
             return false;
         }
         final MersenneTwisterFast other = (MersenneTwisterFast) o;

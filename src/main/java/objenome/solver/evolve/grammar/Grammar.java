@@ -21,16 +21,13 @@
  */
 package objenome.solver.evolve.grammar;
 
+import objenome.solver.evolve.GPContainer.GPKey;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import objenome.solver.evolve.GPContainer.GPKey;
+import java.util.*;
 
 /**
  * A grammar object is constructed from a context-free language grammar. In the
@@ -141,11 +138,11 @@ public class Grammar {
     /*
      * Reads the contents of the given File and returns it as a String.
      */
-    private String readGrammarFile(File grammarFile) throws IOException {
+    private static String readGrammarFile(File grammarFile) throws IOException {
         BufferedReader input = new BufferedReader(new FileReader(grammarFile));
         StringBuilder grammarStr = new StringBuilder();
 
-        String line = null;
+        String line;
         try {
             while ((line = input.readLine()) != null) {
                 grammarStr.append(line);
@@ -203,7 +200,7 @@ public class Grammar {
                 boolean skip = false;
                 if (grammar.charAt(i) == '\'') {// Single quote
                     ch = '\'';
-                } else if (grammar.charAt(i) == '\'') {// Double quote
+                } else if (grammar.charAt(i) == '\"') {// Double quote
                     ch = '\'';
                 } else if (grammar.charAt(i) == '\\') {// Backslash
                     ch = '\\';
@@ -309,7 +306,7 @@ public class Grammar {
                         buffer.append(ch);
 
                         if (!buffer.toString().equals("::=")) {
-                            throw new MalformedGrammarException("Expected '::=' " + "but found: " + buffer.toString());
+                            throw new MalformedGrammarException("Expected '::=' " + "but found: " + buffer);
                         }
                         // Clear the buffer.
                         buffer = new StringBuilder();
@@ -484,7 +481,7 @@ public class Grammar {
             }
 
             // Test that all rules have a potential exit point.
-            if (isInfinitelyRecursive(rule)) {
+            if (recursesInfinitely(rule)) {
                 throw new MalformedGrammarException("Grammar rule " + rule.getName() + " is infinitely recursive");
             }
         }
@@ -500,15 +497,15 @@ public class Grammar {
      * @return true if the given rule is infinitely recursive, and false
      * otherwise.
      */
-    protected boolean isInfinitelyRecursive(GrammarRule rule) {
-        return rule.isRecursive() && isInfinitelyRecursive(rule, rule, new ArrayList<>());
+    protected boolean recursesInfinitely(GrammarRule rule) {
+        return rule.isRecursive() && recursesInfinitely(rule, rule, new ArrayList<>());
     }
 
     /*
      * Recursive helper method for isInfinitelyRecursive(GrammarRule).
      */
-    private boolean isInfinitelyRecursive(GrammarRule rule, GrammarRule currentRule,
-            List<GrammarRule> path) {
+    private static boolean recursesInfinitely(GrammarRule rule, GrammarRule currentRule,
+                                       List<GrammarRule> path) {
         path.add(currentRule);
         boolean ref = true;
 
@@ -518,19 +515,18 @@ public class Grammar {
             List<GrammarNode> nodes = p.getGrammarNodes();
 
             if (nodes.contains(rule)) {
-                continue outer;
             } else {
                 for (GrammarNode n : nodes) {
                     if (n instanceof GrammarRule) {
                         GrammarRule r = (GrammarRule) n;
 
-                        if (path.contains(r) || isInfinitelyRecursive(rule, r, path)) {
+                        if (path.contains(r) || recursesInfinitely(rule, r, path)) {
                             continue outer;
                         }
                     }
                 }
                 ref = false;
-                break outer;
+                break;
             }
         }
 
@@ -555,7 +551,7 @@ public class Grammar {
     /*
      * Recursive helper for setRecursiveness().
      */
-    private void setRecursiveness(List<GrammarRule> path, GrammarRule current) {
+    private static void setRecursiveness(List<GrammarRule> path, GrammarRule current) {
         // Check for recursiveness then step down.
         if (path.contains(current)) {
             // Then everything in the path is recursive.
@@ -573,9 +569,7 @@ public class Grammar {
                         continue;
                     }
 
-                    GrammarRule nt = (GrammarRule) p.getGrammarNode(j);
-
-                    setRecursiveness(new ArrayList<>(path), nt);
+                    setRecursiveness(new ArrayList<>(path), (GrammarRule) p.getGrammarNode(j));
                 }
             }
         }
@@ -585,7 +579,7 @@ public class Grammar {
      * Processes a special rule. Currently the only supported special rule is
      * key value pairs.
      */
-    private void processSpecialRule(String command, GrammarProduction production) {
+    private static void processSpecialRule(String command, GrammarProduction production) {
         String[] commands = command.split(";");
 
         for (String c : commands) {
@@ -597,7 +591,7 @@ public class Grammar {
     /*
      * Recursive helper that calculates the minimum depth of the current symbol.
      */
-    private int getMinDepth(List<GrammarRule> path, GrammarNode currentSymbol) {
+    private static int getMinDepth(List<GrammarRule> path, GrammarNode currentSymbol) {
         if (!(currentSymbol instanceof GrammarRule)) {
             return 0;
         }

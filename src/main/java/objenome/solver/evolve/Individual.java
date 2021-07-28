@@ -27,7 +27,7 @@ import java.io.Serializable;
  * An instance of <code>Individual</code> represents one candidate solution to a
  * specific problem. The only responsibility of an individual is to provide a
  * fitness that is an indicator of the solution's quality. A typical
- * implementation would allow a fitness to be set by a {@link FitnessEvaluator}
+ * implementation would allow a fitness to be set by a {@link ScoreEvaluator}
  * during an evolutionary run.
  */
 public interface Individual extends Serializable, Cloneable, Comparable<Individual> {
@@ -38,13 +38,13 @@ public interface Individual extends Serializable, Cloneable, Comparable<Individu
      *
      * @return the fitness of this individual
      */
-    public Fitness getFitness();
+    Score getScore();
 
     /**
      * Returns a copy of this individual.
      *
      * @return a copy of this individual.
      */
-    public Individual clone();
+    Individual clone();
 
 }

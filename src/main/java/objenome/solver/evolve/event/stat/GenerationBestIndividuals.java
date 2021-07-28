@@ -21,11 +21,12 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import java.util.ArrayList;
-import java.util.List;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.Population;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Stat that provides the best individuals of a generation.
@@ -80,7 +81,7 @@ public class GenerationBestIndividuals extends AbstractStat<EndGeneration> {
      * @return the best individuals.
      */
     public Individual[] getBestIndividuals() {
-        return best.toArray(new Individual[best.size()]);
+        return best.toArray(new Individual[0]);
     }
 
     /**

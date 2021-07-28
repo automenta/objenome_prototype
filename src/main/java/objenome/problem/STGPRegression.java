@@ -21,26 +21,6 @@
  */
 package objenome.problem;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-import objenome.solver.evolve.BranchedBreeder;
-import objenome.solver.evolve.Breeder;
-import objenome.solver.evolve.EvolutionaryStrategy;
-import objenome.solver.evolve.FitnessEvaluator;
-import objenome.solver.evolve.GenerationalStrategy;
-import objenome.solver.evolve.Initialiser;
-import objenome.solver.evolve.MaximumGenerations;
-import objenome.solver.evolve.Operator;
-import objenome.solver.evolve.Population;
-import objenome.problem.ProblemSTGP;
-import objenome.solver.evolve.RandomSequence;
-import objenome.solver.evolve.STGPIndividual;
-import objenome.solver.evolve.TerminationCriteria;
-import objenome.solver.evolve.TerminationFitness;
-import objenome.solver.evolve.fitness.DoubleFitness;
-import objenome.solver.evolve.fitness.HitsCount;
-import objenome.solver.evolve.init.Full;
 import objenome.op.Node;
 import objenome.op.Variable;
 import objenome.op.VariableNode;
@@ -48,10 +28,17 @@ import objenome.op.math.Add;
 import objenome.op.math.DivisionProtected;
 import objenome.op.math.Multiply;
 import objenome.op.math.Subtract;
+import objenome.solver.evolve.*;
+import objenome.solver.evolve.init.Full;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
 import objenome.solver.evolve.mutate.SubtreeMutation;
-import objenome.util.random.MersenneTwisterFast;
+import objenome.solver.evolve.score.DoubleScore;
+import objenome.solver.evolve.score.HitsCount;
 import objenome.solver.evolve.selection.TournamentSelector;
+import objenome.util.random.MersenneTwisterFast;
+
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * This template sets up EpochX to run the cubic regression benchmark with the
@@ -71,13 +58,13 @@ import objenome.solver.evolve.selection.TournamentSelector;
  * <code>SubtreeMutation</code>
  * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
  * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
- * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
+ * <li>{@link Initializer#METHOD}: <code>FullInitialisation</code>
  * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
  * <li>{@link STGPIndividual#SYNTAX}: <code>AddFunction</code>,
  * <code>SubtractFunction</code>, <code>MultiplyFunction<code>,
  * <code>DivisionProtectedFunction<code>, <code>VariableNode("X", Double)<code>
  * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Double</code>
- * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link ScoreEvaluator#FUNCTION}: <code>HitsCount</code>
  * <li>{@link HitsCount#POINT_ERROR}: <code>0.01</code>
  * <li>{@link HitsCount#INPUT_VARIABLES}: <code>X</code>
  * <li>{@link HitsCount#INPUT_VALUE_SETS}: [20 random values between -1.0 and
@@ -88,7 +75,7 @@ import objenome.solver.evolve.selection.TournamentSelector;
  */
 public class STGPRegression extends ProblemSTGP {
 
-    int functionPoints;
+    final int functionPoints;
     
     public final Variable x;
     
@@ -104,22 +91,21 @@ public class STGPRegression extends ProblemSTGP {
         this.functionPoints = functionPoints;
         
         the(Population.SIZE, 100);
-        List<TerminationCriteria> criteria = new ArrayList<>();
-        criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
-        criteria.add(new MaximumGenerations());
-        the(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
+
+        the(EvolutionaryStrategy.TERMINATION_CRITERIA, List.of(new TerminationScore(new DoubleScore.Minimise(0.0)), new MaximumGenerations()));
         the(MaximumGenerations.MAXIMUM_GENERATIONS, 150);
         the(STGPIndividual.MAXIMUM_DEPTH, 6);
 
         the(Breeder.SELECTOR, new TournamentSelector());
         the(TournamentSelector.TOURNAMENT_SIZE, 7);
-        List<Operator> operators = new ArrayList<>();
-        operators.add(new SubtreeCrossover());
-        operators.add(new SubtreeMutation());
-        the(Breeder.OPERATORS, operators);
+
+
+        the(Breeder.OPERATORS, List.of(
+            new SubtreeCrossover(), new SubtreeMutation())
+        );
         the(SubtreeCrossover.PROBABILITY, 1.0);
-        the(SubtreeMutation.PROBABILITY, 0.0);
-        the(Initialiser.METHOD, new Full());
+        the(SubtreeMutation.PROBABILITY, 0.1);
+        the(Initializer.METHOD, new Full());
 
         RandomSequence randomSequence = new MersenneTwisterFast();
         the(RandomSequence.RANDOM_SEQUENCE, randomSequence);
@@ -144,7 +130,7 @@ public class STGPRegression extends ProblemSTGP {
         }
 
         // Setup fitness function
-        the(FitnessEvaluator.FUNCTION, new HitsCount());
+        the(ScoreEvaluator.FUNCTION, new HitsCount());
         the(HitsCount.POINT_ERROR, 0.01);
         the(HitsCount.INPUT_VALUE_SETS, inputsGiven);
         the(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);

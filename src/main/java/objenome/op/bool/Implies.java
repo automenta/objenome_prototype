@@ -65,10 +65,10 @@ public class Implies extends Node {
      */
     @Override
     public Boolean evaluate() {
-        boolean result = ((Boolean) getChild(0).evaluate());
+        boolean result = ((Boolean) node(0).evaluate());
 
         if (result) {
-            result = !((Boolean) getChild(1).evaluate());
+            result = !((Boolean) node(1).evaluate());
         }
 
         return !result;
@@ -80,7 +80,7 @@ public class Implies extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

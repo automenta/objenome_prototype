@@ -63,7 +63,7 @@ public class AreaHyperbolicSine extends Node {
      */
     @Override
     public Double evaluate() {
-        Object c = getChild(0).evaluate();
+        Object c = node(0).evaluate();
 
         return MathUtils.arsinh(NumericUtils.asDouble(c));
     }
@@ -74,7 +74,7 @@ public class AreaHyperbolicSine extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

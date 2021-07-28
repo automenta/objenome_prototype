@@ -1,26 +1,16 @@
 package objenome.util.bean;
 
-import static objenome.util.bean.Annotations.isAnnotated;
-import static objenome.util.bean.anno.GenericBeanMethod.Type.GENERIC_GET;
-import static objenome.util.bean.anno.GenericBeanMethod.Type.GENERIC_SET;
-import static objenome.util.bean.anno.GenericBeanMethod.Type.IS_SET;
-import static objenome.util.bean.anno.GenericBeanMethod.Type.KEYS;
+import objenome.util.bean.anno.GenericBeanKeyMethod;
+import objenome.util.bean.anno.GenericBeanKeyProvider;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import objenome.util.bean.anno.GenericBeanKeyMethod;
-import objenome.util.bean.anno.GenericBeanKeyProvider;
+import static objenome.util.bean.Annotations.isAnnotated;
+import static objenome.util.bean.anno.GenericBeanMethod.Type.*;
 
 public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
 
@@ -34,8 +24,8 @@ public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
     public ProxyInvocationHandlerGenericSupport(final Collection<Class<?>> ifaces,
             final ProxyInvocationHandler delegate) {
         this.delegate = delegate;
-        final Map<Object, Method> localGetters = new HashMap<Object, Method>();
-        final Map<Object, Method> localSetters = new HashMap<Object, Method>();
+        final Map<Object, Method> localGetters = new HashMap<>();
+        final Map<Object, Method> localSetters = new HashMap<>();
         try {
             fillMaps(ifaces, localGetters, localSetters);
         } catch (final Exception e) {
@@ -47,7 +37,7 @@ public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
     }
 
     private Set<Object> determineKeys(final Map<Object, Method> gm, final Map<Object, Method> sm) {
-        final Set<Object> result = new HashSet<Object>(gm.keySet().size() + sm.keySet().size());
+        final Set<Object> result = new HashSet<>(gm.keySet().size() + sm.keySet().size());
         result.addAll(gm.keySet());
         result.addAll(sm.keySet());
         return result;
@@ -93,7 +83,7 @@ public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
         return annotationType.getMethod("value"); //$NON-NLS-1$
     }
 
-    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, CloneNotSupportedException {
         if (isAnnotated(method, GENERIC_GET)) {
             return this.getters.get(args[0]).invoke(proxy);
         } else if (isAnnotated(method, GENERIC_SET)) {
@@ -101,7 +91,7 @@ public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
         } else if (isAnnotated(method, KEYS)) {
             return this.keys;
         } else if (isAnnotated(method, IS_SET)) {
-            return Boolean.valueOf(this.delegate.isSet(proxy, this.getters.get(args[0])));
+            return this.delegate.isSet(proxy, this.getters.get(args[0]));
         } else {
             return this.delegate.invoke(proxy, method, args);
         }

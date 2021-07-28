@@ -13,7 +13,7 @@ public class Scalar extends Literal<Double> implements DiffableFunction {
 
     private double upperBound = Double.POSITIVE_INFINITY;
     private double lowerBound = Double.NEGATIVE_INFINITY;
-    private String name = "";
+    private final String name;
 
     public Scalar(double value, String name) {
         super(value);
@@ -27,11 +27,7 @@ public class Scalar extends Literal<Double> implements DiffableFunction {
 
     @Override
     public double partialDerive(Scalar parameter) {
-        if (this == parameter) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return this == parameter ? 1 : 0;
     }
 
 

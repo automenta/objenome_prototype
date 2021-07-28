@@ -5,11 +5,12 @@
  */
 package objenome.util;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
 import objenome.op.DiffableFunction;
 import objenome.op.Scalar;
 import org.apache.commons.math3.linear.ArrayRealVector;
+
+import java.lang.reflect.Array;
+import java.util.Collection;
 
 /**
  *
@@ -18,14 +19,12 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 public class Utils {
 
     public static <T> T[] toArray(final Collection c) {
-        return (T[]) c.toArray((T[]) Array.newInstance(c.iterator().next().getClass(), c.size()));
+        return (T[]) c.toArray((Object[]) Array.newInstance(c.iterator().next().getClass(), c.size()));
     }
 
     public static double[] join(double[] state, double action) {
         double[] xs = new double[state.length + 1];
-        for (int i = 0; i < state.length; ++i) {
-            xs[i] = state[i];
-        }
+        System.arraycopy(state, 0, xs, 0, state.length);
         xs[xs.length - 1] = action;
         return xs;
     }
@@ -35,7 +34,7 @@ public class Utils {
         if (result == null)
             result = new ArrayRealVector(parameters.length);
         
-        double d[] = result.getDataRef();
+        double[] d = result.getDataRef();
         for (int i = 0; i < parameters.length; ++i) {
             d[i] = f.partialDerive(parameters[i]);
         }

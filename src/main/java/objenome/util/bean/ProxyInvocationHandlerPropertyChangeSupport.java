@@ -1,20 +1,16 @@
 package objenome.util.bean;
 
-import static objenome.util.bean.Annotations.isAnnotated;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyDescriptor;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
-import java.lang.reflect.Method;
-import java.util.Collection;
-
 import objenome.util.bean.anno.IgnoreVeto;
 import objenome.util.bean.anno.PropertyChangeEventMethod.Type;
 import objenome.util.bean.anno.Unbound;
 import objenome.util.bean.listener.BeanListenerSupport;
 import objenome.util.bean.listener.BeanListenerSupportSoftRef;
+
+import java.beans.*;
+import java.lang.reflect.Method;
+import java.util.Collection;
+
+import static objenome.util.bean.Annotations.isAnnotated;
 
 /**
  * ProxyInvocationHandler that supports PropertyChangeSupport.
@@ -26,8 +22,8 @@ public class ProxyInvocationHandlerPropertyChangeSupport extends ProxyInvocation
     private static final long serialVersionUID = 0L;
 
     // TODO switch Soft/Hard
-    private BeanListenerSupport<PropertyChangeListener> propertyChangeListeners = new BeanListenerSupportSoftRef<PropertyChangeListener>();
-    private BeanListenerSupport<VetoableChangeListener> vetoableChangeListeners = new BeanListenerSupportSoftRef<VetoableChangeListener>();
+    private BeanListenerSupport<PropertyChangeListener> propertyChangeListeners = new BeanListenerSupportSoftRef<>();
+    private BeanListenerSupport<VetoableChangeListener> vetoableChangeListeners = new BeanListenerSupportSoftRef<>();
 
     public ProxyInvocationHandlerPropertyChangeSupport(final Class<?> proxiedIface, final Collection<Class<?>> ifaces) {
         super(proxiedIface, ifaces);
@@ -36,7 +32,7 @@ public class ProxyInvocationHandlerPropertyChangeSupport extends ProxyInvocation
         // PropertyChangeListener/VetoableChangeListener)
     }
 
-    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws IllegalArgumentException, CloneNotSupportedException {
         if (args != null && args.length == 1) {
             if (isAnnotated(method, Type.ADD_LISTENER)) {
                 addPropertyChangeListener((PropertyChangeListener) args[0]);

@@ -21,10 +21,11 @@
  */
 package objenome.op.compute;
 
-import javax.script.Invocable;
-import javax.script.ScriptException;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.source.SourceGenerator;
+
+import javax.script.Invocable;
+import javax.script.ScriptException;
 
 /**
  * A GroovyInterpreter provides the facility to evaluate individual Groovy
@@ -85,9 +86,7 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
             for (int i = 0; i < noParamSets; i++) {
                 results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
             }
-        } catch (final ScriptException ex) {
-            ex.printStackTrace();
-        } catch (final NoSuchMethodException ex) {
+        } catch (final ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }
 
@@ -116,12 +115,10 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
             getEngine().eval(code);
 
             // Evaluate each argument set.
-            for (int i = 0; i < noParamSets; i++) {
-                invocableEngine.invokeFunction("expr", argValues[i]);
+            for (Object[] argValue : argValues) {
+                invocableEngine.invokeFunction("expr", argValue);
             }
-        } catch (ScriptException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchMethodException ex) {
+        } catch (ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }
     }
@@ -158,7 +155,7 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
      * method containing the given program.
      */
     private String getExecCode(String program, String[] argNames) {
-        final StringBuffer code = new StringBuffer();
+        final StringBuilder code = new StringBuilder();
 
         code.append("public Object expr(");
         for (int i = 0; i < argNames.length; i++) {

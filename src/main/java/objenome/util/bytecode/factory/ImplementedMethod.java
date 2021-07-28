@@ -17,10 +17,11 @@
  */
 package objenome.util.bytecode.factory;
 
-import java.util.ArrayList;
-import java.util.List;
 import objenome.util.bytecode.SgClass;
 import objenome.util.bytecode.SgMethod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class to cache implementation's new methods.
@@ -80,7 +81,7 @@ final class ImplementedMethod {
      * @return Copy of the internal method list.
      */
     public final Class<?>[] getInterfaces() {
-        return interfaces.toArray(new Class<?>[interfaces.size()]);
+        return interfaces.toArray(new Class<?>[0]);
     }
 
     /**
@@ -107,7 +108,7 @@ final class ImplementedMethod {
      */
     @Override
     public String toString() {
-        return method.getTypeSignature() + " => " + interfaces + "";
+        return method.getTypeSignature() + " => " + interfaces;
     }
     
 }

@@ -94,7 +94,7 @@ public class InvertProtected extends Node {
      */
     @Override
     public Double evaluate() {
-        double c = NumericUtils.asDouble(getChild(0).evaluate());
+        double c = NumericUtils.asDouble(node(0).evaluate());
 
         if (c == 0) {
             return protectionValue;
@@ -109,7 +109,7 @@ public class InvertProtected extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

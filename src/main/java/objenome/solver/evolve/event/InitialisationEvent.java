@@ -21,13 +21,13 @@
  */
 package objenome.solver.evolve.event;
 
-import objenome.solver.evolve.Initialiser;
+import objenome.solver.evolve.Initializer;
 import objenome.solver.evolve.Population;
 
 /**
  * Base class for initialisation related events.
  *
- * @see Initialiser
+ * @see Initializer
  */
 public abstract class InitialisationEvent implements Event {
 
@@ -45,7 +45,7 @@ public abstract class InitialisationEvent implements Event {
         /**
          * The population at the end of the initialisation.
          */
-        private Population population;
+        private final Population population;
 
         /**
          * Constructs a <code>EndInitialisation</code>.

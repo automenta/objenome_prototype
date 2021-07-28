@@ -1,41 +1,36 @@
 /*
  * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
- * 
+ *
  * This file is part of EpochX: genetic programming software for research
- * 
+ *
  * EpochX is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * EpochX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * The latest version is available from: http://www.epochx.org
  */
 package objenome.op;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import objenome.util.TypeUtil;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ObjectUtils;
+
+import java.util.*;
 
 /**
  * A <code>Node</code> is a vertex in a tree structure which represents a
  * program. A node can be thought of as an expression in a computer programming
  * language. Evaluating a node will involve evaluating any children and
  * optionally returning a value.
- *
+ * <p>
  * Subclasses of <code>Node</code> should ensure they call the superclass
  * constructor with all child nodes so information such as the arity of the node
  * can be maintained. Concrete subclasses must also implement
@@ -49,12 +44,14 @@ import org.apache.commons.lang3.ObjectUtils;
  *
  * @since 2.0
  */
-public abstract class Node<X extends Node, Y extends Object> implements Cloneable {
+public abstract class Node<X extends Node, Y> implements Cloneable {
 
     // TODO Consider renaming to EpoxNode
     protected X[] children;
 
     protected Node parent;
+
+    boolean cloned;
 
     /**
      * Constructs a new <code>Node</code> with the given child nodes. The arity
@@ -64,8 +61,9 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @param children child nodes to this node
      */
+    @SafeVarargs
     public Node(X... children) {
-        setChildren(children);
+        setAll(children);
     }
 
     /**
@@ -82,10 +80,10 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * Returns a specific child by index
      *
      * @param index the index of the child to be returned, valid indexes run
-     * from <code>0</code> to <code>getArity()-1</code>
+     *              from <code>0</code> to <code>getArity()-1</code>
      * @return the child node at the specified index
      */
-    public X getChild(final int index) {
+    public X node(final int index) {
         return children[index];
     }
 
@@ -95,7 +93,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @return the node that this node is a child of
      */
-    public Node getParent() {
+    public Node parent() {
         return parent;
     }
 
@@ -106,8 +104,8 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @return an array of this node's children
      */
-    public X[] getChildren() {
-        return ArrayUtils.clone(children);
+    public X[] arrayClone() {
+        return children.clone();
     }
 
     /**
@@ -117,9 +115,31 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @param children the nodes to set as children in order
      */
-    public void setChildren(X... children) {
+    @SafeVarargs
+    public final void setAll(X... children) {
+        ensureMutability();
+
         // Must be careful to maintain the integrity of parent
-        this.children = Arrays.copyOf(children, children.length);
+        this.children =
+                children.length > 0 ?
+                        Arrays.copyOf(children, children.length) :
+                        children;
+    }
+
+    /** call before any modifications */
+    private void ensureMutability() {
+        if (cloned) {
+            //if (!isConstant()) {
+            Node[] cc = children.clone();
+            int n = children.length;
+            for (int i = 0; i < n; i++) {
+                if (cc[i] != null)
+                    cc[i] = cc[i].clone();
+            }
+            children = (X[]) cc;
+            _dataType = null; //invalidate
+            cloned = false;
+        }
     }
 
     /**
@@ -177,7 +197,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * 0th node, since it does not make sense for an object to be able to
      * replace itself.
      *
-     * @param n the index of the node to replace
+     * @param n       the index of the node to replace
      * @param newNode the node to be stored at the specified position
      * @throws IndexOutOfBoundsException if <code>n</code> is out of range
      */
@@ -195,15 +215,17 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * Recursive helper for the public setNode(int, Node)
      */
     private Node setNode(int n, Node newNode, int current) {
-        int arity = getArity();
+        ensureMutability();
+
+        int arity = arity();
         for (int i = 0; i < arity; i++) {
             if (current + 1 == n) {
-                Node old = getChild(i);
-                setChild(i, (X)newNode);
+                Node old = node(i);
+                setChild(i, (X) newNode);
                 return old;
             }
 
-            Node child = getChild(i);
+            Node child = node(i);
             int childLength = child.length();
 
             // Only look at the subtree if it contains the right range of nodes
@@ -242,8 +264,8 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
     /*
      * Recursive helper function for nthNonTerminalIndex
      */
-    private int nthNonTerminalIndex(int n, int functionCount, int nodeCount, Node current) {
-        if (current.isNonTerminal() && (n == functionCount)) {
+    private static int nthNonTerminalIndex(int n, int functionCount, int nodeCount, Node current) {
+        if (!current.isTerminal() && (n == functionCount)) {
             return nodeCount;
         }
 
@@ -292,7 +314,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * Recursive helper function for nthTerminalIndex
      */
     private int nthTerminalIndex(int n, int terminalCount, int nodeCount, Node current) {
-        if (current.getArity() == 0) {
+        if (current.arity() == 0) {
             if (n == terminalCount++) {
                 return nodeCount;
             }
@@ -301,7 +323,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
         int result = -1;
         for (Node child : children) {
             int noNodes = child.length();
-            int noTerminals = child.countTerminals();
+            int noTerminals = child.terminalCount();
 
             // Only look at the subtree if it contains the right range of nodes
             if (n <= noTerminals + terminalCount) {
@@ -360,15 +382,20 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * Replaces the child node at the specified index with the given node
      *
      * @param index the index of the child to replace, from <code>0</code> to
-     * <code>getArity()-1</code>
+     *              <code>getArity()-1</code>
      * @param child the child node to be stored at the specified position
      */
     public void setChild(int index, X child) {
+        if (children[index] == child)
+            return; //no change
+
+        ensureMutability();
+
         children[index] = child;
 
-        if (child != null) {
+        if (child != null)
             child.parent = this;
-        }
+
     }
 
     /**
@@ -378,8 +405,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @return the number of children required by this node
      */
-    public int getArity() {
-        
+    public final int arity() {
         return children.length;
     }
 
@@ -388,13 +414,14 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @return the number of terminal nodes in this node tree
      */
-    public int countTerminals() {
+    public int terminalCount() {
         if (isTerminal()) {
             return 1;
         } else {
             int result = 0;
-            for (int i = 0; i < getArity(); i++) {
-                result += getChild(i).countTerminals();
+            int n = arity();
+            for (int i = 0; i < n; i++) {
+                result += node(i).terminalCount();
             }
             return result;
         }
@@ -423,12 +450,12 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
     public List<Node> listTerminals() {
         List<Node> terminals = new ArrayList<>();
 
-        int arity = getArity();
+        int arity = arity();
         if (isTerminal()) {
             terminals.add(this);
         } else {
             for (int i = 0; i < arity; i++) {
-                terminals.addAll(getChild(i).listTerminals());
+                terminals.addAll(node(i).listTerminals());
             }
         }
         return terminals;
@@ -444,8 +471,8 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
             return 0;
         } else {
             int result = 1;
-            for (int i = 0; i < getArity(); i++) {
-                result += getChild(i).countNonTerminals();
+            for (int i = 0; i < arity(); i++) {
+                result += node(i).countNonTerminals();
             }
             return result;
         }
@@ -462,7 +489,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
         // Remove duplicates. Cannot use equals because that compares children
         List<String> identifiers = new ArrayList<>();
         for (Node f : nonTerminals) {
-            String name = f.getIdentifier();
+            String name = f.id();
             if (!identifiers.contains(name)) {
                 identifiers.add(name);
             }
@@ -480,12 +507,12 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
     public List<Node> listNonTerminals() {
         List<Node> nonTerminals = new ArrayList<>();
 
-        if (isNonTerminal()) {
+        if (!isTerminal()) {
             // Add this node as a function and search its child nodes.
             nonTerminals.add(this);
 
-            for (int i = 0; i < getArity(); i++) {
-                nonTerminals.addAll(getChild(i).listNonTerminals());
+            for (int i = 0; i < arity(); i++) {
+                nonTerminals.addAll(node(i).listNonTerminals());
             }
         }
 
@@ -506,17 +533,15 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * A private helper function for depth() which recurses down the node
      * tree to determine the deepest node's depth
      */
-    private int depth(Node rootNode, int currentDepth, int depth) {
+    private static int depth(Node rootNode, int currentDepth, int depth) {
         if (currentDepth > depth) {
             depth = currentDepth;
         }
 
-        int arity = rootNode.getArity();
+        int arity = rootNode.arity();
         if (arity > 0) {
-            for (int i = 0; i < arity; i++) {
-                Node childNode = rootNode.getChild(i);
-                depth = depth(childNode, (currentDepth + 1), depth);
-            }
+            for (int i = 0; i < arity; i++)
+                depth = depth(rootNode.node(i), (currentDepth + 1), depth);
         }
         return depth;
     }
@@ -534,14 +559,13 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * A private recursive helper function for length() which traverses the
      * the node tree counting the number of nodes
      */
-    private int length(Node rootNode, int length) {
+    private static int length(Node rootNode, int length) {
         length++;
 
-        int arity = rootNode.getArity();
+        int arity = rootNode.arity();
         if (arity > 0) {
             for (int i = 0; i < arity; i++) {
-                Node childNode = rootNode.getChild(i);
-                length = length(childNode, length);
+                length = length(rootNode.node(i), length);
             }
         }
         return length;
@@ -554,7 +578,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @return a <code>String</code> identifier for this node.
      */
-    public abstract String getIdentifier();
+    public abstract String id();
 
     /**
      * Returns the data-type of this node based on the child nodes that are
@@ -566,18 +590,18 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * children remain unset or are of an invalid data-type
      */
     public final Class<?> dataType() {
-        Class<?>[] argTypes = new Class<?>[getArity()];
-        final int arity = getArity();
-        for (int i = 0; i < arity; i++) {
-            Node child = getChild(i);
-            if (child != null) {
-                argTypes[i] = child.dataType();
-            } else {
-                return null;
-            }
-        }
-        return dataType(argTypes);
+        final Class<?> d = _dataType;
+        if (d == null) {
+            int arity = arity();
+            Class<?>[] argTypes = new Class<?>[arity];
+            for (int i = 0; i < arity; i++)
+                argTypes[i] = node(i).dataType();
+
+            return this._dataType = dataType(argTypes);
+        } else
+            return d;
     }
+    private transient Class<?> _dataType;
 
     /**
      * Returns this node's return type given the provided input data-types. The
@@ -589,28 +613,13 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * types are invalid then <code>null</code> should be returned.
      *
      * @param inputTypes the set of input data-types for which to get the return
-     * type.
+     *                   type.
      * @return the return type of this node given the provided input types, or
      * null if the set of input types is invalid.
+     * Either the widest type or null if not valid
      */
     public Class dataType(Class... inputTypes) {
-        if (isTerminal()) {
-            return Void.class;
-        } else {
-            // Either the widest type or null if not valid
-            return TypeUtil.getSuper(inputTypes);
-        }
-    }
-
-    /**
-     * Returns <code>true</code> if this node has an arity of greater than
-     * <code>0</code>.
-     *
-     * @return <code>true</code> if this node is a non-terminal, and
-     * <code>false</code> otherwise.
-     */
-    public boolean isNonTerminal() {
-        return (getArity() > 0);
+        return isTerminal() ? Void.class : TypeUtil.getSuper(inputTypes);
     }
 
     /**
@@ -620,7 +629,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * <code>false</code> otherwise
      */
     public boolean isTerminal() {
-        return (getArity() == 0);
+        return arity() == 0;
     }
 
     /**
@@ -628,13 +637,13 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      */
     @Override
     public int hashCode() {
-        int result = getIdentifier().hashCode();
-        for (final Node child : children) {
-            if (child != null) {
-                result = 37 * result + child.hashCode();
-            }
-        }
-        return result;
+        return Objects.hash(id(), Arrays.hashCode(children));
+//        for (final Node child : children) {
+//            if (child != null) {
+//                result = 37 * result + child.hashCode();
+//            }
+//        }
+//        return result;
     }
 
     /**
@@ -646,26 +655,18 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      */
     @Override
     public Node clone() {
+        Node clone;
         try {
-            Node clone = (Node) super.clone();
-
-            clone.children = children.clone();
-            for (int i = 0; i < children.length; i++) {
-                clone.children[i] = children[i]; // TODO Don't think we need
-                // this line.
-                if (clone.children[i] != null) {
-                    clone.children[i] = clone.children[i].clone();
-                }
-            }
-
-            return clone;
+            clone = (Node) super.clone();
         } catch (final CloneNotSupportedException e) {
-            assert false;
-            // This shouldn't ever happen - if it does then everythings going to
-            // blow up anyway.
+            throw new Error("");
         }
-        return null;
+        clone.cloned = true;
+        clone._dataType = _dataType;
+        clone.children = children;
+        return clone;
     }
+
 
     /**
      * Constructs a new instance of this node-type. Rather than copying the node
@@ -678,16 +679,14 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      *
      * @return a copy of this <code>Node</code> with all children removed
      */
-    public Node newInstance() {
+    @Deprecated public Node newInstance() {
         try {
             Node n = (Node) super.clone();
             n.children = new Node[children.length];
             return n;
         } catch (final CloneNotSupportedException e) {
-            assert false;
+            throw new Error();
         }
-
-        return null;
     }
 
     /**
@@ -701,27 +700,17 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      */
     @Override
     public boolean equals(Object obj) {
-        boolean equal = true;
+        if (this == obj)
+            return true;
 
-        if (obj instanceof Node) {
-            Node n = (Node) obj;
+        if (!(obj instanceof Node)) return false;
 
-            if (n.getArity() != getArity()) {
-                equal = false;
-            } else if (!getIdentifier().equals(n.getIdentifier())) {
-                equal = false;
-            } else {
-                for (int i = 0; (i < n.getArity()) && equal; i++) {
-                    Node thatChild = n.getChild(i);
-                    Node thisChild = getChild(i);
+        Node n = (Node) obj;
+        int a = n.arity();
+        if (a != arity() || !id().equals(n.id()))
+            return false;
 
-                    equal = ObjectUtils.equals(thisChild, thatChild);
-                }
-            }
-        } else {
-            equal = false;
-        }
-        return equal;
+        return Arrays.equals(children, n.children);
     }
 
     /**
@@ -731,7 +720,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      * <pre>
      * identifier(children)
      * </pre>
-     *
+     * <p>
      * where <code>identifier</code> is the node's identifier as returned by
      * <code>getIdentifier</code>, and <code>children</code> is a space
      * separated list of child nodes, according to their <code>toString</code>
@@ -741,7 +730,7 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(getIdentifier());
+        StringBuilder builder = new StringBuilder(id());
         builder.append('(');
         for (int i = 0, n = children.length; i < n; i++) {
             Node c = children[i];
@@ -752,15 +741,12 @@ public abstract class Node<X extends Node, Y extends Object> implements Cloneabl
             if (c == null) {
                 builder.append('X');
             } else {
-                builder.append(c.toString());
+                builder.append(c);
             }
         }
         builder.append(')');
         return builder.toString();
     }
 
-    public boolean allConstDescendants() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 }

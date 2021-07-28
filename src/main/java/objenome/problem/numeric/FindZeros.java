@@ -5,14 +5,13 @@
  */
 package objenome.problem.numeric;
 
-import java.util.List;
-import java.util.function.Function;
 import objenome.Objenome;
 import objenome.solution.SetNumericValue;
 import objenome.solver.NumericSolver;
-import objenome.solver.Solution;
-import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.BisectionSolver;
+
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Find zeros of a scalar function within a range
@@ -31,15 +30,11 @@ public class FindZeros<C> extends NumericSolver<C> {
             //bind variables values to objenome
             
             SetNumericValue var = variables.get(0);
-            Solution sol = var;
-            
-            double best = solver.solve(1000, new UnivariateFunction() {
-                @Override
-                public double value(final double d) {
-                    var.setValue(d);
-                    return eval(o);
-                }
-            }, getMin(var, sol), getMax(var, sol)); //var.getMin().doubleValue(), var.getMax().doubleValue());
+
+            double best = solver.solve(1000, d -> {
+                var.setValue(d);
+                return eval(o);
+            }, getMin(var, var), getMax(var, var)); //var.getMin().doubleValue(), var.getMax().doubleValue());
             
             var.setValue(best);
         } else {

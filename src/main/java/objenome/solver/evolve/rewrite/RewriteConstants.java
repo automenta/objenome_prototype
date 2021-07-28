@@ -23,8 +23,8 @@
  */
 package objenome.solver.evolve.rewrite;
 
-import objenome.solver.evolve.STGPIndividual;
 import objenome.op.Node;
+import objenome.solver.evolve.STGPIndividual;
 
 /**
  * Rewrite any parts of the tree that are constant with a simple constant value.
@@ -67,8 +67,8 @@ public class RewriteConstants implements RewriteRule {
 
         // if we could not rewrite the entire node, rewrite as many children as
         // we can
-        for (int i = 0; i < node.getChildren().length; i++) {
-            Node childNode = node.getChildren()[i];
+        for (int i = 0; i < node.arrayClone().length; i++) {
+            Node childNode = node.arrayClone()[i];
             rewrite = rewriteNode(childNode);
             if (rewrite != null) {
                 node.setChild(i, rewrite);
@@ -87,7 +87,7 @@ public class RewriteConstants implements RewriteRule {
      * @param parentNode The node to attempt rewrite.
      * @return The rewritten node, or original node, if no rewrite could happen.
      */
-    private Node tryNodeRewrite(Node parentNode) {
+    private static Node tryNodeRewrite(Node parentNode) {
         return null;
 
 //        Node result = null;

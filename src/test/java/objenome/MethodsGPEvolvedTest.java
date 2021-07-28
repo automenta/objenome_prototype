@@ -5,19 +5,22 @@
  */
 package objenome;
 
-import java.util.List;
-import objenome.solution.SetMethodsGPEvolved;
 import objenome.solution.SetDoubleValue;
+import objenome.solution.SetMethodsGPEvolved;
 import objenome.solver.Solution;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  *
  * @author me
+ * TODO
  */
+@Ignore
 public class MethodsGPEvolvedTest {
 
     abstract public static class ExampleUnknownMethod {
@@ -43,7 +46,7 @@ public class MethodsGPEvolvedTest {
     }
     
     @Test
-    public void testAbstractClass1() throws Exception {
+    public void testAbstractClass1() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 
         Multitainer a = new Multitainer();
         
@@ -61,7 +64,7 @@ public class MethodsGPEvolvedTest {
         Object result = c.get(ExampleUnknownMethod.class);
         
         assertNotNull(result);
-        assertTrue(!result.getClass().getName().equals(ExampleUnknownMethod.class.getName()));
+        assertNotEquals(result.getClass().getName(), ExampleUnknownMethod.class.getName());
         assertEquals(ExampleUnknownMethod.class, result.getClass().getSuperclass());
 
         

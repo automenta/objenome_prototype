@@ -1,10 +1,11 @@
 package example;
 
+import objenome.problem.Between;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import objenome.problem.Between;
 
 public class OptimizeRuntimeSpeedExample {
 

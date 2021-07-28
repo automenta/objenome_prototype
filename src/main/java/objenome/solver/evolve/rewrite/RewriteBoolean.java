@@ -23,8 +23,8 @@
  */
 package objenome.solver.evolve.rewrite;
 
-import objenome.solver.evolve.STGPIndividual;
 import objenome.op.Node;
+import objenome.solver.evolve.STGPIndividual;
 
 /**
  * Basic rewrite rules for boolean expressions.
@@ -43,7 +43,7 @@ public class RewriteBoolean implements RewriteRule {
      * @param node The node to check.
      * @return True if the value is a true const.
      */
-    private boolean isTrue(Node node) {
+    private static boolean isTrue(Node node) {
         Object v = node.evaluate();
         if (v instanceof Boolean) {
             return ((Boolean) v);
@@ -60,7 +60,7 @@ public class RewriteBoolean implements RewriteRule {
      * @param node The node to check.
      * @return True if the value is a false const.
      */
-    private boolean isFalse(Node node) {
+    private static boolean isFalse(Node node) {
         return !isTrue(node);
         /*
          if (node.getTemplate() == StandardExtensions.EXTENSION_CONST_SUPPORT) {
@@ -101,8 +101,8 @@ public class RewriteBoolean implements RewriteRule {
         rewrittenParent = tryAnd(rewrittenParent);
 
         // try children
-        for (int i = 0; i < rewrittenParent.getChildren().length; i++) {
-            final Node childNode = rewrittenParent.getChildren()[i];
+        for (int i = 0; i < rewrittenParent.arrayClone().length; i++) {
+            final Node childNode = rewrittenParent.arrayClone()[i];
             final Node rewriteChild = internalRewrite(childNode);
             if (childNode != rewriteChild) {
                 rewrittenParent.setChild(i, rewriteChild);
@@ -121,8 +121,8 @@ public class RewriteBoolean implements RewriteRule {
      */
     private Node tryAnd(final Node parent) {
         //if (parent.getTemplate() == StandardExtensions.EXTENSION_AND) {
-        final Node child1 = parent.getChildren()[0];
-        final Node child2 = parent.getChildren()[1];
+        final Node child1 = parent.arrayClone()[0];
+        final Node child2 = parent.arrayClone()[1];
 
         if (isTrue(child1)) /*&& child2.getTemplate() != StandardExtensions.EXTENSION_CONST_SUPPORT)*/ {
             this.rewritten = true;

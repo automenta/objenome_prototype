@@ -21,9 +21,10 @@
  */
 package objenome.solver.evolve.source;
 
+import objenome.solver.evolve.Individual;
+
 import java.util.HashMap;
 import java.util.Map;
-import objenome.solver.evolve.Individual;
 
 /**
  *
@@ -31,9 +32,9 @@ import objenome.solver.evolve.Individual;
 public class CachedSourceGenerator<T extends Individual> implements SourceGenerator<T> {
 
     // The cache of fitness scores
-    private Map<Object, String> cache;
+    private final Map<Object, String> cache;
 
-    private SourceGenerator<T> delegate;
+    private final SourceGenerator<T> delegate;
 
     public CachedSourceGenerator(SourceGenerator<T> delegate) {
         this.delegate = delegate;

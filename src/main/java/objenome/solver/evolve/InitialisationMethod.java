@@ -33,20 +33,20 @@ public interface InitialisationMethod<I extends Individual> {
      * The key for setting and retrieving whether the initialisation method
      * should allow duplicate individuals or not
      */
-    public static final GPKey<Boolean> ALLOW_DUPLICATES = new GPKey<>();
+    GPKey<Boolean> ALLOW_DUPLICATES = new GPKey<>();
 
     /**
      * Returns a newly created individual.
      *
      * @return a newly created individual.
      */
-    public I createIndividual();
+    I createIndividual();
 
     /**
      * Returns a population of new individuals.
      *
      * @return a population of new individuals.
      */
-    public Population<I> createPopulation(Population<I> survivors, GPContainer config);
+    Population<I> createPopulation(Population<I> survivors, GPContainer config);
 
 }

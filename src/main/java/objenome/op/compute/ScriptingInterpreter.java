@@ -21,14 +21,15 @@
  */
 package objenome.op.compute;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.source.SourceGenerator;
 import objenome.util.Utils;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The ScriptingInterpreter provides a generic interpreter for any language
@@ -57,7 +58,7 @@ import objenome.util.Utils;
 public class ScriptingInterpreter<I,T extends Individual,O> implements Computer<I,T,O> {
 
     // The language specific scripting engine.
-    private ScriptEngine engine;
+    private final ScriptEngine engine;
 
     private SourceGenerator<T> generator;
 
@@ -121,7 +122,7 @@ public class ScriptingInterpreter<I,T extends Individual,O> implements Computer<
             Object[] paramSet = argValues[i];
 
             try {
-                for (int j = 0; j < noParams; i++) {
+                for (int j = 0; j < noParams; j++) {
                     engine.put(argNames[j], paramSet[j]);
                 }
                 results.set(i, (O)engine.eval(expression));

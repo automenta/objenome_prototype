@@ -5,11 +5,11 @@
  */
 package objenome.op;
 
-import java.util.function.Function;
-import objenome.op.Node;
 import objenome.util.NumericUtils;
 import objenome.util.TypeUtil;
 import org.apache.commons.math3.analysis.UnivariateFunction;
+
+import java.util.function.Function;
 
 /**
  * 1-input numeric function.
@@ -27,7 +27,7 @@ abstract public class Numeric1<X extends Node, Y extends Number> extends Node<X,
     }
     
     @Override
-    public String getIdentifier() {
+    public String id() {
         return getClass().getSimpleName().toUpperCase();
     }
     
@@ -36,7 +36,7 @@ abstract public class Numeric1<X extends Node, Y extends Number> extends Node<X,
     
     /** returns the one scalar input */
     public X input() {
-        return getChild(0);
+        return node(0);
     }
     
     /**

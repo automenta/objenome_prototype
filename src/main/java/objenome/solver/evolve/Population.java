@@ -21,19 +21,19 @@
  */
 package objenome.solver.evolve;
 
+import objenome.solver.evolve.GPContainer.GPKey;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import objenome.solver.evolve.GPContainer.GPKey;
 
 /**
  * A <code>Population</code> is an ordered collection of {@link Individual}s.
+ * TODO make serializable
  */
 public class Population<I extends Individual> implements Iterable<I>, Cloneable {
 
-    // TODO: make it serializable
     /**
      * The key for setting and retrieving the population size configuration
      * parameter.
@@ -109,7 +109,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
     }
 
     public Individual[] elites(float percent) {
-        return elites((int)(percent * size()));
+        return elites(Math.round(percent * size()));
     }
     
     public void clear() {
@@ -168,13 +168,7 @@ public class Population<I extends Individual> implements Iterable<I>, Cloneable 
      * individuals' fitness from best to worst.
      */
     public void sort() {
-        Collections.sort(individuals, new Comparator<Individual>() {
-
-            @Override
-            public int compare(Individual o1, Individual o2) {
-                return o2.compareTo(o1);
-            }
-        });
+        individuals.sort(Comparator.reverseOrder());
     }
 
     /**

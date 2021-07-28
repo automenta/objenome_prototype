@@ -67,8 +67,8 @@ public class LessThan extends Node {
      */
     @Override
     public Boolean evaluate() {
-        Object c1 = getChild(0).evaluate();
-        Object c2 = getChild(1).evaluate();
+        Object c1 = node(0).evaluate();
+        Object c2 = node(1).evaluate();
 
         double value1 = NumericUtils.asDouble(c1);
         double value2 = NumericUtils.asDouble(c2);
@@ -82,7 +82,7 @@ public class LessThan extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

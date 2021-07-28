@@ -57,7 +57,7 @@ public class Seq3 extends SeqN {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 }

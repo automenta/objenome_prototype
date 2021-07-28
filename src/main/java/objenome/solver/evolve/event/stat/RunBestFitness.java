@@ -21,7 +21,7 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import objenome.solver.evolve.Fitness;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 
 /**
@@ -32,7 +32,7 @@ public class RunBestFitness extends AbstractStat<EndGeneration> {
     /**
      * The best fitness value of a run.
      */
-    private Fitness best;
+    private Score best;
 
     /**
      * Constructs a <code>RunBestFitness</code>.
@@ -48,7 +48,7 @@ public class RunBestFitness extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness generationBest = event.getPopulation().getConfig().get(GenerationBestFitness.class).getBest();
+        Score generationBest = event.getPopulation().getConfig().get(GenerationBestFitness.class).getBest();
 
         if (best == null || generationBest.compareTo(best) > 0) {
             best = generationBest;
@@ -60,7 +60,7 @@ public class RunBestFitness extends AbstractStat<EndGeneration> {
      *
      * @return the best fitness value.
      */
-    public Fitness getBest() {
+    public Score getBest() {
         return best;
     }
 

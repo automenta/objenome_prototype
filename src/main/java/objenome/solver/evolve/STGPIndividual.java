@@ -21,9 +21,10 @@
  */
 package objenome.solver.evolve;
 
-import objenome.solver.evolve.GPContainer.GPKey;
 import objenome.op.Node;
-import org.apache.commons.lang3.ObjectUtils;
+import objenome.solver.evolve.GPContainer.GPKey;
+
+import java.util.Objects;
 
 /**
  * An <code>STGPIndividual</code> is a candidate solution which uses a strongly
@@ -126,11 +127,11 @@ public class STGPIndividual extends AbstractIndividual {
      *         || index >= getLength())
      */
     public Node getNode(int index) {
-        if (index >= 0) {
+//        if (index >= 0) {
             return root.getNode(index);
-        } else {
-            throw new IndexOutOfBoundsException("attempt to get node at negative index");
-        }
+//        } else {
+//            throw new IndexOutOfBoundsException("attempt to get node at negative index");
+//        }
     }
 
     /**
@@ -201,11 +202,7 @@ public class STGPIndividual extends AbstractIndividual {
         STGPIndividual clone = (STGPIndividual) super.clone();
 
         // Deep copy node tree
-        if (root == null) {
-            clone.root = null;
-        } else {
-            clone.root = root.clone();
-        }
+        clone.root = root == null ? null : root.clone();
 
         return clone;
     }
@@ -239,9 +236,9 @@ public class STGPIndividual extends AbstractIndividual {
     @Override
     public boolean equals(Object obj) {
         boolean equal = false;
-        if ((obj != null) && (obj instanceof STGPIndividual)) {
+        if ((obj instanceof STGPIndividual)) {
             STGPIndividual p = (STGPIndividual) obj;
-            if (ObjectUtils.equals(root, p.root)) {
+            if (Objects.equals(root, p.root)) {
                 equal = true;
             }
         }
@@ -276,6 +273,6 @@ public class STGPIndividual extends AbstractIndividual {
      */
     @Override
     public int compareTo(Individual other) {
-        return getFitness().compareTo(other.getFitness());
+        return getScore().compareTo(other.getScore());
     }
 }

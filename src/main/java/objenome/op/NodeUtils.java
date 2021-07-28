@@ -77,7 +77,7 @@ public final class NodeUtils {
 
         List<Node> functions = new ArrayList<>(syntax.size());
         for (Node n : syntax) {
-            if (n.isNonTerminal()) {
+            if (!n.isTerminal()) {
                 functions.add(n);
             }
         }

@@ -6,12 +6,14 @@
 package objenome;
 
 import com.google.common.collect.SetMultimap;
-import java.util.Set;
 import objenome.solution.dependency.Builder;
 import objenome.util.Packatainer;
+import org.junit.Test;
+
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -46,8 +48,8 @@ public class PackatainerTest {
             try {
                 System.out.println(ci + ": " + g.random(ci).getSolutions());
             }
-            catch (Exception e) {
-                System.out.println("  unable: " + ci + ": " + e.toString());
+            catch (RuntimeException e) {
+                System.out.println("  unable: " + ci + ": " + e);
             }
         }
             

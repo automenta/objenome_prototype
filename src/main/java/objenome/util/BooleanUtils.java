@@ -40,7 +40,7 @@ public final class BooleanUtils {
      * @return an array of <code>boolean</code> values which is equivalent to
      * the input <code>String</code>.
      */
-    public static boolean[] toArray(String input) {
+    public static boolean[] toArray(CharSequence input) {
         int len = input.length();
         boolean[] bools = new boolean[len];
 

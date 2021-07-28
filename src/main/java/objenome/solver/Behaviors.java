@@ -9,6 +9,8 @@ package objenome.solver;
 /** thrown by an empty static method to supply training examples to a learning method
  *  that can eventually implement the method by dynamic compilation.
  *  an 'intelligent' alternative to UnsupportedOperationException.
+ *
+ *  TODO unfinished untested
  */
 public abstract class Behaviors extends RuntimeException {
 

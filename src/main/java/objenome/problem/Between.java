@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 /**
  * Defines a range of values, inclusive.
  */
-@Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
 public @interface Between {
 
-    public double min();
+    double min();
 
-    public double max();
+    double max();
     
 }

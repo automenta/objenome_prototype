@@ -40,7 +40,7 @@ public class LogNatural extends Numeric1d {
     }
 
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
     

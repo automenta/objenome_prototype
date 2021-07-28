@@ -21,9 +21,10 @@
  */
 package objenome.op.compute;
 
-import java.util.function.Function;
-import objenome.solver.evolve.Individual;
 import objenome.op.compute.Computer.ComputerInput;
+import objenome.solver.evolve.Individual;
+
+import java.util.function.Function;
 
 /**
  * Computers provide a mechanism for executing program source code that is
@@ -50,7 +51,7 @@ import objenome.op.compute.Computer.ComputerInput;
  */
 public interface Computer<I,P extends Individual,O> extends Function<ComputerInput<I,P>,O[]> {
 
-    public static class ComputerInput<I,P> {
+    class ComputerInput<I,P> {
         public final String[] argNames;
         public final P program;
         public final I[][] argValues;
@@ -68,7 +69,7 @@ public interface Computer<I,P extends Individual,O> extends Function<ComputerInp
         try {
             return eval(input.program, input.argNames, input.argValues);
         } catch (MalformedProgramException ex) {
-            throw new RuntimeException(ex.toString() + ": " + this + " with input " + input.toString(), ex);
+            throw new RuntimeException(ex + ": " + this + " with input " + input, ex);
         }
     }
     
@@ -98,7 +99,7 @@ public interface Computer<I,P extends Individual,O> extends Function<ComputerInp
      * @throws MalformedProgramException if the given expression is not valid
      * according to the language's syntax rules.
      */
-    public O[] eval(P expression, String[] argNames, I[][] argValues) throws MalformedProgramException;
+    O[] eval(P expression, String[] argNames, I[][] argValues) throws MalformedProgramException;
 
     /**
      * Executes a program which may consist of multiple program statements,
@@ -119,5 +120,5 @@ public interface Computer<I,P extends Individual,O> extends Function<ComputerInp
      * @throws MalformedProgramException if the given program is not valid
      * according to the language's syntax rules.
      */
-    public void exec(P program, String[] argNames, I[][] argValues) throws MalformedProgramException;
+    void exec(P program, String[] argNames, I[][] argValues) throws MalformedProgramException;
 }

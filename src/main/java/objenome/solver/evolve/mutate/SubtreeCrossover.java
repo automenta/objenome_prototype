@@ -21,21 +21,19 @@
  */
 package objenome.solver.evolve.mutate;
 
-import java.util.ArrayList;
-import java.util.List;
-import objenome.solver.evolve.AbstractOperator;
-import objenome.solver.evolve.GPContainer;
+import objenome.op.Node;
+import objenome.solver.evolve.*;
 import objenome.solver.evolve.GPContainer.GPKey;
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.RandomSequence;
-import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
-import objenome.solver.evolve.STGPIndividual;
-import static objenome.solver.evolve.STGPIndividual.MAXIMUM_DEPTH;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
 import objenome.solver.evolve.event.OperatorEvent;
 import objenome.solver.evolve.event.OperatorEvent.EndOperator;
-import objenome.op.Node;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
+import static objenome.solver.evolve.STGPIndividual.MAXIMUM_DEPTH;
 
 /**
  * A crossover operator for <code>STGPIndividual</code>s that exchanges subtrees
@@ -164,7 +162,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
         int[] swapPoints = new int[0];
         Node[] subtrees = new Node[0];
 
-        if (matchingNodes.size() > 0) {
+        if (!matchingNodes.isEmpty()) {
             // Select second swap point with the same data-type
             int index = selectNodeIndex(matchingNodes);
             Node subtree2 = matchingNodes.get(index);
@@ -213,14 +211,14 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
      * at 'root' that have a data-type that equals the 'type' argument. The
      * 'indexes' list is filled with the index of each of those nodes.
      */
-    private int nodesOfType(Node root, Class<?> type, int current, List<Node> matching, List<Integer> indexes) {
+    private static int nodesOfType(Node root, Class<?> type, int current, List<Node> matching, List<Integer> indexes) {
         if (root.dataType() == type) {
             matching.add(root);
             indexes.add(current);
         }
 
-        for (int i = 0; i < root.getArity(); i++) {
-            current = nodesOfType(root.getChild(i), type, current + 1, matching, indexes);
+        for (int i = 0; i < root.arity(); i++) {
+            current = nodesOfType(root.node(i), type, current + 1, matching, indexes);
         }
 
         return current;
@@ -245,7 +243,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
             return random.nextInt(length);
         }
 
-        int noTerminals = individual.getRoot().countTerminals();
+        int noTerminals = individual.getRoot().terminalCount();
         int noNonTerminals = length - noTerminals;
 
         if ((noNonTerminals > 0) && (random.nextDouble() >= terminalProbability)) {
@@ -277,14 +275,14 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
             List<Integer> nonTerminalIndexes = new ArrayList<>();
 
             for (int i = 0; i < nodes.size(); i++) {
-                if (nodes.get(i).getArity() == 0) {
+                if (nodes.get(i).arity() == 0) {
                     terminalIndexes.add(i);
                 } else {
                     nonTerminalIndexes.add(i);
                 }
             }
 
-            if ((nonTerminalIndexes.size() > 0) && (random.nextDouble() >= terminalProbability)) {
+            if ((!nonTerminalIndexes.isEmpty()) && (random.nextDouble() >= terminalProbability)) {
                 return nonTerminalIndexes.get(random.nextInt(nonTerminalIndexes.size()));
             } else {
                 return terminalIndexes.get(random.nextInt(terminalIndexes.size()));
@@ -398,7 +396,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
      *
      * @since 2.0
      */
-    public class EndEvent extends OperatorEvent.EndOperator {
+    public static class EndEvent extends OperatorEvent.EndOperator {
 
         private Node[] subtrees;
         private int[] points;

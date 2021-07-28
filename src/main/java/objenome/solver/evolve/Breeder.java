@@ -21,8 +21,9 @@
  */
 package objenome.solver.evolve;
 
-import java.util.List;
 import objenome.solver.evolve.GPContainer.GPKey;
+
+import java.util.List;
 
 /**
  * A <code>Breeder</code> is a component that is responsible for applying
@@ -39,11 +40,11 @@ public interface Breeder extends PopulationProcess {
     /**
      * The key for setting and retrieving the genetic operators.
      */
-    public static final GPKey<List<Operator>> OPERATORS = new GPKey<>();
+    GPKey<List<Operator>> OPERATORS = new GPKey<>();
 
     /**
      * The key for setting and retrieving the <code>IndividualSelector</code>.
      */
-    public static final GPKey<IndividualSelector> SELECTOR = new GPKey<>();
+    GPKey<IndividualSelector> SELECTOR = new GPKey<>();
 
 }

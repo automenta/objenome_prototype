@@ -1,16 +1,15 @@
 package objenome.util.bean;
 
-import static org.junit.Assert.*;
+import objenome.util.bean.util.DefaultPropertyChangeEventProvider;
+import objenome.util.bean.util.DefaultVetoablePropertyChangeEventProvider;
+import org.junit.Test;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
-import objenome.util.bean.util.DefaultPropertyChangeEventProvider;
-import objenome.util.bean.util.DefaultVetoablePropertyChangeEventProvider;
 
-
-
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TestPropertyChange {
 
@@ -40,24 +39,20 @@ public class TestPropertyChange {
         assertEquals(2, listener.getEvents().size());
 
         PropertyChangeEvent evt0 = listener.getEvents().get(0);
-        assertEquals(null, evt0.getOldValue());
+        assertNull(evt0.getOldValue());
         assertEquals("a", evt0.getNewValue()); //$NON-NLS-1$
 
         PropertyChangeEvent evt1 = listener.getEvents().get(1);
-        assertEquals(Integer.valueOf(0), evt1.getOldValue());
-        assertEquals(Integer.valueOf(88), evt1.getNewValue());
+        assertEquals(0, evt1.getOldValue());
+        assertEquals(88, evt1.getNewValue());
     }
 
     @Test
     public void testVetoPropertyChange() {
         TestBean toClone = BeanProxyBuilder.on(TestBean.class).build();
-        VetoableChangeListener listener = new VetoableChangeListener() {
-
-            public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
-                if ("a".equals(evt.getPropertyName()) && "y".equals(evt.getOldValue()) && "z".equals(evt.getNewValue())) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                    throw new PropertyVetoException("message", evt); //$NON-NLS-1$
-                }
-
+        VetoableChangeListener listener = evt -> {
+            if ("a".equals(evt.getPropertyName()) && "y".equals(evt.getOldValue()) && "z".equals(evt.getNewValue())) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                throw new PropertyVetoException("message", evt); //$NON-NLS-1$
             }
 
         };

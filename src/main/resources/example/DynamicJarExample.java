@@ -5,9 +5,10 @@
  */
 package example;
 
-import objenome.Multitainer;
 import objenome.Jartainer;
+import objenome.Multitainer;
 import objenome.Objenome;
+
 import static objenome.solution.dependency.Builder.of;
 
 /**

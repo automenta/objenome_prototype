@@ -1,10 +1,11 @@
 package objenome;
 
-import java.util.Set;
 import objenome.solution.dependency.Builder;
 import objenome.solution.dependency.ConfigurableBuilder;
 import objenome.solution.dependency.ConstructorDependency;
 import objenome.solution.dependency.Scope;
+
+import java.util.Set;
 
 /**
  * first; anterior; relating to a precursor + from Latin tenere 'to hold.’"
@@ -42,7 +43,7 @@ public interface Prototainer  {
      * @param key The factory
      * @return The type returned by this factory
      */
-    public Class<?> type(Object key);
+    Class<?> type(Object key);
 
     /**
      * Configure a bean to be returned with the given implementation when
@@ -56,7 +57,7 @@ public interface Prototainer  {
      * @return The factory created as a ConfigurableBuilder. (Fluent API)
      * @see Scope
      */
-    public ConfigurableBuilder usable(Object key, Scope scope, Class<?> klass);
+    ConfigurableBuilder usable(Object key, Scope scope, Class<?> klass);
 
     /**
      * Same as {@link #ioc(String, Class, Scope)} except that it assumes there
@@ -67,7 +68,7 @@ public interface Prototainer  {
      * @return The factory created as a ConfigurableBuilder. (Fluent API)
      * @see Scope
      */
-    default public ConfigurableBuilder usable(Object key, Class<?> klass) {
+    default ConfigurableBuilder usable(Object key, Class<?> klass) {
         return usable(key, Scope.NONE, klass);
     }
     
@@ -80,7 +81,7 @@ public interface Prototainer  {
      * @return The factory passed as a parameter. (Fluent API)
      * @see Builder
      */
-    default public Builder usable(Object key, Builder factory) {
+    default Builder usable(Object key, Builder factory) {
         return usable(key, Scope.NONE, factory);
     }
 
@@ -95,9 +96,9 @@ public interface Prototainer  {
      * @see Builder
      * @see Scope
      */
-    public Builder usable(Object key, Scope scope, Builder factory);
+    Builder usable(Object key, Scope scope, Builder factory);
 
-    public default Builder usable(Class c) {
+    default Builder usable(Class c) {
         return usable(c, c);
     }
     
@@ -112,13 +113,13 @@ public interface Prototainer  {
      */
     void use(Object sourceFromContainer);
     
-    default public ConfigurableBuilder use(Object key, Class<? extends Object> klass) {
+    default ConfigurableBuilder use(Object key, Class<?> klass) {
         ConfigurableBuilder c = usable(key, klass);
         use(key);
         return c;
     }
     
-    default public Builder use(Class klass) {        
+    default Builder use(Class klass) {
         ConfigurableBuilder c = usable(klass, klass);
         use((Object)klass);
         return c;
@@ -140,6 +141,6 @@ public interface Prototainer  {
 
 
     
-    public Set<ConstructorDependency> getConstructorDependencies();
+    Set<ConstructorDependency> getConstructorDependencies();
 
 }

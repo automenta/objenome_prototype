@@ -21,19 +21,15 @@
  */
 package objenome.solver.evolve.selection;
 
-import objenome.solver.evolve.AbstractSelector;
-import objenome.solver.evolve.Fitness;
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.IndividualSelector;
-import objenome.solver.evolve.Population;
-import objenome.solver.evolve.RandomSequence;
+import objenome.solver.evolve.*;
+import objenome.solver.evolve.score.DoubleScore;
+
 import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
-import objenome.solver.evolve.fitness.DoubleFitness;
 
 /**
  * This class represents an {@link IndividualSelector} that selects individuals
  * with a probability proportional to their fitness. In order to calculate a
- * probability, individuals must have a {@link DoubleFitness} value.
+ * probability, individuals must have a {@link DoubleScore} value.
  */
 public class RouletteSelector extends AbstractSelector {
 
@@ -49,10 +45,10 @@ public class RouletteSelector extends AbstractSelector {
      */
     @Override
     public void setup(Population population) {
-        Fitness best = population.get(0).getFitness();
-        Fitness worst = best;
+        Score best = population.get(0).getScore();
+        Score worst = best;
 
-        if (!(best instanceof DoubleFitness)) {
+        if (!(best instanceof DoubleScore)) {
             throw new IllegalArgumentException("Fitness not supported: " + best.getClass());
         }
 
@@ -60,19 +56,19 @@ public class RouletteSelector extends AbstractSelector {
         double total = 0.0;
 
         for (int i = 0; i < population.size(); i++) {
-            Fitness fitness = population.get(i).getFitness();
+            Score fitness = population.get(i).getScore();
             if (fitness.compareTo(best) > 0) {
                 best = fitness;
             } else if (fitness.compareTo(worst) < 0) {
                 worst = fitness;
             }
 
-            roulette[i] = ((DoubleFitness) fitness).getValue();
+            roulette[i] = ((DoubleScore) fitness).getValue();
             total += roulette[i];
         }
 
-        double bestValue = ((DoubleFitness) best).getValue();
-        double worstValue = ((DoubleFitness) worst).getValue();
+        double bestValue = ((DoubleScore) best).getValue();
+        double worstValue = ((DoubleScore) worst).getValue();
 
         // invert if minimising - using adjusted fitness.
         if (bestValue < worstValue) {

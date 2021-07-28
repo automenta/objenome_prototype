@@ -21,26 +21,23 @@
  */
 package objenome.solver.evolve.init;
 
+import objenome.op.Node;
+import objenome.problem.ProblemSTGP;
+import objenome.solver.evolve.*;
+import objenome.solver.evolve.event.ConfigEvent;
+import objenome.solver.evolve.event.InitialisationEvent;
+import objenome.solver.evolve.event.Listener;
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import objenome.solver.evolve.GPContainer;
-import objenome.solver.evolve.InitialisationMethod;
-import objenome.solver.evolve.Population;
+
 import static objenome.solver.evolve.Population.SIZE;
-import objenome.problem.ProblemSTGP;
-import objenome.solver.evolve.RandomSequence;
 import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
-import objenome.solver.evolve.STGPIndividual;
-import static objenome.solver.evolve.STGPIndividual.MAXIMUM_DEPTH;
-import static objenome.solver.evolve.STGPIndividual.RETURN_TYPE;
-import static objenome.solver.evolve.STGPIndividual.SYNTAX;
-import objenome.solver.evolve.event.ConfigEvent;
-import objenome.solver.evolve.event.InitialisationEvent;
-import objenome.solver.evolve.event.Listener;
-import objenome.op.Node;
+import static objenome.solver.evolve.STGPIndividual.*;
 
 /**
  * Initialisation method which produces <code>STGPIndividual</code>s with
@@ -272,7 +269,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
         List<Node> validNodes = listValidNodes(maxDepth - currentDepth, requiredType);
         int randomIndex = random.nextInt(validNodes.size());
         Node root = validNodes.get(randomIndex).newInstance();
-        int arity = root.getArity();
+        int arity = root.arity();
 
         if (arity > 0) {
             // Construct list of arg sets that produce the right return type
@@ -319,7 +316,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
 
         if (remainingDepth > 0) {
             for (Node n : nonTerminals) {
-                Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
+                Class<?>[][] argTypeSets = dataTypeCombinations(n.arity(), dataTypesTable[remainingDepth - 1]);
 
                 for (Class<?>[] argTypes : argTypeSets) {
                     Class<?> type = n.dataType(argTypes);
@@ -350,7 +347,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
             if (i > 0) {
                 // Also add any valid nonTerminals
                 for (final Node n : nonTerminals) {
-                    final Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[i - 1]);
+                    final Class<?>[][] argTypeSets = dataTypeCombinations(n.arity(), dataTypesTable[i - 1]);
 
                     // Test each possible set of arguments
                     for (final Class<?>[] argTypes : argTypeSets) {
@@ -361,7 +358,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                     }
                 }
             }
-            dataTypesTable[i] = types.toArray(new Class<?>[types.size()]);
+            dataTypesTable[i] = types.toArray(ArrayUtils.EMPTY_CLASS_ARRAY);
         }
     }
 
@@ -372,7 +369,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
      * TODO We should only do this once at each depth for a particular arity
      * TODO This is a duplicate of the same method in FullInitialisation
      */
-    private Class<?>[][] dataTypeCombinations(int arity, Class<?>[] dataTypes) {
+    private static Class<?>[][] dataTypeCombinations(int arity, Class<?>[] dataTypes) {
         int noTypes = dataTypes.length;
         int noCombinations = (int) Math.pow(noTypes, arity);
         Class<?>[][] possibleTypes = new Class<?>[noCombinations][arity];
@@ -434,7 +431,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
         // Add any valid non-terminals
         if (remainingDepth > 0) {
             for (Node n : nonTerminals) {
-                Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
+                Class<?>[][] argTypeSets = dataTypeCombinations(n.arity(), dataTypesTable[remainingDepth - 1]);
 
                 // Construct a list of valid sets of argument types
                 List<Class<?>[]> valid = new ArrayList<>();
@@ -451,13 +448,13 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                     }
                 }
 
-                if (valid.size() > 0) {
+                if (!valid.isEmpty()) {
                     BigInteger totalChildVarieties = BigInteger.ONE;
-                    for (int i = 0; i < n.getArity(); i++) {
+                    for (int i = 0; i < n.arity(); i++) {
                         // Build list of the valid arg types for this child
                         returnTypes = new ArrayList<>();
-                        for (int j = 0; j < valid.size(); j++) {
-                            returnTypes.add(valid.get(j)[i]);
+                        for (Class<?>[] classes : valid) {
+                            returnTypes.add(classes[i]);
                         }
 
                         BigInteger childVarieties = varieties(remainingDepth - 1, returnTypes);
@@ -523,7 +520,7 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
         // Add all valid non-terminals
         if (remainingDepth > 0) {
             for (Node n : nonTerminals) {
-                Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[remainingDepth - 1]);
+                Class<?>[][] argTypeSets = dataTypeCombinations(n.arity(), dataTypesTable[remainingDepth - 1]);
 
                 // Construct a list of valid sets of argument types
                 List<Class<?>[]> valid = new ArrayList<>();
@@ -540,13 +537,13 @@ public class Grow implements STGPInitialisation, Listener<ConfigEvent> {
                     }
                 }
 
-                if (valid.size() > 0) {
+                if (!valid.isEmpty()) {
                     BigInteger totalChildVarieties = BigInteger.ONE;
-                    for (int i = 0; i < n.getArity(); i++) {
+                    for (int i = 0; i < n.arity(); i++) {
                         // Build list of the valid arg types for this child
                         returnTypes = new ArrayList<>();
-                        for (int j = 0; j < valid.size(); j++) {
-                            returnTypes.add(valid.get(j)[i]);
+                        for (Class<?>[] classes : valid) {
+                            returnTypes.add(classes[i]);
                         }
 
                         //TODO This shouldn't be using varieties here - needs to call self

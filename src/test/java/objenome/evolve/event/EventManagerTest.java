@@ -21,10 +21,11 @@
  */
 package objenome.evolve.event;
 
+import junit.framework.TestCase;
 import objenome.solver.evolve.event.EventManager;
 import objenome.solver.evolve.event.Listener;
 import objenome.solver.evolve.event.RunEvent;
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 /**
  * The <code>EventManagerTest</code> class provides unit tests for methods of
@@ -39,18 +40,14 @@ public class EventManagerTest extends TestCase {
      */
     public void testReset() {
         EventManager manager = new EventManager();
-        Listener<RunEvent> listener = new Listener<RunEvent>() {
-
-            @Override
-            public void onEvent(RunEvent event) {
-            }
+        Listener<RunEvent> listener = event -> {
         };
 
         manager.add(RunEvent.class, listener);
-        assertTrue(manager.remove(RunEvent.class, listener));
+        Assert.assertTrue(manager.remove(RunEvent.class, listener));
 
         manager.add(RunEvent.class, listener);
         manager.reset();
-        assertFalse(manager.remove(RunEvent.class, listener));
+        Assert.assertFalse(manager.remove(RunEvent.class, listener));
     }
 }

@@ -141,8 +141,7 @@ public abstract class SgVariable {
         if (name == null) {
             throw new IllegalArgumentException("The argument 'name' cannot be NULL!");
         }
-        for (int i = 0; i < annotations.size(); i++) {
-            final SgAnnotation annotation = annotations.get(i);
+        for (final SgAnnotation annotation : annotations) {
             if (annotation.getName().equals(name)) {
                 return true;
             }

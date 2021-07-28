@@ -24,6 +24,7 @@ package objenome.solver.evolve.event;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The <code>EventManager</code> class provides event-related functionality. It
@@ -77,7 +78,7 @@ public class EventManager {
      */
     public <T extends Event> boolean remove(Class<? extends T> key, Listener<T> listener) {
         List<Listener<?>> listeners = mapping.get(key);
-        return listeners == null ? false : listeners.remove(listener);
+        return listeners != null && listeners.remove(listener);
     }
 
     /**
@@ -87,9 +88,9 @@ public class EventManager {
      */
     @SuppressWarnings("unchecked")
     public <T extends Event, V extends T> void fire(T event) {
-        for (Class<?> key : mapping.keySet()) {
-            if (key.isAssignableFrom(event.getClass())) {
-                for (Listener<?> listener : mapping.get(key)) {
+        for (Map.Entry<Class<?>, List<Listener<?>>> entry : mapping.entrySet()) {
+            if (entry.getKey().isAssignableFrom(event.getClass())) {
+                for (Listener<?> listener : entry.getValue()) {
                     ((Listener<T>) listener).onEvent(event);
                 }
             }

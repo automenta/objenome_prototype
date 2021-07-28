@@ -6,10 +6,11 @@
 package objenome.solution;
 
 import com.google.common.collect.Sets;
-import java.util.Set;
 import objenome.Phenotainer;
 import objenome.problem.DevelopMethod;
 import objenome.solver.Solution;
+
+import java.util.Set;
 
 /**
  * Uses a dynamically generated expression to complete an abstract or interface method

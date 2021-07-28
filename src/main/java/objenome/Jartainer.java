@@ -5,17 +5,13 @@
  */
 package objenome;
 
+import objenome.solution.dependency.Builder;
+
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import objenome.solution.dependency.Builder;
+import java.util.*;
 
 /**
  * Container representing dynamically loaded .jar files and all they provide

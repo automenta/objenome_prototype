@@ -44,6 +44,6 @@ public interface STGPInitialisation extends InitialisationMethod<STGPIndividual>
      * The key for setting and retrieving the maximum initial depth setting for
      * program trees
      */
-    public static final GPKey<Integer> MAXIMUM_INITIAL_DEPTH = new GPKey<>();
+    GPKey<Integer> MAXIMUM_INITIAL_DEPTH = new GPKey<>();
 
 }

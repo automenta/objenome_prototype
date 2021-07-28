@@ -5,12 +5,13 @@
  */
 package objenome.solution.dependency;
 
-import java.util.Collection;
-import java.util.List;
 import objenome.AbstractContainer;
 import objenome.Prototainer;
 import objenome.problem.Problem;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *

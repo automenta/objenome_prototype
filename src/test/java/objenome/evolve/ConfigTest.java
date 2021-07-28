@@ -22,11 +22,11 @@
 
 package objenome.evolve;
 
-import objenome.solver.evolve.Population;
-import objenome.solver.evolve.GPContainer;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import junit.framework.TestCase;
+import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.GPContainer.GPKey;
+import objenome.solver.evolve.Population;
+import org.junit.Assert;
 
 
 /**
@@ -43,9 +43,9 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testGet() {
 		GPKey<Double> key = new GPKey<>();
-		assertNull(config.get(key));
+		Assert.assertNull(config.get(key));
 		config.set(key, 1.0);
-		assertNotNull(config.get(key));
+		Assert.assertNotNull(config.get(key));
 	}
 
 	/**
@@ -54,10 +54,10 @@ public class ConfigTest extends TestCase {
 	public void testSet() {
 		GPKey<Double> key = new GPKey<>();
 		config.set(key, 0.2);
-		assertEquals(0.2, config.get(key));
+		Assert.assertEquals(Double.valueOf(0.2), config.get(key));
 
 		config.set(key, 0.4);
-		assertEquals(0.4, config.get(key));
+		Assert.assertEquals(Double.valueOf(0.4), config.get(key));
 	}
 
 	/**
@@ -65,9 +65,9 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testReset() {
 		config.set(Population.SIZE, 100);		
-		assertNotNull(config.get(Population.SIZE));
+		Assert.assertNotNull(config.get(Population.SIZE));
 
 		config.clear();
-		assertNull(config.get(Population.SIZE));
+		Assert.assertNull(config.get(Population.SIZE));
 	}
 }

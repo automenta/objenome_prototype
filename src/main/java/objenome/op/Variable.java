@@ -33,8 +33,8 @@ package objenome.op;
  */
 public class Variable<X> {
 
-    private final Class datatype;
-    private final String name;
+    public final Class datatype;
+    public final String name;
 
     private X value;
 
@@ -73,7 +73,7 @@ public class Variable<X> {
 
         this.name = name;
         this.value = value;
-        datatype = (Class<? extends X>) value.getClass();
+        datatype = value.getClass();
     }
 
     /**
@@ -85,21 +85,11 @@ public class Variable<X> {
      *
      * @param value the value to set for the variable
      */
-    public void setValue(X value) {
-        if (value != null && !datatype.isAssignableFrom(value.getClass())) {
+    public void set(X value) {
+        if (value != null && !datatype.isAssignableFrom(value.getClass()))
             throw new IllegalArgumentException("variables may not change data-type");
-        }
 
         this.value = value;
-    }
-
-    /**
-     * Returns the data-type of this variable
-     *
-     * @return this variable's data-type
-     */
-    public Class getDataType() {
-        return datatype;
     }
 
     /**
@@ -107,17 +97,8 @@ public class Variable<X> {
      *
      * @return this variable's value
      */
-    public X getValue() {
+    public X value() {
         return value;
-    }
-
-    /**
-     * Returns the name of this variable
-     *
-     * @return the name of this variable
-     */
-    public String getName() {
-        return name;
     }
 
     /**

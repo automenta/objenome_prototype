@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
@@ -17,30 +17,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http:/www.epochx.org
+ * The latest version is available from: http://www.epochx.org
  */
-package objenome.solver.evolve.fitness;
-
-import objenome.solver.evolve.AbstractFitnessFunction;
-import objenome.solver.evolve.GPContainer.GPContainerAware;
-import objenome.solver.evolve.GPContainer.GPKey;
-import objenome.op.Variable;
+package objenome.solver.evolve;
 
 /**
- * A fitness function for evaluating STGP individuals.
+ * Implementations of <code>FitnessFunction</code> are classes that are
+ * responsible for assigning fitnesses to individuals in a population. Typically
+ * this will be performed by evaluating the quality of each individual against
+ * problem specific requirements.
  *
- * @since 2.0
+ * @see Score
  */
-public abstract class STGPFitnessFunction extends AbstractFitnessFunction implements GPContainerAware {
+public interface ScoreFunction<I extends Individual> {
 
     /**
-     * The key for setting the program's input variables
+     * Evaluates the individuals in the specified population.
+     *
+     * @param population the population to be evaluated.
      */
-    public static final GPKey<Variable[]> INPUT_VARIABLES = new GPKey<>();
-
-    /**
-     * The key for setting the sets of values to use as inputs
-     */
-    public static final GPKey<Object[][]> INPUT_VALUE_SETS = new GPKey<>();
+    void evaluate(Population<I> population);
 
 }

@@ -5,12 +5,13 @@
  */
 package objenome;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.concurrent.atomic.AtomicBoolean;
 import objenome.util.bean.util.DefaultPropertyChangeEventProvider;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @see: http://beanproxy.sourceforge.net/
@@ -26,7 +27,7 @@ public class ContainerBeanTest {
     
     @Test public void testBean() {
         Container c = new Container();
-        SomeInterface s = c.bean(SomeInterface.class);
+        SomeInterface s = Container.bean(SomeInterface.class);
         s.setStringValue("x");
         assertEquals("x", s.getStringValue());
     }
@@ -45,15 +46,11 @@ public interface NiceExample extends DefaultPropertyChangeEventProvider {*/
         
         AtomicBoolean success = new AtomicBoolean(false);
         
-        ObservableInterface s = c.bean(ObservableInterface.class);
-        s.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override public void propertyChange(PropertyChangeEvent pce) {
-                success.set(true);
-            }
-        });
+        ObservableInterface s = Container.bean(ObservableInterface.class);
+        s.addPropertyChangeListener(pce -> success.set(true));
         s.setStringValue("x");
         
-        assertEquals("x", s.getStringValue());        
-        assertEquals(true, success.get());
+        assertEquals("x", s.getStringValue());
+        assertTrue(success.get());
     }
 }

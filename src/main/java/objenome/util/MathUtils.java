@@ -170,7 +170,7 @@ public final class MathUtils {
      * of <code>d</code>
      */
     public static double artanh(double d) {
-        return (d != 0.0) ? (Math.log(1.0 + d) - Math.log(1.0 - d)) / 2.0 : d;
+        return (d == 0.0) ? d : (Math.log(1.0 + d) - Math.log(1.0 - d)) / 2.0;
     }
 
     /**

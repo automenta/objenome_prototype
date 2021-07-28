@@ -49,7 +49,7 @@ public class Min extends Node {
     public Min(int n) {
         this((Node) null);
 
-        setChildren(new Node[n]);
+        setAll(new Node[n]);
     }
 
     /**
@@ -71,12 +71,12 @@ public class Min extends Node {
      */
     @Override
     public Object evaluate() {
-        int arity = getArity();
+        int arity = arity();
 
         Object[] childValues = new Object[arity];
         Class<?>[] types = new Class<?>[arity];
         for (int i = 0; i < arity; i++) {
-            childValues[i] = getChild(i).evaluate();
+            childValues[i] = node(i).evaluate();
             types[i] = childValues[i].getClass();
         }
         Class<?> returnType = TypeUtil.widestNumberType(types);
@@ -120,7 +120,7 @@ public class Min extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 
@@ -134,7 +134,7 @@ public class Min extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if (inputTypes.length == getArity()) {
+        if (inputTypes.length == arity()) {
             return TypeUtil.widestNumberType(inputTypes);
         }
         return null;

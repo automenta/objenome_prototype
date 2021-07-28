@@ -80,7 +80,7 @@ public abstract class ProxyComponent<T> implements PopulationProcess, Listener<C
     }
 
     public T getHandler() {
-        return (T)config.get(key);
+        return config.get(key);
     }
 
     public GPContainer getConfig() {

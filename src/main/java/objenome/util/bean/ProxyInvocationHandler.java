@@ -1,5 +1,7 @@
 package objenome.util.bean;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -27,11 +29,11 @@ public class ProxyInvocationHandler implements InvocationHandler, Serializable, 
 
     public ProxyInvocationHandler(Class<?> proxiedIface, final Collection<Class<?>> beanClasses) {
         this.proxiedIface = proxiedIface;
-        this.data = new FixedMap<String, Object>(countAttributes(beanClasses));
+        this.data = new FixedMap<>(countAttributes(beanClasses));
     }
 
     private static Set<String> countAttributes(final Collection<Class<?>> beanClasses) {
-        final Set<String> names = new HashSet<String>();
+        final Set<String> names = new HashSet<>();
         for (final Class<?> clazz : beanClasses) {
             for (final PropertyDescriptor propertyDescriptor : ObjectUtil.getBeanInfo(clazz)
                     .getPropertyDescriptors()) {
@@ -45,22 +47,22 @@ public class ProxyInvocationHandler implements InvocationHandler, Serializable, 
         return this.proxiedIface;
     }
 
-    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws IllegalArgumentException, CloneNotSupportedException {
         final String methodName = method.getName();
         final String returnTypeName = method.getReturnType().getName();
         final int paramCount = method.getParameterTypes().length;
 
         // hashCode
         if ("hashCode".equals(methodName) && paramCount == 0 && "int".equals(returnTypeName)) { //$NON-NLS-1$ //$NON-NLS-2$
-            return Integer.valueOf(this.data.hashCode());
+            return this.data.hashCode();
         }
 
         // equals
         if ("equals".equals(methodName) && paramCount == 1 && "boolean".equals(returnTypeName)) { //$NON-NLS-1$ //$NON-NLS-2$
-            return Boolean.valueOf(proxy == args[0] || args[0] != null
+            return proxy == args[0] || args[0] != null
                     && Proxy.isProxyClass(args[0].getClass())
                     && Proxy.getInvocationHandler(args[0]).getClass() == getClass()
-                    && this.data.equals(((ProxyInvocationHandler) Proxy.getInvocationHandler(args[0])).data));
+                    && this.data.equals(((ProxyInvocationHandler) Proxy.getInvocationHandler(args[0])).data);
         }
 
         // toString
@@ -72,7 +74,7 @@ public class ProxyInvocationHandler implements InvocationHandler, Serializable, 
         if ("clone".equals(methodName) && paramCount == 0 && method.getReturnType().isAssignableFrom(method.getDeclaringClass())) { //$NON-NLS-1$
             final Collection<Class<?>> collectInterfaces = ObjectUtil.collectInterfaces(proxy.getClass());
             return Proxy.newProxyInstance(proxy.getClass().getClassLoader(),
-                    collectInterfaces.toArray(new Class<?>[collectInterfaces.size()]), clone());
+                    collectInterfaces.toArray(ArrayUtils.EMPTY_CLASS_ARRAY), clone());
         }
 
         /*******************************************************************************************
@@ -130,7 +132,7 @@ public class ProxyInvocationHandler implements InvocationHandler, Serializable, 
 
     protected ProxyInvocationHandler clone() throws CloneNotSupportedException {
         final ProxyInvocationHandler result = (ProxyInvocationHandler) super.clone();
-        result.data = new FixedMap<String, Object>(this.data);
+        result.data = new FixedMap<>(this.data);
         return result;
     }
 

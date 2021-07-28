@@ -6,30 +6,24 @@
 package objenome;
 
 import com.google.common.collect.Lists;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import static java.util.stream.Collectors.toList;
 import objenome.problem.DecideNumericValue.DecideBooleanValue;
 import objenome.problem.DecideNumericValue.DecideDoubleValue;
 import objenome.problem.DecideNumericValue.DecideIntegerValue;
 import objenome.problem.DevelopMethod;
 import objenome.problem.Problem;
-import objenome.solution.dependency.Builder;
-import objenome.solution.dependency.ClassBuilder;
+import objenome.solution.dependency.*;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
-import objenome.solution.dependency.DecideImplementationClass;
-import objenome.solution.dependency.Scope;
 import objenome.solver.IncompleteSolutionException;
 import objenome.solver.RandomSolver;
 import objenome.solver.Solution;
 import objenome.solver.Solver;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Dependency-injection Multainer which can be parametrically searched to 
@@ -38,9 +32,9 @@ import objenome.solver.Solver;
  early 20th century: of German Gen, of Pangen, a supposed ultimate unit of heredity (of Greek pan * ‘all’ + genos ‘race, kind, offspring’) + of Latin tenere 'to hold.’"
  */
 public class Multitainer extends AbstractPrototainer implements AbstractMultitainer {       
-    private int intMinDefault = 0;
+    private int intMinDefault;
     private int intMaxDefault = 1;
-    private int doubleMinDefault = 0;
+    private int doubleMinDefault;
     private int doubleMaxDefault = 1;
     
     public Multitainer(Class... useClasses) {
@@ -62,11 +56,11 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
     }
         
     @Override
-    public DecideImplementationClass any(Class abstractClass, Scope scope, Class<?>... klasses) {
+    public objenome.solution.dependency.DecideImplementationClass any(Class abstractClass, Scope scope, Class<?>... klasses) {
         if (abstractClass == null)
             throw new RuntimeException("abstractClass is null");        
         
-        return (DecideImplementationClass)usable(abstractClass, scope, 
+        return (DecideImplementationClass)usable(abstractClass, scope,
                 new DecideImplementationClass(abstractClass, Lists.newArrayList( klasses ) ));
     }
 
@@ -114,7 +108,7 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
         
         //Handle Abstract Methods
         {
-            Class c = cb.type();
+            Class<?> c = cb.type();
             for (Method m : c.getMethods()) {
                 if (Modifier.isAbstract( m.getModifiers() )) {
                     problems.add(new DevelopMethod(m) );
@@ -124,7 +118,7 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
         
         //Handle Constructor Dependencies
         {
-            Set<DependencyKey> possibleConstructorDependencies = new HashSet();
+            Collection<DependencyKey> possibleConstructorDependencies = new HashSet();
             if (cb.getInitValues()!=null) {
                 for (Object o : cb.getInitValues()) {
                     if (o instanceof DependencyKey)
@@ -159,7 +153,7 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
                     //from possibleConstructorDependencies,
                     //so recursively discover its problems:
                     
-                    Class paramClass = dk.param.getType();                    
+                    Class<?> paramClass = dk.param.getType();
                     getProblems(paramClass, nextPath, problems);
                     
                 }
@@ -193,7 +187,7 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
         if (parentPath == null) path = new ArrayList();
         else path = new ArrayList(parentPath);
 
-        Object previousPathElement = path.size() > 0 ? path.get(path.size()-1) : null;
+        Object previousPathElement = path.isEmpty() ? null : path.get(path.size() - 1);
 
         Builder b = (k instanceof Builder) ? (Builder)k : getBuilder(k);
 
@@ -254,7 +248,7 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
     
     public List<Object> getKeyClasses() {
         //TODO use setter dependencies also?
-        return getConstructorDependencies().stream().map(d -> d.getContainerKey()).filter(k -> k!=null).collect(toList());
+        return getConstructorDependencies().stream().map(ConstructorDependency::getContainerKey).filter(Objects::nonNull).collect(toList());
     }
     
     /** creates a new random objosome,
@@ -280,7 +274,7 @@ public class Multitainer extends AbstractPrototainer implements AbstractMultitai
     }
     
     public Objenome solve(Iterable<Solver> solvers, Object... targets) throws IncompleteSolutionException {
-        List<? extends Object> k;
+        List<?> k;
         if (targets.length == 0) {
             //default: use all autowired dependents
             k = getKeyClasses();

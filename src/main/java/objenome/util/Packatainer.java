@@ -8,11 +8,6 @@ package objenome.util;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.reflect.ClassPath;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import static java.util.stream.Collectors.toSet;
 import objenome.AbstractPrototainer;
 import objenome.solution.dependency.Builder;
 import objenome.solution.dependency.DecideImplementationClass;
@@ -21,6 +16,13 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeElementsScanner;
 import org.reflections.util.ConfigurationBuilder;
+
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Package container - contains classes from entire (cloass loader) packages - Type graph analsys
@@ -54,7 +56,7 @@ public class Packatainer extends AbstractPrototainer {
         for (Class c : classes)
             usable(c);
         
-        this.classNames = this.classes.stream().map(c -> c.getName()).collect(toSet());
+        this.classNames = this.classes.stream().map(Class::getName).collect(toSet());
     }
 
     @Override
@@ -79,9 +81,7 @@ public class Packatainer extends AbstractPrototainer {
         //2. map each ancestor to implementations
         Set<Class> superTypes = new HashSet<>();
         for (Class c : classes) {
-            for (Class supertype : ReflectionUtils.getAllSuperTypes(c)) {
-                superTypes.add(supertype);
-            }
+            superTypes.addAll(ReflectionUtils.getAllSuperTypes(c));
         }
         
         Reflections s = new Reflections(configuration);
@@ -101,11 +101,10 @@ public class Packatainer extends AbstractPrototainer {
         return r;
     }
     
-    public static Set<ClassPath.ClassInfo> getPackageClasses(String packege) throws Exception {
+    public static Set<ClassPath.ClassInfo> getPackageClasses(String packege) throws java.io.IOException {
         //https://code.google.com/p/guava-libraries/wiki/ReflectionExplained#ClassPath
-        ClassPath classpath = ClassPath.from(Packatainer.class.getClassLoader()); 
 
-        return classpath.getTopLevelClasses(packege);
+        return ClassPath.from(Packatainer.class.getClassLoader()).getTopLevelClasses(packege);
     }
 
 

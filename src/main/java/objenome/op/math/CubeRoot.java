@@ -50,7 +50,7 @@ public class CubeRoot extends Numeric1d {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

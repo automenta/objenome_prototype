@@ -22,20 +22,18 @@
 package objenome.solver.evolve;
 
 /**
- * Implementations of <code>FitnessFunction</code> are classes that are
- * responsible for assigning fitnesses to individuals in a population. Typically
- * this will be performed by evaluating the quality of each individual against
- * problem specific requirements.
- *
- * @see Fitness
+ * An implementation of the <code>Fitness</code> interface provides a measure of
+ * individual quality. Implementations may represent the fitness score in any
+ * form, explicit or otherwise. The only requirement is that a natural ordering
+ * exists, defined by the implementation's <code>compareTo</code> method.
  */
-public interface FitnessFunction<I extends Individual> {
+public interface Score extends Cloneable, Comparable<Score> {
 
     /**
-     * Evaluates the individuals in the specified population.
+     * Creates an returns a copy of this fitness object.
      *
-     * @param population the population to be evaluated.
+     * @return a clone of this fitness object.
      */
-    public void evaluate(Population<I> population);
+    Score clone();
 
 }

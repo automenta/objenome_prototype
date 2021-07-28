@@ -5,8 +5,8 @@
  */
 package objenome.op.activate;
 
-import objenome.op.Scalar;
 import objenome.op.DiffableFunction;
+import objenome.op.Scalar;
 
 /**
  *
@@ -28,7 +28,7 @@ public class ATanhSigmoid implements DiffableFunction {
     @Override
     public double partialDerive(Scalar parameter) {
         double y = x.value();
-        return x.partialDerive(parameter) * 1.0 / (1 + y * y);
+        return x.partialDerive(parameter) / (1 + y * y);
     }
 
 }

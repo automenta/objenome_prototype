@@ -1,8 +1,9 @@
 package objenome.solution.dependency;
 
-import java.util.Collection;
 import objenome.AbstractContainer;
 import objenome.solution.dependency.ClassBuilder.DependencyKey;
+
+import java.util.Collection;
 
 /**
  * An IoC factory that knows how to create instances.
@@ -11,11 +12,11 @@ import objenome.solution.dependency.ClassBuilder.DependencyKey;
  */
 public interface Builder {
 
-    public static Class[] the(final Class<?> c) {
+    static Class[] the(final Class<?> c) {
         return new Class[] { c };
     }
     
-    public static Class[] of(final Class<?>... c) {
+    static Class[] of(final Class<?>... c) {
         return c;
     }
     
@@ -27,9 +28,9 @@ public interface Builder {
      * supplied collection
      * 
      */
-    public <T> T instance(objenome.Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere);
+    <T> T instance(objenome.Prototainer context, Collection<DependencyKey> simulateAndAddExtraProblemsHere);
 
-    public default <T> T instance(AbstractContainer context) {
+    default <T> T instance(AbstractContainer context) {
         return instance(context, null);
     }
     
@@ -39,5 +40,5 @@ public interface Builder {
      *
      * @return of type of objects returned by this factory.
      */
-    public Class type();
+    Class type();
 }

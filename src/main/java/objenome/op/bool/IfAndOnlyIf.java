@@ -66,8 +66,8 @@ public class IfAndOnlyIf extends Node {
      */
     @Override
     public Boolean evaluate() {
-        boolean c1 = ((Boolean) getChild(0).evaluate());
-        boolean c2 = ((Boolean) getChild(1).evaluate());
+        boolean c1 = ((Boolean) node(0).evaluate());
+        boolean c2 = ((Boolean) node(1).evaluate());
 
         return (c1 && c2) || (!c1 && !c2);
     }
@@ -78,7 +78,7 @@ public class IfAndOnlyIf extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

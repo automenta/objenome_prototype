@@ -21,21 +21,19 @@
  */
 package objenome.solver.evolve.mutate;
 
-import java.util.ArrayList;
-import java.util.List;
-import objenome.solver.evolve.AbstractOperator;
-import objenome.solver.evolve.GPContainer;
+import objenome.op.Node;
+import objenome.solver.evolve.*;
 import objenome.solver.evolve.GPContainer.GPKey;
-import objenome.solver.evolve.Individual;
-import static objenome.problem.ProblemSTGP.PROBLEM;
-import objenome.solver.evolve.RandomSequence;
-import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
-import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
 import objenome.solver.evolve.event.OperatorEvent;
 import objenome.solver.evolve.event.OperatorEvent.EndOperator;
-import objenome.op.Node;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static objenome.problem.ProblemSTGP.PROBLEM;
+import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
 
 /**
  * A crossover operator for <code>STGPIndividual</code>s that exchanges subtrees
@@ -206,17 +204,17 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
         points1.add(current1);
         points2.add(current2);
 
-        boolean valid = false;
+        boolean valid;
         if (!strict) {
-            valid = (root1.getArity() == root2.getArity()) && (root1.dataType() == root2.dataType());
+            valid = (root1.arity() == root2.arity()) && (root1.dataType() == root2.dataType());
         } else {
             valid = root1.getClass().equals(root2.getClass());
         }
 
         if (valid) {
-            for (int i = 0; i < root1.getArity(); i++) {
-                Node child1 = root1.getChild(i);
-                Node child2 = root2.getChild(i);
+            for (int i = 0; i < root1.arity(); i++) {
+                Node child1 = root1.node(i);
+                Node child2 = root2.node(i);
                 alignedPoints(child1, child2, points1, points2, current1 + 1, current2 + 1);
 
                 current1 += child1.length();
@@ -312,7 +310,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
      *
      * @since 2.0
      */
-    public class EndEvent extends OperatorEvent.EndOperator {
+    public static class EndEvent extends OperatorEvent.EndOperator {
 
         private Node[] subtrees;
         private int[] points;

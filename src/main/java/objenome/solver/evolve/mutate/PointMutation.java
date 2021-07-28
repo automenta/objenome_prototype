@@ -22,24 +22,22 @@
 package objenome.solver.evolve.mutate;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import objenome.op.Literal;
-import objenome.solver.evolve.AbstractOperator;
-import objenome.solver.evolve.GPContainer;
+import objenome.op.Node;
+import objenome.op.math.DoubleERC;
+import objenome.solver.evolve.*;
 import objenome.solver.evolve.GPContainer.GPKey;
-import objenome.solver.evolve.Individual;
-import static objenome.problem.ProblemSTGP.PROBLEM;
-import objenome.solver.evolve.RandomSequence;
-import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
-import objenome.solver.evolve.STGPIndividual;
-import static objenome.solver.evolve.STGPIndividual.SYNTAX;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
 import objenome.solver.evolve.event.OperatorEvent;
 import objenome.solver.evolve.event.OperatorEvent.EndOperator;
-import objenome.op.Node;
-import objenome.op.math.DoubleERC;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static objenome.problem.ProblemSTGP.PROBLEM;
+import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
+import static objenome.solver.evolve.STGPIndividual.SYNTAX;
 
 /**
  * A mutation operator for <code>STGPIndividual</code>s that replaces nodes at
@@ -161,7 +159,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
         for (int i = 0; i < length; i++) {
             if (random.nextDouble() < pointProbability) {
                 Node node = program.getNode(i);
-                int arity = node.getArity();
+                int arity = node.arity();
 
                 List<Node> replacements = validReplacements(node);
                 
@@ -172,7 +170,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 
                     // Attach the old node's children.
                     for (int k = 0; k < arity; k++) {
-                        replacement.setChild(k, node.getChild(k));
+                        replacement.setChild(k, node.node(k));
                     }
 
                     child.setNode(i, replacement);
@@ -205,7 +203,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      * <code>n</code>
      */
     protected List<Node> validReplacements(Node n) {
-        int arity = n.getArity();
+        int arity = n.arity();
 
         // TODO This should be the parent's required argument type
         Class<?> requiredType = n.dataType();
@@ -213,13 +211,13 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
         // Get the data-type of children
         Class<?>[] argTypes = new Class<?>[arity];
         for (int i = 0; i < arity; i++) {
-            argTypes[i] = n.getChild(i).getClass();
+            argTypes[i] = n.node(i).getClass();
         }
 
         // Filter the syntax down to valid replacements
         List<Node> replacements = new ArrayList<>();
         for (Node replacement : syntax) {
-            if ((replacement.getArity() == arity) && !nodesEqual(replacement, n)) {
+            if ((replacement.arity() == arity) && !nodesEqual(replacement, n)) {
                 Class<?> replacementReturn = replacement.dataType(argTypes);
                 if ((replacementReturn != null) && requiredType.isAssignableFrom(replacementReturn)) {
                     
@@ -243,10 +241,10 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      * equals() method because we don't want to compare children if it's a
      * non-terminal node.
      */
-    private boolean nodesEqual(final Node nodeA, final Node nodeB) {
+    private static boolean nodesEqual(final Node nodeA, final Node nodeB) {
         boolean equal = false;
         if (nodeA.getClass().equals(nodeB.getClass())) {
-            if (nodeA.getArity() > 0) {
+            if (nodeA.arity() > 0) {
                 equal = true;
             } else {
                 equal = nodeA.equals(nodeB);
@@ -286,26 +284,26 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
         this.probability = probability;
     }
 
-    /**
-     * Returns the random number sequence in use
-     *
-     * @return the currently set random sequence
-     */
-    public RandomSequence getRandomSequence() {
-        return random;
-    }
+//    /**
+//     * Returns the random number sequence in use
+//     *
+//     * @return the currently set random sequence
+//     */
+//    public RandomSequence getRandomSequence() {
+//        return random;
+//    }
 
-    /**
-     * Sets the random number sequence to use. If automatic configuration is
-     * enabled then any value set here will be overwritten by the
-     * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
-     * config event.
-     *
-     * @param random the random number generator to set
-     */
-    public void setRandomSequence(RandomSequence random) {
-        this.random = random;
-    }
+//    /**
+//     * Sets the random number sequence to use. If automatic configuration is
+//     * enabled then any value set here will be overwritten by the
+//     * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
+//     * config event.
+//     *
+//     * @param random the random number generator to set
+//     */
+//    public void setRandomSequence(RandomSequence random) {
+//        this.random = random;
+//    }
 
     /**
      * Returns the array of nodes in the available syntax. Replacement nodes are
@@ -357,7 +355,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
      *
      * @since 2.0
      */
-    public class EndEvent extends OperatorEvent.EndOperator {
+    private static class EndEvent extends OperatorEvent.EndOperator {
 
         private List<Integer> points;
 
@@ -369,7 +367,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
          * @param parent the individual that the operator was performed on
          *
          */
-        public EndEvent(PointMutation operator, Individual... parents) {
+        EndEvent(PointMutation operator, Individual... parents) {
             super(operator, parents);
         }
 
@@ -378,7 +376,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
          *
          * @return a list of indices of the mutation points
          */
-        public List<Integer> getMutationPoints() {
+        List<Integer> getMutationPoints() {
             return points;
         }
 
@@ -387,7 +385,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
          *
          * @param points a list of indices of the mutation points
          */
-        public void setMutationPoints(List<Integer> points) {
+        void setMutationPoints(List<Integer> points) {
             this.points = points;
         }
     }

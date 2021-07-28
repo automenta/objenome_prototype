@@ -21,42 +21,25 @@
  */
 package objenome.problem;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import objenome.solver.evolve.Breeder;
-import objenome.solver.evolve.EvolutionaryStrategy;
-import objenome.solver.evolve.FitnessEvaluator;
-import objenome.solver.evolve.Initialiser;
-import objenome.solver.evolve.MaximumGenerations;
-import objenome.solver.evolve.Operator;
-import objenome.solver.evolve.Population;
-import objenome.solver.evolve.RandomSequence;
-import objenome.solver.evolve.STGPIndividual;
-import objenome.solver.evolve.TerminationCriteria;
-import objenome.solver.evolve.TerminationFitness;
-import objenome.solver.evolve.fitness.DoubleFitness;
 import objenome.op.Node;
 import objenome.op.Variable;
 import objenome.op.VariableNode;
-import objenome.op.math.Add;
-import objenome.op.math.DivisionProtected;
-import objenome.op.math.DoubleERC;
-import objenome.op.math.Max2;
-import objenome.op.math.Min2;
-import objenome.op.math.Multiply;
-import objenome.op.math.Power;
-import objenome.op.math.Subtract;
+import objenome.op.math.*;
 import objenome.op.trig.Sine;
 import objenome.op.trig.Tangent;
-import objenome.solver.evolve.BranchedBreeder;
-import objenome.solver.evolve.fitness.SumOfError;
+import objenome.solver.evolve.*;
 import objenome.solver.evolve.init.Full;
 import objenome.solver.evolve.mutate.PointMutation;
 import objenome.solver.evolve.mutate.SubtreeCrossover;
 import objenome.solver.evolve.mutate.SubtreeMutation;
-import objenome.util.random.MersenneTwisterFast;
+import objenome.solver.evolve.score.DoubleScore;
+import objenome.solver.evolve.score.SumOfError;
 import objenome.solver.evolve.selection.TournamentSelector;
+import objenome.util.random.MersenneTwisterFast;
+
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * Evolves a function that minimizes the total error of an expression
@@ -78,7 +61,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         
         the(Population.SIZE, populationSize);
         List<TerminationCriteria> criteria = new ArrayList<>();
-        criteria.add(new TerminationFitness(new DoubleFitness.Minimise(0.0)));
+        criteria.add(new TerminationScore(new DoubleScore.Minimise(0.0)));
         criteria.add(new MaximumGenerations());
         the(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         the(MaximumGenerations.MAXIMUM_GENERATIONS, 150);
@@ -95,7 +78,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         the(PointMutation.PROBABILITY, 0.3);
         the(SubtreeCrossover.PROBABILITY, 0.3);
         the(SubtreeMutation.PROBABILITY, 0.3);
-        the(Initialiser.METHOD, new Full());
+        the(Initializer.METHOD, new Full());
         //the(Initialiser.METHOD, new RampedHalfAndHalf());
 
         RandomSequence randomSequence = new MersenneTwisterFast();
@@ -129,7 +112,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
         syntax.add( new VariableNode( x = new Variable("X", Double.class) ) );
                 
         // Setup syntax        
-        the(STGPIndividual.SYNTAX, syntax.toArray(new Node[syntax.size()]));
+        the(STGPIndividual.SYNTAX, syntax.toArray(new Node[0]));
             
         
         the(STGPIndividual.RETURN_TYPE, Double.class);
@@ -138,7 +121,7 @@ public class STGPFunctionApproximation extends ProblemSTGP {
 
 
         // Setup fitness function
-        the(FitnessEvaluator.FUNCTION, fitness = new SumOfError<Double,Double>());
+        the(ScoreEvaluator.FUNCTION, fitness = new SumOfError<>());
 
         samples = fitness.obs;
     }

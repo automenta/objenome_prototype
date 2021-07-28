@@ -5,12 +5,13 @@
  */
 package objenome.problem;
 
-import java.lang.reflect.Parameter;
-import java.util.List;
 import objenome.solution.SetBooleanValue;
 import objenome.solution.SetDoubleValue;
 import objenome.solution.SetIntegerValue;
 import objenome.solution.SetNumericValue;
+
+import java.lang.reflect.Parameter;
+import java.util.List;
 
 /**
  *

@@ -21,7 +21,7 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import objenome.solver.evolve.Fitness;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 
 /**
@@ -32,7 +32,7 @@ public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
     /**
      * The worst fitness value of a generation.
      */
-    private Fitness worst;
+    private Score worst;
 
     /**
      * Constructs a <code>GenerationWorstFitness</code>.
@@ -48,10 +48,10 @@ public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
+        Score[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         worst = null;
 
-        for (Fitness fitness : fitnesses) {
+        for (Score fitness : fitnesses) {
             if (worst == null || fitness.compareTo(worst) < 0) {
                 worst = fitness;
             }
@@ -63,7 +63,7 @@ public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
      *
      * @return the worst fitness value.
      */
-    public Fitness getWorst() {
+    public Score getWorst() {
         return worst;
     }
 

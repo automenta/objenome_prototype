@@ -19,10 +19,10 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package objenome.solver.evolve.fitness;
+package objenome.solver.evolve.score;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import objenome.op.Variable;
+import objenome.problem.Observation;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.GPContainer.GPKey;
 import objenome.solver.evolve.Individual;
@@ -30,9 +30,11 @@ import objenome.solver.evolve.Population;
 import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
-import objenome.op.Variable;
-import objenome.problem.Observation;
-import static objenome.solver.evolve.fitness.HitsCount.EXPECTED_OUTPUTS;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+import static objenome.solver.evolve.score.HitsCount.EXPECTED_OUTPUTS;
 
 /**
  * A fitness function for <code>STGPIndividual</code>s that calculates and
@@ -55,7 +57,7 @@ import static objenome.solver.evolve.fitness.HitsCount.EXPECTED_OUTPUTS;
  *
  * @since 2.0
  */
-public class SumOfError<I,O> extends STGPFitnessFunction implements Listener<ConfigEvent> {
+public class SumOfError<I,O> extends STGPScoreFunction implements Listener<ConfigEvent> {
 
     /**
      * The key for setting the program's input variables
@@ -136,7 +138,7 @@ public class SumOfError<I,O> extends STGPFitnessFunction implements Listener<Con
      * STGPIndividual or the individual's data-type is not Double.
      */
     @Override
-    public DoubleFitness.Minimise evaluate(Population population, Individual individual) {
+    public DoubleScore.Minimise evaluate(Population population, Individual individual) {
 
         if (!(individual instanceof STGPIndividual)) {
             throw new IllegalArgumentException("Unsupported representation");
@@ -158,7 +160,7 @@ public class SumOfError<I,O> extends STGPFitnessFunction implements Listener<Con
             I[] input = o.input;
             // Update the variable values
             for (int j = 0; j < input.length; j++) {
-                inputVariables[j].setValue(input[j]);
+                inputVariables[j].set(input[j]);
             }
 
             // Run the program
@@ -183,7 +185,7 @@ public class SumOfError<I,O> extends STGPFitnessFunction implements Listener<Con
             }
         }
 
-        return new DoubleFitness.Minimise(errorSum);
+        return new DoubleScore.Minimise(errorSum);
     }
 
     /**

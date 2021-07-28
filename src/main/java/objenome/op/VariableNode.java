@@ -36,7 +36,7 @@ package objenome.op;
  */
 public class VariableNode extends Node {
 
-    private Variable variable;
+    private final Variable variable;
 
     /**
      * Constructs a new <code>VariableNode</code> wrapper for the given variable
@@ -67,7 +67,7 @@ public class VariableNode extends Node {
      */
     @Override
     public Object evaluate() {
-        return variable.getValue();
+        return variable.value();
     }
 
     /**
@@ -76,8 +76,8 @@ public class VariableNode extends Node {
      * @return the name of the variable
      */
     @Override
-    public String getIdentifier() {
-        return variable.getName();
+    public String id() {
+        return variable.name;
     }
 
     /**
@@ -87,11 +87,10 @@ public class VariableNode extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if (inputTypes.length != 0) {
+        if (inputTypes.length != 0)
             throw new IllegalArgumentException("variables do not have input types");
-        }
 
-        return variable.getDataType();
+        return variable.datatype;
     }
 
     /**
@@ -101,7 +100,7 @@ public class VariableNode extends Node {
      */
     @Override
     public String toString() {
-        return variable.getName();
+        return variable.name;
     }
 
     /**

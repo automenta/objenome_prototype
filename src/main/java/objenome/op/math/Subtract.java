@@ -75,8 +75,8 @@ public class Subtract extends Node {
      */
     @Override
     public Object evaluate() {
-        Object c1 = getChild(0).evaluate();
-        Object c2 = getChild(1).evaluate();
+        Object c1 = node(0).evaluate();
+        Object c2 = node(1).evaluate();
 
         Class<?> returnType = TypeUtil.widestNumberType(c1.getClass(), c2.getClass());
 
@@ -115,7 +115,7 @@ public class Subtract extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

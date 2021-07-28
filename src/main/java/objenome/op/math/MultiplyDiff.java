@@ -13,10 +13,10 @@ import objenome.op.ScalarFunction;
  *
  * @author thorsten
  */
-public class MultiplyDiff extends ScalarFunction /*extends Multiply<ScalarFunction>*/ implements DiffableFunction {
+public class MultiplyDiff extends ScalarFunction /*extends Multiply<ScalarFunction>*/ {
 
-    private DiffableFunction a;
-    private DiffableFunction b;
+    private final DiffableFunction a;
+    private final DiffableFunction b;
 
     public MultiplyDiff(DiffableFunction a, DiffableFunction b) {
         this.a = a;

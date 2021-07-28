@@ -17,9 +17,10 @@
  */
 package objenome.util.bytecode;
 
-import java.lang.reflect.Modifier;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.lang.reflect.Modifier;
 
 
 // CHECKSTYLE:OFF
@@ -40,7 +41,7 @@ public class SgUtilsTest {
 
     @Test
     public void uppercaseToUnderscore() {
-        Assert.assertEquals(SgUtils.uppercaseToUnderscore(null), null);
+        Assert.assertNull(SgUtils.uppercaseToUnderscore(null));
         Assert.assertEquals(SgUtils.uppercaseToUnderscore(""), "");
         Assert.assertEquals(SgUtils.uppercaseToUnderscore("abcDef"), "abc_def");
         Assert.assertEquals(SgUtils.uppercaseToUnderscore("AbcDefG"), "abc_def_g");
@@ -50,7 +51,7 @@ public class SgUtilsTest {
 
     @Test
     public void firstCharUpper() {
-        Assert.assertEquals(SgUtils.firstCharUpper(null), null);
+        Assert.assertNull(SgUtils.firstCharUpper(null));
         Assert.assertEquals(SgUtils.firstCharUpper(""), "");
         Assert.assertEquals(SgUtils.firstCharUpper("a"), "A");
         Assert.assertEquals(SgUtils.firstCharUpper("abc"), "Abc");

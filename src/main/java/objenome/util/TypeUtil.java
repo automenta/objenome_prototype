@@ -231,7 +231,7 @@ public final class TypeUtil {
             return classes[0];
         }
         else if (classes.length == 2) {
-            Class c = classes[0];
+            Class<?> c = classes[0];
             if (c == classes[1]) {
                 if (c == Double.class) return Double.class;
                 if (c == Float.class) return Float.class;
@@ -275,7 +275,7 @@ public final class TypeUtil {
      * @return <code>true</code> if it is a numeric type, <code>false</code>
      * otherwise
      */
-    public static final boolean isNumericType(final Class<?> type) {
+    public static boolean isNumericType(final Class<?> type) {
         return Number.class.isAssignableFrom(type);
         /*
         return ((type == Byte.class) || (type == Short.class) || (type == Integer.class) || (type == Long.class)
@@ -293,7 +293,7 @@ public final class TypeUtil {
      */
     public static boolean isAllNumericType(final Class<?>... classes) {
         for (Class<?> c : classes) {
-            if (!TypeUtil.isNumericType(c)) {
+            if (!isNumericType(c)) {
                 return false;
             }
         }
@@ -355,8 +355,6 @@ public final class TypeUtil {
             return Character.class;
         } else if (byte.class == type) {
             return Byte.class;
-        } else if (short.class == type) {
-            return Short.class;
         } else {
             throw new IllegalArgumentException();
         }

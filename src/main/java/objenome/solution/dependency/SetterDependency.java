@@ -1,9 +1,10 @@
 package objenome.solution.dependency;
 
+import objenome.util.InjectionUtils;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import objenome.util.InjectionUtils;
 
 /**
  * A simple implementation of the Dependency interface.
@@ -66,7 +67,7 @@ public class SetterDependency {
         String className = targetClass.getName();
 
         // first check cache...
-        Method m = null;
+        Method m;
 
         synchronized (cache) {
 

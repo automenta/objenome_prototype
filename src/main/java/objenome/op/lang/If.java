@@ -67,13 +67,7 @@ public class If extends Node {
      */
     @Override
     public Object evaluate() {
-        boolean c1 = ((Boolean) getChild(0).evaluate());
-
-        if (c1) {
-            return getChild(1).evaluate();
-        } else {
-            return getChild(2).evaluate();
-        }
+        return node((boolean) ((Boolean) node(0).evaluate()) ? 1 : 2).evaluate();
     }
 
     /**
@@ -82,7 +76,7 @@ public class If extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 
@@ -99,10 +93,6 @@ public class If extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if ((inputTypes.length == 3) && (inputTypes[0] == Boolean.class)) {
-            return TypeUtil.getSuper(inputTypes[1], inputTypes[2]);
-        } else {
-            return null;
-        }
+        return (inputTypes.length == 3) && (inputTypes[0] == Boolean.class) ? TypeUtil.getSuper(inputTypes[1], inputTypes[2]) : null;
     }
 }

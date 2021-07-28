@@ -59,9 +59,7 @@ public class Tangent extends Node {
      */
     @Override
     public Double evaluate() {
-        Object c = getChild(0).evaluate();
-
-        return Math.tan(NumericUtils.asDouble(c));
+        return Math.tan(NumericUtils.asDouble(node(0).evaluate()));
     }
 
     /**
@@ -70,7 +68,7 @@ public class Tangent extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

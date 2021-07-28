@@ -19,18 +19,17 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package objenome.solver.evolve.fitness;
+package objenome.solver.evolve.score;
 
 
+import objenome.op.Variable;
 import objenome.solver.evolve.GPContainer;
-import objenome.solver.evolve.GPContainer.GPContainerAware;
 import objenome.solver.evolve.GPContainer.GPKey;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.Population;
 import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
-import objenome.op.Variable;
 
 /**
  * A fitness function for <code>STGPIndividual</code>s that calculates and
@@ -50,7 +49,7 @@ import objenome.op.Variable;
  *
  * @since 2.0
  */
-public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEvent>, GPContainerAware {
+public class HitsCount extends STGPScoreFunction implements Listener<ConfigEvent> {
 
     /**
      * The key for setting the expected output values from the programs being
@@ -142,7 +141,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
      * STGPIndividual
      */
     @Override
-    public DoubleFitness.Minimise evaluate(Population population, Individual individual) {
+    public DoubleScore.Minimise evaluate(Population population, Individual individual) {
         setConfig(population.getConfig());
 
         if (!(individual instanceof STGPIndividual)) {
@@ -157,7 +156,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
         for (int i = 0; i < inputValueSets.length; i++) {
             // Update the variable values
             for (int j = 0; j < inputVariables.length; j++) {
-                inputVariables[j].setValue(inputValueSets[i][j]);
+                inputVariables[j].set(inputValueSets[i][j]);
             }
 
             // Run the program
@@ -168,7 +167,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
             }
         }
 
-        return new DoubleFitness.Minimise(noWrong);
+        return new DoubleScore.Minimise(noWrong);
     }
 
     /**
@@ -184,11 +183,11 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
             Double dblResult = (Double) result;
             Double dblExpectedResult = (Double) expectedResult;
 
-            if (dblResult == Double.NaN && dblExpectedResult == Double.NaN) {
+            if (dblResult != dblResult && dblExpectedResult != dblExpectedResult) {
                 return true;
             } else {
                 double error = Math.abs(dblResult - dblExpectedResult);
-                return (error != Double.NaN && error <= pointError);
+                return (error == error && error <= pointError);
             }
         } else {
             return result.equals(expectedResult);

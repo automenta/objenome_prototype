@@ -21,11 +21,11 @@
  */
 package objenome.op.compute;
 
-import objenome.solver.evolve.Individual;
 import objenome.op.EpoxParser;
 import objenome.op.Node;
 import objenome.op.Variable;
 import objenome.op.VariableNode;
+import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.source.SourceGenerator;
 
 /**
@@ -48,7 +48,7 @@ import objenome.solver.evolve.source.SourceGenerator;
 public class EpoxInterpreter<T extends Individual> implements Computer<Object,T,Object> {
 
     // The Epox language parser.
-    private EpoxParser parser;
+    private final EpoxParser parser;
 
     private SourceGenerator<T> generator;
 
@@ -126,7 +126,7 @@ public class EpoxInterpreter<T extends Individual> implements Computer<Object,T,
             Object[] paramSet = argValues[i];
 
             for (int j = 0; j < noParams; j++) {
-                declaredVariables[j].getVariable().setValue(paramSet[j]);
+                declaredVariables[j].getVariable().set(paramSet[j]);
             }
 
             // Evaluate the program tree.

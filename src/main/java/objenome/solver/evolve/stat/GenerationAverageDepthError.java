@@ -58,7 +58,7 @@ public class GenerationAverageDepthError extends AbstractStat<EndGeneration> {
     @Override
     public void refresh(EndGeneration event) {
         double stdev = getConfig().the(GenerationStandardDeviationDepth.class).getStandardDeviation();
-        Population population = event.getPopulation();
+        Population<?> population = event.getPopulation();
 
         error = stdev / Math.sqrt(population.size());
     }

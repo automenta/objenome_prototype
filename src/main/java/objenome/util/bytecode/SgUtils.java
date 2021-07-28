@@ -51,7 +51,7 @@ public final class SgUtils {
     private static final int OUTER_INTERFACE = 5;
     private static final int INNER_INTERFACE = 6;
 
-    private static final String[] TYPE_NAMES = new String[] { "Field", "Method", "Constructor",
+    private static final String[] TYPE_NAMES = { "Field", "Method", "Constructor",
             "Outer Class", "Inner Class", "Outer Interface", "Inner Interface" };
 
     // Modifiers
@@ -67,16 +67,16 @@ public final class SgUtils {
     private static final int VOLATILE = 9;
     private static final int STRICTFP = 10;
 
-    private static final String[] MODIFIER_NAMES = new String[] { "abstract", "final", "native",
+    private static final String[] MODIFIER_NAMES = { "abstract", "final", "native",
             "private", "protected", "public", "static", "synchronized", "transient", "volatile",
             "strictfp" };
 
-    private static final int[] MODIFIER_VALUES = new int[] { Modifier.ABSTRACT, Modifier.FINAL,
+    private static final int[] MODIFIER_VALUES = { Modifier.ABSTRACT, Modifier.FINAL,
             Modifier.NATIVE, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.PUBLIC,
             Modifier.STATIC, Modifier.SYNCHRONIZED, Modifier.TRANSIENT, Modifier.VOLATILE,
             Modifier.STRICT };
 
-    private static final boolean[][] MODIFIERS_MATRIX = new boolean[][] {
+    private static final boolean[][] MODIFIERS_MATRIX = {
             { false, true, false, true, true, true, true },
             { true, true, false, true, true, false, false },
             { false, true, false, false, false, false, false },
@@ -278,7 +278,7 @@ public final class SgUtils {
         if (str == null) {
             return null;
         }
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
             final char ch = str.charAt(i);
             if (Character.isUpperCase(ch)) {
@@ -306,11 +306,11 @@ public final class SgUtils {
         if (str == null) {
             return null;
         }
-        if (str.length() == 0) {
+        if (str.isEmpty()) {
             return str;
         }
         if (str.length() == 1) {
-            return "" + Character.toUpperCase(str.charAt(0));
+            return String.valueOf(Character.toUpperCase(str.charAt(0)));
         }
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
@@ -327,14 +327,14 @@ public final class SgUtils {
      * @return Both packages added with ".".
      */
     public static String concatPackages(final String package1, final String package2) {
-        if ((package1 == null) || (package1.length() == 0)) {
-            if ((package2 == null) || (package2.length() == 0)) {
+        if ((package1 == null) || (package1.isEmpty())) {
+            if ((package2 == null) || (package2.isEmpty())) {
                 return "";
             } else {
                 return package2;
             }
         } else {
-            if ((package2 == null) || (package2.length() == 0)) {
+            if ((package2 == null) || (package2.isEmpty())) {
                 return package1;
             } else {
                 return package1 + "." + package2;
@@ -377,7 +377,7 @@ public final class SgUtils {
      * @return Modifier matrix HTML table.
      */
     public static String modifierMatrixToHtml() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("<table border=\"1\">\n");
 
         // Header
@@ -492,9 +492,9 @@ public final class SgUtils {
         int increase = replacement.length() - replLength;
         increase = (increase < 0 ? 0 : increase);
         increase *= (maxx < 0 ? 16 : (maxx > 64 ? 64 : maxx));
-        final StringBuffer buf = new StringBuffer(text.length() + increase);
+        final StringBuilder buf = new StringBuilder(text.length() + increase);
         while (end != -1) {
-            buf.append(text.substring(start, end)).append(replacement);
+            buf.append(text, start, end).append(replacement);
             start = end + replLength;
             if (--maxx == 0) {
                 break;
@@ -530,7 +530,7 @@ public final class SgUtils {
      * @author See org.apache.commons.lang.StringUtils
      */
     public static boolean isEmpty(final String str) {
-        return str == null || str.length() == 0;
+        return str == null || str.isEmpty();
     }
 
     /**
@@ -545,7 +545,7 @@ public final class SgUtils {
      *         "methodXY(String, int, boolean)").
      */
     public static String createTypeSignature(final String methodName, final Class<?>[] paramTypes) {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(methodName);
         sb.append("(");
         for (int i = 0; i < paramTypes.length; i++) {
@@ -569,9 +569,9 @@ public final class SgUtils {
     public static List<SgAnnotation> createAnnotations(final Annotation[] ann) {
         final List<SgAnnotation> list = new ArrayList<>();
         if ((ann != null) && (ann.length > 0)) {
-            for (int i = 0; i < ann.length; i++) {
-                final SgAnnotation annotation = new SgAnnotation(ann[i].annotationType()
-                        .getPackage().getName(), ann[i].annotationType().getSimpleName());
+            for (Annotation value : ann) {
+                final SgAnnotation annotation = new SgAnnotation(value.annotationType()
+                        .getPackage().getName(), value.annotationType().getSimpleName());
                 // TODO Handle annotation arguments
                 list.add(annotation);
             }

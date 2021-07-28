@@ -49,7 +49,7 @@ public class Cosine<X extends Node> extends Numeric1d<X,Number>  {
     public static final String IDENTIFIER = "COS";
 
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

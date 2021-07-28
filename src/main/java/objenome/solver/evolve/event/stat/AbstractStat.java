@@ -21,15 +21,16 @@
  */
 package objenome.solver.evolve.event.stat;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.GPContainer.GPContainerAware;
 import objenome.solver.evolve.event.Event;
 import objenome.solver.evolve.event.EventManager;
 import objenome.solver.evolve.event.Listener;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The <code>AbstractStat</code> represent the base class for classes that
@@ -56,19 +57,13 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
      * This is the stat listener. When the stat is registered, its listener is
      * added to the {@link EventManager}.
      */
-    public Listener<T> listener = new Listener<T>() {
-
-        @Override
-        public void onEvent(T event) {
-            AbstractStat.this.refresh(event);
-        }
-    };
+    public Listener<T> listener = AbstractStat.this::refresh;
 
     /**
      * The event that trigger the stat to clear its values.
      * TODO make private
      */
-    private Class<T> clearOnEvent = null;
+    private Class<T> clearOnEvent;
 
     
     /**
@@ -77,7 +72,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
      */
     private Listener<T> clearOnListener;
     private GPContainer config;
-    private List<Class<? extends AbstractStat<?>>> dependencies;
+    private final List<Class<? extends AbstractStat<?>>> dependencies;
 
     /**
      * Constructs an <code>AbstractStat</code>.
@@ -93,7 +88,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
      */
     @SuppressWarnings("unchecked")
     public AbstractStat(Class<? extends AbstractStat<?>> dependency) {
-        this(Arrays.<Class<? extends AbstractStat<?>>>asList(dependency));
+        this(List.of(dependency));
     }
 
     /**
@@ -102,6 +97,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
      *
      * @param dependencies the array of dependencies of this stat.
      */
+    @SafeVarargs
     public AbstractStat(Class<? extends AbstractStat<?>>... dependencies) {
         this(Arrays.asList(dependencies));
     }
@@ -125,7 +121,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
      */
     @SuppressWarnings("unchecked")
     public <E extends Event> AbstractStat(Class<T> clearOn, Class<? extends AbstractStat<?>> dependency) {
-        this(clearOn, Arrays.<Class<? extends AbstractStat<?>>>asList(dependency));
+        this(clearOn, List.of(dependency));
     }
 
     /**
@@ -135,6 +131,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
      * @param clearOn the event that trigger the stat to clear its values.
      * @param dependencies the array of dependencies of this stat.
      */
+    @SafeVarargs
     public <E extends Event> AbstractStat(Class<T> clearOn, Class<? extends AbstractStat<?>>... dependencies) {
         this(clearOn, Arrays.asList(dependencies));
     }
@@ -162,11 +159,7 @@ public abstract class AbstractStat<T extends Event> implements GPContainerAware 
             config.get(dependency);
         }
         if (clearOnEvent!=null) {
-            Listener<T> trigger = new Listener<T>() {
-                @Override public void onEvent(T event) {
-                    clear();
-                }            
-            };
+            Listener<T> trigger = event -> clear();
             config.on(clearOnEvent, trigger);
 
             clearOnListener = trigger;

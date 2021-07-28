@@ -21,18 +21,19 @@
  */
 package objenome.solver.evolve;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import objenome.Container;
+import objenome.op.Node;
+import objenome.op.Variable;
+import objenome.op.VariableNode;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Event;
 import objenome.solver.evolve.event.EventManager;
 import objenome.solver.evolve.event.Listener;
 import objenome.solver.evolve.event.stat.AbstractStat;
-import objenome.op.Node;
-import objenome.op.Variable;
-import objenome.op.VariableNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Provides a centralised store for configuration parameters. It uses a
@@ -60,7 +61,7 @@ public class GPContainer<I extends Individual> extends Container {
      */
     public final HashMap<Class<?>, Object> stat = new HashMap<>();
     private Pipeline pipeline;
-    private Population<I> population = null;
+    private Population<I> population;
 
     /**
      * The key -&gt; value mapping.
@@ -98,11 +99,11 @@ public class GPContainer<I extends Individual> extends Container {
              * an evolutionary run is composed of. The specific list of components used
              * is obtained from the {@link Config}, using the appropriate <code>Class</code> */
             for (PopulationProcess component : (Iterable<PopulationProcess>) the(COMPONENTS)) {
-                GPContainer.setContainerAware(this, component);
+                setContainerAware(this, component);
                 pipeline.add(component);
             }
             
-            population = new Population<I>(this);
+            population = new Population<>(this);
         }
 
         //config.fire(new StartRun(0));
@@ -118,9 +119,9 @@ public class GPContainer<I extends Individual> extends Container {
         return population;
     }
 
-    public static interface GPContainerAware {
+    public interface GPContainerAware {
 
-        public void setConfig(GPContainer c);
+        void setConfig(GPContainer c);
     }
 
     /**
@@ -143,7 +144,7 @@ public class GPContainer<I extends Individual> extends Container {
             }
         }
 
-        return variables.toArray(new Variable[variables.size()]);
+        return variables.toArray(new Variable[0]);
     }
 
 //    /**

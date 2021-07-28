@@ -6,14 +6,7 @@
 package objenome.problem;
 
 import com.google.common.collect.Lists;
-import objenome.solver.evolve.BranchedBreeder;
-import objenome.solver.evolve.FitnessEvaluator;
-import objenome.solver.evolve.FitnessFunction;
-import objenome.solver.evolve.GPContainer;
-import objenome.solver.evolve.GenerationalStrategy;
-import objenome.solver.evolve.Initialiser;
-import objenome.solver.evolve.PopulationProcess;
-import objenome.solver.evolve.STGPIndividual;
+import objenome.solver.evolve.*;
 
 /**
  * Static-typed Problem solvable by Evolution
@@ -36,22 +29,18 @@ public abstract class ProblemSTGP extends GPContainer<STGPIndividual> {
     public ProblemSTGP() {
         super();
         
-        the(COMPONENTS, Lists.newArrayList(new PopulationProcess[] {
-            new Initialiser(),
-            new FitnessEvaluator(),
-            new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator())            
-        }));
+        the(COMPONENTS, Lists.newArrayList(new Initializer(),
+                new ScoreEvaluator(),
+                new GenerationalStrategy(new BranchedBreeder(), new ScoreEvaluator())));
         
     }
-   public ProblemSTGP(FitnessFunction f) {
+   public ProblemSTGP(ScoreFunction f) {
         super();
         
-        the(COMPONENTS, Lists.newArrayList(new PopulationProcess[] {
-            new Initialiser(),
-            new GenerationalStrategy(
-                    new BranchedBreeder(), 
-                    new FitnessEvaluator(f))            
-        }));
+        the(COMPONENTS, Lists.newArrayList(new Initializer(),
+                new GenerationalStrategy(
+                        new BranchedBreeder(),
+                        new ScoreEvaluator(f))));
         
     }
 

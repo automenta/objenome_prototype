@@ -21,7 +21,7 @@
  */
 package objenome.solver.evolve;
 
-public abstract class AbstractFitnessFunction<I extends Individual> implements FitnessFunction<I> {
+public abstract class AbstractScorer<I extends Individual> implements ScoreFunction<I> {
 
     /**
      * Evaluates all individuals in the given population by calling the
@@ -34,8 +34,8 @@ public abstract class AbstractFitnessFunction<I extends Individual> implements F
     @Override
     public void evaluate(Population<I> population) {
         for (I individual : population) {
-            Fitness fitness = evaluate(population, individual);
-            assignFitness(fitness, individual);
+            Score fitness = evaluate(population, individual);
+            assignScore(fitness, individual);
         }
     }
 
@@ -45,18 +45,12 @@ public abstract class AbstractFitnessFunction<I extends Individual> implements F
      * @param individual
      * @return the fitness of the given individual
      */
-    public abstract Fitness evaluate(Population population, Individual individual);
+    public abstract Score evaluate(Population population, Individual individual);
 
-    /**
-     *
-     * @param fitness
-     * @param individual
-     */
-    protected void assignFitness(Fitness fitness, Individual individual) {
-        if (individual instanceof AbstractIndividual) {
-            AbstractIndividual abstractIndividual = (AbstractIndividual) individual;
-            abstractIndividual.setFitness(fitness);
-        }
+
+    protected void assignScore(Score fitness, Individual individual) {
+        if (individual instanceof AbstractIndividual)
+            ((AbstractIndividual) individual).setScore(fitness);
     }
 
 }

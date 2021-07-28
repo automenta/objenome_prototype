@@ -1,5 +1,9 @@
 package objenome.util.bean;
 
+import objenome.util.bean.anno.GenericBeanKeyProvider;
+import objenome.util.bean.anno.Initializer;
+import objenome.util.bean.anno.PropertyChangeEventMethod;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,10 +13,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-
-import objenome.util.bean.anno.GenericBeanKeyProvider;
-import objenome.util.bean.anno.Initializer;
-import objenome.util.bean.anno.PropertyChangeEventMethod;
 
 /**
  * Builder for proxied JavaBeans.
@@ -24,7 +24,7 @@ import objenome.util.bean.anno.PropertyChangeEventMethod;
 public class BeanProxyBuilder<T> {
 
     /** Check each class only once so cache the check classes. */
-    private static final Set<Class<?>> CHECKED_CLASSES = new CopyOnWriteArraySet<Class<?>>();
+    private static final Set<Class<?>> CHECKED_CLASSES = new CopyOnWriteArraySet<>();
 
     private final Class<T> iface;
 
@@ -39,7 +39,7 @@ public class BeanProxyBuilder<T> {
     private boolean propertyChangeSupport;
 
     // pre-set by constructor
-    private boolean genericSupport;
+    private final boolean genericSupport;
 
     // -----------------------------------------------------
 
@@ -67,7 +67,7 @@ public class BeanProxyBuilder<T> {
     }
 
     public static <T> BeanProxyBuilder<T> on(final Class<T> iface) {
-        return new BeanProxyBuilder<T>(iface);
+        return new BeanProxyBuilder<>(iface);
     }
 
     private BeanProxyBuilder(final Class<T> iface) {
@@ -78,7 +78,7 @@ public class BeanProxyBuilder<T> {
             throw new IllegalArgumentException(iface + " must be an interface"); //$NON-NLS-1$
         }
         this.iface = iface;
-        this.allIfaces = new HashSet<Class<?>>(ObjectUtil.collectInterfaces(this.iface));
+        this.allIfaces = new HashSet<>(ObjectUtil.collectInterfaces(this.iface));
         this.propertyChangeSupport = Annotations.hasMethodWithAnnotation(this.allIfaces,
                 PropertyChangeEventMethod.class);
         this.genericSupport = checkForGenericSupport(this.allIfaces);
@@ -118,7 +118,7 @@ public class BeanProxyBuilder<T> {
         if (this.check) {
             checkIFace(this.iface);
         }
-        Class<?>[] array = this.allIfaces.toArray(new Class<?>[this.allIfaces.size()]);
+        Class<?>[] array = this.allIfaces.toArray(new Class<?>[0]);
         final T proxy = this.iface.cast(Proxy.newProxyInstance(this.iface.getClassLoader(), array,
                 create(this.iface)));
         if (this.init) {

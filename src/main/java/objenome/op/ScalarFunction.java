@@ -13,7 +13,7 @@ abstract public class ScalarFunction<X extends Node> extends Node<X,Double> impl
  
     
     @Override
-    public String getIdentifier() {
+    public String id() {
         return getClass().getSimpleName().toUpperCase();
     }
 

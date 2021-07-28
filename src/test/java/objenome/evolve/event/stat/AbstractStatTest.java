@@ -21,11 +21,12 @@
  */
 package objenome.evolve.event.stat;
 
-import objenome.solver.evolve.event.stat.AbstractStat;
-import objenome.solver.evolve.event.stat.RunBestFitness;
 import junit.framework.TestCase;
 import objenome.solver.evolve.GPContainer;
 import objenome.solver.evolve.event.GenerationEvent;
+import objenome.solver.evolve.event.stat.AbstractStat;
+import objenome.solver.evolve.event.stat.RunBestFitness;
+import org.junit.Assert;
 
 /**
  * The <code>AbstractStatTest</code> class provides unit tests for methods of
@@ -42,20 +43,20 @@ public class AbstractStatTest extends TestCase {
         GPContainer config = new GPContainer();        
         
         AbstractStat<GenerationEvent.EndGeneration> a, a2, b;
-        
-        assertTrue(!config.contains(RunBestFitness.class));
+
+        Assert.assertFalse(config.contains(RunBestFitness.class));
         
         a = config.stat(new RunBestFitness());
-        assertNotNull(a);
+        Assert.assertNotNull(a);
         a2 = config.stat(new RunBestFitness());
-        assertNotNull(a2);                
+        Assert.assertNotNull(a2);
 
-        assertTrue("singleton accessed twice is identical", a==a2);
+        Assert.assertSame("singleton accessed twice is identical", a, a2);
         
         config.resetStats();       
                 
-        assertNotNull(b = config.stat(new RunBestFitness()));
-        
-        assertTrue("Different instances as a result of resetStats removing the first", a!=b);
+        Assert.assertNotNull(b = config.stat(new RunBestFitness()));
+
+        Assert.assertNotSame("Different instances as a result of resetStats removing the first", a, b);
     }
 }

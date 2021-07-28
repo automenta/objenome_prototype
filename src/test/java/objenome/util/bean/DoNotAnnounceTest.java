@@ -1,16 +1,13 @@
 package objenome.util.bean;
 
-import static org.junit.Assert.assertEquals;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
-
 import objenome.util.bean.anno.IgnoreVeto;
 import objenome.util.bean.anno.Unbound;
 import objenome.util.bean.util.DefaultVetoablePropertyChangeEventProvider;
-
 import org.junit.Test;
+
+import java.beans.PropertyVetoException;
+
+import static org.junit.Assert.assertEquals;
 
 public class DoNotAnnounceTest {
 
@@ -38,11 +35,8 @@ public class DoNotAnnounceTest {
     @Test
     public void testDoNotAnnounce() {
         TestBean bean = BeanProxyBuilder.on(TestBean.class).build();
-        bean.addVetoableChangeListener(new VetoableChangeListener() {
-
-            public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
-                throw new PropertyVetoException("No changes allowed!", evt); //$NON-NLS-1$
-            }
+        bean.addVetoableChangeListener(evt -> {
+            throw new PropertyVetoException("No changes allowed!", evt); //$NON-NLS-1$
         });
         bean.setFoo(4);
         bean.setBar(5);

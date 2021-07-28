@@ -73,35 +73,19 @@ public class Add extends Node {
      */
     @Override
     public Object evaluate() {
-        Object c1 = getChild(0).evaluate();
-        Object c2 = getChild(1).evaluate();
+        Object c1 = node(0).evaluate();
+        Object c2 = node(1).evaluate();
 
         Class<?> returnType = TypeUtil.widestNumberType(c1.getClass(), c2.getClass());
 
         if (returnType == Double.class) {
-            // Add as doubles.
-            double d1 = NumericUtils.asDouble(c1);
-            double d2 = NumericUtils.asDouble(c2);
-
-            return d1 + d2;
+            return NumericUtils.asDouble(c1) + NumericUtils.asDouble(c2);
         } else if (returnType == Float.class) {
-            // Add as floats.
-            float f1 = NumericUtils.asFloat(c1);
-            float f2 = NumericUtils.asFloat(c2);
-
-            return f1 + f2;
+            return NumericUtils.asFloat(c1) + (float) NumericUtils.asFloat(c2);
         } else if (returnType == Long.class) {
-            // Add as longs.
-            long l1 = NumericUtils.asLong(c1);
-            long l2 = NumericUtils.asLong(c2);
-
-            return l1 + l2;
+            return NumericUtils.asLong(c1) + (long) NumericUtils.asLong(c2);
         } else if (returnType == Integer.class) {
-            // Add as integers.
-            int i1 = NumericUtils.asInteger(c1);
-            int i2 = NumericUtils.asInteger(c2);
-
-            return i1 + i2;
+            return (int) NumericUtils.asInteger(c1) + NumericUtils.asInteger(c2);
         }
 
         return null;
@@ -113,7 +97,7 @@ public class Add extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 
@@ -127,9 +111,6 @@ public class Add extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if (inputTypes.length == 2) {
-            return TypeUtil.widestNumberType(inputTypes);
-        }
-        return null;
+        return inputTypes.length == 2 ? TypeUtil.widestNumberType(inputTypes) : null;
     }
 }

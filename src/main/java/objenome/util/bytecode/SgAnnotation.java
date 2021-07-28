@@ -19,7 +19,6 @@ package objenome.util.bytecode;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -55,7 +54,7 @@ public final class SgAnnotation {
             throw new IllegalArgumentException("The argument 'simpleName' cannot be null!");
         }
         final String trimmed = simpleName.trim();
-        if (trimmed.length() == 0) {
+        if (trimmed.isEmpty()) {
             throw new IllegalArgumentException(
                     "The argument 'simpleName' cannot be an empty string!");
         }
@@ -70,7 +69,7 @@ public final class SgAnnotation {
      * @return Name including package - Always non-null.
      */
     public final String getName() {
-        if (packageName.length() == 0) {
+        if (packageName.isEmpty()) {
             return simpleName;
         }
         return packageName + "." + simpleName;
@@ -126,16 +125,15 @@ public final class SgAnnotation {
      */
     @Override
     public final String toString() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("@");
         sb.append(getName());
-        if (arguments.size() > 0) {
+        if (!arguments.isEmpty()) {
             sb.append("(");
             if (arguments.size() == 1) {
-                final Iterator<String> it = arguments.keySet().iterator();
-                while (it.hasNext()) {
-                    final String name = it.next();
-                    final Object value = arguments.get(name);
+                for (Map.Entry<String, Object> entry : arguments.entrySet()) {
+                    String name = entry.getKey();
+                    final Object value = entry.getValue();
                     if (!name.equals("value")) {
                         sb.append(name);
                         sb.append("=");
@@ -144,14 +142,12 @@ public final class SgAnnotation {
                 }
             } else {
                 int count = 0;
-                final Iterator<String> it = arguments.keySet().iterator();
-                while (it.hasNext()) {
-                    final String name = it.next();
-                    final Object value = arguments.get(name);
+                for (Map.Entry<String, Object> entry : arguments.entrySet()) {
+                    final Object value = entry.getValue();
                     if (count > 0) {
                         sb.append(", ");
                     }
-                    sb.append(name);
+                    sb.append(entry.getKey());
                     sb.append("=");
                     sb.append(value);
                     count++;

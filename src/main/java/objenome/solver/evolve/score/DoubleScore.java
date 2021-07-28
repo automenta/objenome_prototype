@@ -19,10 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package objenome.solver.evolve.fitness;
+package objenome.solver.evolve.score;
+
+import objenome.solver.evolve.Score;
 
 import java.util.Comparator;
-import objenome.solver.evolve.Fitness;
 
 /**
  * Represents a <code>Fitness</code> score as a <code>double</code> value. The
@@ -32,36 +33,24 @@ import objenome.solver.evolve.Fitness;
  * With a minimising fitness the opposite is true. Fitness scores may range from
  * Double.MIN_VALUE to Double.MAX_VALUE.
  */
-public abstract class DoubleFitness implements Fitness {
+public abstract class DoubleScore implements Score {
 
     /**
      * The comparator used by the {@link Maximise} double fitness
      * implementation.
      */
-    private static final Comparator<Double> MAXIMISE = new Comparator<Double>() {
-
-        @Override
-        public int compare(Double d1, Double d2) {
-            return Double.compare(d1, d2);
-        }
-    };
+    private static final Comparator<Double> MAXIMISE = Comparator.comparingDouble(d -> d);
 
     /**
      * The comparator used by the {@link Minimise} double fitness
      * implementation.
      */
-    private static final Comparator<Double> MINIMISE = new Comparator<Double>() {
-
-        @Override
-        public int compare(Double d1, Double d2) {
-            return Double.compare(d2, d1);
-        }
-    };
+    private static final Comparator<Double> MINIMISE = (d1, d2) -> Double.compare(d2, d1);
 
     /**
      * The actual double fitness value.
      */
-    private final double fitness;
+    private final double score;
 
     /**
      * Constructs a <code>DoubleFitness</code> with the specified value as the
@@ -69,8 +58,8 @@ public abstract class DoubleFitness implements Fitness {
      *
      * @param fitness the <code>double</code> value that represents the fitness
      */
-    public DoubleFitness(double fitness) {
-        this.fitness = fitness;
+    public DoubleScore(double fitness) {
+        this.score = fitness;
     }
 
     /**
@@ -79,7 +68,7 @@ public abstract class DoubleFitness implements Fitness {
      * @return the explicit fitness value this instance represents
      */
     public double getValue() {
-        return fitness;
+        return score;
     }
 
     /**
@@ -95,9 +84,10 @@ public abstract class DoubleFitness implements Fitness {
      * less fit than, equally fit as, or fitter than the specified object.
      */
     @Override
-    public int compareTo(Fitness o) {
+    public int compareTo(Score o) {
+        if (this == o ) return 0;
         if (this.getClass().isAssignableFrom(o.getClass())) {
-            return comparator().compare(fitness, ((DoubleFitness) o).fitness);
+            return comparator().compare(score, ((DoubleScore) o).score);
         } else {
             throw new IllegalArgumentException("Expected " + this.getClass() + ", found " + o.getClass());
         }
@@ -105,19 +95,19 @@ public abstract class DoubleFitness implements Fitness {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof DoubleFitness) {
-            DoubleFitness fitnessObj = (DoubleFitness) obj;
+        if (obj instanceof DoubleScore) {
+            DoubleScore fitnessObj = (DoubleScore) obj;
 
-            return fitnessObj.fitness == this.fitness;
+            return fitnessObj.score == this.score;
         }
 
         return false;
     }
 
     @Override
-    public DoubleFitness clone() {
+    public DoubleScore clone() {
         try {
-            return (DoubleFitness) super.clone();
+            return (DoubleScore) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError();
         }
@@ -131,7 +121,7 @@ public abstract class DoubleFitness implements Fitness {
      */
     @Override
     public String toString() {
-        return Double.toString(fitness);
+        return Double.toString(score);
     }
 
     /**
@@ -146,7 +136,7 @@ public abstract class DoubleFitness implements Fitness {
      * A <code>Fitness</code> score with a <code>double</code> value and a
      * maximising natural ordering.
      */
-    public static class Maximise extends DoubleFitness {
+    public static class Maximise extends DoubleScore {
 
         /**
          * Constructs a <code>DoubleFitness</code> with a maximising ordering.
@@ -179,7 +169,7 @@ public abstract class DoubleFitness implements Fitness {
      * A <code>Fitness</code> score with a <code>double</code> value and a
      * minimising natural ordering.
      */
-    public static class Minimise extends DoubleFitness {
+    public static class Minimise extends DoubleScore {
 
         /**
          * Constructs a <code>DoubleFitness</code> with a minimising ordering.

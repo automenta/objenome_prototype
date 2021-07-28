@@ -6,13 +6,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Helper class with static methods for accessing bean methods (getters/setters).
@@ -32,12 +26,12 @@ public final class ObjectUtil {
      * @return all valid getters of class <code>clazz</code>
      */
     public static Method[] getAllGetters(final Class<?> clazz) {
-        final List<Method> methods = new ArrayList<Method>();
+        List<Method> methods = new ArrayList<>();
         fillGetters(clazz, methods);
-        for (final Class<?> parent : clazz.getInterfaces()) {
+        for (final Class<?> parent : clazz.getInterfaces())
             fillGetters(parent, methods);
-        }
-        return methods.toArray(new Method[methods.size()]);
+
+        return methods.toArray(new Method[0]);
     }
 
     protected static void fillGetters(final Class<?> clazz, final List<Method> methods) {
@@ -59,12 +53,12 @@ public final class ObjectUtil {
      * @return all valid setters of class <code>clazz</code>
      */
     public static Method[] getAllSetters(final Class<?> clazz) {
-        final List<Method> methods = new ArrayList<Method>();
+        final List<Method> methods = new ArrayList<>();
         fillSetters(clazz, methods);
         for (final Class<?> parent : clazz.getInterfaces()) {
             fillSetters(parent, methods);
         }
-        return methods.toArray(new Method[methods.size()]);
+        return methods.toArray(new Method[0]);
     }
 
     protected static void fillSetters(final Class<?> clazz, final List<Method> methods) {
@@ -196,7 +190,7 @@ public final class ObjectUtil {
     }
 
     public static Collection<Class<?>> collectInterfaces(final Class<?> clazz) {
-        final Set<Class<?>> all = new HashSet<Class<?>>();
+        final Set<Class<?>> all = new HashSet<>();
         if (Modifier.isInterface(clazz.getModifiers())) {
             all.add(clazz);
         }

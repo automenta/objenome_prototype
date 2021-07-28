@@ -19,14 +19,15 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package objenome.solver.evolve.fitness;
+package objenome.solver.evolve.score;
+
+import objenome.solver.evolve.AbstractScorer;
+import objenome.solver.evolve.Individual;
+import objenome.solver.evolve.Population;
+import objenome.solver.evolve.Score;
 
 import java.util.HashMap;
 import java.util.Map;
-import objenome.solver.evolve.AbstractFitnessFunction;
-import objenome.solver.evolve.Fitness;
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.Population;
 
 /**
  * A fitness function which caches fitness scores and delegates fitness
@@ -37,13 +38,13 @@ import objenome.solver.evolve.Population;
  *
  * @since 2.0
  */
-public class CachedFitnessFunction extends AbstractFitnessFunction {
+public class CachedScoreFunction extends AbstractScorer {
 
     // The cache of fitness scores
-    private Map<Object, Fitness> cache;
+    private final Map<Object, Score> cache;
 
     // The fitness function to delegate to when not in cache
-    private AbstractFitnessFunction delegate;
+    private final AbstractScorer delegate;
 
     /**
      * Constructs a <code>CachedFitnessFunction</code> fitness function. Fitness
@@ -53,7 +54,7 @@ public class CachedFitnessFunction extends AbstractFitnessFunction {
      * @param delegate the fitness function the fitness calculations should be
      * delegated to
      */
-    public CachedFitnessFunction(AbstractFitnessFunction delegate) {
+    public CachedScoreFunction(AbstractScorer delegate) {
         this.delegate = delegate;
         cache = new HashMap<>();
     }
@@ -72,11 +73,11 @@ public class CachedFitnessFunction extends AbstractFitnessFunction {
      * @return the fitness of the given individual
      */
     @Override
-    public Fitness evaluate(Population population, Individual individual) {
+    public Score evaluate(Population population, Individual individual) {
         Object key = individual.hashCode();
 
         //TODO Use source generator if one is set
-        Fitness fitness = cache.get(key);
+        Score fitness = cache.get(key);
         if (fitness == null) {
             fitness = delegate.evaluate(population, individual);
             cache.put(key, fitness);

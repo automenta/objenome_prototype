@@ -3,11 +3,7 @@ package objenome.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InjectionUtils {
 
@@ -22,9 +18,9 @@ public class InjectionUtils {
 
     public static final char PREFIX_SEPARATOR = '.';
 
-    private static Map<Class<?>, Map<String, Object>> settersMaps = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Object>> settersMaps = new HashMap<>();
 
-    private static Map<Class<?>, Map<String, Object>> fieldsMaps = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Object>> fieldsMaps = new HashMap<>();
 
     public static void prepareForInjection(Class<?> klass, Map<String, Object> setters, Map<String, Object> fields) {
 
@@ -32,9 +28,7 @@ public class InjectionUtils {
 
         Method[] methods = klass.getMethods();
 
-        for (int i = 0; i < methods.length; i++) {
-
-            Method m = methods[i];
+        for (Method m : methods) {
 
             String name = m.getName();
 
@@ -97,9 +91,7 @@ public class InjectionUtils {
 
         Field[] f = klass.getDeclaredFields();
 
-        for (int i = 0; i < f.length; i++) {
-
-            Field field = f[i];
+        for (Field field : f) {
 
             field.setAccessible(true);
 
@@ -186,11 +178,7 @@ public class InjectionUtils {
             return true;
         }
 
-        if (target.equals(double.class) && source.equals(Double.class)) {
-            return true;
-        }
-
-        return false;
+        return target.equals(double.class) && source.equals(Double.class);
 
     }
 
@@ -201,7 +189,7 @@ public class InjectionUtils {
 
     public static Object tryToConvert(Object source, Class<?> targetType, boolean tryNumber) {
 
-        String value = null;
+        String value;
 
         if (source instanceof String) {
 
@@ -223,7 +211,7 @@ public class InjectionUtils {
         //TODO use switch statement
 
         if (className.equals("int") || className.equals("java.lang.Integer")) {
-            int x = -1;
+            int x;
             try {
                 x = Integer.parseInt(value);
             } catch (Exception e) {
@@ -231,7 +219,7 @@ public class InjectionUtils {
             }
             newValue = x;
         } else if (className.equals("short") || className.equals("java.lang.Short")) {
-            short x = -1;
+            short x;
             try {
                 x = Short.parseShort(value);
             } catch (Exception e) {
@@ -248,7 +236,7 @@ public class InjectionUtils {
             newValue = value.charAt(0);
 
         } else if (className.equals("long") || className.equals("java.lang.Long")) {
-            long x = -1;
+            long x;
             try {
                 x = Long.parseLong(value);
             } catch (Exception e) {
@@ -256,7 +244,7 @@ public class InjectionUtils {
             }
             newValue = x;
         } else if (className.equals("float") || className.equals("java.lang.Float")) {
-            float x = -1;
+            float x;
             try {
                 x = Float.parseFloat(value);
             } catch (Exception e) {
@@ -264,7 +252,7 @@ public class InjectionUtils {
             }
             newValue = x;
         } else if (className.equals("double") || className.equals("java.lang.Double")) {
-            double x = -1;
+            double x;
             try {
                 x = Double.parseDouble(value);
             } catch (Exception e) {
@@ -294,11 +282,9 @@ public class InjectionUtils {
 
             try {
 
-                Class k = targetType; // not sure how to avoid this raw type!
+                newValue = Enum.valueOf((Class) targetType, value);
 
-                newValue = Enum.valueOf(k, value);
-
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
 
                 return null;
             }
@@ -348,25 +334,17 @@ public class InjectionUtils {
 
         String s = klass.getName();
 
-        switch (s) {
-            case "java.lang.Boolean":
-                return Boolean.TYPE;
-            case "java.lang.Byte":
-                return Byte.TYPE;
-            case "java.lang.Short":
-                return Short.TYPE;
-            case "java.lang.Character":
-                return Character.TYPE;
-            case "java.lang.Integer":
-                return Integer.TYPE;
-            case "java.lang.Long":
-                return Long.TYPE;
-            case "java.lang.Float":
-                return Float.TYPE;
-            case "java.lang.Double":
-                return Double.TYPE;
-        }
-        return null;
+        return switch (s) {
+            case "java.lang.Boolean" -> Boolean.TYPE;
+            case "java.lang.Byte" -> Byte.TYPE;
+            case "java.lang.Short" -> Short.TYPE;
+            case "java.lang.Character" -> Character.TYPE;
+            case "java.lang.Integer" -> Integer.TYPE;
+            case "java.lang.Long" -> Long.TYPE;
+            case "java.lang.Float" -> Float.TYPE;
+            case "java.lang.Double" -> Double.TYPE;
+            default -> null;
+        };
     }
 
     public static Field getField(Object target, String name) {
@@ -374,10 +352,10 @@ public class InjectionUtils {
     }
 
     public static Field getField(Class<?> target, String name) {
-        Field fields[] = target.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            if (name.equals(fields[i].getName())) {
-                return fields[i];
+        Field[] fields = target.getDeclaredFields();
+        for (Field field : fields) {
+            if (name.equals(field.getName())) {
+                return field;
             }
         }
         return null;
@@ -464,7 +442,7 @@ public class InjectionUtils {
 
                 try {
 
-                    m = target.getMethod(methodName, new Class[]{primitive});
+                    m = target.getMethod(methodName, primitive);
 
                 } catch (Exception e) {
                 }
@@ -500,21 +478,19 @@ public class InjectionUtils {
         return null;
     }
 
-    private static final boolean isBlank(Object value) {
+    private static boolean isBlank(Object value) {
 
-        if (value != null && value instanceof String) {
+        if (value instanceof String) {
 
             String s = ((String) value).trim();
 
-            if (s.length() == 0) {
-                return true;
-            }
+            return s.isEmpty();
         }
 
         return false;
     }
 
-    public static boolean inject(Method m, Object target, Object value, boolean tryToConvert, boolean tryingToConvertBoolean) throws Exception {
+    public static boolean inject(Method m, Object target, Object value, boolean tryToConvert, boolean tryingToConvertBoolean) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         Class<?> type = m.getParameterTypes()[0];
 
@@ -536,22 +512,10 @@ public class InjectionUtils {
                 || (type.isAssignableFrom(value.getClass()) || checkPrimitives(type, value.getClass()) || (tryToConvert && ((isBlank(value) && (value = shouldConvertToNull(value,
                         type)) == null) || (value = tryToConvert(value, type)) != null)))) {
 
-            try {
+            m.invoke(target, value);
 
-                m.invoke(target, new Object[]{value});
+            return true;
 
-                return true;
-
-            } catch (Exception e) {
-
-                //System.err.println("Error injecting by method: " + value + " in " + target + " thru " + m);
-
-                //e.printStackTrace();
-                
-
-                throw e;
-
-            }
         }
 
         return false;
@@ -579,7 +543,7 @@ public class InjectionUtils {
      * every property!
      * @throws Exception
      */
-    public static String getProperty(Object bean, String nameProperty) throws Exception {
+    public static String getProperty(Object bean, String nameProperty) throws SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         if (nameProperty == null || nameProperty.isEmpty()) {
             return null;
@@ -634,18 +598,18 @@ public class InjectionUtils {
                 if (name.length() > 3 && name.startsWith("get") && !name.equals("getClass") && method.getParameterTypes().length == 0) {
 
                     method.setAccessible(true);
-                    Object value = method.invoke(bean, new Object[0]);
+                    Object value = method.invoke(bean);
                     map.put(name, value.toString());
                 }
             }
         }
     }
 
-    public static interface Provider {
+    public interface Provider {
 
-        public Object get(String key);
+        Object get(String key);
 
-        public boolean hasValue(String key);
+        boolean hasValue(String key);
     }
 
     public static void getObject(Object target, Provider provider, boolean tryField, String prefix, boolean tryToConvert, boolean convertBoolean, boolean allowRecursion)
@@ -688,11 +652,8 @@ public class InjectionUtils {
             }
         }
 
-        Iterator<Map.Entry<String, Object>> iter = setters.entrySet().iterator();
+        for (Map.Entry<String, Object> evar : setters.entrySet()) {
 
-        while (iter.hasNext()) {
-
-            Map.Entry<String, Object> evar = iter.next();
             String var = evar.getKey();
 
             boolean hasValue = provider.hasValue(var);
@@ -742,9 +703,9 @@ public class InjectionUtils {
 
                     if (!type.getName().startsWith("java.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
 
-                        Object param = type.newInstance();
+                        Object param = type.getConstructor().newInstance();
 
-                        InjectionUtils.getObject(param, provider, true, prefix, true, true, false); // no
+                        getObject(param, provider, true, prefix, true, true, false); // no
                         // recursion...
 
                         inject(m, target, param, false, false);
@@ -783,9 +744,9 @@ public class InjectionUtils {
 
                         if (!type.getName().startsWith("java.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
 
-                            Object param = type.newInstance();
+                            Object param = type.getConstructor().newInstance();
 
-                            InjectionUtils.getObject(param, provider, true, prefix, true, true, false); // no
+                            getObject(param, provider, true, prefix, true, true, false); // no
                             // recursion...
 
                             if (inject(m, target, param, false, false)) {
@@ -800,11 +761,8 @@ public class InjectionUtils {
 
         if (fields != null) {
 
-            iter = fields.entrySet().iterator();
+            for (Map.Entry<String, Object> evar : fields.entrySet()) {
 
-            while (iter.hasNext()) {
-
-                Map.Entry<String, Object> evar = iter.next();
                 String var = evar.getKey();
 
                 boolean hasValue = provider.hasValue(var);
@@ -835,21 +793,10 @@ public class InjectionUtils {
                 // if (value == null) continue;
                 if (value == null
                         || (type.isAssignableFrom(value.getClass()) || checkPrimitives(type, value.getClass()) || (tryToConvert && ((isBlank(value) && (value = shouldConvertToNull(
-                                value, type)) == null) || (value = tryToConvert(value, type)) != null)))) {
+                        value, type)) == null) || (value = tryToConvert(value, type)) != null)))) {
 
-                    try {
+                    f.set(target, value);
 
-                        f.set(target, value);
-
-                    } catch (Exception e) {
-
-                        //System.err.println("Error injecting by field: " + value + " in " + target);
-
-                        //e.printStackTrace();
-
-                        throw e;
-
-                    }
                 }
             }
         }

@@ -71,16 +71,16 @@ public class CoefficientPower extends Node {
      */
     @Override
     public Double evaluate() {
-        Object c1 = getChild(0).evaluate();
-        Object c2 = getChild(1).evaluate();
-        Object c3 = getChild(2).evaluate();
+        Object c1 = node(0).evaluate();
+        Object c2 = node(1).evaluate();
+        Object c3 = node(2).evaluate();
 
         Class<?> returnType = TypeUtil.widestNumberType(c1.getClass(), c2.getClass(), c3.getClass());
 
         if (returnType != null) {
-            double d1 = NumericUtils.asDouble(getChild(0).evaluate());
-            double d2 = NumericUtils.asDouble(getChild(1).evaluate());
-            double d3 = NumericUtils.asDouble(getChild(2).evaluate());
+            double d1 = NumericUtils.asDouble(node(0).evaluate());
+            double d2 = NumericUtils.asDouble(node(1).evaluate());
+            double d3 = NumericUtils.asDouble(node(2).evaluate());
 
             return d1 * (Math.pow(d2, d3));
         }
@@ -94,7 +94,7 @@ public class CoefficientPower extends Node {
      * @return this node's identifier
      */
     @Override
-    public String getIdentifier() {
+    public String id() {
         return IDENTIFIER;
     }
 

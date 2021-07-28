@@ -25,6 +25,7 @@ import objenome.solver.evolve.AbstractSelector;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.IndividualSelector;
 import objenome.solver.evolve.RandomSequence;
+
 import static objenome.solver.evolve.RandomSequence.RANDOM_SEQUENCE;
 
 /**

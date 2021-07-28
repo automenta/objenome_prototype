@@ -5,26 +5,19 @@
  */
 package objenome;
 
-import java.util.HashSet;
-import java.util.Set;
-import objenome.MultitainerTest.Machine;
-import objenome.MultitainerTest.Part;
-import objenome.MultitainerTest.Part0;
-import objenome.MultitainerTest.Part1;
-import objenome.MultitainerTest.PartN;
-import objenome.MultitainerTest.PartWithSubPart;
-import objenome.MultitainerTest.SubPart0;
-import objenome.MultitainerTest.SubPart1;
+import objenome.MultitainerTest.*;
 import objenome.solution.SetImplementationClass;
 import objenome.solution.SetIntegerValue;
 import objenome.solution.dependency.Builder;
-import static objenome.solution.dependency.Builder.of;
 import objenome.solution.dependency.ClassBuilder;
 import objenome.solution.dependency.DecideImplementationClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static objenome.solution.dependency.Builder.of;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -71,7 +64,7 @@ public class PhenotainerTest {
         assertEquals(expectedResult, m.function());        
         
         Machine possiblyDifferent = o.mutate().get(Machine.class);
-        assertTrue(possiblyDifferent!=null);
+        assertNotNull(possiblyDifferent);
         
         
     }
@@ -101,7 +94,7 @@ public class PhenotainerTest {
     @Test public void testRecursiveAuto() { testMultiGeneRecursive(false);     }
     @Test public void testRecursiveManual() { testMultiGeneRecursive(true);    }
             
-    protected void testMultiGeneRecursive(boolean includeUnnecessaryTargetWhichCouldBeDiscoveredAutomagically) {
+    protected static void testMultiGeneRecursive(boolean includeUnnecessaryTargetWhichCouldBeDiscoveredAutomagically) {
         
         Multitainer g = new Multitainer();
 
@@ -122,7 +115,7 @@ public class PhenotainerTest {
         Container c = o.container();
         
         for (Builder b : c.getBuilders().values()) {
-            assertTrue(!(b instanceof DecideImplementationClass));                
+            assertFalse(b instanceof DecideImplementationClass);
         }
         
         Machine m = o.get(Machine.class);

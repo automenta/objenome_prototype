@@ -21,12 +21,13 @@
  */
 package objenome.solver.evolve.stat;
 
-import java.util.Arrays;
 import objenome.solver.evolve.Individual;
 import objenome.solver.evolve.Population;
 import objenome.solver.evolve.STGPIndividual;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 import objenome.solver.evolve.event.stat.AbstractStat;
+
+import java.util.Arrays;
 
 /**
  * A stat that returns the average number of nodes at each depth level of the

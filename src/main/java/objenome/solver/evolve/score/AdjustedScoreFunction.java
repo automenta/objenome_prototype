@@ -19,15 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package objenome.solver.evolve.fitness;
+package objenome.solver.evolve.score;
 
-import objenome.solver.evolve.AbstractFitnessFunction;
-import objenome.solver.evolve.Fitness;
-import objenome.solver.evolve.GPContainer;
+import objenome.solver.evolve.*;
 import objenome.solver.evolve.GPContainer.GPContainerAware;
 import objenome.solver.evolve.GPContainer.GPKey;
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.Population;
 import objenome.solver.evolve.event.ConfigEvent;
 import objenome.solver.evolve.event.Listener;
 
@@ -57,7 +53,7 @@ import objenome.solver.evolve.event.Listener;
  *
  * @since 2.0
  */
-public class AdjustedFitnessFunction extends AbstractFitnessFunction implements Listener<ConfigEvent>, GPContainerAware {
+public class AdjustedScoreFunction extends AbstractScorer implements Listener<ConfigEvent>, GPContainerAware {
 
     /**
      * The key for setting the minimum fitness score possible, used when
@@ -66,7 +62,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
     public static final GPKey<Double> MINIMUM_FITNESS_SCORE = new GPKey<>();
 
     // The delegate that fitness calculations will be passed to
-    private AbstractFitnessFunction delegate;
+    private final AbstractScorer delegate;
 
     // Configuration settings
     private double minFitnessScore;
@@ -76,7 +72,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * Constructs a <code>AdjustedFitnessFunction</code> fitness function with
      * control parameters automatically loaded from the config.
      */
-    public AdjustedFitnessFunction(AbstractFitnessFunction delegate) {
+    public AdjustedScoreFunction(AbstractScorer delegate) {
         this(delegate, true);
     }
 
@@ -89,7 +85,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * @param autoConfig whether this operator should automatically update its
      * configuration settings from the config
      */
-    public AdjustedFitnessFunction(AbstractFitnessFunction delegate, boolean autoConfig) {
+    public AdjustedScoreFunction(AbstractScorer delegate, boolean autoConfig) {
 
         this.delegate = delegate;
         this.autoConfig = autoConfig;
@@ -142,21 +138,21 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * an instance of DoubleFitness.Minimise
      */
     @Override
-    public DoubleFitness.Maximise evaluate(Population population, Individual individual) {
+    public DoubleScore.Maximise evaluate(Population population, Individual individual) {
         setConfig(population.getConfig());
 
-        Fitness fitness = delegate.evaluate(population, individual);
+        Score fitness = delegate.evaluate(population, individual);
 
-        if (!(fitness instanceof DoubleFitness.Minimise)) {
+        if (!(fitness instanceof DoubleScore.Minimise)) {
             throw new IllegalStateException("Delegate must return instances of DoubleFitness.Minimise");
         }
 
-        DoubleFitness.Minimise minimised = (DoubleFitness.Minimise) fitness;
+        DoubleScore.Minimise minimised = (DoubleScore.Minimise) fitness;
 
         // Convert to standardised fitness (minimised with 0.0 as lowest value)
         double standardised = minimised.getValue() - minFitnessScore;
 
-        return new DoubleFitness.Maximise(adjustedFitness(standardised));
+        return new DoubleScore.Maximise(adjustedScore(standardised));
     }
 
     /**
@@ -170,14 +166,12 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
      * @return a double which is the adjusted fitness score between 0.0 and 1.0,
      * where 1.0 is more fit than 0.0
      */
-    protected double adjustedFitness(double standardised) {
+    protected double adjustedScore(double standardised) {
         if (standardised < 0.0) {
             throw new IllegalArgumentException("Standardised fitness must be 0.0 or greater");
         }
 
-        double adjusted = 1.0 / (1.0 + standardised);
-
-        return adjusted;
+        return 1.0 / (1.0 + standardised);
     }
 
     /**

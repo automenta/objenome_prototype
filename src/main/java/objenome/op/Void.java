@@ -26,7 +26,7 @@ public class Void extends Node {
     }
 
     @Override
-    public String getIdentifier() {
+    public String id() {
         return "void";
     }
 }

@@ -21,17 +21,17 @@
  */
 package objenome.solver.evolve.stat;
 
-import objenome.solver.evolve.Fitness;
+import objenome.solver.evolve.Score;
 import objenome.solver.evolve.event.GenerationEvent.EndGeneration;
 import objenome.solver.evolve.event.stat.AbstractStat;
 import objenome.solver.evolve.event.stat.GenerationFitnesses;
-import objenome.solver.evolve.fitness.DoubleFitness;
+import objenome.solver.evolve.score.DoubleScore;
 
 /**
  * Stat that provides the average fitness value of the population at the end of
  * a generation. This stat can only be used with <code>DoubleFitness</code>.
  *
- * @see DoubleFitness
+ * @see DoubleScore
  */
 public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
 
@@ -54,11 +54,11 @@ public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> 
      */
     @Override
     public void refresh(EndGeneration event) {
-        Fitness[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
+        Score[] fitnesses = getConfig().the(GenerationFitnesses.class).getFitnesses();
         average = 0;
 
-        for (Fitness fitness : fitnesses) {
-            average += ((DoubleFitness) fitness).getValue();
+        for (Score fitness : fitnesses) {
+            average += ((DoubleScore) fitness).getValue();
         }
 
         average /= fitnesses.length;

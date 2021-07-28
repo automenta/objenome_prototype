@@ -17,9 +17,10 @@
  */
 package objenome.util.bytecode.factory;
 
-import java.util.List;
 import objenome.util.bytecode.SgClass;
 import objenome.util.bytecode.SgMethod;
+
+import java.util.List;
 
 /**
  * Creates the source code for the method implementations.
@@ -33,7 +34,7 @@ public interface ImplementationFactoryListener {
      * @param clasz
      *            Class without any method yet.
      */
-    public void afterClassCreated(SgClass clasz);
+    void afterClassCreated(SgClass clasz);
 
     /**
      * Creates the source code for a method.
@@ -45,6 +46,6 @@ public interface ImplementationFactoryListener {
      * 
      * @return List of source lines.
      */
-    public List<String> createBody(SgMethod method, Class<?>... intf);
+    List<String> createBody(SgMethod method, Class<?>... intf);
 
 }
