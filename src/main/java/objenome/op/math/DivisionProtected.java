@@ -110,33 +110,33 @@ public class DivisionProtected extends Node {
      */
     @Override
     public Object evaluate() {
-        Object c1 = node(0).evaluate();
-        Object c2 = node(1).evaluate();
+        Object x = node(0).evaluate();
+        Object y = node(1).evaluate();
 
-        Class<?> returnType = TypeUtil.widestNumberType(c1.getClass(), c2.getClass());
+        Class<?> returnType = TypeUtil.widestNumberType(x.getClass(), y.getClass());
 
         if (returnType == Double.class) {
             // Divide as doubles.
-            double d1 = NumericUtils.asDouble(c1);
-            double d2 = NumericUtils.asDouble(c2);
+            double d1 = NumericUtils.asDouble(x);
+            double d2 = NumericUtils.asDouble(y);
 
             return (d2 == 0) ? NumericUtils.asDouble(protectionValue) : (d1 / d2);
         } else if (returnType == Float.class) {
             // Divide as floats.
-            float f1 = NumericUtils.asFloat(c1);
-            float f2 = NumericUtils.asFloat(c2);
+            float f1 = NumericUtils.asFloat(x);
+            float f2 = NumericUtils.asFloat(y);
 
             return (f2 == 0) ? NumericUtils.asFloat(protectionValue) : (f1 / f2);
         } else if (returnType == Long.class) {
             // Divide as longs.
-            long l1 = NumericUtils.asLong(c1);
-            long l2 = NumericUtils.asLong(c2);
+            long l1 = NumericUtils.asLong(x);
+            long l2 = NumericUtils.asLong(y);
 
             return (l2 == 0) ? NumericUtils.asLong(protectionValue) : (l1 / l2);
         } else if (returnType == Integer.class) {
             // Divide as integers.
-            int i1 = NumericUtils.asInteger(c1);
-            int i2 = NumericUtils.asInteger(c2);
+            int i1 = NumericUtils.asInteger(x);
+            int i2 = NumericUtils.asInteger(y);
 
             return (i2 == 0) ? NumericUtils.asInteger(protectionValue) : (i1 / i2);
         }

@@ -1,9 +1,9 @@
 package objenome;
 
 import javassist.*;
+import objenome.dependency.Builder;
 import objenome.problem.Problem;
 import objenome.solution.SetMethodsGPEvolved;
-import objenome.solution.dependency.Builder;
 import objenome.solver.Solution;
 
 import java.lang.reflect.Modifier;

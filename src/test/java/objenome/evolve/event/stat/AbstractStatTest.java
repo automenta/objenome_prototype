@@ -22,10 +22,8 @@
 package objenome.evolve.event.stat;
 
 import junit.framework.TestCase;
-import objenome.solver.evolve.GPContainer;
-import objenome.solver.evolve.event.GenerationEvent;
-import objenome.solver.evolve.event.stat.AbstractStat;
-import objenome.solver.evolve.event.stat.RunBestFitness;
+import objenome.evolve.GP;
+import objenome.evolve.event.GenerationEvent;
 import org.junit.Assert;
 
 /**
@@ -40,7 +38,7 @@ public class AbstractStatTest extends TestCase {
      * Test for the {@link AbstractStat#clear()} method.
      */
     public void testReset() {
-        GPContainer config = new GPContainer();        
+        GP config = new GP();
         
         AbstractStat<GenerationEvent.EndGeneration> a, a2, b;
 

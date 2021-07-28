@@ -1,6 +1,6 @@
 package objenome;
 
-import objenome.solution.dependency.*;
+import objenome.dependency.*;
 import objenome.util.InjectionUtils;
 import objenome.util.InjectionUtils.Provider;
 import objenome.util.bean.BeanProxyBuilder;
@@ -8,6 +8,7 @@ import objenome.util.bean.BeanProxyBuilder;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * The deterministic implementation of of IoC container.
@@ -49,13 +50,16 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
     
     
     
-    public <T> T get(Object key, T defaultValue) {
+    public final <T> T get(Object key, T defaultValue) {
+        return get(key, ()->defaultValue);
+    }
+
+    public <T> T get(Object key, Supplier<T> defaultValue) {
         T existing = get(key);
         if (existing == null)
-            return defaultValue;
+            return defaultValue.get();
         return existing;
     }
-    
 
     @Override
     public <T> T get(Object key) {
@@ -191,7 +195,7 @@ public class Container extends AbstractPrototainer implements AbstractContainer 
         }
     }
 
-    private void checkInterceptable(Builder f, Object value) {
+    private static void checkInterceptable(Builder f, Object value) {
         if (f instanceof Interceptor)
             ((Interceptor) f).onCreated(value);
     }

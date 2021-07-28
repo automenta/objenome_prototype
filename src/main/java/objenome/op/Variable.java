@@ -33,6 +33,8 @@ package objenome.op;
  */
 public class Variable<X> {
 
+    public static final Variable[] EMPTY_VARIABLE_ARRAY = new Variable[0];
+
     public final Class datatype;
     public final String name;
 

@@ -9,7 +9,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.reflect.ClassPath;
 import objenome.AbstractPrototainer;
-import objenome.solution.dependency.Builder;
+import objenome.dependency.Builder;
 import objenome.solution.dependency.DecideImplementationClass;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;

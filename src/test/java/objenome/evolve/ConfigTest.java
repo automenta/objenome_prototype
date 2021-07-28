@@ -23,21 +23,19 @@
 package objenome.evolve;
 
 import junit.framework.TestCase;
-import objenome.solver.evolve.GPContainer;
-import objenome.solver.evolve.GPContainer.GPKey;
-import objenome.solver.evolve.Population;
+import objenome.evolve.GP.GPKey;
 import org.junit.Assert;
 
 
 /**
  * The <code>ConfigTest</code> class provides unit tests for methods of the
- * {@link GPContainer} class.
+ * {@link GP} class.
  * 
- * @see GPContainer
+ * @see GP
  */
 public class ConfigTest extends TestCase {
 
-    GPContainer config = new GPContainer();
+    GP config = new GP();
 	/**
 	 * Test for the {@link Config#get(ConfigKey)} method.
 	 */

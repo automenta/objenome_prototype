@@ -65,14 +65,12 @@ public class And extends Node {
      * and <code>false</code> otherwise
      */
     @Override
-    public Boolean evaluate() {
-        boolean result = ((Boolean) node(0).evaluate());
+    public final Boolean evaluate() {
+        return evaluate(0) && evaluate(1);
+    }
 
-        if (result) {
-            result = ((Boolean) node(1).evaluate());
-        }
-
-        return result;
+    private boolean evaluate(int i) {
+        return (Boolean) node(i).evaluate();
     }
 
     /**
@@ -97,10 +95,6 @@ public class And extends Node {
      */
     @Override
     public Class dataType(Class... inputTypes) {
-        if ((inputTypes.length == 2) && TypeUtil.allEqual(inputTypes, Boolean.class)) {
-            return Boolean.class;
-        } else {
-            return null;
-        }
+        return (inputTypes.length == 2) && TypeUtil.allEqual(inputTypes, Boolean.class) ? Boolean.class : null;
     }
 }

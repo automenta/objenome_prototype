@@ -21,8 +21,8 @@
  */
 package objenome.op.compute;
 
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.source.SourceGenerator;
+import objenome.evolve.Individual;
+import objenome.evolve.source.SourceGenerator;
 import objenome.util.Utils;
 
 import javax.script.ScriptEngine;

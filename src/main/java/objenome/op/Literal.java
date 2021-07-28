@@ -34,6 +34,10 @@ import java.util.Objects;
  */
 public class Literal<X> extends Node<Void,X> {
 
+    public static final Literal<Double> NaN = new Literal<>(Double.NaN);
+    public static final Literal<Boolean> True = new Literal(Boolean.TRUE);
+    public static final Literal<Boolean> False = new Literal(Boolean.FALSE);
+
     protected X value;
 
     /**

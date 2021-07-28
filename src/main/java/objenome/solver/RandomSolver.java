@@ -27,12 +27,12 @@ public class RandomSolver implements Solver {
         for (Map.Entry<Problem, Solution> e : p.entrySet()) {
             Solution existingSolution = e.getValue();
             if (existingSolution == null) {
-                e.setValue(getSolution(e.getKey()));
+                e.setValue(solution(e.getKey()));
             }
         }
     }
 
-    public Solution getSolution(Problem p) {
+    private Solution solution(Problem p) {
         if (p instanceof DecideNumericValue) {
             if (p instanceof DecideNumericValue.DecideBooleanValue) {
                 return new SetBooleanValue((DecideNumericValue.DecideBooleanValue) p, Math.random() < 0.5);

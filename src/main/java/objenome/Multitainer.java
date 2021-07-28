@@ -6,13 +6,17 @@
 package objenome;
 
 import com.google.common.collect.Lists;
+import objenome.dependency.Builder;
+import objenome.dependency.ClassBuilder;
+import objenome.dependency.ClassBuilder.DependencyKey;
+import objenome.dependency.ConstructorDependency;
+import objenome.dependency.Scope;
 import objenome.problem.DecideNumericValue.DecideBooleanValue;
 import objenome.problem.DecideNumericValue.DecideDoubleValue;
 import objenome.problem.DecideNumericValue.DecideIntegerValue;
 import objenome.problem.DevelopMethod;
 import objenome.problem.Problem;
 import objenome.solution.dependency.*;
-import objenome.solution.dependency.ClassBuilder.DependencyKey;
 import objenome.solver.IncompleteSolutionException;
 import objenome.solver.RandomSolver;
 import objenome.solver.Solution;

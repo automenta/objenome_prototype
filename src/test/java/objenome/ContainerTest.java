@@ -2,7 +2,7 @@ package objenome;
 
 import objenome.MultitainerTest.Part;
 import objenome.MultitainerTest.Part0;
-import objenome.solution.dependency.Scope;
+import objenome.dependency.Scope;
 import org.junit.Test;
 
 import java.util.Date;
@@ -221,7 +221,7 @@ public class ContainerTest {
             this.userDAO = userDAO;
         }
 
-        public boolean doSomething() {
+        public static boolean doSomething() {
             //System.out.println(userDAO.getUsername(11));
             return true;
         }
@@ -239,7 +239,7 @@ public class ContainerTest {
 
         // populate (apply) all properties of SomeService with
         // beans from the container
-        assertTrue(c.apply(service).doSomething()); 
+        assertTrue(SomeService.doSomething());
     }
 
     public static class ExampleService {

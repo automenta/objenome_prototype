@@ -5,7 +5,7 @@
  */
 package objenome;
 
-import objenome.solution.dependency.Builder;
+import objenome.dependency.Builder;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;

@@ -30,9 +30,8 @@ package objenome.util;
  */
 public final class MathUtils {
 
-    final static double EPSILON = 0.0001;
 
-    public static boolean equalEnough(double a, double b) {
+    public static boolean equalEnough(double a, double b, double EPSILON) {
         return Math.abs(a - b) < EPSILON;
     }
 

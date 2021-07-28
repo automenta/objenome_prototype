@@ -22,9 +22,6 @@
 package objenome.evolve.event;
 
 import junit.framework.TestCase;
-import objenome.solver.evolve.event.EventManager;
-import objenome.solver.evolve.event.Listener;
-import objenome.solver.evolve.event.RunEvent;
 import org.junit.Assert;
 
 /**

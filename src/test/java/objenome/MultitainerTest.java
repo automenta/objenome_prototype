@@ -14,8 +14,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static objenome.solution.dependency.Builder.of;
-import static objenome.solution.dependency.Builder.the;
+import static objenome.dependency.Builder.of;
+import static objenome.dependency.Builder.the;
 import static org.junit.Assert.assertEquals;
 
 /**

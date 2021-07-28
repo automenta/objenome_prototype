@@ -1,9 +1,9 @@
 package objenome;
 
-import objenome.solution.dependency.Builder;
-import objenome.solution.dependency.ConfigurableBuilder;
-import objenome.solution.dependency.ConstructorDependency;
-import objenome.solution.dependency.Scope;
+import objenome.dependency.Builder;
+import objenome.dependency.ConfigurableBuilder;
+import objenome.dependency.ConstructorDependency;
+import objenome.dependency.Scope;
 
 import java.util.Set;
 

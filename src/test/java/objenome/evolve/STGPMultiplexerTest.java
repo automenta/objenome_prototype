@@ -1,9 +1,7 @@
 package objenome.evolve;
 
 import junit.framework.TestCase;
-import objenome.problem.STGPBoolean;
-import objenome.solver.evolve.Population;
-import objenome.solver.evolve.STGPIndividual;
+import objenome.evolve.population.STGPBoolean;
 import objenome.util.BenchmarkSolutions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,16 +14,16 @@ public class STGPMultiplexerTest extends TestCase {
             
             Population<STGPIndividual> p = e.run();
             
-            STGPIndividual best = p.fittest();
+            STGPIndividual best = p.best();
             
-            System.out.println(p.fittest());
+            System.out.println(p.best());
             System.out.println(p.size());            
             System.out.println(p);            
             System.out.println(best.evaluate());
             
             Assert.assertTrue(best.depth() > 3);
             Assert.assertEquals(100, p.size());
-            Assert.assertNotNull(p.fittest());
+            Assert.assertNotNull(p.best());
             
             
             

@@ -6,7 +6,7 @@
 package objenome;
 
 import com.google.common.collect.SetMultimap;
-import objenome.solution.dependency.Builder;
+import objenome.dependency.Builder;
 import objenome.util.Packatainer;
 import org.junit.Test;
 

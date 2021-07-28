@@ -5,7 +5,7 @@
  */
 package objenome;
 
-import objenome.solution.dependency.Scope;
+import objenome.dependency.Scope;
 
 /**
  * AbstractContainer which can completely operate to produce or modify objects

@@ -73,19 +73,19 @@ public class Add extends Node {
      */
     @Override
     public Object evaluate() {
-        Object c1 = node(0).evaluate();
-        Object c2 = node(1).evaluate();
+        Object x = node(0).evaluate();
+        Object y = node(1).evaluate();
 
-        Class<?> returnType = TypeUtil.widestNumberType(c1.getClass(), c2.getClass());
+        Class<?> returnType = TypeUtil.widestNumberType(x.getClass(), y.getClass());
 
         if (returnType == Double.class) {
-            return NumericUtils.asDouble(c1) + NumericUtils.asDouble(c2);
+            return NumericUtils.asDouble(x) + NumericUtils.asDouble(y);
         } else if (returnType == Float.class) {
-            return NumericUtils.asFloat(c1) + (float) NumericUtils.asFloat(c2);
+            return NumericUtils.asFloat(x) + (float) NumericUtils.asFloat(y);
         } else if (returnType == Long.class) {
-            return NumericUtils.asLong(c1) + (long) NumericUtils.asLong(c2);
+            return NumericUtils.asLong(x) + (long) NumericUtils.asLong(y);
         } else if (returnType == Integer.class) {
-            return (int) NumericUtils.asInteger(c1) + NumericUtils.asInteger(c2);
+            return (int) NumericUtils.asInteger(x) + NumericUtils.asInteger(y);
         }
 
         return null;

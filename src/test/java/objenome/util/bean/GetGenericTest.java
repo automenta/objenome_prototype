@@ -140,14 +140,14 @@ public class GetGenericTest {
      * @param map the map to copy the data to
      * @return the passed in map
      */
-    private Map<MyKeyEnum, Object> copyToMap(MyGenericAccessBean bean, Map<MyKeyEnum, Object> map) {
+    private static Map<MyKeyEnum, Object> copyToMap(MyGenericAccessBean bean, Map<MyKeyEnum, Object> map) {
         for (MyKeyEnum key : bean.keys()) {
             map.put(key, bean.get(key));
         }
         return map;
     }
 
-    private Map<MyKeyEnum, Object> getExpected() {
+    private static Map<MyKeyEnum, Object> getExpected() {
         Map<MyKeyEnum, Object> map = new EnumMap<>(MyKeyEnum.class);
         map.put(MyKeyEnum.NAME, "Fichtner"); //$NON-NLS-1$
         map.put(MyKeyEnum.PRENAME, "Peter"); //$NON-NLS-1$

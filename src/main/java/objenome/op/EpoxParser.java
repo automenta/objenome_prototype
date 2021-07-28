@@ -165,7 +165,7 @@ public class EpoxParser {
      * arguments - this method splits just the top level of arguments so that
      * they can themselves be parsed individually.
      */
-    private List<String> splitArguments(String argStr) {
+    private static List<String> splitArguments(String argStr) {
         int depth = 0;
 
         List<String> args = new ArrayList<>(5);

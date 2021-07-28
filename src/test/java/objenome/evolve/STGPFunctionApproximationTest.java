@@ -2,11 +2,8 @@ package objenome.evolve;
 
 import com.google.common.collect.Lists;
 import junit.framework.TestCase;
-import objenome.problem.Observation;
-import objenome.problem.STGPFunctionApproximation;
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.Population;
-import objenome.solver.evolve.STGPIndividual;
+import objenome.evolve.population.STGPFunctionApproximation;
+import objenome.util.Observation;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,7 +15,8 @@ public class STGPFunctionApproximationTest extends TestCase {
             
             int individuals = 50;
             
-            STGPFunctionApproximation e = new STGPFunctionApproximation(individuals, 6, true, true, true, true);
+            STGPFunctionApproximation e = new STGPFunctionApproximation(
+                    individuals, 3, true, true, true, true);
             
             //setup function
             int j =0;
@@ -32,15 +30,15 @@ public class STGPFunctionApproximationTest extends TestCase {
             
             Population<STGPIndividual> p = e.run();
             
-            STGPIndividual best = p.fittest();
+            STGPIndividual best = p.best();
             
             //assertTrue(best.depth() > 1);            
             Assert.assertEquals(individuals, p.size());
-            Assert.assertNotNull(p.fittest());
+            Assert.assertNotNull(p.best());
 
             List<Individual>  firstBest = Lists.newArrayList(p.elites(0.5f));
             
-            System.out.println(p.fittest());
+            System.out.println(p.best());
             System.out.println(p.size());            
             System.out.println(p);            
             System.out.println(best.evaluate());

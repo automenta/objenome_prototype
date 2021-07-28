@@ -36,15 +36,15 @@ public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
         this.keys = Collections.unmodifiableSet(determineKeys(localGetters, localSetters));
     }
 
-    private Set<Object> determineKeys(final Map<Object, Method> gm, final Map<Object, Method> sm) {
+    private static Set<Object> determineKeys(final Map<Object, Method> gm, final Map<Object, Method> sm) {
         final Set<Object> result = new HashSet<>(gm.keySet().size() + sm.keySet().size());
         result.addAll(gm.keySet());
         result.addAll(sm.keySet());
         return result;
     }
 
-    private void fillMaps(final Collection<Class<?>> ifaces, final Map<Object, Method> gm,
-            final Map<Object, Method> sm) throws SecurityException, IllegalArgumentException,
+    private static void fillMaps(final Collection<Class<?>> ifaces, final Map<Object, Method> gm,
+                                 final Map<Object, Method> sm) throws SecurityException, IllegalArgumentException,
             IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         // TODO Check all methods to be valid in dependency of their annotations (e.g. if annotated
         // with Type.SETTER it has to have TWO parameters and returntype void)
@@ -72,7 +72,7 @@ public class ProxyInvocationHandlerGenericSupport implements InvocationHandler {
         }
     }
 
-    private Method getGetAttributeMethod(final Annotation annotation) throws SecurityException,
+    private static Method getGetAttributeMethod(final Annotation annotation) throws SecurityException,
             NoSuchMethodException {
         final Class<? extends Annotation> annotationType = annotation.annotationType();
         for (final Method method : annotationType.getDeclaredMethods()) {

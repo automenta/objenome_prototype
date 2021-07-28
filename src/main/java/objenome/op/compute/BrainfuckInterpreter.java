@@ -21,8 +21,8 @@
  */
 package objenome.op.compute;
 
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.source.SourceGenerator;
+import objenome.evolve.Individual;
+import objenome.evolve.source.SourceGenerator;
 
 import java.util.Arrays;
 
@@ -229,9 +229,10 @@ public class BrainfuckInterpreter<T extends Individual> implements Computer<Byte
     /*
      * Locate the matching bracket in the given source.
      */
-    private int findClosingBracket(final String source) {
+    private static int findClosingBracket(final String source) {
         int open = 1;
-        for (int i = 0; i < source.length(); i++) {
+        int n = source.length();
+        for (int i = 0; i < n; i++) {
             final char c = source.charAt(i);
 
             if (c == '[') {

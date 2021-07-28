@@ -24,6 +24,7 @@ package objenome.op;
 import objenome.util.TypeUtil;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * A <code>Node</code> is a vertex in a tree structure which represents a
@@ -748,5 +749,14 @@ public abstract class Node<X extends Node, Y> implements Cloneable {
         return builder.toString();
     }
 
+    public final boolean allConstDescendants() {
+        return
+            !(this instanceof VariableNode) && (
+                this instanceof Literal
+                ||
+                Stream.of(children).allMatch(Node::allConstDescendants
+            )
+        );
+    }
 
 }

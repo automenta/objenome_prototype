@@ -21,8 +21,8 @@
  */
 package objenome.op.compute;
 
+import objenome.evolve.Individual;
 import objenome.op.compute.Computer.ComputerInput;
-import objenome.solver.evolve.Individual;
 
 import java.util.function.Function;
 

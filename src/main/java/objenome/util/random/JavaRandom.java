@@ -21,7 +21,7 @@
  */
 package objenome.util.random;
 
-import objenome.solver.evolve.RandomSequence;
+import objenome.evolve.RandomSequence;
 
 import java.util.Random;
 

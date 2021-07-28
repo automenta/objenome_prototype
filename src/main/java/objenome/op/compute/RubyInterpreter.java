@@ -21,8 +21,8 @@
  */
 package objenome.op.compute;
 
-import objenome.solver.evolve.Individual;
-import objenome.solver.evolve.source.SourceGenerator;
+import objenome.evolve.Individual;
+import objenome.evolve.source.SourceGenerator;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
@@ -129,7 +129,7 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
      * method containing a return statement that returns the result of evaluating
      * the given expression.
      */
-    private String getEvalCode(String expression, String[] argNames) {
+    private static String getEvalCode(String expression, String[] argNames) {
         StringBuilder code = new StringBuilder();
 
         code.append("def expr(");
@@ -153,7 +153,7 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
      * Helper method to exec. Constructs a string representing source code of a Ruby 
      * method containing the given program.
      */
-    private String getExecCode(String program, String[] argNames) {
+    private static String getExecCode(String program, String[] argNames) {
         final StringBuilder code = new StringBuilder();
 
         // code.append("class Evaluation\n");

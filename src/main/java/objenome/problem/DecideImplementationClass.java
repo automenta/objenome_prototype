@@ -7,8 +7,9 @@ package objenome.solution.dependency;
 
 import objenome.AbstractContainer;
 import objenome.Prototainer;
+import objenome.dependency.Builder;
+import objenome.dependency.ClassBuilder.DependencyKey;
 import objenome.problem.Problem;
-import objenome.solution.dependency.ClassBuilder.DependencyKey;
 
 import java.util.Collection;
 import java.util.List;

@@ -85,12 +85,12 @@ public abstract class NumericSolver<C> implements Solver  {
     
     
     /** var = gene, from different casts */
-    public double getMin(SetNumericValue var, Solution gene) {
+    public static double getMin(SetNumericValue var, Solution gene) {
         return var.getMin().doubleValue();
     }
     
     /** var = gene, from different casts */
-    public double getMax(SetNumericValue var, Solution gene) {
+    public static double getMax(SetNumericValue var, Solution gene) {
         return var.getMax().doubleValue();
     }    
 }

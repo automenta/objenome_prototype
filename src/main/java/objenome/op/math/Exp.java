@@ -24,7 +24,6 @@ package objenome.op.math;
 import objenome.op.Node;
 import objenome.op.Numeric1d;
 import objenome.util.NumericUtils;
-import objenome.util.TypeUtil;
 
 /**
  * A node which performs the mathematical exponential function <code>e^x</code>
@@ -84,20 +83,4 @@ public class Exp<X extends Node> extends Numeric1d<X,Number>  {
         return IDENTIFIER;
     }
 
-    /**
-     * Returns this function node's return type for the given child input types.
-     * If there is one input type of a numeric type then the return type will be
-     * Double. In all other cases this method will return <code>null</code> to
-     * indicate that the inputs are invalid.
-     *
-     * @return the Double class or null if the input type is invalid.
-     */
-    @Override
-    public Class dataType(Class... inputTypes) {
-        if ((inputTypes.length == 1) && TypeUtil.isNumericType(inputTypes[0])) {
-            return Double.class;
-        } else {
-            return null;
-        }
-    }
 }

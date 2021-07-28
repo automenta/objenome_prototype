@@ -6,17 +6,17 @@
 package objenome;
 
 import objenome.MultitainerTest.*;
+import objenome.dependency.Builder;
+import objenome.dependency.ClassBuilder;
 import objenome.solution.SetImplementationClass;
 import objenome.solution.SetIntegerValue;
-import objenome.solution.dependency.Builder;
-import objenome.solution.dependency.ClassBuilder;
 import objenome.solution.dependency.DecideImplementationClass;
 import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static objenome.solution.dependency.Builder.of;
+import static objenome.dependency.Builder.of;
 import static org.junit.Assert.*;
 
 /**

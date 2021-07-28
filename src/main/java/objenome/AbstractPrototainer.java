@@ -5,7 +5,7 @@
  */
 package objenome;
 
-import objenome.solution.dependency.*;
+import objenome.dependency.*;
 import objenome.util.InjectionUtils;
 
 import java.util.*;

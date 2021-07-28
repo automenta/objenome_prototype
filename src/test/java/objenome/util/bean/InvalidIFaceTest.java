@@ -109,7 +109,7 @@ public class InvalidIFaceTest {
      * 
      * @param clazz invalid interface
      */
-    private <T> void checkLoadRevocation(Class<T> clazz) {
+    private static <T> void checkLoadRevocation(Class<T> clazz) {
         BeanProxyBuilder.on(clazz).check(false).build();
         try {
             BeanProxyBuilder.on(clazz).check(true).build();

@@ -9,7 +9,7 @@ import objenome.Jartainer;
 import objenome.Multitainer;
 import objenome.Objenome;
 
-import static objenome.solution.dependency.Builder.of;
+import static objenome.dependency.Builder.of;
 
 /**
  *

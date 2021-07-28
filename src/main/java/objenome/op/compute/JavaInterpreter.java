@@ -28,7 +28,7 @@ package objenome.op.compute;
  * are converted into source code using a <code>SourceGenerator</code> whose
  * responsibility it is that valid Java source is produced from the individual.
  *
- * @see objenome.solver.evolve.source.SourceGenerator
+ * @see objenome.evolve.source.SourceGenerator
  * 
  * TODO not implemented since we will not continue to support BeanShell
  *

@@ -6,9 +6,9 @@
 package objenome;
 
 import com.google.common.collect.Sets;
-import objenome.solution.dependency.Builder;
+import objenome.dependency.Builder;
+import objenome.dependency.Scope;
 import objenome.solution.dependency.DecideImplementationClass;
-import objenome.solution.dependency.Scope;
 
 import java.util.List;
 import java.util.Set;

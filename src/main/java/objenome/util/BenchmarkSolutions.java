@@ -21,7 +21,7 @@
  */
 package objenome.util;
 
-import objenome.problem.STGPBoolean.BooleanCases;
+import objenome.evolve.population.STGPBoolean.BooleanCases;
 
 import java.util.function.Function;
 
